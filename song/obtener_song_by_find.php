@@ -1,6 +1,8 @@
 <?php
 session_start();//importante para ver al usuario logueado
 
+header("Access-Control-Allow-Origin: *");
+
 include('functions.php');
 include('includes/config.php');
 

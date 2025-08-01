@@ -8,7 +8,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 	$servername = "PMYSQL120.dns-servicio.com";
     $username = "holy_songs_user";
     $password = "&parol_holy_songs_user&";
-    $dbname = "7229353_db_holy_songs";//db de slideshow
+    $dbname = "7229353_db_holy_songs";//db de holy-songs
     
 }else{//LOCALHOST
     //echo"localhost";

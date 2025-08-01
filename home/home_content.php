@@ -26,15 +26,15 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     
     <div class="container">
 
-    <!-- <h1 class="h1_title">Bible-Text.com</h1> -->
-    <h1 class="h1_title">BT</h1>
+    <!-- <h1 class="h1_title">Holy-Songs.com</h1> -->
+    <h1 class="h1_title">HS</h1>
     
         
 
     </div><!--/container-->
 
     <footer>
-        <p>&copy; <?=date("Y");?> Bible-Text.com. Todos los derechos reservados.</p>
+        <p>&copy; <?=date("Y");?> Holy-Songs.com. Todos los derechos reservados.</p>
     </footer>
 
 </body>
