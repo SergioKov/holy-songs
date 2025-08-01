@@ -1,0 +1,81 @@
+/* Desktop */
+@media screen and (min-width: 1024px){
+
+
+    
+
+}
+
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px){
+
+
+}
+
+
+/* Mobilka */
+@media screen and (min-width: 1px) and (max-width: 767px) {
+    .bl_partes, 
+    .wr_group 
+    {
+        flex-direction: column;
+    }
+    .partes {
+        width: 100% !important;
+        flex-direction: column;
+    }
+
+
+}
+
+
+/* mobilka L */
+@media screen and (min-width: 1px) and (max-width: 425px) {
+    .step{
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+
+    .slide_inner{
+        padding: 0;
+    }
+    
+    fieldset {
+        padding: 1rem;
+    }
+
+    .barra_estado::-webkit-scrollbar {
+        height: 3px;
+    }
+
+
+
+}
+
+
+/* mobilka horizontal */
+@media (orientation: landscape) and (max-height: 700px) {
+    .step {
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+
+    .barra_estado::-webkit-scrollbar {
+        height: 3px;
+    }
+}
+
+
+
+/* mobilka XL */
+@media screen and (min-width: 426px) and (max-width: 767px) {
+   .step{
+        padding: 2px 5px;
+        font-size: 12px;
+    }
+        .barra_estado::-webkit-scrollbar {
+        height: 3px;
+    }
+
+}

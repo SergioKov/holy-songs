@@ -1,0 +1,32 @@
+/* =================================================== */
+/* HORIZONTAL START en partDeskTabs de headerContainer */
+/* =================================================== */
+
+/* height - altura de la barra de scroll */
+.barra_estado::-webkit-scrollbar
+{
+    height: 10px;/* altura de barra de scroll horizontal en headerContainer */
+}
+  
+/* Track - recorrido donde se desplaza la barra de scroll */
+.barra_estado::-webkit-scrollbar-track
+{
+    background: #a8a8a8;
+}
+   
+/* Handle - es la misma barra la cual hay que mover con el ratón */
+.barra_estado::-webkit-scrollbar-thumb
+{
+    background: #666;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+/* Handle on hover - color del fondo al poner el ratón encima */
+barra_estado::-webkit-scrollbar-thumb:hover 
+{
+    background: #444; 
+}
+/* ========================================= */
+/* HORIZONTAL END                            */
+/* ========================================= */
