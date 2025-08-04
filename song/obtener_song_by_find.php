@@ -1,7 +1,7 @@
 <?php
 session_start();//importante para ver al usuario logueado
 
-header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: *");//? no sé si hace falta...
 
 include('functions.php');
 include('includes/config.php');
@@ -125,9 +125,22 @@ $result = $conn->query($sql_init);
 //";
 //$arr_params = [$campo, $tabla, $id_user_logged];
 //$sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
-$result = $conn->query($sql_init);
+//$result = $conn->query($sql_init);
 //echo_json_x($sql_init, 'sql');
 //debug_x($sql_init, 'sql');
+
+
+
+//hacer test en HOSTALIA
+/*
+if (!$result) {
+    die("Error en la consulta: " . $conn->error);
+}else{
+	echo "Filas encontradas: " . $result->num_rows;
+	die("<p>ok en la consulta</p>");
+}
+*/
+
 
 
 if($result->num_rows > 0){   

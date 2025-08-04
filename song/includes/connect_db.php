@@ -6,9 +6,9 @@
 if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
     //echo"hostalia";
 	$servername = "PMYSQL120.dns-servicio.com";
-    $username = "holy_songs_user";
-    $password = "&parol_holy_songs_user&";
-    $dbname = "7229353_db_holy_songs";//db de holy-songs
+    $username = "demovtc";//porque 'holy_songs_user' no funciona
+    $password = "&777&demovtc&777&";//antes '&parol_holy_songs_user&'
+    $dbname = "7229353_db_holy_songs";//db de holy-songs en bible-text.com
     
 }else{//LOCALHOST
     //echo"localhost";
@@ -24,11 +24,15 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     //echo "conn error";
     //writeLog("Conexión fallida. Error: [" . $conn->connect_error . "]");
-
 	die("Conexión fallida: " . $conn->connect_error);
 }else{
 	//echo "conn ok";
 }
 
+// Establecer el conjunto de caracteres a UTF-8 moderno
+if (!$conn->set_charset("utf8mb4")) {
+    //writeLog("Error al establecer el conjunto de caracteres utf8mb4. Error: [" . $conn->error . "]");
+    die("Error al establecer el conjunto de caracteres utf8mb4: " . $conn->error);
+}
 
 ?>
