@@ -105,6 +105,7 @@ function ajustarTexto() {
             //console.log('slide_inner: ', slide_inner);
 
             const legend = slide.querySelector('legend');
+            const legend2 = slide.querySelectorAll('legend')[1];
             //console.log('legend: ', legend);
 
             let fontSize = 10;
@@ -130,6 +131,10 @@ function ajustarTexto() {
                     ? legend_fontSize_max 
                     : legend_fontSize ;
                 legend.style.fontSize = legend_fontSize_new + 'px';
+
+                if(legend2){
+                    legend2.style.fontSize = legend_fontSize_new + 'px';
+                }
             }
             document.body.removeChild(clone);
         });
@@ -897,7 +902,7 @@ function crear_arr_esquema_bucle(obj_bloques){
     
     let arr_esquema_bd;
 
-    if(!objSongBd.arr_esquema && objSongBd.arr_esquema?.length > 0){
+    if(objSongBd.arr_esquema && objSongBd.arr_esquema?.length > 0){
         arr_esquema_bd = objSongBd.arr_esquema.map(el => el.nombre)
     }else{
         arr_esquema_bd = Object.keys(obj_bloques).map(el => el);
@@ -949,17 +954,22 @@ function buildSong(){
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        // const slide_original = obj_bloques[titulo.nombre].slide;//as json
         const slide_original = obj_bloques[titulo].slide;//bd
         console.log('slide_original: ', slide_original);
+
+            const slide_original_next = (arr[i+1]) ? obj_bloques[arr[i+1]].slide : null ;//bd
+            console.log('slide_original_next: ', slide_original_next);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
         console.log('slide_clone: ', slide_clone);        
 
+            const slide_clone_next = (arr[i+1]) ? slide_original_next.cloneNode(true) : null ; // true para clonar también hijos 
+            console.log('slide_clone_next: ', slide_clone_next);
+
         const step = document.createElement('div');
         step.className = 'step';
         step.dataset.index = i;
-        // step.textContent = titulo;
+
         let titulo_text;
         if(esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema[i].veces > 1){//si hay repeticion del titulo
             titulo_text = `${titulo} <span>x${objSongBd.arr_esquema[i].veces}</span>`;
@@ -968,6 +978,32 @@ function buildSong(){
         }
         step.innerHTML = titulo_text;
         slide_clone.querySelector('legend').innerHTML = titulo_text;
+
+
+        if(slide_clone_next){
+            let next_legend = slide_clone_next.querySelector('legend').textContent;
+            console.log('next_legend: ', next_legend);
+
+            let next_fieldset = slide_clone_next.querySelector('fieldset');
+            console.log('next_fieldset: ', next_fieldset);
+
+            next_fieldset.classList.add('preview_next');
+
+            //1. elimino los p's dejando solo los 2 primeros
+            next_fieldset.querySelectorAll('p').forEach((el,i) => { 
+                if(i >= 2){
+                    el.remove();
+                }
+            });
+
+            //2. si hay 2 filas de solo texto, elimino la 2 fila
+            let los_p_t = next_fieldset.querySelectorAll('p.t');
+            if(los_p_t.length == 2){
+                los_p_t[1].remove();
+            }
+
+            slide_clone.querySelector('.slide_inner').append(next_fieldset);
+        }
 
         
         stepsContainer.append(step);
@@ -1367,7 +1403,8 @@ async function guardarEsquema(){
     //obj_lista[id_song].arr_esquema = arr_esquema_obj;
     objSong.arr_esquema = arr_esquema_obj;
 
-    await insertarSongDatos(objSong);
+    const result = await insertarSongDatos(objSong);
+    console.log('result: ', result);
 
     crearSlides();
     crear_esquema_btns_actual();//actualizo los botones de esquema actual
