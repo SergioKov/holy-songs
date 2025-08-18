@@ -15,27 +15,23 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 </head>
 <body>
 
-    <header>
-        <nav>
-            <ul>
-                <li><a class="active" href="#" data-link="">Home</a></li>
-                <li><a href="/song" data-link="">Song</a></li>
-            </ul>
-        </nav>
-    </header>
+<?php
+    $li_active = 'home';
+    include __DIR__ . '/../includes/templates/header.php';
+?>
     
     <div class="container">
 
-    <!-- <h1 class="h1_title">Holy-Songs.com</h1> -->
-    <h1 class="h1_title">HS</h1>
+        <!-- <h1 class="h1_title">Holy-Songs.com</h1> -->
+        <h1 class="h1_title">HS</h1>
     
         
 
     </div><!--/container-->
 
-    <footer>
-        <p>&copy; <?=date("Y");?> Holy-Songs.com. Todos los derechos reservados.</p>
-    </footer>
+<?php
+    include __DIR__ . '/../includes/templates/footer.php';
+?>
 
 </body>
 </html>

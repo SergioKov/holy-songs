@@ -197,23 +197,27 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     <h5>Selecciona songbook o algo mas...(decidir...):</h5>
                                     <div class="wr_sel_song">
-                                        <select class="sel_song">
+                                        <select id="songbook" class="sel_song">
                                             <option>1. asdfsdfa</option>
                                             <option>2. asdfsdfa</option>
                                             <option>3. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
-                                            <option>1. asdfsdfa</option>
                                         </select>
                                     </div>
 
-                                    <h5>Lista de canciones encontradas:</h5>
+
+                                    <h5>Selecciona modo de búsqueda:</h5>
+                                    <div class="wr_sel_song">
+                                        <select id="modo" class="sel_song">
+                                            <option value="1">1. Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                            <option value="2">2. Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                            <option value="3">3. Coincidir al menos una palabra</option>
+                                            <option value="4">4. Palabras en el orden establecido</option>
+                                            <option value="5">5. Frase exacta</option>
+                                            <option value="6">6. Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                        </select>
+                                    </div>
+
+                                    <h5 id="titulo_lista">Lista de canciones encontradas: <b></b></h5>
                                     <div class="wr_tabla">
                                         <div class="wr_tabla_inner">
 

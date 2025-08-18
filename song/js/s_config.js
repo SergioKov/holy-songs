@@ -59,6 +59,7 @@ const eid_block_cancion_head = document.getElementById('block_cancion_head');
 const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
 
 
+const eid_titulo_lista = document.getElementById('titulo_lista');
 
 const song_bloques = eid_block_esquema.querySelector('.song_bloques');
 const wr_vista_btns = eid_block_esquema.querySelector('.wr_vista_btns');

@@ -46,11 +46,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         }
 
         $words_input = $datos['words_input'];
+        $modo = $datos['modo'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
         // Obtener usuario y contraseña del cuerpo de la solicitud
         $words_input = isset($_GET['words_input']) ? $_GET['words_input'] : null ;
+        $modo = isset($_GET['modo']) ? $_GET['modo'] : 1 ;
 
         if ($words_input === null) {
             http_response_code(400);
@@ -61,10 +63,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'dic_code' => 'd251'
             ]);
             exit;
-        }
-        
-        //para que los datos sean iguales como en POST
-        $datos['words_input'] = $words_input;
+        }        
     }
 }
 
@@ -72,9 +71,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 include('includes/connect_db.php');
 
-$words_input = $conn->real_escape_string($datos['words_input']);//aki importante
-// echo_json_x($datos, 'datos');
+$words_input = $conn->real_escape_string($words_input);//aki importante
+$modo = $conn->real_escape_string($modo);
+//echo_json_x($datos, 'datos');
 //echo_json_x($words_input);
+//echo_json_x($modo);
 
 
 //busco si hay registro
@@ -97,6 +98,39 @@ $words_input = $conn->real_escape_string($datos['words_input']);//aki importante
 //             FROM songs s
 //             WHERE song_text like '%$words_input%'
 // ";
+
+// $sql_init = "SELECT 
+//                 s.id_song, 
+//                 s.song_number, 
+//                 s.title, 
+//                 s.category,
+//                 ct.name AS category_name,
+//                 s.song_text, 
+//                 s.arr_esquema, 
+//                 s.tune, 
+//                 s.lang,
+//                 s.notes, 
+//                 s.count, 
+//                 s.created_at, 
+//                 s.updated_at
+//             FROM songs s
+//             LEFT JOIN category_translations ct 
+//                 ON ct.id_category = s.category AND ct.lang = s.lang
+//             WHERE MATCH(s.title, s.song_text, s.notes) AGAINST('$words_input' IN NATURAL LANGUAGE MODE)
+//             ORDER BY s.title, s.song_number, s.id_song
+// ";
+// $result = $conn->query($sql_init); 
+
+
+
+$params = [];
+$types  = "";
+
+// Buscar "Jesús Pedro" en varios campos
+$where = buildWhere($modo, $words_input, ["s.title", "s.song_text", "s.notes"], $params, $types);
+
+
+//test modos de where
 $sql_init = "SELECT 
                 s.id_song, 
                 s.song_number, 
@@ -114,10 +148,28 @@ $sql_init = "SELECT
             FROM songs s
             LEFT JOIN category_translations ct 
                 ON ct.id_category = s.category AND ct.lang = s.lang
-            WHERE MATCH(s.title, s.song_text, s.notes) AGAINST('$words_input' IN NATURAL LANGUAGE MODE)
+            WHERE $where
             ORDER BY s.title, s.song_number, s.id_song
 ";
-$result = $conn->query($sql_init);      
+
+// Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):
+// reconstruir consulta final para debug
+$finalSQL = $sql_init;
+foreach ($params as $p) {
+    $safe = "'" . $p . "'";
+    $pos = strpos($finalSQL, "?");
+    if ($pos !== false) {
+        $finalSQL = substr_replace($finalSQL, $safe, $pos, 1);
+    }
+}
+//debug_x($finalSQL, 'finalSQL');//para ver la consulta preparada para debuguear
+
+$stmt = $conn->prepare($sql_init);
+$stmt->bind_param($types, ...$params);
+$stmt->execute();
+$result = $stmt->get_result();
+
+
 //-- AND id_song = '$id_song'
 //$sql_prep = "SELECT $campo 
 //            FROM $tabla 
@@ -193,5 +245,135 @@ $conn->close();
 // Enviar respuesta al cliente en formato JSON
 header('Content-Type: application/json');
 echo json_encode($result_data);
+
+
+
+
+
+//======================================================================//
+//FUNCTIONS - start
+//======================================================================//
+function buildWhere($modo, $texto, $campos = ["contenido"], &$params = [], &$types = "") {
+    $where = "";
+    $texto = trim($texto);
+
+    // Arma condiciones OR para los distintos campos
+    $makeConditions = function($expr) use ($campos) {
+        $conds = [];
+        foreach ($campos as $campo) {
+            $conds[] = "$campo $expr";
+        }
+        return "(" . implode(" OR ", $conds) . ")";
+    };
+
+    switch ($modo) {
+
+        // 1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)
+        case 1:
+            $palabras = preg_split('/\s+/', $texto);
+            $ands = [];
+            foreach ($palabras as $palabra) {
+                $ors = [];
+                foreach ($campos as $campo) {
+                    $ors[] = "$campo LIKE ?";
+                    $params[] = "%" . $palabra . "%";
+                    $types .= "s";
+                }
+                $ands[] = "(" . implode(" OR ", $ors) . ")";
+            }
+            $where = implode(" AND ", $ands);
+            break;
+
+
+        // 2) Todas las palabras (sin importar orden)
+        case 2:
+        $palabras = preg_split('/\s+/', $texto);
+        $ands = [];
+        foreach ($palabras as $palabra) {
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo REGEXP ?";
+                $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                $types .= "s";
+            }
+            $ands[] = "(" . implode(" OR ", $ors) . ")";
+        }
+        $where = implode(" AND ", $ands);
+        break;
+        
+
+        // 3) Coincidir al menos una palabra (OR global)
+        case 3:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+            $orsGlobal = [];
+
+            foreach ($palabras as $palabra) {
+                $orsCampos = [];
+                foreach ($campos as $campo) {
+                    $orsCampos[] = "$campo REGEXP ?";
+                    $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                    $types .= "s";
+                }
+                // Cada palabra puede aparecer en cualquiera de los campos
+                $orsGlobal[] = "(" . implode(" OR ", $orsCampos) . ")";
+            }
+
+            // Con OR global: basta con que una de las palabras esté
+            $where = "(" . implode(" OR ", $orsGlobal) . ")";
+            break;            
+
+
+        // 4) Palabras en el orden establecido
+        case 4:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+
+            // Un solo patrón que respete el orden
+            $pattern = implode('.+', array_map('preg_quote', $palabras));
+
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo REGEXP ?";
+                $params[] = $pattern;
+                $types .= "s";
+            }
+            $where = "(" . implode(" OR ", $ors) . ")";
+            break; 
+            
+            
+        // 5) Frase exacta
+        case 5:
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo LIKE ?";
+                $params[] = "%" . $texto . "%";
+                $types .= "s";
+            }
+            $where = "(" . implode(" OR ", $ors) . ")";
+            break;
+
+
+        // 6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)
+        case 6:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+            $ands = [];
+            foreach ($palabras as $palabra) {
+                $ors = [];
+                foreach ($campos as $campo) {
+                    $ors[] = "$campo REGEXP ?";
+                    $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                    $types .= "s";
+                }
+                $ands[] = "(" . implode(" OR ", $ors) . ")";
+            }
+            $where = implode(" AND ", $ands);
+            break;
+
+    }
+
+    return $where;
+}
+//======================================================================//
+//FUNCTIONS - end
+//======================================================================//
 
 ?>

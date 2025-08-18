@@ -1439,3 +1439,11 @@ form p.mensaje {
     color: white !important;
 }
 
+#titulo_lista b {
+    background: green;
+    border: 1px solid #006000;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: white;
+    display: none;
+}

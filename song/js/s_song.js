@@ -1832,7 +1832,10 @@ async function findWordsSong(){
     console.time('time_findWordsNew');
 
     const eid_inpt_find = document.getElementById('inpt_find');
+    const eid_modo = document.getElementById('modo');
+
     let frase = eid_inpt_find.value;
+    let modo = eid_modo.value;
 
     let words_input = frase.trim();
     if(words_input == ''){
@@ -1853,6 +1856,7 @@ async function findWordsSong(){
     }
 
     objFindParams.words_input = words_input;
+    objFindParams.modo = modo;
 
 
     const objData = await getSongTextFromBdByFind(objFindParams);
@@ -1863,6 +1867,9 @@ async function findWordsSong(){
         console.log('hay coincidencias...');
 
         tbody.innerHTML = '';//reset
+
+        eid_titulo_lista.querySelector('b').style.display = 'inline';
+        eid_titulo_lista.querySelector('b').textContent = objData.arr_data.length;
 
         //Recorrer canciones encontradas...
         objData.arr_data.forEach((el, i, arr) => {
@@ -1906,7 +1913,8 @@ async function findWordsSong(){
                     <button class="btn" onclick="addToLista();">Añadir a la Lista</button>
                 `;
 
-                objSong = arr.find(s => s.id_song === id_song);
+                //dejo '==' en vez de '===' porque id_song viene como string "925"
+                objSong = arr.find(s => s.id_song == id_song);
                 console.log('objSong: ', objSong);
 
                 const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
