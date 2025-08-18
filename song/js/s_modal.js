@@ -348,7 +348,7 @@ async function getSongTextFromBd(){
 async function getSongTextFromBdByFind(objFindParams /*words_input*/){
     console.log('=== function getSongTextFromBdByFind(words_input) ===');
 
-    let words_input = objFindParams.words_input;
+    let {words_input, modo} = objFindParams;
 
     try {
         
@@ -363,7 +363,8 @@ async function getSongTextFromBdByFind(objFindParams /*words_input*/){
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
             },
             body: JSON.stringify({
-                words_input: words_input
+                words_input,
+                modo
             }), // Convertir los datos a formato JSON
         });
 
