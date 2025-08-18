@@ -857,7 +857,10 @@ b.c_red {
     gap: 5px;
     justify-content: space-between;
 }
-#inpt_nav, #inpt_find, #inpt_strong {
+#inpt_nav, 
+#inpt_find, 
+#inpt_find_lista 
+{
     padding: 3px 3px 3px 5px;
     width: 100%;
     overflow: hidden;
@@ -909,7 +912,9 @@ b.c_red {
     height: 24px;
 }
 
-#inpt_find {
+#inpt_find,
+#inpt_find_lista
+ {
     padding: 5px;
     width: 100%;
     overflow: hidden;
@@ -995,6 +1000,7 @@ tbody tr.selected {
 }
 
 td.td_id_song,
+td.td_id_lista,
 td.td_numero,
 td.td_esquema,
 td.td_idioma
@@ -1439,11 +1445,62 @@ form p.mensaje {
     color: white !important;
 }
 
-#titulo_lista b {
+.titulo_tabla b {
     background: green;
     border: 1px solid #006000;
     padding: 2px 5px;
     border-radius: 5px;
     color: white;
     display: none;
+}
+
+
+
+
+
+.p_aviso {
+    color: #eaeaea;
+    background: black;
+    padding: 10px;
+    width: 100%;
+    white-space: normal;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.2rem;
+}
+.p_aviso b {
+    color: orange;
+}
+p.p_aviso a {
+    white-space: nowrap;
+}
+
+p.p_list {
+    background: #494949;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 20px;
+    color: yellow;
+    font-family: arial;
+    flex-direction: row;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+p.p_list:hover {
+    background: #737373;
+}
+
+.l_n {
+    color: #FFEB3B;
+    width: 20px;
+}
+.l_title {
+    color: orange;
+    width: 100%;
+}
+.l_tune {
+    color: #51ebff;
 }

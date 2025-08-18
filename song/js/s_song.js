@@ -1476,6 +1476,20 @@ function resetBlockCancion(){
     cancion_form_container.querySelector('form').reset();//reseteo formulario
 }
 
+function resetBlockLista(){
+    console.log('=== function resetBlockLista() ===');
+
+    // resetBtnActive(eid_block_lista_head);//reseteo btn_active de botones en el contenedor
+
+    // lista_wr_vista_blocks.innerHTML = '...';//reset
+    // lista_wr_btns_action.innerHTML = '...';//reset  
+    
+    // lista_song_bloques.querySelector('.puntos_def').style.display = 'block';//muestro '...'
+    // lista_form_container.style.display = 'none';//oculto formulario de canción
+
+    // lista_form_container.querySelector('form').reset();//reseteo formulario
+}
+
 
 async function guardarSong(event){
     console.log('=== function guardarSong() ===');
@@ -1594,8 +1608,6 @@ async function guardarSong(event){
     //crear_esquema_btns_actual();//actualizo los botones de esquema actual
 }
 
-
-
 async function deleteSong(){
     console.log('=== function deleteSong() ===');
 
@@ -1665,6 +1677,198 @@ async function deleteSong(){
         cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
     }
 }
+
+
+
+async function guardarLista(event){
+    console.log('=== function guardarLista() ===');
+    event.preventDefault();
+
+    try {
+        
+        // if(get_cookieConsent && get_cookieConsent === 'rejected'){
+        //     let aviso_text = `<span>${obj_lang.d315}</span>`;//Si no aceptas cookies no puedes crear una cuenta.
+        //     aviso_text += ` <a onclick="showBlockCookies(); closeModal(null,true);">${obj_lang.d316}</a>.`;//Seleccionar Coockies
+        //     openModal('center','Cookies',aviso_text,'showAviso');
+        //     return;
+        // }
+
+        let title = document.getElementById("title").value.trim();
+        let category = document.getElementById("category").value.trim();
+        let song_number = document.getElementById("song_number").value.trim();
+        let tune = document.getElementById("tune").value.trim();
+        let lang = document.getElementById("lang").value.trim();
+        let song_text = document.getElementById("song_text").value.trim();
+        let notes = document.getElementById("notes").value.trim();
+    
+        let errors = [];
+
+        if(title == ''){
+            errors.push('título');
+        }
+        if(song_text == ''){
+            errors.push('texto de la canción');
+        }
+        if(lang == ''){
+            errors.push('idioma de la canción');
+        }
+        // if(!validarEmail(email)){
+        //     errors.push(obj_lang.d278);//El email no es válido.
+        // }
+        // if(!validarPassword(password)){
+        //     errors.push(obj_lang.d279);//La contraseña no es válida. Debe tener al menos 6 carácteres.
+        // }        
+        if(errors.length > 0){
+            let error_text = '';
+            errors.forEach(error => {
+                error_text += ' - ' + error + '<br>';
+            });            
+            form_mensaje.innerHTML = `<span class="add_result add_error">Por favor, introduce: <br> ${error_text}</span>`;
+            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            return;
+        }
+
+        const objSongToSend = {
+            id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
+            song_number: song_number,
+            title: title,
+            arr_esquema: '', //no hay esquema al crear/editar una canción. se guarda en guardarEsquema()
+            category: category,
+            tune: tune,
+            lang: lang,
+            song_text: song_text,
+            notes: notes,
+        }
+        console.log('objSongToSend: ',objSongToSend);
+    
+        const data = await insertarSongDatos(objSongToSend);;
+        console.log('data: ',data);         
+
+    
+        if(data.success){                
+            
+            let text_show;
+
+            if(data.action == 'is_insert'){
+                text_show = 'Canción añadida con éxito.';
+            }else if(data.action == 'is_update'){
+                text_show = 'Canción actualizada con éxito.';
+            }
+            console.log(text_show);
+    
+            form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            if(data.id_song){
+                console.log('id_song: ', data.id_song);
+                id_song = data.id_song;//guardo el id de la canción recién creada
+                objSong = objSongToSend;//reasigno el objeto song con los datos del formulario
+                objSong.id_song = id_song;//añado el id_song al objeto song
+
+                cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
+                cancion_form_container.querySelector('#id_song').value = id_song;
+
+                cancion_wr_btns_action.innerHTML = `
+                    <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+                    <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+                    <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+                `;
+            }
+           
+        }else{
+            console.log(`Error al añadir la canción.`);
+            
+            //"Error al registrar el usuario";
+            console.error(data.error);
+            console.error(data.dic_code);
+
+            let error_text = 'Error al añadir la canción.';
+    
+            form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        }
+    
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('guardarSong. error: ',error);
+    }
+
+    //crearSlides();
+    //crear_esquema_btns_actual();//actualizo los botones de esquema actual
+}
+
+async function deleteLista(){
+    console.log('=== function deleteSong() ===');
+
+    id_song = objSong.id_song;
+    console.log('id_song: ', id_song);
+
+    if(!id_song){
+        alert('id_song no está indicado... hago return.');
+    }
+
+    const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la canción con los siguientes datos? \nID: ${id_song} \ntítulo: '${objSong.title}' \n\nEsta acción no se podrá deshacer.`);
+    if(respuesta){
+        console.log('sigo adelante para eliminar la canción...'); //clic en "Aceptar"
+    } else {
+        //console.log("7755. Cancelar..."); //clic en "Cancelar"
+        return;
+    }
+
+    const data = await deleteSongFromBd();
+    console.log('data: ',data);
+
+    if(data.success){
+        
+        let text_show;
+        text_show = 'Canción eliminada con éxito.';
+        console.log(text_show);
+
+        form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+        cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+        if(data.id_song){
+            console.log('id_song: ', data.id_song);
+
+            //Elimino elemento tr de la tabla tbody con la cancion eliminada
+            tbody.querySelector(`.tr_song[data-id="${id_song}"]`).remove();
+
+            cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
+            cancion_form_container.querySelector('#id_song').value = id_song;
+
+            resetBlockBuscar();
+            resetBlockEsquema();
+
+            pintLineasXinBlock(eid_block_cancion);
+
+            // eid_block_cancion.querySelector('bl_parte_l .bloques_outer').classList.add('datos_eliminados');
+            // eid_block_cancion.querySelector('bl_parte_r .bloques_outer').classList.add('datos_eliminados');
+
+            cancion_wr_btns_action.innerHTML = `
+                <p class="prim bg_red">Canción eliminada</p>
+                <button class="btn" onclick="showBlockName('buscar');">Buscar</button>
+            `;
+
+            id_song = null;
+            objSong = {};//reseteo objeto song
+        }
+        
+    }else{
+        console.log(`Error al añadir la canción.`);
+        
+        //"Error al registrar el usuario";
+        console.error(data.error);
+        console.error(data.dic_code);
+
+        let error_text = 'Error al añadir la canción.';
+
+        form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+        cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+    }
+}
+
+
+
 
 function pintLineasXinBlock(contenedor){
     console.log('=== function pintLineasXinBlock() ===');
@@ -1796,6 +2000,11 @@ function showBlockName(blockName){
             bl_titulo.textContent = 'Ejemplo de canción';
             showOnlyBlock(blockName);
             break;
+
+        case 'lista':
+            bl_titulo.textContent = 'Buscar lista';
+            showOnlyBlock(blockName);
+            break;
         
         default:
             bl_titulo.textContent = 'Buscar canción';
@@ -1868,8 +2077,8 @@ async function findWordsSong(){
 
         tbody.innerHTML = '';//reset
 
-        eid_titulo_lista.querySelector('b').style.display = 'inline';
-        eid_titulo_lista.querySelector('b').textContent = objData.arr_data.length;
+        eid_titulo_tabla_song.querySelector('b').style.display = 'inline';
+        eid_titulo_tabla_song.querySelector('b').textContent = objData.arr_data.length;
 
         //Recorrer canciones encontradas...
         objData.arr_data.forEach((el, i, arr) => {
@@ -1945,6 +2154,176 @@ async function findWordsSong(){
 }
 
 
+async function findWordsLista(){
+    console.log('=== async function findWordsLista() ===');
+    //console.log('--- frase: ', frase);
+    //console.time('time_findWordsNew');
+
+    const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
+    const eid_modo_lista = document.getElementById('modo_lista');
+
+    let frase = eid_inpt_find_lista.value;
+    let modo = eid_modo_lista.value;
+
+    let words_input = frase.trim();
+    if(words_input == ''){
+        console.log('21. no has introducido nada....');
+        return;
+    }
+
+    let arr_words;    
+    if(words_input.includes(' ')){
+        arr_words = words_input.split(' ');
+    }else{
+        arr_words = [words_input];
+    }
+
+    if(arr_words.length === 0){
+        console.log('2. no has introducido nada....');
+        return;
+    }
+
+    objFindListaParams.words_input = words_input;
+    objFindListaParams.modo = modo;
+
+
+    const objData = await getListaTextFromBdByFind(objFindListaParams);
+    console.log('objData: ', objData);
+
+
+    if(esObjeto(objData) && objData.arr_data.length > 0){
+        console.log('hay coincidencias...');
+
+        tbody_lista.innerHTML = '';//reset
+
+        eid_titulo_tabla_lista.querySelector('b').style.display = 'inline';
+        eid_titulo_tabla_lista.querySelector('b').textContent = objData.arr_data.length;
+
+        //Recorrer canciones encontradas...
+        objData.arr_data.forEach((el, i, arr) => {
+            console.log('el: ', el);
+
+            const tr = document.createElement('tr');
+            tr.className = 'tr_list';
+            tr.dataset.id = el.id_lista;
+
+            tr.innerHTML = `
+                <td class="td_n">${i + 1}</td>
+                <td class="td_id_lista" data-id_lista="${el.id_lista}" title="${el.id_lista}">${el.id_lista}</td>
+                <td class="td_titulo">${el.title}</td>
+                <td class="td_fecha">${el.fecha || '---'}</td>            
+                <td class="td_creado">${el.created_at || '---'}</td>
+                <td class="td_actualizado">${el.updated_at || '---'}</td>
+            `;
+
+            tr.onclick = (e)=>{
+                console.log('e.currentTarget: ', e.currentTarget);
+                id_lista = e.currentTarget.dataset.id;
+                console.log('asigno global --- id_lista: ', id_lista);
+
+                resetTrSelected(tbody_lista);
+                e.currentTarget.classList.add('selected');
+
+                const wr_vista_song = eid_block_lista.querySelector('.wr_vista_song');
+                wr_vista_song.style.gap = '5px';
+                wr_vista_song.innerHTML = `
+                    <div class="vista_song_content">...</div>
+                `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
+
+                const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
+                vista_song_content.innerHTML = '';//reset
+
+                const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
+                wr_btns_action.innerHTML = `
+                    <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+                    <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+                    <button class="btn" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</button>
+                    <button class="btn" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</button>
+                    <button class="btn" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</button>
+                    <button class="btn" onclick="crearSlides()">Crear slides</button>
+                    <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+                    <button class="btn" onclick="addToLista();">Añadir a la Lista</button>
+                `;
+
+                //dejo '==' en vez de '===' porque id_song viene como string "925"
+                objLista = arr.find(s => s.id_lista == id_lista);
+                console.log('objLista: ', objLista);
+                
+                
+
+                
+
+                // Normalizamos palabras
+                const arr_normalized = arr_words.map(normalize);
+                console.log('arr_normalized: ', arr_normalized);
+
+                //const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
+                // console.log('regex: ', regex);
+
+                // Creamos regex sin acentos
+                const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
+                console.log('regex: ', regex);
+
+                let lista_text_red = objLista.title.replace(regex, (x) => {
+                    return `<b class="c_red">${x}</b>`;
+                });
+
+                vista_song_content.innerHTML = lista_text_red;
+
+                // resetBlockLista();
+                // resetLineasXinBlock(eid_block_lista);
+
+
+
+
+
+
+                let arr_lista_bd = JSON.parse(objLista.arr_lista);
+                console.log('arr_lista_bd: ', arr_lista_bd);
+
+                if(Array.isArray(arr_lista_bd) && arr_lista_bd.length > 0){
+
+                    arr_lista_bd.forEach((item, i) => {
+                        console.log('item: ', item);
+
+                        const p = document.createElement('p');
+                        p.className = 'p_list';
+                        p.dataset.id_song = item.id_song;
+                        p.innerHTML =`
+                            <span class="l_n">${i + 1}.</span>
+                            <span class="l_title">${item.title}</span>
+                            <span class="l_tune">${item.tune || '--'}</span>
+                        `;
+                        p.onclick = (e) => {
+                            console.log(e.currentTarget.dataset.id_song);
+                            let este_id_song = e.currentTarget.dataset.id_song;
+
+                            alert(este_id_song);
+                        }
+
+                        wr_vista_song.append(p);
+                    });
+
+                }
+
+
+            }
+
+            tbody_lista.append(tr);
+        });
+    }else{
+        console.log('no hay coincidencias...');
+        tbody_lista.innerHTML = `
+            <tr>
+                <td colspan="6" class="td_no_data">
+                    <p class="prim">No se encontraron listas con la frase: "<b>${frase}</b>"</p>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
 
 function esObjeto(valor) {
     return typeof valor === 'object' && valor !== null && !Array.isArray(valor);
@@ -1963,7 +2342,7 @@ function esArray(valor) {
 
 
 function clear_inpt(param){
-    let thisInpt = document.getElementById('inpt_'+param);
+    let thisInpt = document.getElementById(`inpt_${param}`);
     thisInpt.value = '';
     thisInpt.focus();
 }

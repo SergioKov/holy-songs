@@ -20,6 +20,15 @@ window.addEventListener('resize',(e) => {
 });
 
 
+// When the user clicks anywhere outside of the eid_myModal, close it
+window.onclick = (e) =>{
+    //console.log('window.onclick on eid_myModal');
+    if(e.target == eid_myModal || e.target == eid_myModalContent){
+        closeModal(null,true);//click_fuera_o_x
+    }
+}
+
+
 header.addEventListener('click', (e) => {
     console.log('=== header click ===');
 

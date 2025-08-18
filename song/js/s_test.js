@@ -267,10 +267,47 @@ function addToLista(){
         return; // <- se detiene aquí si no hay id_song
     }
 
-    arr_lista.push(objSong);
+    //compruebo si ya está id_song enla lista
+    let hay_en_la_lista = arr_lista.some(s => s.id_song == objSong.id_song);
+    let text_aviso;
+    let text_song_datos = `
+        <br>
+        <br>id: <b>${objSong.id_song}</b> 
+        <br>número: <b>${objSong.song_number}</b> 
+        <br>título: <b>${objSong.title}</b>
+    `;
+
+    if(hay_en_la_lista){
+        text_aviso = `La canción ya está añadida anteriormente. ` + text_song_datos;
+        //alert('ya está añadida anteriormente');
+        //return;
+    }else{
+        const objSongSmall = {
+            id_song: objSong.id_song,
+            song_number: objSong.song_number,
+            title: objSong.title,
+            tune: objSong.tune,
+        };
+
+        arr_lista.push(objSongSmall);
+        text_aviso = `La canción se ha añadido con éxito a la lista de canciones. ` + text_song_datos;
+    }
+
+    //aki guardarLista();
+
     console.log('arr_lista: ', arr_lista);
+    openModal('center','Estado de la Lista',text_aviso,'showAviso');
+}
 
 
+function update_arr_lista(){
+    console.log('=== function update_arr_lista() ===');
+    localStorage.setItem('arr_lista', JSON.stringify(arr_lista));    
+    // if(hay_sesion){
+    //     guardarEnBd('fav_trans', 'arrFavTrans', arrFavTrans);
+    // }
+}
 
-
+function normalize(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }

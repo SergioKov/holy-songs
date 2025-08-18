@@ -48,18 +48,21 @@ const eid_block_buscar = document.getElementById('block_buscar');
 const eid_block_esquema = document.getElementById('block_esquema');
 const eid_block_cancion = document.getElementById('block_cancion');
 const eid_block_ejemplo = document.getElementById('block_ejemplo');
+const eid_block_lista = document.getElementById('block_lista');
 
 const eid_block_editar = document.getElementById('block_editar');
 const eid_block_eliminar = document.getElementById('block_eliminar');
 
 const tbody = eid_block_buscar.querySelector('.wr_tabla table tbody');
+const tbody_lista = eid_block_lista.querySelector('.wr_tabla table tbody');
 
 const eid_block_esquema_head = document.getElementById('block_esquema_head');
 const eid_block_cancion_head = document.getElementById('block_cancion_head');
 const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
 
 
-const eid_titulo_lista = document.getElementById('titulo_lista');
+const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
+const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
 
 const song_bloques = eid_block_esquema.querySelector('.song_bloques');
 const wr_vista_btns = eid_block_esquema.querySelector('.wr_vista_btns');
@@ -204,6 +207,9 @@ let objSongDemo = {
 let objSong = {};
 let id_song = null;//id de la canción actual
 
+let objLista = {};
+let id_lista = null;//id de la lista actual
+
 let obj_lang_names = {
     'ua': 'Укр.',
     'ru': 'Рус.',
@@ -223,7 +229,12 @@ let objFindParams = {
     lang: '',//idioma de la canción
 };
 
-let arr_lista = [];
+let objFindListaParams = {
+    retornar: 'todo',// 'todo' o 'find'
+    words_input: ''
+};
+
+let arr_lista = localStorage.getItem('arr_lista') || [] ;
 
 
 //=================================================================//

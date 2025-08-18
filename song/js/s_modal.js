@@ -40,7 +40,7 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
             eid_modcont_body.style.overflow = 'auto';//habilita scroll  
             eid_modcont_body.classList.add('theme_grey');   
             //eid_h4_text.innerHTML = headerTitle;//'Меню';
-            eid_btn_sp_atras.style.display = 'none'; //mo muestro flecha atras
+            //eid_btn_sp_atras.style.display = 'none'; //mo muestro flecha atras
             eid_myModal.style.paddingTop = '0px';
             eid_myModalContent.classList.add('modalContentTop');
             eid_bl_modalTop.style.display = 'block';
@@ -86,7 +86,7 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
         //pendiente de desarrollo
         case 'center':
             eid_h4_text.innerHTML = headerTitle;//'verse Меню';
-            eid_btn_sp_atras.style.display = 'none';//?
+            //eid_btn_sp_atras.style.display = 'none';//?
             eid_myModal.style.paddingTop = '25vh';
             eid_myModalContent.classList.add('modalContentCenter');
             eid_bl_modalCenter.style.display = 'block';
@@ -115,7 +115,7 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
         //pendiente de desarrollo
         case 'bottom':
             eid_h4_text.innerHTML = headerTitle;//'verse Меню';
-            eid_btn_sp_atras.style.display = 'none';//?
+            //eid_btn_sp_atras.style.display = 'none';//?
             eid_myModal.style.paddingTop = '50vh';
             eid_myModalContent.classList.add('modalContentBottom');
             eid_bl_modalBottom.style.display = 'block';
@@ -345,7 +345,7 @@ async function getSongTextFromBd(){
 
 
 
-async function getSongTextFromBdByFind(objFindParams /*words_input*/){
+async function getSongTextFromBdByFind(objFindParams){
     console.log('=== function getSongTextFromBdByFind(words_input) ===');
 
     let {words_input, modo} = objFindParams;
@@ -392,6 +392,57 @@ async function getSongTextFromBdByFind(objFindParams /*words_input*/){
 
     } catch (error) {
         console.error('Error en getSongTextFromBdByFind(): error.message: ', error.message);
+    }
+}
+
+
+async function getListaTextFromBdByFind(objFindListaParams){
+    console.log('=== function getListaTextFromBdByFind(objFindListaParams) ===');
+
+    let {words_input, modo} = objFindListaParams;
+
+    try {
+        
+        if(!words_input){
+            alert('No hay words_input. hago return...');//'No hay todos los parametros necesarios.'
+            return;
+        }
+               
+        const response = await fetch('obtener_lista_by_find.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify({
+                words_input,
+                modo
+            }), // Convertir los datos a formato JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        //const data = await response.text();//test
+        console.log(data);  
+        
+        if(data.success){
+            console.log('success is true');
+
+            let arr_data = data.arr_data; 
+
+            console.log(`arr_data: `, arr_data);
+
+            return data;
+
+        }else{
+            console.log('success is false');
+            return 'no_hay_datos';
+        }
+
+    } catch (error) {
+        console.error('Error en getListaTextFromBdByFind(): error.message: ', error.message);
     }
 }
 
@@ -486,3 +537,116 @@ async function deleteSongFromBd(){
 }
 
 
+
+
+async function insertarListaDatos(objListaa) {
+    console.log('=== function insertarSongDatos(objSong) ===');
+
+    try {
+        
+        // if(get_cookieConsent && get_cookieConsent === 'rejected'){
+        //     let aviso_text = `Si no aceptas cookies no puedes insertar datos. <a onclick="showBlockCookies(); closeModal(null,true);">Seleccionar Coockies</a>.`;
+        //     openModal('center','Cookies',aviso_text,'showAviso');
+        //     return;
+        // }
+
+        if(!objSong || Object.keys(objSong).length == 0){
+            alert('No hay todos los parametros necesarios de la cancion...');//'No hay todos los parametros necesarios.'
+            return;
+        }
+
+        console.log('objSong: ',objSong);
+
+        const response = await fetch('insertar_song_datos.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(objSong)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        console.log('data: ',data); 
+        
+        return data;
+
+    } catch (error) {
+        console.error('Error en la función insertarSongDatos: ', error);
+    }
+}
+
+
+async function deleteSongFromBd(){
+    console.log('=== function deleteSongFromBd() ===');
+
+    try {
+        
+        if(!hay_id_song('deleteSongFromBd()')){
+            return; // <- se detiene aquí si no hay id_song
+        } 
+               
+        const response = await fetch('eliminar_song_datos.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify({
+                id_song: id_song
+            }), // Convertir los datos a formato JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        //const data = await response.text();//test
+        console.log(data);  
+        
+        if(data.success){
+            console.log('success is true');
+
+            let song_title = data.title; 
+            let song_text = data.song_text; 
+            data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : data.arr_esquema ; 
+
+            console.log(`[ELIMINADA] id_song: [${id_song}] --- song_title: [${song_title}] --- song_text: [${song_text}] --- data.arr_esquema: `, data.arr_esquema);
+
+            return data;
+
+        }else{
+            console.log('success is false');
+            return 'no_hay_datos';
+        }
+
+    } catch (error) {
+        console.error('Error en deleteSongFromBd(): error.message: ', error.message);
+    }
+}
+
+
+
+function showAviso(htmlTrans, positionModal){
+    console.log('=== showAviso(htmlTrans, param) ===');
+
+    if(positionModal == 'center'){
+        eid_bl_modalCenterInner.innerHTML = '';
+    }else if(positionModal == 'bottom'){
+        eid_bl_modalBottomInner.innerHTML = '';
+    }
+    
+    const p = document.createElement('p');
+    p.className = 'p_aviso';
+    p.innerHTML = htmlTrans;
+
+    if(positionModal == 'center'){
+        eid_bl_modalCenterInner.append(p);    
+    }else if(positionModal == 'bottom'){
+        eid_bl_modalBottomInner.append(p);
+    }
+
+}

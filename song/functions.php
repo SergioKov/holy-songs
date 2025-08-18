@@ -164,7 +164,117 @@ function prepararQuery($conn, $query, $arr_params, $sign = '?') {
 
 
 
+function buildWhere($modo, $texto, $campos = ["contenido"], &$params = [], &$types = "") {
+    
+    $where = "";
+    $texto = trim($texto);
 
+    switch ($modo) {
+
+        // 1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)
+        case 1:
+            $palabras = preg_split('/\s+/', $texto);
+            $ands = [];
+            foreach ($palabras as $palabra) {
+                $ors = [];
+                foreach ($campos as $campo) {
+                    $ors[] = "$campo LIKE ?";
+                    $params[] = "%" . $palabra . "%";
+                    $types .= "s";
+                }
+                $ands[] = "(" . implode(" OR ", $ors) . ")";
+            }
+            $where = implode(" AND ", $ands);
+            break;
+
+
+        // 2) Todas las palabras (sin importar orden)
+        case 2:
+        $palabras = preg_split('/\s+/', $texto);
+        $ands = [];
+        foreach ($palabras as $palabra) {
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo REGEXP ?";
+                $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                $types .= "s";
+            }
+            $ands[] = "(" . implode(" OR ", $ors) . ")";
+        }
+        $where = implode(" AND ", $ands);
+        break;
+        
+
+        // 3) Coincidir al menos una palabra (OR global)
+        case 3:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+            $orsGlobal = [];
+
+            foreach ($palabras as $palabra) {
+                $orsCampos = [];
+                foreach ($campos as $campo) {
+                    $orsCampos[] = "$campo REGEXP ?";
+                    $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                    $types .= "s";
+                }
+                // Cada palabra puede aparecer en cualquiera de los campos
+                $orsGlobal[] = "(" . implode(" OR ", $orsCampos) . ")";
+            }
+
+            // Con OR global: basta con que una de las palabras esté
+            $where = "(" . implode(" OR ", $orsGlobal) . ")";
+            break;            
+
+
+        // 4) Palabras en el orden establecido
+        case 4:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+
+            // Un solo patrón que respete el orden
+            $pattern = implode('.+', array_map('preg_quote', $palabras));
+
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo REGEXP ?";
+                $params[] = $pattern;
+                $types .= "s";
+            }
+            $where = "(" . implode(" OR ", $ors) . ")";
+            break; 
+            
+            
+        // 5) Frase exacta
+        case 5:
+            $ors = [];
+            foreach ($campos as $campo) {
+                $ors[] = "$campo LIKE ?";
+                $params[] = "%" . $texto . "%";
+                $types .= "s";
+            }
+            $where = "(" . implode(" OR ", $ors) . ")";
+            break;
+
+
+        // 6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)
+        case 6:
+            $palabras = preg_split('/\s+/', $texto, -1, PREG_SPLIT_NO_EMPTY);
+            $ands = [];
+            foreach ($palabras as $palabra) {
+                $ors = [];
+                foreach ($campos as $campo) {
+                    $ors[] = "$campo REGEXP ?";
+                    $params[] = "[[:<:]]" . $palabra . "[[:>:]]";
+                    $types .= "s";
+                }
+                $ands[] = "(" . implode(" OR ", $ors) . ")";
+            }
+            $where = implode(" AND ", $ands);
+            break;
+
+    }
+
+    return $where;
+}
 
 
 
