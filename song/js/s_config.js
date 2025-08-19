@@ -234,7 +234,8 @@ let objFindListaParams = {
     words_input: ''
 };
 
-let arr_lista = localStorage.getItem('arr_lista') || [] ;
+// let arr_lista = JSON.parse(localStorage.getItem('arr_lista')) || [] ;
+let arr_lista = [] ;
 
 
 //=================================================================//

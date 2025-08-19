@@ -845,6 +845,12 @@ h5 {
 b.c_red {
     color: red;
 }
+b.c_blue {
+    color: blue;
+}
+b.c_green {
+    color: green;
+}
 
 .wr_nav {
     background: #858585;
@@ -1359,6 +1365,9 @@ textarea:not(:placeholder-shown) + label
 }
 
 .wr_id_song,
+.wr_id_lista,
+.wr_title,
+.wr_fecha,
 .wr_song_number,
 .wr_tune,
 .wr_lang
@@ -1476,7 +1485,7 @@ p.p_aviso a {
     white-space: nowrap;
 }
 
-p.p_list {
+p.p_lista {
     background: #494949;
     width: 100%;
     display: flex;
@@ -1489,7 +1498,7 @@ p.p_list {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-p.p_list:hover {
+p.p_lista:hover {
     background: #737373;
 }
 
@@ -1504,3 +1513,14 @@ p.p_list:hover {
 .l_tune {
     color: #51ebff;
 }
+
+.wr_p_lista {
+    /* background: grey; */
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+

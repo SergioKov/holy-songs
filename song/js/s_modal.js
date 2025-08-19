@@ -171,6 +171,18 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
                     //alert('hasta aki...');
                     buildEsquema();
                     break;
+
+                case 'buildLista':
+                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    console.log('aki llamar buildLista()');
+                    // alert('hasta aki...');
+                    let lista_action = args;
+                    console.log('lista_action:', lista_action);
+
+                    buildLista(lista_action);
+                    break;
             
                 default:
                     //console.log('indica action en openModal()');
@@ -283,6 +295,149 @@ function buildEsquema(){
 
     //eid_bl_modalFullInner.append(p);
     eid_bl_modalFullInner.append(d_ejemplo);
+}
+
+
+function buildLista(lista_action = null){
+    console.log('=== function buildLista() ===');
+    console.log('lista_action: ', lista_action);
+    console.log('objLista: ', objLista);
+
+    eid_bl_modalFullInner.innerHTML = '';//reset
+
+    let id_lista_val = '';
+    let title_val = '';
+    let fecha_val = '';
+    let notes_val = '';
+    let mensaje_html = '';
+    let arr_lista_bucle = [];
+    
+    //Nueva lista
+    if(lista_action == 'nueva'){
+        mensaje_html = `
+            <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
+        `;
+        arr_lista_bucle = arr_lista;
+        console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);
+        id_lista = null;
+    }
+    
+    //Editar lista
+    if(lista_action == 'editar'){
+        mensaje_html = `
+            <span>Rellena los campos del formulario con los datos de la lista <b class="c_green">EDITADA</b>.</span>
+        `;
+        id_lista_val = objLista.id_lista;
+        title_val = objLista.title;
+        fecha_val = objLista.fecha;
+        notes_val = objLista.notes;
+
+        arr_lista_bucle = objLista.arr_lista;
+        console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+    }
+    
+
+
+    const wr_id_lista = document.createElement('div');
+    wr_id_lista.className = 'form_group wr_id_lista';
+    wr_id_lista.innerHTML = `
+        <input type="number" id="id_lista" name="id_lista" required="" placeholder=" " disabled value="${id_lista_val}">
+        <label for="id_lista">Id</label>
+    `;
+
+    const form_lista = document.createElement('div');
+    form_lista.id = 'form_lista';
+    form_lista.innerHTML = `
+        <div class="form_container">
+            <form>
+                
+                <p class="mensaje" data-dic="">
+                    ${mensaje_html}
+                </p>
+
+                <div class="wr_group">
+
+                    <div class="form_group wr_title">
+                        <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
+                        <label for="title">Título de la lista</label>
+                    </div>
+
+                    ${(lista_action == 'editar') ? wr_id_lista.outerHTML : ''}
+
+                </div>
+
+                <div class="form_group wr_fecha">
+                    <input type="date" id="fecha" name="fecha" required="" placeholder=" " value="${fecha_val}">
+                    <label for="title">Fecha del evento</label>
+                </div>
+
+
+                <h4>Canciones:</h4>
+                <div id="d_canciones_lista"></div>
+
+                <div class="form_group">
+                    <textarea id="notes" name="notes" rows="3" required="" placeholder=" ">${notes_val}</textarea>
+                    <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
+                </div>
+
+
+                <div class="wr_btns_form">
+                    <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
+                    <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarLista(event)">Guardar</button>
+                </div>
+
+            </form>
+        </div>     
+    `;
+
+
+    const wr_p_lista = document.createElement('div');
+    wr_p_lista.className = 'wr_p_lista';
+    
+    if(Array.isArray(arr_lista_bucle) && arr_lista_bucle.length > 0){
+          
+        arr_lista_bucle.forEach((item, i) => {
+            console.log('item: ', item);
+
+            const p = document.createElement('p');
+            p.className = 'p_lista';
+            p.dataset.id_song = item.id_song;
+            p.innerHTML = `
+                <span class="l_n">${i + 1}.</span>
+                <span class="l_title">${item.title}</span>
+                <span class="l_tune">${item.tune || '--'}</span>
+            `;
+            p.onclick = (e) => {
+                console.log(e.currentTarget.dataset.id_song);
+                let este_id_song = e.currentTarget.dataset.id_song;
+
+                alert(este_id_song);
+            }
+
+            wr_p_lista.append(p);
+        });
+
+        form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+
+    }else{//lista vacía
+            
+        const p = document.createElement('p');
+        p.className = 'prim';
+        p.innerHTML = `
+                No hay canciónes 
+        `;                       
+
+        wr_p_lista.append(p);
+        form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+    }
+
+
+
+
+
+    eid_bl_modalFullInner.append(form_lista);
+
+    console.log('fin func');
 }
 
 
@@ -539,8 +694,8 @@ async function deleteSongFromBd(){
 
 
 
-async function insertarListaDatos(objListaa) {
-    console.log('=== function insertarSongDatos(objSong) ===');
+async function insertarListaDatos(objLista) {
+    console.log('=== function insertarListaDatos(objLista) ===');
 
     try {
         
@@ -550,19 +705,22 @@ async function insertarListaDatos(objListaa) {
         //     return;
         // }
 
-        if(!objSong || Object.keys(objSong).length == 0){
-            alert('No hay todos los parametros necesarios de la cancion...');//'No hay todos los parametros necesarios.'
+        if(!objLista || Object.keys(objLista).length == 0){
+            alert('No hay todos los parametros necesarios de la lista...');//'No hay todos los parametros necesarios.'
             return;
         }
 
-        console.log('objSong: ',objSong);
+        console.log('objLista: ',objLista);
 
-        const response = await fetch('insertar_song_datos.php', {
+        const objLista_str = JSON.stringify(objLista);
+        console.log('objLista_str: ',objLista_str);
+
+        const response = await fetch('insertar_lista_datos.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(objSong)
+            body: objLista_str
         });
 
         if (!response.ok) {

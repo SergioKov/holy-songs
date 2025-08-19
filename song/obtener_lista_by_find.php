@@ -84,13 +84,14 @@ $params = [];
 $types  = "";
 
 // Buscar "Jesús Pedro" en varios campos
-$where = buildWhere($modo, $words_input, ["id_lista", "title"], $params, $types);
+$where = buildWhere($modo, $words_input, ["id_lista", "title", "notes"], $params, $types);
 
 
 //test modos de where
 $sql_init = "SELECT 
                 id_lista, 
                 title,
+                notes,
                 arr_lista,
                 fecha,
                 created_at,
@@ -151,6 +152,7 @@ if($result->num_rows > 0){
             'success' => true,
             'id_lista' => $row['id_lista'],
             'title' => $row['title'],
+            'notes' => $row['notes'],
             'arr_lista' => $row['arr_lista'],
             'fecha' => $row['fecha'],
             'created_at' => $row['created_at'],

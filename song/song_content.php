@@ -142,8 +142,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar">Buscar</div>
                         <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema">Esquema</div>
                         <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion">Canción</div>
-                        <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo">Ejemplo</div>
-                        <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista">Lista</div>
+                        <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo">Ejemplo</div>
+                        <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista">Lista</div>
                     </div>
 
                     <div class="bl_body">
@@ -540,7 +540,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         </div><!--/#block_cancion-->
 
 
-                        <div id="block_ejemplo" class="edit_blocks d-block">
+                        <div id="block_ejemplo" class="edit_blocks">
                             
                             <div id="block_ejemplo_head" class="edit_blocks_head">
                                 <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Приклад (Укр.)</button>
@@ -602,12 +602,12 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         </div><!--/#block_ejemplo-->
 
 
-                        <div id="block_lista" class="edit_blocks">
+                        <div id="block_lista" class="edit_blocks d-block">
                             
                             <div id="block_lista_head" class="edit_blocks_head">
-                                <button id="btn_lista_ver" class="btn" onclick="editar_lista('ver')">Ver lista</button>
-                                <button id="btn_lista_editar" class="btn" onclick="editar_lista('editar')">Editar lista</button>
-                                <button id="btn_lista_nueva" class="btn" onclick="nueva_lista();">Nueva lista</button>
+                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
+                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
+                                <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
                                 <button id="btn_lista_eliminar" class="btn" onclick="eliminar_lista();">Eliminar lista</button>
                             </div>
 
@@ -625,7 +625,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 type="text"
                                                 placeholder="Введите слово или фразу для поиска..."
                                                 data-dic=""
-                                                value="lalala"
+                                                value="zzz"
                                             >
                                             <div id="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
                                         </div>
@@ -685,7 +685,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div class="partes bl_parte_r">
                                     <h4>Vista previa</h4>
 
-                                    <h5>Texto de la canción seleccionada:</h5>
+                                    <h5>Datos de la lista seleccionada:</h5>
                                     <div class="bloques_outer">                                    
                                         <div class="bloques wr_vista_song">
                                             <div class="vista_song_content">

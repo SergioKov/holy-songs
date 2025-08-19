@@ -33,6 +33,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
         $jsonString = $_GET['datos'];//saco datos del url.
         //debug($jsonString, 'jsonString');
+        //echo_json_x($jsonString, 'jsonString');
     } 
     
     
@@ -46,7 +47,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     // Validar si la decodificación fue exitosa
     if (json_last_error() === JSON_ERROR_NONE) {
         // Validar estructura y contenido del JSON
-        if (isset($datos['song_text']) ) {
+        if (isset($datos['title']) ) {
             //echo "JSON es válido y contiene las claves esperadas.";
             //sigo adelante...
         } else {
@@ -116,21 +117,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     include('includes/connect_db.php');
 
     
-    $id_song = $conn->real_escape_string($datos['id_song']);//get parameter
-    $song_number = $conn->real_escape_string($datos['song_number']);//get parameter
+    $id_lista = $conn->real_escape_string($datos['id_lista']);//get parameter
     $title = $conn->real_escape_string($datos['title']);//get parameter
-    $category  = $conn->real_escape_string($datos['category']);//get parameter
-    $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
-    $arr_esquema = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
-    $tune  = $conn->real_escape_string($datos['tune']);//get parameter
-    $lang  = $conn->real_escape_string($datos['lang']);//get parameter
     $notes  = $conn->real_escape_string($datos['notes']);//get parameter
-    //$count  = $conn->real_escape_string($datos['count']);//get parameter
+    $arr_lista = json_encode($datos['arr_lista'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+    $fecha  = $conn->real_escape_string($datos['fecha']);//get parameter
 
-    //debug($tabla);
-    //debug($campo);
+    //debug($title);
     //debug($arr, 'arr');
-    //echo_json_x($arr, 'arr');
+    //echo_json_x($arr_lista, 'arr_lista');
 
     //exit('<br>hasta aki-2');
 
@@ -141,13 +136,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //busco si hay registro en la tabla a donde insertar array
     // $sql_init = "SELECT * 
     //             FROM songs 
-    //             WHERE id_songs = '$id_song' 
+    //             WHERE id_lista = '$id_lista' 
     // ";
-    $sql_prep = "SELECT * 
-                FROM songs 
-                WHERE id_song = ? 
+    $sql_prep = "SELECT id_lista 
+                FROM listas 
+                WHERE id_lista = ? 
     ";
-    $arr_params = [$id_song];
+    $arr_params = [$id_lista];
     $sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
 	$result = $conn->query($sql_preparada);
     //debug_x($sql_preparada, 'sql_preparada');
@@ -155,30 +150,26 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     if($result->num_rows > 0){
         $row = $result->fetch_assoc();
 		//echo_json_x($row,'row');		
-        $stored_id_song = $row["id_song"];//1
-        $hay_id_song_en_tabla = true;
+        $stored_id_lista = $row["id_lista"];//1
+        $hay_id_lista_en_tabla = true;
     }else{
-        $hay_id_song_en_tabla = false;
+        $hay_id_lista_en_tabla = false;
     }
 
-	//echo_json_x($hay_id_song_en_tabla, 'hay_id_song_en_tabla');
+	//echo_json_x($hay_id_lista_en_tabla, 'hay_id_lista_en_tabla');
 
     $sign = '__[(&)]__';//IMPORTANTE! para que ho haya errores con $arr en json
     
     // Realizar la inserción o (update) en la base de datos 
-    if($hay_id_song_en_tabla){
+    if($hay_id_lista_en_tabla){
         //hago update
-        $sql2_up_init = "UPDATE songs SET
-                song_number = '$song_number',
+        $sql2_up_init = "UPDATE listas SET
                 title = '$title',
-                category = '$category',
-                song_text = '$song_text',
-                arr_esquema = '$arr_esquema',
-                tune = '$tune',
-                lang = '$lang',
+                arr_lista = $arr_lista,
                 notes = '$notes',
+                fecha = '$fecha',
                 updated_at = '$fechaHoraActual'
-            WHERE id_song = '$id_song'
+            WHERE id_lista = '$id_lista'
         ";
         //$sql2_up_prep = "UPDATE $tabla SET 
         //            $campo = $sign,
@@ -194,17 +185,17 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }else{
         
         //hago insert
-        if (is_array($arr_esquema) && !empty($arr_esquema)) {// Es un array y tiene elementos
-            $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
+        if ( true /*is_array($arr_lista) && !empty($arr_lista)*/) {// Es un array y tiene elementos
+            $sql2_in_init = "INSERT INTO listas 
+                    (  title,    arr_lista,    fecha,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$song_text', '$arr_esquema', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$title', $arr_lista, '$fecha', '$notes', '$fechaHoraActual')
             ";
-        }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
-            $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    song_text,    tune,    lang,    notes,    created_at) 
+        }else{//no es array o está vacío. no incluyo arr_lista en la SQL
+            $sql2_in_init = "INSERT INTO listas 
+                    (  title,    fecha,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$song_text', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$title', '$fecha', '$notes', '$fechaHoraActual')
             ";
         }
         // $sql2_in_prep = "INSERT INTO $tabla (id_user, $campo, created_at) 
@@ -223,33 +214,33 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     //Update o insert datos en la tabla $tabla
     if($result2 === TRUE) {
-        if($hay_id_song_en_tabla){
+        if($hay_id_lista_en_tabla){
             $respuesta = [
                 'success' => true,
-                'id_song' => $id_song,
+                'id_lista' => $id_lista,
                 'action' => 'is_update',
                 'mensaje' => 'Datos actualizados correctamente.'
             ];
         }else{
-            //consulta para saber id_song de la cancion añadida
-            $sql_id_song = "SELECT id_song 
-                            FROM songs
-                            ORDER BY id_song DESC
+            //consulta para saber id_lista de la lista añadida
+            $sql_id_lista = "SELECT id_lista 
+                            FROM listas
+                            ORDER BY id_lista DESC
                             LIMIT 1 
             ";
-            $result_id_song = $conn->query($sql_id_song);
+            $result_id_lista = $conn->query($sql_id_lista);
 
-            if($result_id_song->num_rows > 0){
-                $row_id_song = $result_id_song->fetch_assoc();
-                //echo_json_x($row_id_song,'row_id_song');		
-                $id_song_bd = $row_id_song["id_song"];//1    
+            if($result_id_lista->num_rows > 0){
+                $row_id_lista = $result_id_lista->fetch_assoc();
+                //echo_json_x($row_id_lista,'row_id_lista');		
+                $id_lista_bd = $row_id_lista["id_lista"];//1    
             }else{
-                $id_song_bd = null;
+                $id_lista_bd = null;
             }
 
             $respuesta = [
                 'success' => true,
-                'id_song' => $id_song_bd,
+                'id_lista' => $id_lista_bd,
                 'action' => 'is_insert',
                 'mensaje' => 'Datos insertados correctamente.'
             ];
@@ -257,7 +248,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     }else{
 
-        if($hay_id_song_en_tabla){
+        if($hay_id_lista_en_tabla){
             //writeLog("Error al actualizar datos. Error: [" . $conn->error . "]");
 
             $respuesta = [
