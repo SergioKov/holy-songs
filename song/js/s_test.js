@@ -352,4 +352,5 @@ function crearSlidesForSongOfLista(e, lista_id_song) {
 
     crearSlides();
     closeAll();
+    closeModal(null,true);
 }

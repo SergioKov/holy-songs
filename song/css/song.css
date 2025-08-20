@@ -1600,3 +1600,10 @@ p.p_lista:hover {
 .parte_lista:not(:last-child){
     margin-bottom: 25px;
 }
+
+p.p_sm {
+    color: white;
+    font-family: Arial;
+    font-weight: normal;
+    padding: 5px 0;
+}

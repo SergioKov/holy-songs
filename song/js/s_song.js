@@ -950,21 +950,35 @@ function buildSong(){
     currentSlide = 0;//reset al cargar nueva cancion
     totalSlides = arr_esquema_bucle.length;//total de slides a pintar
 
+    if(Object.keys(obj_bloques).length > 0){
+        console.log('obj_bloques es correcto y no vacio');
+        
+    }else{//DORABOTAT!!!
+        console.log('obj_bloques es vacio: ');
+        alert('obj_bloques es vacio. edita el texto de la cancion para poder separarlo en bloques');
+        
+        // showEdit('cancion');
+        // showBlockName('cancion'); 
+        // editar_song('ver');
+        // return;
+
+    }
+
     //recorrer el bucle...
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;//bd
+        const slide_original = obj_bloques[titulo]?.slide;//bd
         console.log('slide_original: ', slide_original);
 
-            const slide_original_next = (arr[i+1]) ? obj_bloques[arr[i+1]].slide : null ;//bd
-            console.log('slide_original_next: ', slide_original_next);
+        const slide_original_next = (arr[i+1]) ? obj_bloques[arr[i+1]]?.slide : null ;//bd
+        console.log('slide_original_next: ', slide_original_next);
         
-        const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
+        const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
         console.log('slide_clone: ', slide_clone);        
 
-            const slide_clone_next = (arr[i+1]) ? slide_original_next.cloneNode(true) : null ; // true para clonar también hijos 
-            console.log('slide_clone_next: ', slide_clone_next);
+        const slide_clone_next = (arr[i+1]) ? slide_original_next?.cloneNode(true) : null ; // true para clonar también hijos 
+        console.log('slide_clone_next: ', slide_clone_next);
 
         const step = document.createElement('div');
         step.className = 'step';

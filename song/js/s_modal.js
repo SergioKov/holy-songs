@@ -307,10 +307,12 @@ function buildLista(lista_action = null){
 
     let id_lista_val = '';
     let title_val = '';
+    let diaSemana_val = '';
     let fecha_val = '';
     let notes_val = '';
     let mensaje_html = '';
     let arr_lista_bucle = [];
+    let contenedor;//general. se asigna luego
     
 
     //Nueva lista
@@ -328,6 +330,7 @@ function buildLista(lista_action = null){
     if(lista_action == 'ver'){
         id_lista_val = objLista.id_lista;
         title_val = objLista.title;
+        diaSemana_val = diaSemana(objLista.fecha);
         fecha_val = invertirFecha(objLista.fecha);
         notes_val = objLista.notes;
 
@@ -350,20 +353,22 @@ function buildLista(lista_action = null){
         console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
     }
     
-
+    
 
 
     //para VER sm
-    const contenedor_sm_lista = document.createElement('div');
-    contenedor_sm_lista.id = 'contenedor_sm_lista';
-    contenedor_sm_lista.innerHTML = `                    
-        <p class="">Titulo: ${title_val} (id: ${id_lista_val})</p>
-        <p class="">Fecha: ${fecha_val}</p>
+    const contenedor_lista_sm = document.createElement('div');
+    contenedor_lista_sm.id = 'contenedor_lista_sm';
+    contenedor_lista_sm.innerHTML = `                    
+        <div class="parte_lista">
+            <p class="p_sm">Titulo: ${title_val} (id: ${id_lista_val})</p>
+            <p class="p_sm">Fecha: ${diaSemana_val} ${fecha_val}</p>
+        </div>
         
         <!-- Canciones -->
         <div id="d_canciones_lista"></div>   
         
-        <p class="">Notas: ${notes_val}</p>
+        <p class="p_sm">Notas: ${notes_val}</p>
     `;
 
     //para Ver y Editar
@@ -420,6 +425,12 @@ function buildLista(lista_action = null){
         </div>     
     `;
 
+    if(lista_action == 'ver'){ 
+        contenedor = contenedor_lista_sm;
+    }else{
+        contenedor = form_lista;
+    }
+
 
     const wr_p_lista = document.createElement('div');
     wr_p_lista.className = 'wr_p_lista';
@@ -456,8 +467,7 @@ function buildLista(lista_action = null){
             wr_p_lista.append(p);
         });
 
-        form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
-        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+        contenedor.querySelector('#d_canciones_lista').append(wr_p_lista);        
 
     }else{//lista vacía
             
@@ -468,18 +478,10 @@ function buildLista(lista_action = null){
         `;                       
 
         wr_p_lista.append(p);
-        form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
-        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+        contenedor.querySelector('#d_canciones_lista').append(wr_p_lista);
     }
 
-
-    if(lista_action == 'ver'){ 
-        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);        
-        eid_bl_modalFullInner.append(contenedor_sm_lista);
-    }else{
-        //form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
-        eid_bl_modalFullInner.append(form_lista);
-    }
+    eid_bl_modalFullInner.append(contenedor);
 
     console.log('fin func');
 }
