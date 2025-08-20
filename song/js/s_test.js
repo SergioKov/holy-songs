@@ -337,7 +337,7 @@ function invertirFecha(fechaStr, separador = '/') {
     return `${dia}${separador}${mes}${separador}${anio}`;// '03/12/2025' 
 }
 
-function crearSlidesForSongOfLista(e, lista_id_song) {
+async function crearSlidesForSongOfLista(e, lista_id_song) {
     console.log('=== function crearSlidesForSongOfLista() ===');
 
     resetBlockBuscar();//quito song anterior si hay
@@ -349,6 +349,9 @@ function crearSlidesForSongOfLista(e, lista_id_song) {
 
     id_song = lista_id_song;
     console.log('lista_id_song: ', lista_id_song);
+
+    //cojo datos de la song de la lista desde BD
+    objSong = await getSongTextFromBd();
 
     crearSlides();
     closeAll();
