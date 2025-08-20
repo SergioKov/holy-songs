@@ -224,14 +224,14 @@ let obj_lang_names = {
 };
 
 let objFindParams = {
-    retornar: 'todo',// 'todo' o 'find'
     words_input: '',
     lang: '',//idioma de la canción
+    buscar_en: '',// campos para buscar en
 };
 
 let objFindListaParams = {
-    retornar: 'todo',// 'todo' o 'find'
-    words_input: ''
+    words_input: '',
+    buscar_en: '',// campos para buscar en
 };
 
 // let arr_lista = JSON.parse(localStorage.getItem('arr_lista')) || [] ;

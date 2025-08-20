@@ -164,7 +164,7 @@ function prepararQuery($conn, $query, $arr_params, $sign = '?') {
 
 
 
-function buildWhere($modo, $texto, $campos = ["contenido"], &$params = [], &$types = "") {
+function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [], &$types = "") {
     
     $where = "";
     $texto = trim($texto);

@@ -312,6 +312,7 @@ function buildLista(lista_action = null){
     let mensaje_html = '';
     let arr_lista_bucle = [];
     
+
     //Nueva lista
     if(lista_action == 'nueva'){
         mensaje_html = `
@@ -322,6 +323,19 @@ function buildLista(lista_action = null){
         id_lista = null;
     }
     
+
+    //Ver lista
+    if(lista_action == 'ver'){
+        id_lista_val = objLista.id_lista;
+        title_val = objLista.title;
+        fecha_val = invertirFecha(objLista.fecha);
+        notes_val = objLista.notes;
+
+        arr_lista_bucle = objLista.arr_lista;
+        console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+    }
+
+
     //Editar lista
     if(lista_action == 'editar'){
         mensaje_html = `
@@ -338,13 +352,29 @@ function buildLista(lista_action = null){
     
 
 
+
+    //para VER sm
+    const contenedor_sm_lista = document.createElement('div');
+    contenedor_sm_lista.id = 'contenedor_sm_lista';
+    contenedor_sm_lista.innerHTML = `                    
+        <p class="">Titulo: ${title_val} (id: ${id_lista_val})</p>
+        <p class="">Fecha: ${fecha_val}</p>
+        
+        <!-- Canciones -->
+        <div id="d_canciones_lista"></div>   
+        
+        <p class="">Notas: ${notes_val}</p>
+    `;
+
+    //para Ver y Editar
     const wr_id_lista = document.createElement('div');
     wr_id_lista.className = 'form_group wr_id_lista';
     wr_id_lista.innerHTML = `
         <input type="number" id="id_lista" name="id_lista" required="" placeholder=" " disabled value="${id_lista_val}">
         <label for="id_lista">Id</label>
-    `;
+    `;    
 
+    //FORMULARIO
     const form_lista = document.createElement('div');
     form_lista.id = 'form_lista';
     form_lista.innerHTML = `
@@ -372,7 +402,7 @@ function buildLista(lista_action = null){
                 </div>
 
 
-                <h4>Canciones:</h4>
+                <!-- Canciones -->
                 <div id="d_canciones_lista"></div>
 
                 <div class="form_group">
@@ -395,7 +425,15 @@ function buildLista(lista_action = null){
     wr_p_lista.className = 'wr_p_lista';
     
     if(Array.isArray(arr_lista_bucle) && arr_lista_bucle.length > 0){
-          
+        const wr_p_lista = document.createElement('div');
+        wr_p_lista.className = 'wr_p_lista';
+        
+        const d_canciones_head = document.createElement('div');
+        d_canciones_head.className = 'canciones_head';
+        d_canciones_head.textContent = 'Canciones:';
+        wr_p_lista.append(d_canciones_head);
+
+        //Recorrer array
         arr_lista_bucle.forEach((item, i) => {
             console.log('item: ', item);
 
@@ -409,15 +447,17 @@ function buildLista(lista_action = null){
             `;
             p.onclick = (e) => {
                 console.log(e.currentTarget.dataset.id_song);
-                let este_id_song = e.currentTarget.dataset.id_song;
+                let lista_id_song = e.currentTarget.dataset.id_song;
 
-                alert(este_id_song);
+                crearSlidesForSongOfLista(e, lista_id_song);
+
             }
 
             wr_p_lista.append(p);
         });
 
         form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
 
     }else{//lista vacía
             
@@ -429,13 +469,17 @@ function buildLista(lista_action = null){
 
         wr_p_lista.append(p);
         form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
     }
 
 
-
-
-
-    eid_bl_modalFullInner.append(form_lista);
+    if(lista_action == 'ver'){ 
+        //contenedor_sm_lista.querySelector('#d_canciones_lista').append(wr_p_lista);        
+        eid_bl_modalFullInner.append(contenedor_sm_lista);
+    }else{
+        //form_lista.querySelector('#d_canciones_lista').append(wr_p_lista);
+        eid_bl_modalFullInner.append(form_lista);
+    }
 
     console.log('fin func');
 }
@@ -503,7 +547,7 @@ async function getSongTextFromBd(){
 async function getSongTextFromBdByFind(objFindParams){
     console.log('=== function getSongTextFromBdByFind(words_input) ===');
 
-    let {words_input, modo} = objFindParams;
+    let {words_input, modo, buscar_en} = objFindParams;
 
     try {
         
@@ -519,7 +563,8 @@ async function getSongTextFromBdByFind(objFindParams){
             },
             body: JSON.stringify({
                 words_input,
-                modo
+                modo,
+                buscar_en
             }), // Convertir los datos a formato JSON
         });
 
@@ -554,7 +599,7 @@ async function getSongTextFromBdByFind(objFindParams){
 async function getListaTextFromBdByFind(objFindListaParams){
     console.log('=== function getListaTextFromBdByFind(objFindListaParams) ===');
 
-    let {words_input, modo} = objFindListaParams;
+    let {words_input, modo, buscar_en} = objFindListaParams;
 
     try {
         
@@ -570,7 +615,8 @@ async function getListaTextFromBdByFind(objFindListaParams){
             },
             body: JSON.stringify({
                 words_input,
-                modo
+                modo,
+                buscar_en
             }), // Convertir los datos a formato JSON
         });
 

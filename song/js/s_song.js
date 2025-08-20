@@ -1910,6 +1910,12 @@ function resetTrSelected(contenedor){
     });
 }
 
+function resetPListaActive() {
+    document.querySelectorAll('.p_lista').forEach(p => {
+        p.classList.remove('active');
+    });
+}
+
 function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
     const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
     //'|D      |F#m |G  |G  |'  => true;
@@ -2044,9 +2050,11 @@ async function findWordsSong(){
 
     const eid_inpt_find = document.getElementById('inpt_find');
     const eid_modo = document.getElementById('modo');
+    const eid_buscar_en = document.getElementById('buscar_en');
 
     let frase = eid_inpt_find.value;
     let modo = eid_modo.value;
+    let buscar_en = eid_buscar_en.value;
 
     let words_input = frase.trim();
     if(words_input == ''){
@@ -2068,11 +2076,10 @@ async function findWordsSong(){
 
     objFindParams.words_input = words_input;
     objFindParams.modo = modo;
-
+    objFindParams.buscar_en = buscar_en;
 
     const objData = await getSongTextFromBdByFind(objFindParams);
     console.log('objData: ', objData);
-
 
     if(esObjeto(objData) && objData.arr_data.length > 0){
         console.log('hay coincidencias...');
@@ -2097,19 +2104,21 @@ async function findWordsSong(){
                 <td class="td_titulo">${el.title}</td>
                 <td class="td_esquema">${el.arr_esquema?.length ? 'Sí' : ''}</td>            
                 <td class="td_category" data-category="${el.category}">${el.category_name || ''}</td>            
-                <td class="td_idioma">${obj_lang_names[el.lang] || el.lang}</td>
+                <td class="td_idioma" data-lang_name="${el.lang_name}">${obj_lang_names[el.lang] || el.lang}</td>
                 <td class="td_tonalidad">${el.tune}</td>
             `;
 
             tr.onclick = (e)=>{
                 console.log('e.currentTarget: ', e.currentTarget);
+
                 id_song = e.currentTarget.dataset.id;
                 console.log('asigno global --- id_song: ', id_song);
 
                 resetTrSelected(tbody);
                 e.currentTarget.classList.add('selected');
 
-                const vista_song_content = document.querySelector('.vista_song_content');
+                //song_text
+                const vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
                 vista_song_content.innerHTML = '';//reset
 
                 const wr_btns_action = document.querySelector('.wr_btns_action');
@@ -2131,15 +2140,47 @@ async function findWordsSong(){
                 const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
                 console.log('regex: ', regex);
 
-                let song_text_red = objSong.song_text.replace(regex, (x) => {
-                    return `<b class="c_red">${x}</b>`;
-                });
+                let vista_html = '';
 
-                vista_song_content.innerHTML = song_text_red;
+                if(objSong.title){
+                    //Marco en rojo las palabras encontradas en title 
+                    let titulo_text_red = objSong.title.replace(regex, (x) => {
+                        return `<b class="c_red">${x}</b>`;
+                    });
+                    vista_html += `
+                        <p class="p_titulo">Título Canción:</p>
+                        <p class="texto_norm t_big">${titulo_text_red}</p>
+                    `;
+                }
+        
+                if(objSong.song_text){
+                    //Marco en rojo las palabras encontradas en song_text 
+                    let song_text_red = objSong.song_text.replace(regex, (x) => {
+                        return `<b class="c_red">${x}</b>`;
+                    });
+                    vista_html += `
+                        <p class="p_titulo">Texto:</p>
+                        <div class="texto_pre">${song_text_red}</div>
+                    `;
+                }
+
+                if(objSong.notes){
+                    //Marco en rojo las palabras encontradas en notes 
+                    let notas_text_red = objSong.notes.replace(regex, (x) => {
+                        return `<b class="c_red">${x}</b>`;
+                    });
+                    vista_html += `
+                        <p class="p_titulo">Notas:</p>
+                        <p class="texto_norm">${notas_text_red}</p>
+                    `;
+                }                 
+
+                vista_song_content.innerHTML = vista_html;
 
                 resetBlockCancion();
                 resetLineasXinBlock(eid_block_cancion);
-            }
+
+            }//end - tr.onclick
 
             tbody.append(tr);
         });
@@ -2163,9 +2204,11 @@ async function findWordsLista(){
 
     const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
     const eid_modo_lista = document.getElementById('modo_lista');
+    const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
 
     let frase = eid_inpt_find_lista.value;
     let modo = eid_modo_lista.value;
+    let buscar_en = eid_buscar_en_lista.value;
 
     let words_input = frase.trim();
     if(words_input == ''){
@@ -2187,6 +2230,7 @@ async function findWordsLista(){
 
     objFindListaParams.words_input = words_input;
     objFindListaParams.modo = modo;
+    objFindListaParams.buscar_en = buscar_en;
 
 
     const objData = await getListaTextFromBdByFind(objFindListaParams);
@@ -2208,15 +2252,23 @@ async function findWordsLista(){
             const tr = document.createElement('tr');
             tr.className = 'tr_list';
             tr.dataset.id = el.id_lista;
-            let fecha_texto = (el.fecha && el.fecha !== '0000-00-00') ? el.fecha : '...' ;
+
+            let fecha_str = (el.fecha && el.fecha !== '0000-00-00') ? el.fecha : '' ;
+            let diaSemana_val = '';
+            let fecha_val = '';
+
+            if(fecha_str){
+                diaSemana_val = diaSemana(fecha_str);
+                fecha_val = invertirFecha(fecha_str, '/');
+            }
 
             tr.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_lista" data-id_lista="${el.id_lista}" title="${el.id_lista}">${el.id_lista}</td>
                 <td class="td_titulo">${el.title}</td>
-                <td class="td_fecha">${fecha_texto}</td>            
-                <td class="td_creado">${el.created_at || '---'}</td>
-                <td class="td_actualizado">${el.updated_at || '---'}</td>
+                <td class="td_dia_semana">${diaSemana_val}</td>            
+                <td class="td_fecha">${fecha_val}</td>            
+                <td class="td_lista">${(el.arr_lista) ? 'Sí' : ''}</td>
             `;
 
             tr.onclick = (e)=>{
@@ -2244,36 +2296,39 @@ async function findWordsLista(){
 
                 //dejo '==' en vez de '===' porque id_song viene como string "925"
                 const objListaBD = arr.find(s => s.id_lista == id_lista);
-                console.log('objListaBD: ', objListaBD);
-                
-                
-
-                
+                console.log('objListaBD: ', objListaBD);                
 
                 // Normalizamos palabras
                 const arr_normalized = arr_words.map(normalize);
                 console.log('arr_normalized: ', arr_normalized);
 
-                //const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
+                //const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//antes - busco las palabras del input
                 // console.log('regex: ', regex);
 
                 // Creamos regex sin acentos
                 const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
                 console.log('regex: ', regex);
 
-                let lista_text_red = objListaBD.title.replace(regex, (x) => {
-                    return `<b class="c_red">${x}</b>`;
-                });
+                //Titulo lista
+                if(objListaBD.title){
+                    //Marco en rojo las palabras encontradas en title 
+                    let titulo_text_red = objListaBD.title.replace(regex, (x) => {
+                        return `<b class="c_red">${x}</b>`;
+                    });
 
-                vista_song_content.innerHTML = lista_text_red;
+                    const d_titulo = document.createElement('div');
+                    d_titulo.className = 'parte_lista';
+                    d_titulo.innerHTML = `
+                        <p class="p_titulo">Título Lista:</p>
+                        <p class="texto_norm t_big">${titulo_text_red}</p>
+                    `;
+                    vista_song_content.append(d_titulo);
+                }
 
                 // resetBlockLista();
                 // resetLineasXinBlock(eid_block_lista);
 
-
-
-
-
+                //Canciones
                 console.log('antes --- objListaBD.arr_lista: ', objListaBD.arr_lista);
                 objLista = structuredClone(objListaBD);//equivale a JSON.parse(JSON.stringify(objListaBD));
                 console.log('ahora --- objLista: ', objLista);
@@ -2283,19 +2338,23 @@ async function findWordsLista(){
                 }else{
                     objLista.arr_lista = JSON.parse(objListaBD.arr_lista);
                 }
-
-                // objLista.arr_lista = (Array.isArray(JSON.parse(objListaBD.arr_lista))) ? JSON.parse(objListaBD.arr_lista) : [] ;//OBLIGATORIO JSON.parse() aki!!!
                 console.log('despues --- objLista.arr_lista: ', objLista.arr_lista);
+
                 
                 let arr_lista_bd = objLista.arr_lista;
                 console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
 
                 if(Array.isArray(arr_lista_bd) && arr_lista_bd.length > 0){
-                        
+                    
                     const wr_p_lista = document.createElement('div');
                     wr_p_lista.className = 'wr_p_lista';
+                    
+                    const d_canciones_head = document.createElement('div');
+                    d_canciones_head.className = 'canciones_head';
+                    d_canciones_head.textContent = 'Canciones:';
+                    wr_p_lista.append(d_canciones_head);
 
-
+                    //Recorrer array
                     arr_lista_bd.forEach((item, i) => {
                         console.log('item: ', item);
 
@@ -2309,15 +2368,16 @@ async function findWordsLista(){
                         `;
                         p.onclick = (e) => {
                             console.log(e.currentTarget.dataset.id_song);
-                            let este_id_song = e.currentTarget.dataset.id_song;
+                            let lista_id_song = e.currentTarget.dataset.id_song;
 
-                            alert(este_id_song);
+                            crearSlidesForSongOfLista(e, lista_id_song);
                         }
 
                         wr_p_lista.append(p);
                     });
 
-                    wr_vista_song.append(wr_p_lista);
+                    //wr_vista_song.append(wr_p_lista);
+                    vista_song_content.append(wr_p_lista);
 
                 }else{//lista vacía
                         
@@ -2333,11 +2393,31 @@ async function findWordsLista(){
                         <button class="btn" onclick="showBlockName('buscar')">Buscar Canciones</button>
                     `;                       
 
-                    wr_vista_song.append(d_info);
+                    //wr_vista_song.append(d_info);
+                    vista_song_content.append(d_info);
                 }
 
 
-            }
+
+                if(objListaBD.notes){
+                    //Marco en rojo las palabras encontradas en notes 
+                    let notas_text_red = objListaBD.notes.replace(regex, (x) => {
+                        return `<b class="c_red">${x}</b>`;
+                    });
+                    const d_notas = document.createElement('div');
+                    d_notas.className = 'parte_lista';
+                    d_notas.innerHTML = `
+                        <p class="p_titulo">Notas:</p>
+                        <p class="texto_norm">${notas_text_red}</p>
+                    `;
+                    vista_song_content.append(d_notas);
+                }
+
+
+
+
+
+            }//end - tr.onclick
 
             tbody_lista.append(tr);
         });

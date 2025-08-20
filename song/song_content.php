@@ -46,6 +46,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
             <div id="head_block_c">
                 <div class="wr_transpose">
+
+                    <div class="separador"></div>
+                    <button id="btn_lista" class="btn" onclick="showEdit('lista')">Buscar Lista</button>
+                    <button id="btn_lista" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver Lista</button>
                     <div class="separador"></div>
 
                     <div id="d_currentTipoAcorde">Tipo acorde (si hay): </div>
@@ -72,13 +76,12 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
     <div id="puntosMenu">
         <ul>
-            <li onclick="showEdit('buscar')">Buscar canción</li>
-            <li onclick="showEdit('esquema')">Ver/Crear esquema de canción</li>
+            <li onclick="showEdit('buscar')">Buscar</li>
+            <li onclick="showEdit('esquema')">Esquema</li>
             <li onclick="showEdit('cancion')">Canción</li>
-            <li onclick="showEdit('cancion'); nueva_song();">Nueva canción</li>
-            <li onclick="showEdit('cancion'); editar_song('ver');">Ver canción</li>
-            <li onclick="showEdit('cancion'); editar_song('editar');">Editar canción</li>
-            <li onclick="showEdit('cancion'); eliminar_song();">Eliminar canción</li>
+            <li onclick="showEdit('ejemplo')">Ejemplo</li>
+            <li onclick="showEdit('lista')">Lista</li>
+            <li>---</li>
             <li onclick="openModal('full','Mostrar canción',null,'showSong')">1. opemModal() - showSong()</li>
             <li onclick="openModal('full','Crear esquema de canción',null,'buildEsquema')">1. opemModal() - buildEsquema()</li>
             <li><a href="/">Inicio</a></li>
@@ -156,7 +159,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     <H4>Selecciona canción</H4>
 
-                                    <h5>Buscar en la base de datos:</h5>
+                                    <h5>Buscar:</h5>
                                     <div class="wr_nav">
                                         <div class="wr_inpt_x">
                                             <input
@@ -195,8 +198,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div><!--/.wr_nav-->
 
-                                    <h5>Selecciona songbook o algo mas...(decidir...):</h5>
-                                    <div class="wr_sel_song">
+                                    <h5 class="d-none">Selecciona songbook o algo mas...(decidir...):</h5>
+                                    <div class="wr_sel_song d-none">
                                         <select id="songbook" class="sel_song">
                                             <option>1. asdfsdfa</option>
                                             <option>2. asdfsdfa</option>
@@ -205,8 +208,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     </div>
 
 
-                                    <h5>Selecciona modo de búsqueda:</h5>
-                                    <div class="wr_sel_song">
+                                    <h5>Modo de búsqueda:</h5>
+                                    <div class="wr_sel_song m_0">
                                         <select id="modo" class="sel_song">
                                             <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
                                             <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
@@ -214,6 +217,25 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             <option value="4">4) Palabras en el orden establecido</option>
                                             <option value="5">5) Frase exacta</option>
                                             <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                        </select>
+                                    </div>
+
+                                    <h5>Campos de búsqueda:</h5>
+                                    <div class="wr_sel_song">
+                                        <select id="buscar_en" class="sel_song">
+                                            <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
+                                            <option value="2">2) Todos los campos disponibles (lento)</option>
+
+                                            <option value="3">3) Todos los campos de texto disponibles</option>
+                                            <option value="4">4) Sólo el título de canción</option>
+                                            <option value="5">5) Sólo el texto de canción</option>
+                                            <option value="6">6) Sólo las notas de canción</option>
+                                            <option value="7">7) Identificador y número de canción</option>
+                                            <option value="8">8) Sólo el identificador de canción</option>
+                                            <option value="9">9) Sólo el número de canción</option>                                            
+                                            <option value="10">10) Sólo el identificador de categoría</option>
+                                            <option value="10">10) Sólo el nombre de categoría</option>
+                                            <option value="11">11) Sólo el idioma</option>
                                         </select>
                                     </div>
 
@@ -638,7 +660,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                     <h5>Selecciona modo de búsqueda:</h5>
-                                    <div class="wr_sel_song">
+                                    <div class="wr_sel_song m_0">
                                         <select id="modo_lista" class="sel_song">
                                             <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
                                             <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
@@ -646,6 +668,19 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             <option value="4">4) Palabras en el orden establecido</option>
                                             <option value="5">5) Frase exacta</option>
                                             <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                        </select>
+                                    </div>
+
+                                    <h5>Campos de búsqueda:</h5>
+                                    <div class="wr_sel_song">
+                                        <select id="buscar_en_lista" class="sel_song">
+                                            <option value="1">1) Todos los campos por defecto disponibles - (rápido)</option>
+                                            <option value="2">2) Todos los campos disponibles, los títulos de canciones incluidos - (lento)</option>
+                                            <option value="3">3) Todos los campos de texto disponibles</option>
+                                            <option value="4">4) Sólo el título de lista</option>
+                                            <option value="5">5) Sólo las notas de lista</option>
+                                            <option value="6">6) Sólo el identificador de lista</option>
+                                            <option value="7">7) Sólo la fecha de lista (introducir en formato: aaaa-mm-dd)</option>
                                         </select>
                                     </div>
 
@@ -660,9 +695,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <th class="td_n">Nº</th>
                                                         <th class="td_id_lista">id_lista</th>
                                                         <th class="td_titulo">Título</th>
+                                                        <th class="td_dia_sem">Día/Sem.</th>
                                                         <th class="td_fecha">Fecha</th>
-                                                        <th class="td_creado">Creado</th>
-                                                        <th class="td_actualizado">Actualizado</th>
+                                                        <th class="td_lista">Lista</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -670,9 +705,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <td class="td_n">...</td>
                                                         <td class="td_id_lista">...</td>
                                                         <td class="td_titulo">...</td>
+                                                        <td class="td_dia_sem">...</td>
                                                         <td class="td_fecha">...</td>
-                                                        <td class="td_creado">...</td>
-                                                        <td class="td_actualizado">...</td>
+                                                        <td class="td_lista">...</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

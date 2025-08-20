@@ -311,3 +311,45 @@ function update_arr_lista(){
 function normalize(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+
+
+function diaSemana(fechaStr) {
+    // fechaStr viene en formato "aaaa-mm-dd"
+    const fecha = new Date(fechaStr);
+
+    // Días de la semana en castellano
+    const dias = [
+        "domingo",
+        "lunes",
+        "martes",
+        "miércoles",
+        "jueves",
+        "viernes",
+        "sábado"
+    ];
+
+    return dias[fecha.getDay()];
+}
+
+function invertirFecha(fechaStr, separador = '/') {
+    // fechaStr = "aaaa-mm-dd" //debe estar en este formato!
+    const [anio, mes, dia] = fechaStr.split("-");
+    return `${dia}${separador}${mes}${separador}${anio}`;// '03/12/2025' 
+}
+
+function crearSlidesForSongOfLista(e, lista_id_song) {
+    console.log('=== function crearSlidesForSongOfLista() ===');
+
+    resetBlockBuscar();//quito song anterior si hay
+    resetBlockEsquema();
+    resetBlockCancion();
+
+    resetPListaActive();
+    e.currentTarget.classList.add('active');
+
+    id_song = lista_id_song;
+    console.log('lista_id_song: ', lista_id_song);
+
+    crearSlides();
+    closeAll();
+}

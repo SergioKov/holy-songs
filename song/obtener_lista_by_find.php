@@ -47,12 +47,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
         $words_input = $datos['words_input'];
         $modo = $datos['modo'];
+        $buscar_en = $datos['buscar_en'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
         // Obtener usuario y contraseña del cuerpo de la solicitud
         $words_input = isset($_GET['words_input']) ? $_GET['words_input'] : null ;
         $modo = isset($_GET['modo']) ? $_GET['modo'] : 1 ;
+        $buscar_en = isset($_GET['buscar_en']) ? $_GET['buscar_en'] : 1 ;
 
         if ($words_input === null) {
             http_response_code(400);
@@ -73,6 +75,7 @@ include('includes/connect_db.php');
 
 $words_input = $conn->real_escape_string($words_input);//aki importante
 $modo = $conn->real_escape_string($modo);
+$buscar_en = $conn->real_escape_string($buscar_en);
 //echo_json_x($datos, 'datos');
 //echo_json_x($words_input);
 //echo_json_x($modo);
@@ -81,10 +84,44 @@ $modo = $conn->real_escape_string($modo);
 //busco si hay registro
 //Preparar y ejecutar la consulta
 $params = [];
-$types  = "";
+$types  = '';
+
+$arr_campos = [];
+
+switch ($buscar_en) {
+    case '1'://Todos los campos por defecto disponibles - (rápido)
+    default:
+        $arr_campos = ['id_lista', 'title', 'notes', 'fecha'];
+        break;
+
+    case '2'://Todos los campos disponibles, los títulos de canciones incluidos - (lento)
+        $arr_campos = ['id_lista', 'title', 'arr_lista', 'notes', 'fecha'];
+        break;
+    
+    case '3'://Todos los campos de texto disponibles
+        $arr_campos = ['title', 'notes'];
+        break;
+
+    case '4'://Sólo el título de lista
+        $arr_campos = ['title'];
+        break;
+
+    case '5'://Sólo las notas de lista
+        $arr_campos = ['notes'];
+        break;
+
+    case '6'://Sólo el identificador de lista
+        $arr_campos = ['id_lista'];
+        break;
+
+    case '7'://Sólo la fecha de lista
+        $arr_campos = ['fecha'];
+        break;
+}
+
 
 // Buscar "Jesús Pedro" en varios campos
-$where = buildWhere($modo, $words_input, ["id_lista", "title", "notes"], $params, $types);
+$where = buildWhere($modo, $words_input, $arr_campos, $params, $types);
 
 
 //test modos de where
@@ -98,7 +135,7 @@ $sql_init = "SELECT
                 updated_at 
             FROM listas
             WHERE $where
-            ORDER BY id_lista DESC, title ASC
+            ORDER BY fecha DESC, id_lista ASC, title ASC
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):

@@ -47,12 +47,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
         $words_input = $datos['words_input'];
         $modo = $datos['modo'];
+        $buscar_en = $datos['buscar_en'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
         // Obtener usuario y contraseña del cuerpo de la solicitud
         $words_input = isset($_GET['words_input']) ? $_GET['words_input'] : null ;
         $modo = isset($_GET['modo']) ? $_GET['modo'] : 1 ;
+        $buscar_en = isset($_GET['buscar_en']) ? $_GET['buscar_en'] : 1 ;
 
         if ($words_input === null) {
             http_response_code(400);
@@ -73,6 +75,7 @@ include('includes/connect_db.php');
 
 $words_input = $conn->real_escape_string($words_input);//aki importante
 $modo = $conn->real_escape_string($modo);
+$buscar_en = $conn->real_escape_string($buscar_en);
 //echo_json_x($datos, 'datos');
 //echo_json_x($words_input);
 //echo_json_x($modo);
@@ -125,9 +128,61 @@ $modo = $conn->real_escape_string($modo);
 
 $params = [];
 $types  = "";
+$arr_campos = [];
+
+switch ($buscar_en) {
+    case '1'://Todos los campos por defecto disponibles (rápido)
+    default:
+        $arr_campos = ['s.id_song', 's.song_number', 's.title', 's.song_text', 's.notes'];
+        break;
+
+    case '2'://Todos los campos disponibles (lento)
+        $arr_campos = ['s.id_song', 's.song_number', 's.title', 'ct.name', 'ct.lang_name', 's.song_text', 's.notes'];
+        break;
+    
+    case '3'://Todos los campos de texto disponibles
+        $arr_campos = ['s.title', 'ct.name', 's.song_text', 's.notes'];
+        break;
+
+    case '4'://Sólo el título de canción
+        $arr_campos = ['s.title'];
+        break;
+
+    case '5'://Sólo el texto de canción
+        $arr_campos = ['s.song_text'];
+        break;
+
+    case '6':// Sólo las notas de canción
+        $arr_campos = ['s.notes'];
+        break;
+
+    case '7'://Identificador y número de canción
+        $arr_campos = ['s.id_song', 's.song_number'];
+        break;
+
+    case '8'://Sólo el identificador de canción
+        $arr_campos = ['s.id_song'];
+        break;
+
+    case '9'://Sólo el número de canción
+        $arr_campos = ['s.song_number'];
+        break;
+
+    case '10'://Sólo el identificador de categoría
+        $arr_campos = ['s.category'];
+        break;
+
+    case '11'://Sólo el nombre de categoría
+        $arr_campos = ['ct.name'];
+        break;
+
+    case '12'://Sólo el idioma de canción
+        $arr_campos = ['ct.lang_name'];
+        break;
+}
 
 // Buscar "Jesús Pedro" en varios campos
-$where = buildWhere($modo, $words_input, ["s.title", "s.song_text", "s.notes"], $params, $types);
+$where = buildWhere($modo, $words_input, $arr_campos, $params, $types);
 
 
 //test modos de where
@@ -137,6 +192,7 @@ $sql_init = "SELECT
                 s.title, 
                 s.category,
                 ct.name AS category_name,
+                ct.lang_name AS lang_name,
                 s.song_text, 
                 s.arr_esquema, 
                 s.tune, 
@@ -216,6 +272,7 @@ if($result->num_rows > 0){
             'title' => $row['title'],
             'category' => $row['category'],
             'category_name' => $row['category_name'],
+            'lang_name' => $row['lang_name'],
             'song_text' => $row['song_text'],
             'arr_esquema' => $row['arr_esquema'],
             'tune' => $row['tune'],
