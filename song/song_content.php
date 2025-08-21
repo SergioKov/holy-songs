@@ -31,6 +31,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
         </div>
     </div>
 
+    <div id="btn_lista_fix" class="shown" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">
+        <span>L</span>
+    </div>
+
     <div id="menu_contenido">
         <div id="menu_contenido_inner">
 

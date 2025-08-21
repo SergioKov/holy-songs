@@ -106,6 +106,14 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
                     showAviso(htmlTrans, param);//es arr_p_id en este caso
                     break;
                                 
+                case 'showAviso2'://se introduce objeto HTML (y no elemento.innerHTML como en 'showAviso')
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    //console.log('aki llamar showAviso2()');
+                    //alert('aki showAviso2()');
+                    showAviso2(htmlTrans, param);//es arr_p_id en este caso
+                    break;
+                                
                 default:
                     //console.log('indica action en openModal()');
                     break;
@@ -502,7 +510,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
             p.innerHTML = `
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">${item.title}</span>
-                <span class="l_tune">${item.tune || '--'}</span>
+                <span class="l_tune">${item.tune || ''}</span>
             `;
             p.onclick = (e) => {
                 console.log(e.currentTarget.dataset.id_song);
@@ -521,7 +529,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
         const p = document.createElement('p');
         p.className = 'prim';
         p.innerHTML = `
-            No hay canciónes 
+            No hay canciones 
         `;
         wr_p_lista.append(p);
 
@@ -910,6 +918,27 @@ function showAviso(htmlTrans, positionModal){
         eid_bl_modalCenterInner.append(p);    
     }else if(positionModal == 'bottom'){
         eid_bl_modalBottomInner.append(p);
+    }
+
+}
+
+function showAviso2(elemento_aviso, positionModal){// elemento_aviso es objeto HTML y no elemento.innerHTML
+    console.log('=== showAviso2(elemento_aviso, param) ===');
+
+    if(positionModal == 'center'){
+        eid_bl_modalCenterInner.innerHTML = '';
+    }else if(positionModal == 'bottom'){
+        eid_bl_modalBottomInner.innerHTML = '';
+    }
+    
+    const contenedor_aviso = document.createElement('div');
+    contenedor_aviso.className = 'contenedor_aviso';
+    contenedor_aviso.append(elemento_aviso);
+
+    if(positionModal == 'center'){
+        eid_bl_modalCenterInner.append(contenedor_aviso);    
+    }else if(positionModal == 'bottom'){
+        eid_bl_modalBottomInner.append(contenedor_aviso);
     }
 
 }

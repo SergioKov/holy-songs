@@ -36,6 +36,31 @@ header:not(#myModal header) {
     left: 3px;
 }
 
+#btn_lista_fix {
+    position: fixed;
+    top: 18px;
+    padding: 10px;
+    right: -35px;
+    background: #999999;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 3px;
+    transition: right 0.3s ease, background-color 0.3s ease;
+    color: black;
+    cursor: pointer;
+}
+#btn_lista_fix.shown {
+    right: 16px;
+}
+
+#btn_lista_fix:hover {
+    background: white;
+}
+
 #menu_contenido {
     background: #2b2b2b;
     position: absolute;
@@ -876,13 +901,13 @@ h5 {
     justify-content: space-between;
 }
 b.c_red {
-    color: red;
+    color: red !important;
 }
 b.c_blue {
-    color: blue;
+    color: blue !important;
 }
 b.c_green {
-    color: green;
+    color: green !important;
 }
 
 .wr_nav {
@@ -1059,6 +1084,9 @@ td.td_n {
     color: grey;
     font-style: italic;
     font-size: 0.8rem;
+}
+tr.selected td.td_n {
+    color: white;
 }
 
 .bloques_outer {
@@ -1535,15 +1563,17 @@ p.p_lista {
     background: #000000;
     width: 100%;
     display: flex;
-    align-items: flex-start;
     padding: 10px;
     gap: 20px;
     color: yellow;
     font-family: arial;
-    flex-direction: row;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    white-space: normal;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }
 p.p_lista:hover {
     background: #494949;
@@ -1611,12 +1641,24 @@ p.p_lista:hover {
     margin-bottom: 25px;
 }
 
+
+#contenedor_lista_sm .parte_lista:not(:first-child){
+    margin-top: 15px;
+}
+#contenedor_lista_sm .parte_lista:not(:last-child){
+    margin-bottom: 15px;
+}
+
 p.p_sm {
     color: #a8a8a8;
     font-family: Arial;
     font-weight: normal;
-    padding: 5px 0;
+    padding: 0 0 3px;
 }
 p.p_sm b {
     color: white;
+}
+
+#btn_guardar{
+    width: 100%;
 }
