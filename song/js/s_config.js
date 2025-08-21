@@ -59,6 +59,7 @@ const tbody_lista = eid_block_lista.querySelector('.wr_tabla table tbody');
 const eid_block_esquema_head = document.getElementById('block_esquema_head');
 const eid_block_cancion_head = document.getElementById('block_cancion_head');
 const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
+const eid_block_lista_head = document.getElementById('block_lista_head');
 
 
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
@@ -81,6 +82,9 @@ const form_mensaje = cancion_form_container.querySelector('form .mensaje');
 const ejemplo_song_bloques = eid_block_ejemplo.querySelector('.song_bloques');
 const ejemplo_wr_vista_blocks = eid_block_ejemplo.querySelector('.wr_vista_blocks');
 const ejemplo_form_container = eid_block_ejemplo.querySelector('.form_container');
+
+const lista_wr_vista_song = eid_block_lista.querySelector('.wr_vista_song');
+const lista_wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
 
 const form = eid_block_cancion.querySelector('form');
 const form_ejemplo = eid_block_ejemplo.querySelector('form');

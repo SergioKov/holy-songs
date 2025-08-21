@@ -300,6 +300,7 @@ function buildEsquema(){
 
 function buildLista(lista_action = null){
     console.log('=== function buildLista() ===');
+
     console.log('lista_action: ', lista_action);
     console.log('objLista: ', objLista);
 
@@ -312,72 +313,112 @@ function buildLista(lista_action = null){
     let notes_val = '';
     let mensaje_html = '';
     let arr_lista_bucle = [];
+    let cl_id_lista = 'd-none';//oculto
     let contenedor;//general. se asigna luego
-    
 
-    //Nueva lista
-    if(lista_action == 'nueva'){
-        mensaje_html = `
-            <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
-        `;
-        arr_lista_bucle = arr_lista;
-        console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);
-        id_lista = null;
-    }
-    
-
-    //Ver lista
-    if(lista_action == 'ver'){
+    if(lista_action !== 'nueva'){
+        if(!hay_id_lista('buildLista()')){
+            let aviso_text = `
+                El identificador de la lista es desconocido. 
+                <br>Busca la lista según tus criterios en la pestaña <b>Lista</b>.
+                <br>
+                <br>
+                <button id="btn_lista" class="btn" onclick="closeModal(null,true); showEdit('lista');">Buscar Lista</button>
+            `;
+            openModal('center','Aviso Lista',aviso_text,'showAviso');
+            return; // <- se detiene aquí si no hay id_lista
+        } 
         id_lista_val = objLista.id_lista;
         title_val = objLista.title;
         diaSemana_val = diaSemana(objLista.fecha);
-        fecha_val = invertirFecha(objLista.fecha);
+        // fecha_val = convertirFecha(objLista.fecha, 'ver', '/');
+        fecha_val = objLista.fecha_ver;//formato ya desde bd '03/08/2025'
         notes_val = objLista.notes;
-
         arr_lista_bucle = objLista.arr_lista;
-        console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
     }
 
+    switch (lista_action) {
+        case 'nueva'://Nueva lista
+            mensaje_html = `
+                <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
+            `;
+            arr_lista_bucle = arr_lista;
+            console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);
+            id_lista = null;
+            break;
 
-    //Editar lista
-    if(lista_action == 'editar'){
-        mensaje_html = `
-            <span>Rellena los campos del formulario con los datos de la lista <b class="c_green">EDITADA</b>.</span>
-        `;
-        id_lista_val = objLista.id_lista;
-        title_val = objLista.title;
-        fecha_val = objLista.fecha;
-        notes_val = objLista.notes;
+        case 'ver_sm'://Ver lista - SM => SMALL - vista
+            console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+            cl_id_lista = '';//muestro
+            break;
+        
+        default:
+        case 'ver'://Ver lista - FORMULARIO
+            fecha_val = objLista.fecha;//formato correcto para el input '2025-08-03'
+            mensaje_html = `
+                <span>Datos de la lista <b class="c_green">ACTUAL</b>.</span>
+            `;
+            console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+            break;
 
-        arr_lista_bucle = objLista.arr_lista;
-        console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+        case 'editar'://Editar lista - FORMULARIO
+            fecha_val = objLista.fecha;//formato correcto para el input '2025-08-03'
+            mensaje_html = `
+                <span>Rellena los campos del formulario con los datos de la lista <b class="c_green">EDITADA</b>.</span>
+            `;
+            console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+            break;
+
+        case 'eliminar'://Eliminar lista - SM => SMALL - vista
+            console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
+            cl_id_lista = '';//muestro
+            break;
     }
     
-    
+
+    //Botones ELIMINAR - SM
+    const wr_btns_eliminar = document.createElement('div');
+    wr_btns_eliminar.className = 'wr_btns_form wr_btns_eliminar';
+    wr_btns_eliminar.innerHTML = `
+        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
+        <button class="btn btn_big btn_eliminar" onclick="deleteLista();">Eliminar Lista DEFINITIVAMENTE</button>
+    `;
 
 
-    //para VER sm
+    //para VER - SM
     const contenedor_lista_sm = document.createElement('div');
     contenedor_lista_sm.id = 'contenedor_lista_sm';
     contenedor_lista_sm.innerHTML = `                    
         <div class="parte_lista">
-            <p class="p_sm">Titulo: ${title_val} (id: ${id_lista_val})</p>
-            <p class="p_sm">Fecha: ${diaSemana_val} ${fecha_val}</p>
+            <p class="p_sm ${cl_id_lista}">Id: <b>${id_lista_val}</b></p>
+            <p class="p_sm">Titulo: <b>${title_val}</b></p>
+            <p class="p_sm">Fecha: <b>${diaSemana_val} ${fecha_val}</b></p>
         </div>
         
         <!-- Canciones -->
-        <div id="d_canciones_lista"></div>   
-        
-        <p class="p_sm">Notas: ${notes_val}</p>
+        <div id="d_canciones_lista" class="parte_lista"></div>
+
+        ${ (notes_val) ? `<p class="p_sm p_b10">1.Notas: <b>${notes_val}</b></p>` : '' }
+
+        ${(lista_action == 'eliminar') ? wr_btns_eliminar.outerHTML : '' }
     `;
 
-    //para Ver y Editar
+
+    //para Ver y Editar - FORMULARIO
     const wr_id_lista = document.createElement('div');
     wr_id_lista.className = 'form_group wr_id_lista';
     wr_id_lista.innerHTML = `
         <input type="number" id="id_lista" name="id_lista" required="" placeholder=" " disabled value="${id_lista_val}">
         <label for="id_lista">Id</label>
-    `;    
+    `;
+    
+    //Botones de FORMULARIO
+    const wr_btns_form = document.createElement('div');
+    wr_btns_form.className = 'wr_btns_form';
+    wr_btns_form.innerHTML = `
+        <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
+        <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarLista(event)">Guardar</button>
+    `;
 
     //FORMULARIO
     const form_lista = document.createElement('div');
@@ -397,7 +438,7 @@ function buildLista(lista_action = null){
                         <label for="title">Título de la lista</label>
                     </div>
 
-                    ${(lista_action == 'editar') ? wr_id_lista.outerHTML : ''}
+                    ${ (['ver','editar'].includes(lista_action)) ? wr_id_lista.outerHTML : '' }
 
                 </div>
 
@@ -408,36 +449,43 @@ function buildLista(lista_action = null){
 
 
                 <!-- Canciones -->
-                <div id="d_canciones_lista"></div>
+                <div id="d_canciones_lista" class="parte_lista"></div>
 
                 <div class="form_group">
                     <textarea id="notes" name="notes" rows="3" required="" placeholder=" ">${notes_val}</textarea>
                     <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
                 </div>
 
-
-                <div class="wr_btns_form">
-                    <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
-                    <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarLista(event)">Guardar</button>
-                </div>
+                ${ (['nueva','editar'].includes(lista_action)) ? wr_btns_form.outerHTML : '' }
 
             </form>
         </div>     
     `;
 
-    if(lista_action == 'ver'){ 
+    //Reasigno el contenedor
+    if(['ver_sm','eliminar'].includes(lista_action)){ 
         contenedor = contenedor_lista_sm;
     }else{
         contenedor = form_lista;
     }
 
+    buildListaSoloSongs(contenedor.querySelector('#d_canciones_lista'), arr_lista_bucle);
 
+    eid_bl_modalFullInner.append(contenedor);
+
+    console.log('fin func');
+}
+
+
+function buildListaSoloSongs(contenedor, arr_lista_bucle){
+    console.log('=== function buildListaSoloSongs() ===');
+    
     const wr_p_lista = document.createElement('div');
     wr_p_lista.className = 'wr_p_lista';
     
     if(Array.isArray(arr_lista_bucle) && arr_lista_bucle.length > 0){
-        const wr_p_lista = document.createElement('div');
-        wr_p_lista.className = 'wr_p_lista';
+        // const wr_p_lista = document.createElement('div');
+        // wr_p_lista.className = 'wr_p_lista';
         
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
@@ -461,30 +509,39 @@ function buildLista(lista_action = null){
                 let lista_id_song = e.currentTarget.dataset.id_song;
 
                 crearSlidesForSongOfLista(e, lista_id_song);
-
             }
 
             wr_p_lista.append(p);
         });
 
-        contenedor.querySelector('#d_canciones_lista').append(wr_p_lista);        
+        contenedor.append(wr_p_lista);        
 
     }else{//lista vacía
             
         const p = document.createElement('p');
         p.className = 'prim';
         p.innerHTML = `
-                No hay canciónes 
-        `;                       
-
+            No hay canciónes 
+        `;
         wr_p_lista.append(p);
-        contenedor.querySelector('#d_canciones_lista').append(wr_p_lista);
+
+        const d_info = document.createElement('div');
+        d_info.className = 'd_info';
+        d_info.innerHTML = `
+            <p class="prim">
+                Lista vacía 
+            </p>
+            <p class="prim">
+                Para añadir canciones pincha en la canción deseada y añádela a la lista seleccionada. 
+            </p>
+            <button class="btn" onclick="showBlockName('buscar')">Buscar Canciones</button>
+        `;
+
+        contenedor.append(wr_p_lista);
+        //contenedor.append(d_info);
     }
+} 
 
-    eid_bl_modalFullInner.append(contenedor);
-
-    console.log('fin func');
-}
 
 
 
@@ -786,22 +843,22 @@ async function insertarListaDatos(objLista) {
 }
 
 
-async function deleteSongFromBd(){
-    console.log('=== function deleteSongFromBd() ===');
+async function deleteListaFromBd(){
+    console.log('=== function deleteListaFromBd() ===');
 
     try {
         
-        if(!hay_id_song('deleteSongFromBd()')){
-            return; // <- se detiene aquí si no hay id_song
+        if(!hay_id_lista('deleteListaFromBd()')){
+            return; // <- se detiene aquí si no hay id_lista
         } 
                
-        const response = await fetch('eliminar_song_datos.php', {
+        const response = await fetch('eliminar_lista_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
             },
             body: JSON.stringify({
-                id_song: id_song
+                id_lista: id_lista
             }), // Convertir los datos a formato JSON
         });
 
@@ -816,11 +873,11 @@ async function deleteSongFromBd(){
         if(data.success){
             console.log('success is true');
 
-            let song_title = data.title; 
-            let song_text = data.song_text; 
-            data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : data.arr_esquema ; 
+            let lista_title = data.title; 
+            let lista_nota = data.notes; 
+            data.arr_lista = (data.arr_lista != '') ? JSON.parse(data.arr_lista) : data.arr_lista ; 
 
-            console.log(`[ELIMINADA] id_song: [${id_song}] --- song_title: [${song_title}] --- song_text: [${song_text}] --- data.arr_esquema: `, data.arr_esquema);
+            console.log(`[ELIMINADA] id_lista: [${id_lista}] --- lista_title: [${lista_title}] --- lista_nota: [${lista_nota}] --- data.arr_lista: `, data.arr_lista);
 
             return data;
 
@@ -830,7 +887,7 @@ async function deleteSongFromBd(){
         }
 
     } catch (error) {
-        console.error('Error en deleteSongFromBd(): error.message: ', error.message);
+        console.error('Error en deleteListaFromBd(): error.message: ', error.message);
     }
 }
 

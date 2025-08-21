@@ -192,6 +192,7 @@ if($result->num_rows > 0){
             'notes' => $row['notes'],
             'arr_lista' => $row['arr_lista'],
             'fecha' => $row['fecha'],
+            'fecha_ver' => convertirFecha($row['fecha'], '/'),
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
             'valorData' => 'hay_datos'

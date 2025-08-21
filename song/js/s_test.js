@@ -19,7 +19,7 @@ function generarSQLInsertMultiple(datos) {
 }
 
 
-function convertirFecha(fechaStr) {// de '01:31:2021' que es 31 de enero de 2021 => '2021-01-31'
+function convertirFechaAntes(fechaStr) {// de '01:31:2021' que es 31 de enero de 2021 => '2021-01-31'
     // Separar por ':'
     if(!fechaStr) return;
     const partes = fechaStr.split(':');
@@ -331,11 +331,53 @@ function diaSemana(fechaStr) {
     return dias[fecha.getDay()];
 }
 
-function invertirFecha(fechaStr, separador = '/') {
-    // fechaStr = "aaaa-mm-dd" //debe estar en este formato!
-    const [anio, mes, dia] = fechaStr.split("-");
-    return `${dia}${separador}${mes}${separador}${anio}`;// '03/12/2025' 
+
+function convertirFecha(fechaStr, formato, separador = '/', validar_partes_fecha = true) {
+    // de 'aaaa-mm-dd' a 'dd/mm/aaaa'
+    //formato 'sql': '2025-12-03'
+    //formato 'ver': '03/12/2025' '03.12.2025' '03-12-2025'
+
+    const separadores = ['-', '/', '.'];
+
+    if (!fechaStr) return fechaStr;
+
+    // Filtrar los separadores que aparecen en la cadena
+    const encontrados = separadores.filter(sep => fechaStr.includes(sep));
+
+    // Si no hay exactamente un separador o hay varios tipos, devolver la fechaStr
+    if (encontrados.length !== 1) {
+        return fechaStr;
+    }
+
+    const separador_encontrado = encontrados[0];
+    const partes = fechaStr.split(separador_encontrado);
+
+    if (validar_partes_fecha && partes.length !== 3) {
+        alert('no hay tres partes válidas. hago return...');
+        return fechaStr; // Si no hay tres partes válidas
+    }
+
+    let [p1, p2, p3] = partes;
+    if(!p3) p3 = '';//para mostrar en rojo encontrado '/08/2025' en la lista
+    if(!p2) p2 = '';
+
+    if(formato == 'sql'){
+        if (p1.length === 4) {// p1 = primera_parte = '2025'
+            return `${p3}-${p2}-${p1}`;//formato '2025-12-03' SIEMPRE
+        }else{
+            return `${p1}-${p2}-${p3}`;//formato '2025-12-03' SIEMPRE
+        }        
+    }
+    
+    if(formato == 'ver'){
+        if (p1.length === 4) {// p1 = primera_parte = '2025'
+            return `${p3}${separador}${p2}${separador}${p1}`;//formato '2025/12/03' o '2025-12-03' o '2025.12.03'
+        }else{
+            return `${p1}${separador}${p2}${separador}${p3}`;//formato '03/12/2025' o '03.12.2025' o '03-12-2025'
+        }
+    } 
 }
+
 
 async function crearSlidesForSongOfLista(e, lista_id_song) {
     console.log('=== function crearSlidesForSongOfLista() ===');

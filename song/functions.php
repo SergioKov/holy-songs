@@ -277,7 +277,10 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
 }
 
 
-
+function convertirFecha($fecha, $separador = '/') {
+    $partes = explode('-', $fecha);// de formato sql '2025-08-03' a '03/08/2025' o '03.08.2025'
+    return $partes[2] . $separador . $partes[1] . $separador . $partes[0];
+}
 
 
 //=====================================================================================//

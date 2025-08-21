@@ -49,7 +49,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                     <div class="separador"></div>
                     <button id="btn_lista" class="btn" onclick="showEdit('lista')">Buscar Lista</button>
-                    <button id="btn_lista" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver Lista</button>
+                    <button id="btn_lista" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver Lista</button>
                     <div class="separador"></div>
 
                     <div id="d_currentTipoAcorde">Tipo acorde (si hay): </div>
@@ -627,10 +627,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         <div id="block_lista" class="edit_blocks d-block">
                             
                             <div id="block_lista_head" class="edit_blocks_head">
-                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
+                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver lista SMALL</button>
                                 <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
                                 <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
-                                <button id="btn_lista_eliminar" class="btn" onclick="eliminar_lista();">Eliminar lista</button>
+                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
                             </div>
 
                             <div class="bl_partes">
@@ -680,7 +680,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             <option value="4">4) Sólo el título de lista</option>
                                             <option value="5">5) Sólo las notas de lista</option>
                                             <option value="6">6) Sólo el identificador de lista</option>
-                                            <option value="7">7) Sólo la fecha de lista (introducir en formato: aaaa-mm-dd)</option>
+                                            <option value="7">7) Sólo la fecha de lista (introducir en formatos: aaaa-mm-dd, aaaa-mm, aaaa, mm, dd)</option>
                                         </select>
                                     </div>
 
