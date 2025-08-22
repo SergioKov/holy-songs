@@ -320,6 +320,7 @@ p.p_edit button {
 
 .btn_big {
     padding: 10px 20px;
+    font-size: 1rem;
 }
 
 .btn_active {
@@ -1330,13 +1331,9 @@ p.prim b {
 /* start form song */
 form {
     background-color: white;
-    padding: 20px;
+    padding: 25px;
     border: 1px solid #ddd;
     border-radius: 5px;
-}
-
-form .form_group {
-    margin-bottom: 25px;
 }
 
 form label {
@@ -1367,9 +1364,16 @@ form textarea {
     /* max-width: 400px; */
 }
 
-.form_group {
+form .form_group {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+}
+form > .form_group:last-child {
+  margin-bottom: 0px; /* Solo el último hijo directo */
+}
+
+form .d_canciones_lista.parte_lista {
+    margin-bottom: 40px;
 }
 
 input, textarea, select {
@@ -1446,7 +1450,7 @@ textarea:not(:placeholder-shown) + label
 }
 
 .wr_btns_form {
-    padding: 20px 0 0;
+    padding: 25px 0 0;
     /* background: #e4e4e4; */
     /* margin: 0 0 10px; */
     display: flex;
@@ -1456,8 +1460,9 @@ textarea:not(:placeholder-shown) + label
 }
 
 #contenedor_lista_sm .wr_btns_eliminar {
-    border-top: 1px solid grey;
+    margin-top: 10px;
     padding-top: 10px;
+    border-top: 1px solid #737373;
 }
 
 .color_red {
@@ -1601,6 +1606,36 @@ p.p_lista:hover {
     color: #51ebff;
 }
 
+.btn_song_x {
+    /* background: #E91E63; */
+    padding: 2px 5px 0px;
+    font-weight: 600;
+    color: #ffffff;
+    height: 24px;
+    /* width: 24px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    opacity: 0.4;
+    transition: 0.3s;
+}
+.btn_song_x:hover{
+    background: red;
+    opacity: 1;
+}
+.cl_tab:hover .btn_song_x {
+    color: white;
+}
+.p_lista.active .btn_song_x:hover{
+    background: black;
+}
+.p_lista.active .btn_song_x {
+    color: white;
+}
+
+
+
 .wr_p_lista {
     background: #737373;
     padding: 10px 10px;
@@ -1628,10 +1663,10 @@ p.p_lista:hover {
 
 
 .m_0 {
-    margin: 0;
+    margin: 0 !important;
 }
 .p_b10 {
-    padding-bottom: 10px;
+    padding-bottom: 10px !important;
 }
 
 .parte_lista:not(:first-child){
@@ -1661,4 +1696,25 @@ p.p_sm b {
 
 #btn_guardar{
     width: 100%;
+}
+
+.w_100 {
+    width: 100%;
+}
+
+.aviso_outer {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+#fecha {
+    max-width: 218px;
+}
+
+.sp_id {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid #dddddd;
+    padding: 0 0 10px;
 }

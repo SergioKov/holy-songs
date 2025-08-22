@@ -61,6 +61,14 @@ const eid_block_cancion_head = document.getElementById('block_cancion_head');
 const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
 const eid_block_lista_head = document.getElementById('block_lista_head');
 
+const eid_inpt_find = document.getElementById('inpt_find');
+const eid_modo = document.getElementById('modo');
+const eid_buscar_en = document.getElementById('buscar_en');
+
+const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
+const eid_modo_lista = document.getElementById('modo_lista');
+const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
+
 
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
 const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');

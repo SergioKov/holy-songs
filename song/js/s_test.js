@@ -307,7 +307,7 @@ function addToLista(){
         </div>
         
         <!-- Canciones -->
-        <div id="d_canciones_lista" class="parte_lista"></div>
+        <div class="d_canciones_lista parte_lista"></div>
 
         <!-- botón Guardar nueva lista / Editar lista -->
     `;
@@ -332,7 +332,7 @@ function addToLista(){
     contenedor_lista_sm.append(btn_guardar);
 
     console.log('arr_lista: ', arr_lista);
-    buildListaSoloSongs(contenedor_lista_sm.querySelector('#d_canciones_lista'), arr_lista);
+    buildListaSoloSongs(contenedor_lista_sm.querySelector('.d_canciones_lista'), arr_lista);
 
     // openModal('center','Estado de la Lista',aviso_text,'showAviso');//antes    
     openModal('center', 'Estado de la Lista', contenedor_lista_sm, 'showAviso2');
@@ -528,6 +528,11 @@ function pintListaActive(e, arr, arr_words){
     // resetLineasXinBlock(eid_block_lista);
 
     //Canciones
+    const d_canciones_lista = document.createElement('div');
+    d_canciones_lista.className = 'd_canciones_lista parte_lista';
+    vista_song_content.append(d_canciones_lista);
+
+    
     console.log('antes --- objListaBD.arr_lista: ', objListaBD.arr_lista);
     objLista = structuredClone(objListaBD);//equivale a JSON.parse(JSON.stringify(objListaBD));
     console.log('ahora --- objLista: ', objLista);
@@ -545,7 +550,7 @@ function pintListaActive(e, arr, arr_words){
     let arr_lista_bd = objLista.arr_lista;
     console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
 
-    buildListaSoloSongs(vista_song_content, arr_lista_bd);
+    buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
 
     if(objListaBD.notes){
         //Marco en rojo las palabras encontradas en notes 
@@ -561,4 +566,183 @@ function pintListaActive(e, arr, arr_words){
         vista_song_content.append(d_notas);
     }
 
+}
+
+
+
+function pintListaActiveSoloDatos(objLista){
+    console.log('=== function pintListaActiveSoloDatos() === ');
+
+    //comprobar si existe tr_lista de lalista activa
+    const tr_lista = tbody_lista.querySelector(`tr[data-id="${objLista.id_lista}"]`);
+    console.log('tr_lista: ', tr_lista);
+    
+    if(!tr_lista){
+        return;
+    }
+
+    //actualizo datos de tr_lista
+    tr_lista.querySelector('.td_titulo').textContent = objLista.title || 'kuku';
+    tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
+    tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
+    tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? 'Sí' :  '';
+
+    const objListaBD = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objListaBD));
+    console.log('objListaBD: ', objListaBD);
+
+    let words_input = eid_inpt_find_lista.value.trim();
+    let arr_words = [];
+    if(words_input.includes(' ')){
+        arr_words = words_input.split(' ');
+    }else{
+        arr_words = [words_input];
+    }
+
+    
+
+    //resetTrSelected(tbody_lista);
+
+    lista_wr_vista_song.style.gap = '5px';
+    lista_wr_vista_song.innerHTML = `
+        <div class="vista_song_content">...</div>
+    `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
+
+    const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
+    vista_song_content.innerHTML = '';//reset
+
+    const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
+    wr_btns_action.innerHTML = `
+        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
+        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
+        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar lista</button>
+    `;
+
+
+    // Normalizamos palabras
+    //const arr_normalized = arr_words.map(normalize);//modo corto de escribir la func abajo
+    const arr_normalized = arr_words.map( palabra => {
+        return normalize(palabra);
+    });
+    console.log('arr_normalized: ', arr_normalized);
+
+
+    // Creamos regex sin acentos
+    const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
+    console.log('regex: ', regex);
+
+    //Titulo lista
+    if(objListaBD.title){
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_text_red = objListaBD.title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+
+        const d_titulo = document.createElement('div');
+        d_titulo.className = 'parte_lista';
+        d_titulo.innerHTML = `
+            <p class="p_titulo">Título Lista:</p>
+            <p class="texto_norm t_big">${titulo_text_red}</p>
+        `;
+        vista_song_content.append(d_titulo);
+    }
+
+    //Fecha
+    if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
+        //Marco en rojo las palabras encontradas en title 
+        //En BD busco '2025-08-03' 
+        //pero como el formato para mostrar es '03/08/2025'
+        //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
+        let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
+        const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
+        console.log('regex_fecha: ', regex_fecha);
+
+        // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
+        let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
+        fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        console.log('fecha_text_red: ', fecha_text_red);
+
+        const d_fecha = document.createElement('div');
+        d_fecha.className = 'parte_lista';
+        d_fecha.innerHTML = `
+            <p class="p_titulo">Fecha:</p>
+            <p class="texto_norm t_big">${fecha_text_red}</p>
+        `;
+        vista_song_content.append(d_fecha);
+    }
+
+    // resetBlockLista();
+
+    //Canciones
+    const d_canciones_lista = document.createElement('div');
+    d_canciones_lista.className = 'd_canciones_lista parte_lista';
+    vista_song_content.append(d_canciones_lista);
+
+    let arr_lista_bd = objLista.arr_lista;
+    console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
+
+    buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
+
+    if(objListaBD.notes){
+        //Marco en rojo las palabras encontradas en notes 
+        let notas_text_red = objListaBD.notes.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        const d_notas = document.createElement('div');
+        d_notas.className = 'parte_lista';
+        d_notas.innerHTML = `
+            <p class="p_titulo">Notas:</p>
+            <p class="texto_norm">${notas_text_red}</p>
+        `;
+        vista_song_content.append(d_notas);
+    }
+
+}
+
+
+
+
+function eliminarSongDeLista(id_song){
+    console.log('=== function eliminarSongDeLista() ===');
+    console.log('id_song: ', id_song);
+    
+    if(!id_lista){
+        alert('No hay id_lista. No se puede eliminar canción de la lista.');
+        return;
+    }
+    if(!id_song){
+        alert('No hay id_song. No se puede eliminar canción de la lista.');
+        return;
+    }
+
+    //Eliminar del arr_lista
+    arr_lista = arr_lista.filter(item => item.id_song != id_song);
+    console.log('arr_lista actualizado: ', arr_lista);
+
+    //Eliminar del objLista.arr_lista
+    objLista.arr_lista = objLista.arr_lista.filter(item => item.id_song != id_song);
+    console.log('objLista.arr_lista actualizado: ', objLista.arr_lista);
+    
+    let d_canciones_listaAll = document.querySelectorAll(`.d_canciones_lista`);
+    console.log('d_canciones_listaAll: ', d_canciones_listaAll);
+
+    //Actualizar el DOM
+    d_canciones_listaAll.forEach(contenedor => {
+        console.log('contenedor: ', contenedor);
+        buildListaSoloSongs(contenedor, objLista.arr_lista);
+    });
+
+    //Actualizar en BD
+    //guardarLista(null, true);//true -> solo actualizar lista en bd
+
+    //Si la lista queda vacía
+    if(objLista.arr_lista.length == 0){
+        const p_empty = document.createElement('p');
+        p_empty.className = 'prim';
+        p_empty.innerHTML = `
+            No hay canciones 
+        `;
+        wr_p_lista.append(p_empty);
+    }
 }

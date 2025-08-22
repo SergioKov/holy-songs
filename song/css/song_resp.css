@@ -1,5 +1,11 @@
 /* Desktop */
 @media screen and (min-width: 1024px){
+    #id_lista,
+    #fecha
+    {
+        max-width: 218px;
+    }
+
 
 
     
@@ -35,6 +41,11 @@
     .step{
         padding: 2px 5px;
         font-size: 12px;
+    }
+    #id_lista,
+    #fecha
+    {
+        max-width: 100%;
     }
 
     .slide_inner{

@@ -1705,7 +1705,10 @@ async function deleteSong(){
 
 async function guardarLista(event){
     console.log('=== function guardarLista() ===');
-    event.preventDefault();
+    if(event){
+        console.log('hay event. no lo propago...')
+        event.preventDefault();
+    }
 
     try {
         
@@ -1785,6 +1788,17 @@ async function guardarLista(event){
     
             form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
             form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            setTimeout(()=>{
+                form_mensaje_lista.innerHTML = `
+                    <span class="sp_id">
+                        <span>Id: <b class="c_green">${data.id_lista}</b></span>
+                        <span><b class="guardado">GUARDADO</b></span>
+                    </span>
+                `;
+            }, 2000);
+            setTimeout(()=>{
+                form_mensaje_lista.querySelector('.guardado').remove();
+            }, 4000);
 
             if(data.id_lista){
                 console.log('id_lista: ', data.id_lista);
@@ -1794,6 +1808,9 @@ async function guardarLista(event){
                 objLista.id_lista = id_lista;//añado el id_lista al objeto lista
                 objLista.arr_lista = arr_lista;//formato array correcto
                 console.log('objLista: ', objLista);
+
+                //pinto la lista activa en el contenedor de listas sin marcar en rojo el texto
+                pintListaActiveSoloDatos(objLista);
 
                 form_lista.querySelector('#btn_ResetForm').removeAttribute('type');
                 form_lista.querySelector('#btn_ResetForm').onclick = (e) => {
@@ -1875,10 +1892,12 @@ async function deleteLista(){
             tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).remove();
 
             resetBlockLista();
-            contenedor_lista_sm.querySelector('wr_btns_action').remove();
+            contenedor_lista_sm.querySelector('.wr_btns_eliminar').remove();
+            contenedor_lista_sm.querySelector('.d_canciones_lista').remove();
 
             id_lista = null;
             objLista = {};//reseteo objeto lista
+            arr_lista = [];//reseteo array lista
         }
         
     }else{
@@ -2073,9 +2092,6 @@ async function findWordsSong(){
     //console.log('--- frase: ', frase);
     console.time('time_findWordsNew');
 
-    const eid_inpt_find = document.getElementById('inpt_find');
-    const eid_modo = document.getElementById('modo');
-    const eid_buscar_en = document.getElementById('buscar_en');
 
     let frase = eid_inpt_find.value;
     let modo = eid_modo.value;
@@ -2227,10 +2243,6 @@ async function findWordsLista(){
     //console.log('--- frase: ', frase);
     //console.time('time_findWordsNew');
 
-    const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
-    const eid_modo_lista = document.getElementById('modo_lista');
-    const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
-
     let frase = eid_inpt_find_lista.value;
     let modo = eid_modo_lista.value;
     let buscar_en = eid_buscar_en_lista.value;
@@ -2241,7 +2253,7 @@ async function findWordsLista(){
         return;
     }
 
-    let arr_words;    
+    let arr_words = [];    
     if(words_input.includes(' ')){
         arr_words = words_input.split(' ');
     }else{

@@ -651,7 +651,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 type="text"
                                                 placeholder="Введите слово или фразу для поиска..."
                                                 data-dic=""
-                                                value="zzz"
+                                                value="2025"
                                             >
                                             <div id="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
                                         </div>

@@ -326,14 +326,14 @@ function buildLista(lista_action = null){
 
     if(lista_action !== 'nueva'){
         if(!hay_id_lista('buildLista()')){
-            let aviso_text = `
-                El identificador de la lista es desconocido. 
-                <br>Busca la lista según tus criterios en la pestaña <b>Lista</b>.
-                <br>
-                <br>
-                <button id="btn_lista" class="btn" onclick="closeModal(null,true); showEdit('lista');">Buscar Lista</button>
+            const aviso_outer = document.createElement('div');
+            aviso_outer.className = 'aviso_outer';
+            aviso_outer.innerHTML = `
+                <p class="p_aviso">No has seleccionado ninguna lista.</p>
+                <p class="p_aviso">Crea una lista añadiéndo canciones o busca la lista según tus criterios en la pestaña <b>Lista</b>.</p>
+                <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('lista');">Buscar Lista</button>
             `;
-            openModal('center','Aviso Lista',aviso_text,'showAviso');
+            openModal('center','Aviso Lista',aviso_outer,'showAviso2');
             return; // <- se detiene aquí si no hay id_lista
         } 
         id_lista_val = objLista.id_lista;
@@ -362,17 +362,13 @@ function buildLista(lista_action = null){
         
         default:
         case 'ver'://Ver lista - FORMULARIO
-            fecha_val = objLista.fecha;//formato correcto para el input '2025-08-03'
-            mensaje_html = `
-                <span>Datos de la lista <b class="c_green">ACTUAL</b>.</span>
-            `;
-            console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
-            break;
-
         case 'editar'://Editar lista - FORMULARIO
             fecha_val = objLista.fecha;//formato correcto para el input '2025-08-03'
             mensaje_html = `
-                <span>Rellena los campos del formulario con los datos de la lista <b class="c_green">EDITADA</b>.</span>
+                <span class="sp_id">
+                    <span>Id: <b class="c_green">${id_lista}</b></span>
+                    <span><b class="actual">(ACTUAL)</b></span>
+                </span>
             `;
             console.log('(editar) --- arr_lista_bucle: ', arr_lista_bucle);
             break;
@@ -404,21 +400,13 @@ function buildLista(lista_action = null){
         </div>
         
         <!-- Canciones -->
-        <div id="d_canciones_lista" class="parte_lista"></div>
+        <div class="d_canciones_lista parte_lista"></div>
 
-        ${ (notes_val) ? `<p class="p_sm p_b10">1.Notas: <b>${notes_val}</b></p>` : '' }
+        ${ (notes_val) ? `<p class="p_sm ${ ((lista_action == 'eliminar') ? '' : 'parte_lista') }">Notas: <b>${notes_val}</b></p>` : '' }
 
         ${(lista_action == 'eliminar') ? wr_btns_eliminar.outerHTML : '' }
     `;
 
-
-    //para Ver y Editar - FORMULARIO
-    const wr_id_lista = document.createElement('div');
-    wr_id_lista.className = 'form_group wr_id_lista';
-    wr_id_lista.innerHTML = `
-        <input type="number" id="id_lista" name="id_lista" required="" placeholder=" " disabled value="${id_lista_val}">
-        <label for="id_lista">Id</label>
-    `;
     
     //Botones de FORMULARIO
     const wr_btns_form = document.createElement('div');
@@ -439,15 +427,9 @@ function buildLista(lista_action = null){
                     ${mensaje_html}
                 </p>
 
-                <div class="wr_group">
-
-                    <div class="form_group wr_title">
-                        <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
-                        <label for="title">Título de la lista</label>
-                    </div>
-
-                    ${ (['ver','editar'].includes(lista_action)) ? wr_id_lista.outerHTML : '' }
-
+                <div class="form_group wr_title">
+                    <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
+                    <label for="title">Título de la lista</label>
                 </div>
 
                 <div class="form_group wr_fecha">
@@ -455,9 +437,8 @@ function buildLista(lista_action = null){
                     <label for="title">Fecha del evento</label>
                 </div>
 
-
                 <!-- Canciones -->
-                <div id="d_canciones_lista" class="parte_lista"></div>
+                <div class="d_canciones_lista parte_lista"></div>
 
                 <div class="form_group">
                     <textarea id="notes" name="notes" rows="3" required="" placeholder=" ">${notes_val}</textarea>
@@ -477,7 +458,7 @@ function buildLista(lista_action = null){
         contenedor = form_lista;
     }
 
-    buildListaSoloSongs(contenedor.querySelector('#d_canciones_lista'), arr_lista_bucle);
+    buildListaSoloSongs(contenedor.querySelector('.d_canciones_lista'), arr_lista_bucle);
 
     eid_bl_modalFullInner.append(contenedor);
 
@@ -487,6 +468,8 @@ function buildLista(lista_action = null){
 
 function buildListaSoloSongs(contenedor, arr_lista_bucle){
     console.log('=== function buildListaSoloSongs() ===');
+
+    contenedor.innerHTML = '';//reset - SIEMPRE
     
     const wr_p_lista = document.createElement('div');
     wr_p_lista.className = 'wr_p_lista';
@@ -511,12 +494,21 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">${item.title}</span>
                 <span class="l_tune">${item.tune || ''}</span>
+                <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>
             `;
             p.onclick = (e) => {
                 console.log(e.currentTarget.dataset.id_song);
                 let lista_id_song = e.currentTarget.dataset.id_song;
 
-                crearSlidesForSongOfLista(e, lista_id_song);
+                if(e.target.classList.contains('btn_song_x')){
+                    //Eliminar canción de la lista
+                    console.log('Eliminar canción de la lista. id_song: ', e.currentTarget.dataset.id_song);
+                    e.stopPropagation();//evita que se dispare el onclick del padre
+
+                    eliminarSongDeLista(e.currentTarget.dataset.id_song);
+                }else{
+                    crearSlidesForSongOfLista(e, lista_id_song);
+                }
             }
 
             wr_p_lista.append(p);
