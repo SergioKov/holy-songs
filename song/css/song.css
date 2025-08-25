@@ -203,12 +203,13 @@ header:not(#myModal header) {
     width: fit-content;
 }
 #puntosMenu ul li {
-    padding: 5px;
+    padding: 10px;
     border: 1px solid grey;
     background: #2b2b2b;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s ease;
+    font-family: Arial, 'sans-serif';
 }
 #puntosMenu ul li:hover {
     background: #3b3b3b;
@@ -1688,6 +1689,7 @@ p.p_lista:hover {
     flex-direction: column;
     gap: 5px;
     width: 100%;
+    position: relative;
 }
 
 
@@ -1766,6 +1768,25 @@ p.p_sm b {
     height: 40px;
     border: 2px dashed #aaa;
     margin: 5px 0;
+}
+
+.dragging {
+    background: #ad0000 !important;
+    position: absolute;
+    margin: 0 10px  0px;
+    left: 0;
+    top: 10px;
+    width: calc(100% - 20px) !important;
+    opacity: 1;
+    z-index: 20;
+    outline: 3px solid white;
+    color: white;
+}
+.dragging .l_n,
+.dragging .l_title,
+.dragging .l_tune
+{
+    color: white;
 }
 
 #contenedor_lista_sm {

@@ -787,6 +787,11 @@ function makeItemsDraggable(id_contenedor, class_element){
     let draggedElement = null;
     let placeholder = null;
 
+    let startY = 0;          // posición inicial del puntero
+    let initialTop = 0;      // posición inicial del elemento arrastrado
+    let startX = 0;          // posición inicial del puntero
+    let initialLeft = 0;     // posición inicial del elemento arrastrado
+
     // Create a placeholder element
     function createPlaceholder() {
         const placeholder = document.createElement('div');
@@ -797,14 +802,24 @@ function makeItemsDraggable(id_contenedor, class_element){
     // Handle drag start
     function startDrag(e) {
         e.preventDefault();
+
         draggedElement = e.target.closest('.draggable');
         if (!draggedElement) return;
+
+                    const rect_dragged = draggedElement.getBoundingClientRect();
+
+                    // Guardar posición inicial del puntero y del elemento
+                    startY = (e.type === 'mousedown') ? e.clientY : e.touches[0].clientY;
+                    initialTop = rect_dragged.top - container.getBoundingClientRect().top;        
+                    startX = (e.type === 'mousedown') ? e.clientX : e.touches[0].clientX;
+                    initialLeft = rect_dragged.left - container.getBoundingClientRect().left;        
 
         placeholder = createPlaceholder();
         container.insertBefore(placeholder, draggedElement.nextSibling);
         draggedElement.classList.add('dragging');
 
-        //console.log('container: ', container);
+        // console.log('container: ', container);
+        // console.log('draggedElement: ', draggedElement);
 
         document.addEventListener('mousemove', moveDrag);
         document.addEventListener('mouseup', endDrag);
@@ -816,17 +831,32 @@ function makeItemsDraggable(id_contenedor, class_element){
     function moveDrag(e) {
         //console.log('=== function moveDrag(e) ===');
         
-        //const y = e.clientY;
         let y;
+        let currentY;//test
+        let currentX;//test
 
         // Determinar las coordenadas iniciales
         if (e.type === 'mousemove') {
             //startX = e.clientX;
             y = e.clientY;
+            x = e.clientX;
         } else if (e.type === 'touchmove') {
             //startX = e.touches[0].clientX;
             y = e.touches[0].clientY;
-        }        
+            x = e.touches[0].clientX;
+        }
+        
+                currentY = y;//test
+                currentX = x;//test
+                // Calcular cuánto se ha movido el puntero
+                let deltaY = currentY - startY;
+                let deltaX = currentX - startX;
+
+                // Aplicar movimiento relativo al elemento
+                //draggedElement.style.position = "absolute";
+                //draggedElement.style.width = placeholder.offsetWidth + "px"; // para que no se colapse
+                draggedElement.style.top = (initialTop + deltaY) + "px";
+                draggedElement.style.left = (initialLeft + deltaX) + "px";
 
         const elements = [...container.children].filter(el => el !== draggedElement && el !== placeholder);
         //console.log('elements: ', elements);
@@ -836,11 +866,19 @@ function makeItemsDraggable(id_contenedor, class_element){
             return y > rect.top && y < rect.bottom;
         });
 
+
         if (currentElement) {
             const rect = currentElement.getBoundingClientRect();
+            console.log('currentElement: ', currentElement);
+            console.log('rect: ', rect);
+
+            const mitad = rect.top + rect.height / 2;
+
             if (y < rect.top + rect.height / 2) {
+                console.log('if --- y es menor la MITAD de rect.height. mitad: ', mitad);
                 container.insertBefore(placeholder, currentElement);
             } else {
+                console.log('else --- y es MAYOR de la mitad de rect.height. mitad: ', mitad);
                 container.insertBefore(placeholder, currentElement.nextSibling);
             }
         }
@@ -852,6 +890,7 @@ function makeItemsDraggable(id_contenedor, class_element){
 
         container.insertBefore(draggedElement, placeholder);
         draggedElement.classList.remove('dragging');
+        draggedElement.removeAttribute('style');//test
         placeholder.remove();
 
         placeholder = null;
