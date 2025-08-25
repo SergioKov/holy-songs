@@ -751,20 +751,10 @@ async function getSongBlocks(){
             step.dataset.index = i;
             step.textContent = titulo;
 
-            let div_titulo_cancion = '';
-            if(i == 0){
-                div_titulo_cancion = `
-                    <div class="song_titulo">
-                        <span>${song_titulo}</span>
-                    </div>
-                `;
-            }
-
             const slide = document.createElement('div');
             slide.className = 'slide';
             slide.innerHTML = `
                 <div class="slide_inner">
-                ${div_titulo_cancion}
                     <fieldset class="kuplet">
                         <legend>${titulo}</legend>
                         <!-- aki los p -->
@@ -799,6 +789,38 @@ async function getSongBlocks(){
                     p.textContent = linea;
                     slide.querySelector('fieldset').append(p);
                 });
+                
+                //añado titulo cancion como primer slide
+                if(i == 0){
+                    const d_titulo_cancion = document.createElement('div');
+                    d_titulo_cancion.className = 'song_titulo';
+                    d_titulo_cancion.innerHTML = `<span>${song_titulo}</span>`;
+
+                    const titulo_cancion = '_titulo_cancion_';
+
+                    const step = document.createElement('div');
+                    step.className = 'step';
+                    step.dataset.index = i;
+                    step.textContent = 'titulo cancion';
+
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.innerHTML = `
+                        <div class="slide_inner">
+                            <fieldset class="kuplet fld_song_titulo">
+                                <legend>${titulo_cancion}</legend>
+                                <!-- aki los p -->
+                            </fieldset>
+                        </div>
+                    `;
+
+                    slide.querySelector('fieldset').append(d_titulo_cancion);
+
+                    obj_bloques[titulo_cancion] = {
+                        step,
+                        slide
+                    };
+                }
 
                 //relleno objeto con html elementos
                 obj_bloques[titulo] = {
@@ -917,6 +939,12 @@ function crear_arr_esquema_bucle(obj_bloques){
         arr_esquema_bucle = arr_obj;//lo reasigno
     }
     console.log('return --- arr_esquema_bucle: ', arr_esquema_bucle);
+
+    //si hay. quito el primer elemento que es titulo de la cancion para no mostrarlo en ver_esquema() y crear_esquema()
+    if(arr_esquema_bucle[0] == '_titulo_cancion_'){
+        //arr_esquema_bucle.splice(0,1);
+        console.log('(quitado titulo) --- arr_esquema_bucle (sin titulo cancion): ', arr_esquema_bucle);
+    }
 
     return arr_esquema_bucle;
 }
@@ -1168,7 +1196,6 @@ async function ver_esquema(){
     //Recorrer el bucle - partes de song...
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
-
         const slide_original = obj_bloques[titulo].slide;
         console.log('slide_original: ', slide_original);
         
@@ -1304,114 +1331,131 @@ async function crear_esquema(){
 
         const el_fieldset = slide_clone.querySelector('fieldset');
 
+        
         el_fieldset.onclick = (e) => {
             console.log('(text) legend: ', e.currentTarget.querySelector('legend').innerText);
             
-            wr_vista_btns.querySelector('.sp_prim')?.remove();
-            wr_vista_blocks.querySelector('.sp_prim')?.remove();
-
-            const el_fieldset_cloned = e.currentTarget.cloneNode(true); // true para clonar también hijos 
-            el_fieldset_cloned.classList.remove('fld_active');
-            
-            let titulo = el_fieldset_cloned.querySelector('legend').textContent;
-            window.arr_temp.push(titulo);
-
-            let titulo_orig = titulo;
-            let titulo_text;
-            let titulo_count_veces;
-
-            //si el titulo que se añade es el mismo que el último añadido...
-            if(titulo === window.arr_temp[window.arr_temp.length - 2]) {
-                //es titulo que se repite. calculo cuantas veces...
-                //alert('se repite');
-                window.titulo_count++;
+            if(titulo !== '_titulo_cancion_'){//no pinto el titulo de la cancion
+                wr_vista_btns.querySelector('.sp_prim')?.remove();
+                wr_vista_blocks.querySelector('.sp_prim')?.remove();
+    
+                const el_fieldset_cloned = e.currentTarget.cloneNode(true); // true para clonar también hijos 
+                el_fieldset_cloned.classList.remove('fld_active');
                 
-                //no dejo repetir el bloque mas de 5 veces...
-                if(window.titulo_count >= 4){
-                    return;
+                let titulo = el_fieldset_cloned.querySelector('legend').textContent;
+                window.arr_temp.push(titulo);
+    
+                let titulo_orig = titulo;
+                let titulo_text;
+                let titulo_count_veces;
+    
+                //si el titulo que se añade es el mismo que el último añadido...
+                if(titulo === window.arr_temp[window.arr_temp.length - 2]) {
+                    //es titulo que se repite. calculo cuantas veces...
+                    //alert('se repite');
+                    window.titulo_count++;
+                    
+                    //no dejo repetir el bloque mas de 5 veces...
+                    if(window.titulo_count >= 4){
+                        return;
+                    }
+    
+                    titulo_count_veces = titulo_count + 1;
+                    console.log('titulo_count_veces: ', titulo_count_veces);
+    
+                    titulo_text = `${titulo} <span>x${titulo_count_veces}</span>`;
+                    el_fieldset_cloned.querySelector('legend').innerHTML = titulo_text;
+    
+                    console.log('titulo_count: ', window.titulo_count);
+    
+                    wr_vista_blocks.lastElementChild?.remove();//elimino el anterior bloque
+                    wr_vista_btns.lastElementChild?.remove();//elimino el anterior btn
+                    arr_esquema_obj.pop();//elimino el último elemento del array
+    
+                }else{
+                    //es nuevo titlulo
+                    window.titulo_count = 0;
+                    titulo_text = titulo;
+                    titulo_count_veces = 1;
                 }
-
-                titulo_count_veces = titulo_count + 1;
-                console.log('titulo_count_veces: ', titulo_count_veces);
-
-                titulo_text = `${titulo} <span>x${titulo_count_veces}</span>`;
-                el_fieldset_cloned.querySelector('legend').innerHTML = titulo_text;
-
-                console.log('titulo_count: ', window.titulo_count);
-
-                wr_vista_blocks.lastElementChild?.remove();//elimino el anterior bloque
-                wr_vista_btns.lastElementChild?.remove();//elimino el anterior btn
-                arr_esquema_obj.pop();//elimino el último elemento del array
-
-            }else{
-                //es nuevo titlulo
-                window.titulo_count = 0;
-                titulo_text = titulo;
-                titulo_count_veces = 1;
-            }
-
-            let idx_vista_prev = arr_esquema_obj.length;
-
-            //creo boton del bloque
-            const btn_close = document.createElement('button');
-            btn_close.className = 'btn btn_close';
-            btn_close.dataset.idx = i;
-            btn_close.dataset.idx_esquema = idx_vista_prev;
-            btn_close.dataset.titulo = titulo_orig;
-            btn_close.innerHTML = `
-                <span class="sp_titulo">${titulo_text}</span>
-                <span class="sp_close">✕</span>
-            `;
-            btn_close.onclick = (e) => {
-                console.log('e.currentTarget: ', e.currentTarget);
-                console.log('e.target: ', e.target);
-
-                const element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
-                
-                const element_fieldset = element_legend.closest('fieldset');
-                resetFldActive(song_bloques);
-                
-                element_fieldset.classList.add('fld_active');
-                element_fieldset.scrollIntoView({behavior: 'smooth'});
-
-                if(e.target.className === 'sp_close'){
-                    //alert('voy a eliminar este boton...');
-                    arr_esquema_obj.splice(e.currentTarget.dataset.idx_esquema, 1);
-                    const vista_block_to_remove = [...wr_vista_blocks.querySelectorAll('fieldset')].find(el => el.dataset.idx_esquema === e.currentTarget.dataset.idx_esquema);
-                    vista_block_to_remove?.remove();
-                    e.currentTarget.remove();
-
-                    if(arr_esquema_obj.length === 0){
-                        //si no hay bloques, oculto los botones de acción
-                        wr_btns_action.innerHTML = '';
+    
+                let idx_vista_prev = arr_esquema_obj.length;
+    
+                //creo boton del bloque
+                const btn_close = document.createElement('button');
+                btn_close.className = 'btn btn_close';
+                btn_close.dataset.idx = i;
+                btn_close.dataset.idx_esquema = idx_vista_prev;
+                btn_close.dataset.titulo = titulo_orig;
+                btn_close.innerHTML = `
+                    <span class="sp_titulo">${titulo_text}</span>
+                    <span class="sp_close">✕</span>
+                `;
+                btn_close.onclick = (e) => {
+                    console.log('e.currentTarget: ', e.currentTarget);
+                    console.log('e.target: ', e.target);
+    
+                    const element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
+                    
+                    const element_fieldset = element_legend.closest('fieldset');
+                    resetFldActive(song_bloques);
+                    
+                    element_fieldset.classList.add('fld_active');
+                    element_fieldset.scrollIntoView({behavior: 'smooth'});
+    
+                    if(e.target.className === 'sp_close'){
+                        //alert('voy a eliminar este boton...');
+                        arr_esquema_obj.splice(e.currentTarget.dataset.idx_esquema, 1);
+                        const vista_block_to_remove = [...wr_vista_blocks.querySelectorAll('fieldset')].find(el => el.dataset.idx_esquema === e.currentTarget.dataset.idx_esquema);
+                        vista_block_to_remove?.remove();
+                        e.currentTarget.remove();
+    
+                        if(arr_esquema_obj.length === 0){
+                            //si no hay bloques, oculto los botones de acción
+                            wr_btns_action.innerHTML = '';
+                        }
                     }
                 }
+
+                //si es vacio, añado _titulo_cancion_ al principio
+                if(arr_esquema_obj.length == 0){
+                    const obj_titulo = {
+                        nombre: '_titulo_cancion_',
+                        veces: 1
+                    }
+                    
+                    arr_esquema_obj.push(obj_titulo); 
+                    console.log('(con _titulo_cancion_) --- arr_esquema_obj: ', arr_esquema_obj);
+                }
+
+    
+                const obj_titulo = {
+                    nombre: titulo,
+                    veces: titulo_count_veces
+                }
+                
+                arr_esquema_obj.push(obj_titulo); 
+                console.log('arr_esquema_obj: ', arr_esquema_obj);
+    
+                el_fieldset_cloned.dataset.idx_esquema = idx_vista_prev;
+    
+                wr_vista_blocks.append(el_fieldset_cloned);
+                el_fieldset_cloned.scrollIntoView({behavior: 'smooth'});
+    
+                wr_btns_action.innerHTML = `
+                    <button id="btn_resetEsquema" class="btn" onclick="resetEsquema()">Reset</button>
+                    <button id="btn_guardarEsquema" class="btn" onclick="guardarEsquema()">Guardar</button>
+                    <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Ver slides</button>
+                    <button id="btn_crearSlides_ver" class="btn" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</button>
+                `;
+    
+                wr_vista_btns.append(btn_close);
             }
-
-            const obj_titulo = {
-                nombre: titulo,
-                veces: titulo_count_veces
-            }
-            
-            arr_esquema_obj.push(obj_titulo); 
-            console.log('arr_esquema_obj: ', arr_esquema_obj);
-
-            el_fieldset_cloned.dataset.idx_esquema = idx_vista_prev;
-
-            wr_vista_blocks.append(el_fieldset_cloned);
-            el_fieldset_cloned.scrollIntoView({behavior: 'smooth'});
-
-            wr_btns_action.innerHTML = `
-                <button id="btn_resetEsquema" class="btn" onclick="resetEsquema()">Reset</button>
-                <button id="btn_guardarEsquema" class="btn" onclick="guardarEsquema()">Guardar</button>
-                <button id="btn_crearSlides_ver" class="btn" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</button>
-            `;
-
-            wr_vista_btns.append(btn_close);
-
-        }        
+    
+        }// end onclick
         
         song_bloques.append(slide_clone.querySelector('fieldset'));
+        
     });
 }
 
@@ -1750,12 +1794,25 @@ async function guardarLista(event){
         if(id_lista == null){
             console.log('es lista NUEVA');
             arr_lista_str = JSON.stringify(arr_lista);
+
+            if(arr_lista.length == 0){
+                console.log('es lista NUEVA y el array está vacío');
+            }else{
+                console.log('es lista NUEVA y el array está lleno');
+            }
+
         }else{
             console.log('es lista EDITADA');
             if(esString(objLista.arr_lista)){
                 arr_lista_str = objLista.arr_lista;
             }else{
                 arr_lista_str = JSON.stringify(objLista.arr_lista);
+            }
+
+            if(objLista.arr_lista.length == 0){
+                console.log('es lista EDITADA y el array está vacío');
+            }else{
+                console.log('es lista EDITADA y el array está lleno');
             }
         }
 

@@ -737,15 +737,18 @@ function eliminarSongDeLista(id_song){
     //Actualizar en BD
     //guardarLista(null, true);//true -> solo actualizar lista en bd
 
-    //Si la lista queda vacía
-    if(objLista.arr_lista.length == 0){
-        const p_empty = document.createElement('p');
-        p_empty.className = 'prim';
-        p_empty.innerHTML = `
-            No hay canciones 
-        `;
-        wr_p_lista.append(p_empty);
-    }
+    // wr_p_lista = document.querySelector('.d_canciones_lista .wr_p_lista');
+    // console.log('wr_p_lista: ', wr_p_lista);
+
+    // //Si la lista queda vacía
+    // if(objLista.arr_lista.length == 0){
+    //     const p_empty = document.createElement('p');
+    //     p_empty.className = 'prim';
+    //     p_empty.innerHTML = `
+    //         2.No hay canciones 
+    //     `;
+    //     //wr_p_lista.append(p_empty);
+    // }
 }
 
 

@@ -164,15 +164,28 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     // Realizar la inserción o (update) en la base de datos 
     if($hay_id_lista_en_tabla){
-        //hago update
-        $sql2_up_init = "UPDATE listas SET
-                title = '$title',
-                arr_lista = $arr_lista_string,
-                notes = '$notes',
-                fecha = '$fecha',
-                updated_at = '$fechaHoraActual'
-            WHERE id_lista = '$id_lista'
-        ";
+        //echo_json_x($arr_lista_array, 'en hay_id_lista_en_tabla --- arr_lista_array');
+
+        if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
+            $sql2_up_init = "UPDATE listas SET
+                    title = '$title',
+                    arr_lista = $arr_lista_string,
+                    notes = '$notes',
+                    fecha = '$fecha',
+                    updated_at = '$fechaHoraActual'
+                WHERE id_lista = '$id_lista'
+            ";
+        }else{//no es array o está vacío. no incluyo arr_lista en la SQL
+            //hago update
+            $sql2_up_init = "UPDATE listas SET
+                    title = '$title',
+                    arr_lista = '',
+                    notes = '$notes',
+                    fecha = '$fecha',
+                    updated_at = '$fechaHoraActual'
+                WHERE id_lista = '$id_lista'
+            ";
+        }
         //$sql2_up_prep = "UPDATE $tabla SET 
         //            $campo = $sign,
         //            updated_at = '$fechaHoraActual' 

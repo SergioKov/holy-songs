@@ -530,22 +530,20 @@ legend span {
 
 /* --- start - contenido de slides --------------------------- */
 .song_titulo {
-    width: 100%;
-    position: absolute;
-    top: 10vh;
-    left: 50%;
-    /* background: #2d2d2d; */
+    background: #2d2d2d;
     color: #909090;
-    text-align: center;
-    transform: translateX(-50%);
-    top: 0;
-    font-size: 30px;
+    padding: 10px 20px;
+}
+fieldset.fld_song_titulo {
+    cursor: default !important;
+}
+.fld_song_titulo {
+    border: none !important;
+}
+.fld_song_titulo legend{
+    display: none !important;
+}
 
-}
-.song_titulo span {
-    border-bottom: 3px solid #909090;
-    padding-bottom: 5px;
-}
 
 
 p {
