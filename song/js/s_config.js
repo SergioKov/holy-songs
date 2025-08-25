@@ -221,6 +221,7 @@ let id_song = null;//id de la canción actual
 
 let objLista = {};
 let id_lista = null;//id de la lista actual
+let lista_id_song = null;//id de song clicked de la lista actual
 
 let obj_lang_names = {
     'ua': 'Укр.',
@@ -248,6 +249,10 @@ let objFindListaParams = {
 
 // let arr_lista = JSON.parse(localStorage.getItem('arr_lista')) || [] ;
 let arr_lista = [] ;
+
+
+
+let made_draggable_once = false;
 
 
 //=================================================================//

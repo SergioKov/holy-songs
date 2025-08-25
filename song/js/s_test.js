@@ -462,9 +462,10 @@ function pintListaActive(e, arr, arr_words){
 
     const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
     wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar lista</button>
+        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
+        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
     `;
 
     //dejo '==' en vez de '===' porque id_song viene como string "925"
@@ -745,4 +746,179 @@ function eliminarSongDeLista(id_song){
         `;
         wr_p_lista.append(p_empty);
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function makeItemsDraggable(id_contenedor, class_element){
+    console.log('=== function makeItemsDraggable() ===');
+
+    if(made_draggable_once){
+        console.log('made_draggable_once is true. no dejo continuar.');
+        return;
+    }else{
+        console.log('made_draggable_once is false. sigo...');
+    }
+
+    const container = document.getElementById(id_contenedor);
+    if (!container) {
+        console.error(`No se encontró el contenedor con ID: ${id_contenedor}`);
+        return;
+    }
+
+    let draggedElement = null;
+    let placeholder = null;
+
+    // Create a placeholder element
+    function createPlaceholder() {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'placeholder';
+        return placeholder;
+    }
+
+    // Handle drag start
+    function startDrag(e) {
+        e.preventDefault();
+        draggedElement = e.target.closest('.draggable');
+        if (!draggedElement) return;
+
+        placeholder = createPlaceholder();
+        container.insertBefore(placeholder, draggedElement.nextSibling);
+        draggedElement.classList.add('dragging');
+
+        //console.log('container: ', container);
+
+        document.addEventListener('mousemove', moveDrag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchmove', moveDrag);
+        document.addEventListener('touchend', endDrag);
+    }
+
+    // Handle drag move
+    function moveDrag(e) {
+        //console.log('=== function moveDrag(e) ===');
+        
+        //const y = e.clientY;
+        let y;
+
+        // Determinar las coordenadas iniciales
+        if (e.type === 'mousemove') {
+            //startX = e.clientX;
+            y = e.clientY;
+        } else if (e.type === 'touchmove') {
+            //startX = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        }        
+
+        const elements = [...container.children].filter(el => el !== draggedElement && el !== placeholder);
+        //console.log('elements: ', elements);
+
+        const currentElement = elements.find(el => {
+            const rect = el.getBoundingClientRect();
+            return y > rect.top && y < rect.bottom;
+        });
+
+        if (currentElement) {
+            const rect = currentElement.getBoundingClientRect();
+            if (y < rect.top + rect.height / 2) {
+                container.insertBefore(placeholder, currentElement);
+            } else {
+                container.insertBefore(placeholder, currentElement.nextSibling);
+            }
+        }
+    }
+
+    // Handle drag end
+    function endDrag() {
+        if (!draggedElement) return;
+
+        container.insertBefore(draggedElement, placeholder);
+        draggedElement.classList.remove('dragging');
+        placeholder.remove();
+
+        placeholder = null;
+        draggedElement = null;
+
+        //al terminar de mover el elemento, actualizo arr_lista y repinto wr_p_lista
+        if(class_element == 'p_drag'){//translations
+            make_arrListaFromItems(`.${class_element}`);
+            console.log('arr_lista actualizado: ', arr_lista);
+
+            buildListaSoloSongs(document.querySelector('.vista_song_content .d_canciones_lista'), arr_lista);
+
+            const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');
+            pintarSoloNumerosDeOrden(contenedor_pintar_numeros);
+        }
+
+        document.removeEventListener('mousemove', moveDrag);
+        document.removeEventListener('mouseup', endDrag);
+        document.removeEventListener('touchmove', moveDrag);
+        document.removeEventListener('touchend', endDrag);
+
+        // if(hay_sesion){
+        //     guardarEnBd('fav_trans','arrFavTrans',arrFavTrans);
+        // }
+    }
+
+    // Attach event listeners for drag and drop
+    container.addEventListener('mousedown', startDrag); 
+    container.addEventListener('touchstart', startDrag); 
+    
+    //aki pongo que se ha ejecutado ya 1 vez esta función, para que con click sobre sortModule2() no se ejecute 2 vez
+    made_draggable_once = true;
+}
+
+
+function make_arrListaFromItems(cl_item){
+    //console.log('=== function make_arrFavTransFromItems(e) ===');
+    
+    const los_items = document.querySelectorAll(cl_item);
+    let arr_new = Array.from(los_items).map(item =>{
+        const itemSong = arr_lista.find(s => s.id_song == item.dataset.id_song);
+        console.log('itemSong: ', itemSong);
+        return itemSong;
+    });
+    console.log('arr_new: ', arr_new);
+    
+    arr_lista = quitarObjetosDuplicadosDeArray(arr_new);
+    if(objLista.arr_lista){
+        objLista.arr_lista = arr_new;        
+    }
+    //update_arr_lista();     
+
+    return arr_new;
+}
+
+function quitarObjetosDuplicadosDeArray(arr) {
+    const mapa = new Map(
+        arr.map(obj => [JSON.stringify(obj), obj])
+    );
+    return Array.from(mapa.values());
+}
+
+function pintarSoloNumerosDeOrden(contenedor){
+    console.log('=== function pintarSoloNumerosDeOrden() ===');
+
+    contenedor.querySelectorAll('.l_n').forEach((item,i) => {
+        console.log('item: ', item);
+        console.log('i: ', i);
+
+        item.textContent = i + 1;
+    });
+
 }

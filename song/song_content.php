@@ -187,7 +187,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="wr_nav" style="display:none;">
                                         <div class="wr_inpt_x">
                                             <input
-                                                id="inpt_find"
+                                                id="inpt_filter"
                                                 type="text"
                                                 placeholder="Введите слово или фразу для фильтра..."
                                                 data-dic=""
@@ -631,10 +631,12 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         <div id="block_lista" class="edit_blocks d-block">
                             
                             <div id="block_lista_head" class="edit_blocks_head">
-                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver lista SMALL</button>
-                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
-                                <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
+                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
+                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+                                <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
                                 <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
+                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
                             </div>
 
                             <div class="bl_partes">
