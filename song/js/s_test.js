@@ -864,7 +864,8 @@ function makeItemsDraggable(id_contenedor, class_element){
 
             buildListaSoloSongs(document.querySelector('.vista_song_content .d_canciones_lista'), arr_lista);
 
-            const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');
+            // const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');//no funciona
+            const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #d_canciones_body_drag');
             pintarSoloNumerosDeOrden(contenedor_pintar_numeros);
         }
 

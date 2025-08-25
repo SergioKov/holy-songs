@@ -536,12 +536,13 @@ legend span {
 }
 fieldset.fld_song_titulo {
     cursor: default !important;
+    border: 3px solid transparent !important;
+    background: transparent !important;
 }
-.fld_song_titulo {
-    border: none !important;
-}
-.fld_song_titulo legend{
-    display: none !important;
+.fld_song_titulo legend {
+    /* display: none !important; */
+    border: 3px solid transparent;
+    visibility: hidden;
 }
 
 
