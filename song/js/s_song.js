@@ -2189,7 +2189,7 @@ async function findWordsSong(){
 
         //Recorrer canciones encontradas...
         objData.arr_data.forEach((el, i, arr) => {
-            console.log('el: ', el);
+            //console.log('el: ', el);
 
             const tr = document.createElement('tr');
             tr.className = 'tr_song';
@@ -3302,12 +3302,10 @@ function quitarObjetosDuplicadosDeArray(arr) {
 
 function pintarSoloNumerosDeOrden(contenedor){
     console.log('=== function pintarSoloNumerosDeOrden() ===');
-
     contenedor.querySelectorAll('.l_n').forEach((item,i) => {
-        console.log('item: ', item);
-        console.log('i: ', i);
-
-        item.textContent = i + 1;
+        //console.log('item: ', item);
+        //console.log('i: ', i);
+        item.textContent = `${i + 1}.`;
     });
 
 }

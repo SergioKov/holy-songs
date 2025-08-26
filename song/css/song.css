@@ -1599,6 +1599,13 @@ p.p_lista:hover {
 .l_n {
     width: 20px;
 }
+.l_id {
+    /* background: darkred; */
+    color: grey;
+    min-width: 50px;
+    font-style: italic;
+    font-size: 0.8rem;
+}
 .l_title {
     color: orange;
     width: 100%;

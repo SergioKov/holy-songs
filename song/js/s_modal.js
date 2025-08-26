@@ -539,6 +539,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">${item.title}</span>
                 <span class="l_tune">${item.tune || ''}</span>
+                <span class="l_id">${item.id_song}</span>
                 <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>
             `;
             p.onclick = (e) => {
@@ -641,6 +642,7 @@ function buildListaSort(contenedor, arr_lista_bucle){
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">${item.title}</span>
                 <span class="l_tune">${item.tune || ''}</span>
+                <span class="l_id">${item.id_song}</span>
                 <span class="l_drag">
                     <span></span>
                     <span></span>
@@ -771,14 +773,13 @@ async function getSongTextFromBdByFind(objFindParams){
 
         const data = await response.json();
         //const data = await response.text();//test
-        console.log(data);  
+        // console.log('data: ', data);  
         
         if(data.success){
             console.log('success is true');
 
-            let arr_data = data.arr_data; 
-
-            console.log(`arr_data: `, arr_data);
+            let arr_data = data.arr_data;
+            //console.log(`arr_data: `, arr_data);
 
             return data;
 
