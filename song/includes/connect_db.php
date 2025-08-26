@@ -15,7 +15,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 	$servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "db_songs";    
+    $dbname = "db_holy_songs";    
 }
 
 $conn = new mysqli($servername, $username, $password, $dbname);
