@@ -120,6 +120,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $song_number = $conn->real_escape_string($datos['song_number']);//get parameter
     $title = $conn->real_escape_string($datos['title']);//get parameter
     $category  = $conn->real_escape_string($datos['category']);//get parameter
+    $songbook  = $conn->real_escape_string($datos['songbook']);//get parameter
     $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
     $arr_esquema = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
     $tune  = $conn->real_escape_string($datos['tune']);//get parameter
@@ -172,6 +173,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 song_number = '$song_number',
                 title = '$title',
                 category = '$category',
+                songbook = '$songbook',
                 song_text = '$song_text',
                 arr_esquema = '$arr_esquema',
                 tune = '$tune',
@@ -196,15 +198,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         //hago insert
         if (is_array($arr_esquema) && !empty($arr_esquema)) {// Es un array y tiene elementos
             $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
+                    (song_number,      title,    category,    songbook,   song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$song_text', '$arr_esquema', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema', '$tune', '$lang', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
             $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    song_text,    tune,    lang,    notes,    created_at) 
+                    (song_number,      title,    category,    songbook,    song_text,    tune,    lang,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$song_text', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$tune', '$lang', '$notes', '$fechaHoraActual')
             ";
         }
         // $sql2_in_prep = "INSERT INTO $tabla (id_user, $campo, created_at) 

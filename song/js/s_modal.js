@@ -740,6 +740,52 @@ async function getSongTextFromBd(){
 }
 
 
+async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el <select></select>
+    console.log('=== function getSongbooksFromBd() ===');
+
+    try {
+        
+        // if(!hay_id_song('getSongTextFromBd()')){
+        //     return; // <- se detiene aquí si no hay id_song
+        // } 
+               
+        const response = await fetch('obtener_songbooks_datos.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify({
+                tipo_consulta: 'todo'//sacar todos los datos
+            }), // Convertir los datos a formato JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        //const data = await response.text();//test
+        console.log(data);  
+        
+        if(data.success){
+            console.log('success is true');
+            console.log(`data.arr_songbooks: `, data.arr_songbooks);
+            
+            objSongbooksBd = data.arr_songbooks; //asigno a variable global
+            console.log(`objSongbooksBd: `, objSongbooksBd);
+
+            return objSongbooksBd;
+
+        }else{
+            console.log('success is false');
+            return 'no_hay_datos';
+        }
+
+    } catch (error) {
+        console.error('Error en getSongbooksFromBd(): error.message: ', error.message);
+    }
+}
+
 
 
 

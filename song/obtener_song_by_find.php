@@ -193,6 +193,8 @@ $sql_init = "SELECT
                 s.category,
                 ct.name AS category_name,
                 ct.lang_name AS lang_name,
+                s.songbook,
+                sb.title AS songbook_title,
                 s.song_text, 
                 s.arr_esquema, 
                 s.tune, 
@@ -204,6 +206,8 @@ $sql_init = "SELECT
             FROM songs s
             LEFT JOIN category_translations ct 
                 ON ct.id_category = s.category AND ct.lang = s.lang
+            LEFT JOIN songbooks sb 
+                ON sb.id_songbook = s.songbook
             WHERE $where
             ORDER BY s.title, s.song_number, s.id_song
 ";
@@ -272,6 +276,8 @@ if($result->num_rows > 0){
             'title' => $row['title'],
             'category' => $row['category'],
             'category_name' => $row['category_name'],
+            'songbook' => $row['songbook'],
+            'songbook_title' => $row['songbook_title'],
             'lang_name' => $row['lang_name'],
             'song_text' => $row['song_text'],
             'arr_esquema' => $row['arr_esquema'],

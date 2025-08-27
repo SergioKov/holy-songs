@@ -171,7 +171,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 type="text"
                                                 placeholder="Введите слово или фразу для поиска..."
                                                 data-dic=""
-                                                value="боже"
+                                                va-lue="боже"
+                                                value="zzz"
                                             >
                                             <div id="clear_inpt" onclick="clear_inpt('find')">&times;</div>
                                         </div>
@@ -201,15 +202,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </button>
 
                                     </div><!--/.wr_nav-->
-
-                                    <h5 class="d-none">Selecciona songbook o algo mas...(decidir...):</h5>
-                                    <div class="wr_sel_song d-none">
-                                        <select id="songbook" class="sel_song">
-                                            <option>1. asdfsdfa</option>
-                                            <option>2. asdfsdfa</option>
-                                            <option>3. asdfsdfa</option>
-                                        </select>
-                                    </div>
 
 
                                     <h5>Modo de búsqueda:</h5>
@@ -256,6 +248,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <th class="td_titulo">Título</th>
                                                         <th class="td_esquema">Esquema</th>
                                                         <th class="td_category">Categoría</th>
+                                                        <th class="td_songbook">Songbook</th>
                                                         <th class="td_idioma">Idioma</th>
                                                         <th class="td_tonalidad">Tonalidad</th>
                                                     </tr>
@@ -268,6 +261,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <td class="td_titulo">...</td>
                                                         <td class="td_esquema">...</td>
                                                         <td class="td_category">...</td>
+                                                        <td class="td_songbook">...</td>
                                                         <td class="td_idioma">...</td>
                                                         <td class="td_tonalidad">...</td>
                                                     </tr>
@@ -310,6 +304,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_esquema_head" class="edit_blocks_head">
                                 <button id="btn_ver_esquema" class="btn" onclick="ver_esquema()">Ver esquema</button>
                                 <button id="btn_crear_esquema" class="btn" onclick="crear_esquema()">Crear esquema</button>
+                                <button id="btn_select_slide" class="btn" onclick="select_slide()">Select Slide</button>
                             </div>
                             
                             <div class="bl_partes">
@@ -410,7 +405,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <div class="wr_sel_category select_container">
                                                         <select id="category" class="sel_opt" required="">
                                                             <option value="" disabled selected hidden></option>
-
                                                             <option value="1">1. Наприкінці церковного зібрання</option>
                                                             <option value="2">2. На рукопокладення</option>
                                                             <option value="3">3. Хрещення</option>
@@ -441,7 +435,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <option value="28">28. Вечеря Господня</option>
                                                             <option value="29">29. Різне</option>
                                                             <option value="30">30. Практичне життя з Богом</option>
-                                                            <option value="31">31. Хвала і подяка</option>
+                                                            <option value="31" selected>31. Хвала і подяка</option>
                                                             <option value="32">32. Молитва</option>
                                                             <option value="33">33. Спасіння</option>
                                                             <option value="34">34. Духовна боротьба і перемога</option>
@@ -468,6 +462,13 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <option value="55">55. Трійця</option>
                                                         </select>
                                                         <label for="category">Category</label>
+                                                    </div>
+
+                                                    <div class="wr_sel_category select_container">
+                                                        <select id="songbook" class="sel_opt" required="">
+                                                             <!-- se pintan los songbook aki desde bd -->
+                                                        </select>
+                                                        <label for="songbook">Пісенник (Збірник пісень)</label>
                                                     </div>
 
                                                     <div class="wr_group">
@@ -849,6 +850,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 <script src="js/s_song.js"></script>
 <script src="js/s_modal.js"></script>
 <script src="js/s_listen.js"></script>
+<script src="js/s_new.js"></script>
 <script src="js/s_test.js"></script>
 
 </body>

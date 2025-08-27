@@ -8,9 +8,16 @@ function init() {
     pintTipoAcorde();
     transponerTodosLosAcordes(currentTransposition);
     scrollToSlide(currentSlide);
+
+    crear_objSongbooks();
 }
 
+async function crear_objSongbooks(){
+    console.log('=== function crear_objSongbooks() ===');
 
+    objSongbooks = await getSongbooksFromBd();
+    console.log(`objSongbooks: `, objSongbooks);
+}
 
 
 function scrollToSlide(index) {
@@ -1196,6 +1203,7 @@ async function ver_esquema(){
     //Recorrer el bucle - partes de song...
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
+
         const slide_original = obj_bloques[titulo].slide;
         console.log('slide_original: ', slide_original);
         
@@ -1249,6 +1257,11 @@ async function ver_esquema(){
             console.log('e.currentTarget: ', e.currentTarget);
             console.log('e.target: ', e.target);
 
+            const btn_clicked = e.currentTarget;
+            resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
+            btn_clicked.classList.add('btn_active');
+
+
             const song_element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
             const song_element_fieldset = song_element_legend.closest('fieldset');
             resetFldActive(song_bloques);            
@@ -1272,6 +1285,421 @@ async function ver_esquema(){
     `;
 
 }
+
+
+async function select_slide(){
+    console.log('=== function select_slide() ===');
+
+    if(!hay_id_song('select_slide()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    console.log('obj_bloques esta vacio, lo creo...');
+    obj_bloques = await getSongBlocks();
+
+    console.log('obj_bloques: ', obj_bloques);
+
+    arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
+    console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
+    
+    song_bloques.innerHTML = '';//reset
+    wr_vista_btns.innerHTML = '';//reset
+    wr_vista_blocks.innerHTML = '';//reset
+    wr_btns_action.innerHTML = '';//reset
+
+    song_bloques.classList.add('solo_ver');
+    wr_vista_blocks.classList.add('wr_full_block');//para que ocupe todo el ancho posible
+
+    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Seleccionar una DIAPOSITIVA desde la esquema de la canción:';
+    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Diapositivas de la canción:';
+    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
+    eid_block_esquema.querySelector('.bl_parte_r h4').textContent = 'Vista previa de Diapositiva ACTUAL:';
+    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Diapositiva ACTUAL:';
+    
+    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+
+    wr_esquema_actual.style.display = 'none';//oculto el contenedor de esquema actual por no hacer falta (y no duplicar vista de datos)
+
+
+
+    // Recorrer el bucle - btns y vista...
+    arr_esquema_bucle.forEach( (titulo, i, arr) => {
+        console.log('titulo: ', titulo);
+
+        // const slide_original = obj_bloques[titulo.nombre].slide;//as json
+        const slide_original = obj_bloques[titulo].slide;//bd
+        console.log('slide_original: ', slide_original);
+        
+        const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
+        console.log('slide_clone: ', slide_clone); 
+
+        const el_fieldset_cloned = slide_clone.querySelector('fieldset').cloneNode(true); // true para clonar también hijos
+        console.log('el_fieldset_cloned: ', el_fieldset_cloned);
+        
+
+        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
+        let titulo_text = titulo_orig;
+        console.log('titulo_text: ', titulo_text); 
+        
+        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
+        console.log('before --- titulo_count_veces: ', titulo_count_veces); 
+        
+        if(titulo_count_veces > 1){//si hay repeticion del titulo
+            titulo_text = `${titulo_text} <span>x${titulo_count_veces}</span>`;
+        }
+        console.log('after --- titulo_text: ', titulo_text); 
+
+        el_fieldset_cloned.dataset.idx_esquema = i;
+        el_fieldset_cloned.querySelector('legend').innerHTML = titulo_text;//pongo el titulo en el bloque
+
+        //añado al DOM
+        song_bloques.append(el_fieldset_cloned);
+
+
+
+
+
+
+
+        //Creo boton del bloque sin poder cerrarlo con 'X'
+        const btn_simple = document.createElement('button');
+        btn_simple.className = 'btn btn_simple';
+        btn_simple.dataset.titulo = titulo_orig;
+        btn_simple.dataset.idx = i;
+        btn_simple.innerHTML = `
+            <span class="sp_titulo">${i} --- ${titulo_text}</span>
+        `;
+        btn_simple.onclick = (e) => {
+            console.log('e.currentTarget: ', e.currentTarget);
+            console.log('e.target: ', e.target);
+
+            const btn_clicked = e.currentTarget;
+            
+            if(btn_clicked.dataset.titulo === '_titulo_cancion_'){
+                return;
+            }
+            
+            resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
+            btn_clicked.classList.add('btn_active');
+
+            const song_element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === btn_clicked.dataset.titulo);
+            console.log('song_element_legend: ', song_element_legend);
+
+            const song_element_fieldset = song_element_legend.closest('fieldset');
+            resetFldActive(song_bloques); 
+            console.log('song_element_fieldset: ', song_element_fieldset);
+
+            song_element_fieldset.classList.add('fld_active');
+            song_element_fieldset.scrollIntoView({behavior: 'smooth'}); 
+
+
+            
+            wr_vista_blocks.innerHTML = '';//reset
+            
+            const wr_full_block_inner = document.createElement('div');
+            wr_full_block_inner.className = 'wr_full_block_inner';
+            wr_vista_blocks.append(wr_full_block_inner);
+
+
+            const el_fieldset_cloned = song_element_fieldset.cloneNode(true); // true para
+            wr_full_block_inner.append(el_fieldset_cloned);
+
+            const contenedorSlideView = document.querySelector('.wr_full_block');
+
+            ajustarTextoContenedor(contenedorSlideView);
+
+        }
+        
+        //añado al DOM
+        wr_vista_btns.append(btn_simple);
+        //wr_vista_blocks.append(el_fieldset_cloned);
+    });
+
+    wr_btns_action.innerHTML = `
+        <button id="btn_crearSlides" class="btn" onclick="crearSlides();">Crear slides</button>
+        <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+    `;
+
+}
+
+
+function ajustarTextoContenedor(contenedor) {
+    if (!contenedor) return;
+
+    console.log('=== ajustarTextoContenedor ===');
+    console.log('contenedor:', contenedor);
+
+    const maxW = contenedor.clientWidth;
+    const maxH = contenedor.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
+
+    const coef_legend = 0.6;
+    const legend_fontSize_max = 25;
+    const legend = contenedor.querySelector('legend');
+
+    let fontSize = 16; // Iniciar desde 1 para evitar error inicial
+
+    // Caja oculta para medir
+    const box = document.createElement('div');
+    box.style.position = 'absolute';
+    box.style.left = '-10000px';
+    box.style.top = '0';
+    box.style.visibility = 'hidden';
+    box.style.width = maxW + 'px';
+    box.style.boxSizing = 'border-box';
+    document.body.appendChild(box);
+
+    // Clon a medir dentro de la caja
+    const clone = contenedor.querySelector('.wr_full_block_inner').cloneNode(true);
+    // clone.style.width = '100%';
+    // clone.style.height = 'auto';
+    clone.style.margin = '0';
+    clone.style.position = 'static';
+    box.appendChild(clone);
+
+    // Bucle para ajustar fontSize
+    while (fontSize <= 100) {
+        clone.style.fontSize = fontSize + 'px';
+        console.log('pongo fontSize: ', fontSize);
+
+
+
+        const { width, height } = clone.getBoundingClientRect();
+        console.log('clone width: ', width);
+        console.log('clone height: ', height);
+
+        if (width > maxW || height > maxH) {
+            console.log('break fontSize: ', fontSize);
+            break;
+        }
+
+        // Comprobamos overflow
+        if (clone.scrollWidth > maxW || clone.scrollHeight > maxH) {
+            console.log('overflow break. fontSize: ', fontSize);           
+            
+            fontSize -= 1;
+            break;
+        }
+
+        fontSize++;
+        //console.log('aumento. fontSize: ', fontSize);  
+        //contenedor.style.fontSize = fontSize + 'px';
+
+    }
+
+    // Aplicar al contenedor real
+    contenedor.style.fontSize = fontSize + 'px';
+    console.log('contenedor. fontSize: ', fontSize);  
+    
+
+
+    if(legend){
+        const legend_fontSize = (fontSize - 1) * coef_legend;
+        const legend_fontSize_new = (legend_fontSize > legend_fontSize_max) 
+            ? legend_fontSize_max 
+            : legend_fontSize ;
+        legend.style.fontSize = legend_fontSize_new + 'px';
+    }
+
+
+
+    // Eliminar clon de prueba
+    document.body.removeChild(box);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function old2_ajustarTextoContenedor(contenedor) {
+    console.log('=== function ajustarTextoContenedor() ===');
+    console.log('contenedor:', contenedor);
+
+    let maxW = contenedor.clientWidth;
+    let maxH = contenedor.clientHeight;
+
+    const coef_legend = 0.6; // Proporción para legend
+    const legend_fontSize_max = 50; // Tamaño máximo legend
+
+    const legend = contenedor.querySelector('legend');
+
+    let fontSize = 10;
+    contenedor.style.fontSize = fontSize + 'px';
+
+
+
+
+  // Caja de medida oculta que reproduce el ancho del contenedor
+  const box = document.createElement('div');
+  box.style.position = 'absolute';
+  box.style.left = '-10000px';
+  box.style.top = '0';
+  box.style.visibility = 'hidden';
+  box.style.width = maxW + 'px';           // ¡clave!: mismo ancho que el contenedor
+  box.style.boxSizing = 'border-box';
+  box.style.contain = 'layout style size'; // aísla el layout para medir más fielmente
+  document.body.appendChild(box);
+
+
+  // Clon a medir dentro de la caja
+  const clone = contenedor.cloneNode(true);
+  clone.style.width = '100%';     // respeta el ancho de la caja
+  clone.style.height = 'auto';
+  clone.style.margin = '0';
+  clone.style.position = 'static';
+  box.appendChild(clone);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // Crear clon oculto para medir
+    // const clone = contenedor.cloneNode(true);
+    // clone.style.position = 'absolute';
+    // clone.style.visibility = 'hidden';
+    // clone.style.left = '-9999px';
+    // clone.style.top = '-9999px';
+    // document.body.appendChild(clone);
+
+    // Incrementar font-size hasta que se pase del tamaño permitido
+    while (fontSize < 500) {
+        clone.style.fontSize = fontSize + 'px';
+        const { width, height } = clone.querySelector('.wr_full_block_inner').getBoundingClientRect();
+
+        if (width > maxW || height > maxH) {
+            console.log('break fontSize: ', fontSize);
+            break;
+        }
+
+        // Comprobamos overflow
+        if (clone.scrollWidth > maxW || clone.scrollHeight > maxH) {
+            fontSize--; // retrocedemos al último tamaño válido
+            break;
+        }
+
+        fontSize++;
+    }
+
+    // Asignar tamaño final
+    contenedor.style.fontSize = (fontSize - 1) + 'px';
+
+    // Ajustar legend si existe
+    if (legend) {
+        let legend_fontSize = (fontSize - 1) * coef_legend;
+        if (legend_fontSize > legend_fontSize_max) {
+            legend_fontSize = legend_fontSize_max;
+        }
+        legend.style.fontSize = legend_fontSize + 'px';
+    }
+
+    // Eliminar clon de prueba
+    document.body.removeChild(box);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function old_ajustarTextoContenedor(contenedor){
+    console.log('=== function ajustarTextoContenedor() ===');
+    console.log('contenedor: ', contenedor);
+
+    setTimeout(() => {
+
+        let maxW = contenedor.clientWidth;
+        let maxH = contenedor.clientHeight;
+        
+        const coef_legend = 0.6;// 2/3 del tamaño de la fuente de texto de kuplet
+        const legend_fontSize_max = 50;// tamaño maximo de la fuente de legend
+
+        const legend = contenedor.querySelector('legend');
+        console.log('legend: ', legend);
+
+        let fontSize = 10;
+        contenedor.style.fontSize = fontSize + 'px';
+
+        const clone = contenedor.cloneNode(true);
+        
+
+        //clone.style.position = 'absolute';
+        // clone.style.visibility = 'hidden';
+        // clone.style.left = '-9999px';
+        // document.body.appendChild(clone);
+
+        document.querySelector('.wr_full_block').appendChild(clone);
+
+        while (fontSize < 500) {//while() es mas rapido que for()
+            clone.style.fontSize = fontSize + 'px';
+            console.log('while --- pongo fontSize: ', fontSize);
+
+            const { width, height } = clone.getBoundingClientRect();
+            console.log('rect width: ', width);
+            console.log('rect height: ', height);
+
+
+            if (width > maxW || height > maxH) {
+                console.log('break fontSize: ', fontSize);
+                break;
+            }
+            fontSize++;
+        }
+
+        contenedor.style.fontSize = (fontSize - 1) + 'px';
+        if(legend){
+            const legend_fontSize = (fontSize - 1) * coef_legend;
+            const legend_fontSize_new = (legend_fontSize > legend_fontSize_max) 
+                ? legend_fontSize_max 
+                : legend_fontSize ;
+            legend.style.fontSize = legend_fontSize_new + 'px';
+        }
+        //document.body.removeChild(clone);
+        document.querySelector('.wr_full_block').removeChild(clone);
+
+    }, 1000);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function crear_esquema(){
@@ -1504,6 +1932,7 @@ function resetBlockBuscar(){
     //             <td class="td_titulo">...</td>
     //             <td class="td_esquema">...</td>
     //             <td class="td_category">...</td>
+    //             <td class="td_songbook">...</td>
     //             <td class="td_idioma">...</td>
     //             <td class="td_tonalidad">...</td>
     // `;
@@ -1573,6 +2002,7 @@ async function guardarSong(event){
 
         let title = document.getElementById("title").value.trim();
         let category = document.getElementById("category").value.trim();
+        let songbook = document.getElementById("songbook").value.trim();
         let song_number = document.getElementById("song_number").value.trim();
         let tune = document.getElementById("tune").value.trim();
         let lang = document.getElementById("lang").value.trim();
@@ -1612,6 +2042,7 @@ async function guardarSong(event){
             title: title,
             arr_esquema: '', //no hay esquema al crear/editar una canción. se guarda en guardarEsquema()
             category: category,
+            songbook: songbook,
             tune: tune,
             lang: lang,
             song_text: song_text,
@@ -2198,86 +2629,17 @@ async function findWordsSong(){
             tr.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_song" data-id_song="${el.id_song}" title="${el.id_song}">${el.id_song}</td>
-                <td class="td_numero">${el.song_number}</td>
+                <td class="td_numero">${el.song_number || ''}</td>
                 <td class="td_titulo">${el.title}</td>
                 <td class="td_esquema">${el.arr_esquema?.length ? 'Sí' : ''}</td>            
                 <td class="td_category" data-category="${el.category}">${el.category_name || ''}</td>            
+                <td class="td_songbook" data-songbook="${el.songbook}">${el.songbook_title || ''}</td>            
                 <td class="td_idioma" data-lang_name="${el.lang_name}">${obj_lang_names[el.lang] || el.lang}</td>
                 <td class="td_tonalidad">${el.tune}</td>
             `;
 
             tr.onclick = (e)=>{
-                console.log('e.currentTarget: ', e.currentTarget);
-
-                id_song = e.currentTarget.dataset.id;
-                console.log('asigno global --- id_song: ', id_song);
-
-                resetTrSelected(tbody);
-                e.currentTarget.classList.add('selected');
-
-                //song_text
-                const vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
-                vista_song_content.innerHTML = '';//reset
-
-                const wr_btns_action = document.querySelector('.wr_btns_action');
-                wr_btns_action.innerHTML = `
-                    <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-                    <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-                    <button class="btn" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</button>
-                    <button class="btn" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</button>
-                    <button class="btn" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</button>
-                    <button class="btn" onclick="crearSlides()">Crear slides</button>
-                    <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-                    <button class="btn" onclick="addToLista();">Añadir a la Lista</button>
-                `;
-
-                //dejo '==' en vez de '===' porque id_song viene como string "925"
-                objSong = arr.find(s => s.id_song == id_song);
-                console.log('objSong: ', objSong);
-
-                const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
-                console.log('regex: ', regex);
-
-                let vista_html = '';
-
-                if(objSong.title){
-                    //Marco en rojo las palabras encontradas en title 
-                    let titulo_text_red = objSong.title.replace(regex, (x) => {
-                        return `<b class="c_red">${x}</b>`;
-                    });
-                    vista_html += `
-                        <p class="p_titulo">Título Canción:</p>
-                        <p class="texto_norm t_big">${titulo_text_red}</p>
-                    `;
-                }
-        
-                if(objSong.song_text){
-                    //Marco en rojo las palabras encontradas en song_text 
-                    let song_text_red = objSong.song_text.replace(regex, (x) => {
-                        return `<b class="c_red">${x}</b>`;
-                    });
-                    vista_html += `
-                        <p class="p_titulo">Texto:</p>
-                        <div class="texto_pre">${song_text_red}</div>
-                    `;
-                }
-
-                if(objSong.notes){
-                    //Marco en rojo las palabras encontradas en notes 
-                    let notas_text_red = objSong.notes.replace(regex, (x) => {
-                        return `<b class="c_red">${x}</b>`;
-                    });
-                    vista_html += `
-                        <p class="p_titulo">Notas:</p>
-                        <p class="texto_norm">${notas_text_red}</p>
-                    `;
-                }                 
-
-                vista_song_content.innerHTML = vista_html;
-
-                resetBlockCancion();
-                resetLineasXinBlock(eid_block_cancion);
-
+                pintSongActive(e, arr, arr_words);//en la ventana a la derecha de la tabla de lista
             }//end - tr.onclick
 
             tbody.append(tr);
@@ -2416,8 +2778,20 @@ function convertirFechaAntes(fechaStr) {// de '01:31:2021' que es 31 de enero de
     return `'${anio}-${mes}-${dia}'`;
 }
 
+function pintSongbooksOptions(selectElement){
+    selectElement.innerHTML = '';//reset
+    //Recorrer objSongbooks
+    Object.values(objSongbooks).forEach(songbook => {
+        const option = document.createElement('option');
+        option.value = songbook.id_songbook;
+        option.innerHTML = `${songbook.id_songbook}. ${songbook.title}`;
+        selectElement.append(option);
+    });
+}
 
-function nueva_song(){
+
+
+async function nueva_song(){
     console.log('=== function nueva_song() ===');
 
     id_song = null;//reset id_song -> ya que es nueva canción
@@ -2428,7 +2802,9 @@ function nueva_song(){
     resetLineasXinBlock(eid_block_cancion);
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset    
+    cancion_wr_btns_action.innerHTML = '...';//reset 
+    
+    pintSongbooksOptions(cancion_form_container.querySelector('#songbook'));
 
     cancion_song_bloques.classList.add('solo_ver');
 
@@ -2495,7 +2871,9 @@ function editar_song(modo){
 
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset    
+    cancion_wr_btns_action.innerHTML = '...';//reset 
+
+    pintSongbooksOptions(cancion_form_container.querySelector('#songbook'));   
 
     cancion_song_bloques.classList.add('solo_ver');
     
@@ -2506,6 +2884,7 @@ function editar_song(modo){
     
     cancion_form_container.querySelector('#title').value = objSong.title || '';
     cancion_form_container.querySelector('#category').value = objSong.category || '';
+    cancion_form_container.querySelector('#songbook').value = objSong.songbook || '';
     cancion_form_container.querySelector('#id_song').value = objSong.id_song;
     cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song
     cancion_form_container.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
@@ -3249,7 +3628,7 @@ function makeItemsDraggable(id_contenedor, class_element){
 
             // const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');//no funciona
             const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #d_canciones_body_drag');
-            pintarSoloNumerosDeOrden(contenedor_pintar_numeros);
+            pintSoloNumerosDeOrden(contenedor_pintar_numeros);
         }
 
         document.removeEventListener('mousemove', moveDrag);
@@ -3300,8 +3679,8 @@ function quitarObjetosDuplicadosDeArray(arr) {
 }
 
 
-function pintarSoloNumerosDeOrden(contenedor){
-    console.log('=== function pintarSoloNumerosDeOrden() ===');
+function pintSoloNumerosDeOrden(contenedor){
+    console.log('=== function pintSoloNumerosDeOrden() ===');
     contenedor.querySelectorAll('.l_n').forEach((item,i) => {
         //console.log('item: ', item);
         //console.log('i: ', i);

@@ -223,6 +223,10 @@ let objLista = {};
 let id_lista = null;//id de la lista actual
 let lista_id_song = null;//id de song clicked de la lista actual
 
+let objSongbooksBd = {};//datos de BD de todos songbooks
+let objSongbooks = {};//datos de todos songbooks
+
+
 let obj_lang_names = {
     'ua': 'Укр.',
     'ru': 'Рус.',
