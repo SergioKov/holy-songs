@@ -129,11 +129,192 @@ function pintSongActive(e, arr, arr_words){//click en tr de la tabla de cancione
 
     vista_song_content.innerHTML = vista_html;
 
+    resetBlockEsquemaSoloHTML();
     resetBlockCancion();
     resetLineasXinBlock(eid_block_cancion);
 
 }
 
+
+
+
+function showOneSlideFrom(elementClicked, arr_esquema_bucle){
+    console.log('=== function showOneSlideFrom() ===');
+    console.log('elementClicked: ', elementClicked);
+
+    if(elementClicked.dataset.titulo === '_titulo_cancion_'){
+        //return;
+    }
+
+    const index_esquema = elementClicked.dataset.idx;
+    console.log('index_esquema: ', index_esquema);
+
+    const elementBtnSimple = wr_vista_btns.querySelector(`.btn_simple[data-idx="${index_esquema}"]`);
+    console.log('elementBtnSimple: ', elementBtnSimple);
+
+    const elementFieldset = song_bloques.querySelector(`fieldset[data-idx="${index_esquema}"]`);
+    console.log('elementFieldset: ', elementFieldset);
+
+    wr_vista_blocks.innerHTML = '';//reset
+    wr_vista_blocks.removeAttribute('style');// quitar font-size anterior
+
+    resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
+    elementBtnSimple.classList.add('btn_active');
+
+    resetFldActive(song_bloques);//reseteo fieldset active de kuplet's a la izda
+    elementFieldset.classList.add('fld_active');
+
+    if(elementClicked === elementBtnSimple){
+        console.log('es button -> btn_clicked ');
+        elementFieldset.scrollIntoView({behavior: 'smooth', block: "center"});//btn clicked -> muevo fildset
+    }else{
+        console.log('es fieldset clicked');
+        elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
+    }
+        
+    const wr_full_block_inner = document.createElement('div');
+    wr_full_block_inner.className = 'wr_full_block_inner';
+    wr_vista_blocks.append(wr_full_block_inner);
+
+    const el_fieldset_cloned = song_bloques.querySelectorAll('fieldset')[index_esquema].cloneNode(true); // true para clonar hijos
+
+    //Primer slide
+    if(elementClicked.dataset.titulo === '_titulo_cancion_' || index_esquema == 0){
+        el_fieldset_cloned.querySelector('.song_titulo').textContent = '...';//muestro ... en vez del título del slide 1
+    }
+
+    //Ultimo slide
+    if(index_esquema == arr_esquema_bucle.length - 1){
+        const p = document.createElement('p');
+        p.className = 'tres_estrellas';
+        p.textContent = '* * *';
+        el_fieldset_cloned.append(p);//muestro ... en vez del título del slide 1
+    }
+
+    wr_full_block_inner.append(el_fieldset_cloned);
+
+    const contenedorSlideView = document.querySelector('.wr_full_block');
+
+    ajustarTextoContenedor(contenedorSlideView);
+
+    make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle);
+}
+
+
+
+
+
+
+function make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle){
+    console.log('=== function make_arr_pantalla() ===');
+
+    arr_pantalla = [];//reset   
+    let song_text = '';
+    let arr_p_text = [];
+
+    let p_textAll = el_fieldset_cloned.querySelectorAll('p.t');//solo texto
+    console.log('p_textAll: ', p_textAll);
+
+    p_textAll.forEach((p, i, arr) => {
+        console.log('p: ', p);
+        song_text += p.innerHTML;
+        if(i != arr.length - 1){
+            song_text += '<br>';
+        }
+        //arr_p_text.push(p.textContent);
+    });
+
+    //si es ultimo slide
+    if(el_fieldset_cloned.dataset.idx == arr_esquema_bucle.length - 1){
+        song_text += `<span class="tres_estrellas">* * *</span>`;
+    }
+
+    if(p_textAll.length == 0){//si no se encuentra el verse, no hago nada
+        //alert('no hay texto en la diapositiva seleccionada. pero sigo...');
+        let hay_song_titulo = el_fieldset_cloned.querySelector('.song_titulo');
+        if(hay_song_titulo){
+            song_text += `
+                <div class="wr_d_puntos">
+                    <p>...</p>
+                </div>
+            `;
+        }
+
+        let p_acordeAll = el_fieldset_cloned.querySelectorAll('p.c');
+        if(p_acordeAll.length > 0){
+            song_text += `
+                <div class="wr_d_music">
+                    <img src="images/notas_de_musica_grey.svg">
+                </div>
+            `;
+        }
+    }
+
+
+    let pantalla = {
+        //tipo_content: 'song_text',
+        //arr_p_text: arr_p_text,
+        //fieldset_html: el_fieldset_cloned.outerHTML,
+        song_text: song_text
+    };
+    console.log('pantalla: ', pantalla);
+
+    arr_pantalla.push(pantalla);
+    console.log('arr_pantalla: ', arr_pantalla);
+
+    let arr_pantalla_string = JSON.stringify(arr_pantalla);
+
+    localStorage.setItem('arr_pantalla',arr_pantalla_string);
+
+    //buildArrPantallaDesktop(arr_pantalla);
+}
+
+
+function enableDisablePantallaShow(){//muestra 
+    if(pantallaShow){
+        pantallaShow = false;//siguiente accion
+    }else{        
+        pantallaShow = true;//siguiente accion
+    }
+    check_pantallaShow();
+}
+
+function check_pantallaShow(){
+    //console.log('=== function check_pantallaShow() ===');
+    //console.log('pantallaShow: ', pantallaShow);
+
+    if(pantallaShow){
+        mostrar_pantallaShow();
+    }else{
+        ocultar_pantallaShow();
+    }
+}
+
+function mostrar_pantallaShow(){
+    const eid_btn_pantallaShow = document.querySelector('#btn_pantallaShow');
+    eid_btn_pantallaShow.classList.add('btn_active');
+
+    // eid_btn_pantallaShow.classList.add('btn_active');
+    // eid_vklad_btn_pantallaShow.classList.add('btn_active');
+    //eid_contenedor.classList.add('shown');
+    //eid_fondo_body.classList.add('fondo_black');
+
+    localStorage.setItem('pantallaShow','true');
+
+    //make_arr_pantalla(act_show_verse);
+}
+
+function ocultar_pantallaShow(){
+    const eid_btn_pantallaShow = document.querySelector('#btn_pantallaShow');
+    eid_btn_pantallaShow.classList.remove('btn_active');
+
+    // eid_btn_pantallaShow.classList.remove('btn_active');
+    // eid_vklad_btn_pantallaShow.classList.remove('btn_active');
+    //eid_contenedor.classList.remove('shown');
+    //eid_fondo_body.classList.remove('fondo_black');
+    
+    localStorage.setItem('pantallaShow','false');
+}
 
 
 

@@ -1,0 +1,191 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+body {
+    margin: 0 auto;
+    padding: 0;
+    /* background: linear-gradient(to bottom right, white 0%, #9dd3fd 10%, #1875bf 45%, #012643 100%); */
+    color: white;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif';
+    /* overflow: hidden; */
+    background: black;
+    background-image: url('../images/bible_open6.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
+
+
+#contenedor {
+    height: 100%;
+    background: black;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    align-items: stretch;
+    opacity: 0;
+    transition: 1s;
+}
+.shown {
+    opacity: 1 !important;
+}
+
+S {
+    display: none;
+}
+
+.trad {
+    box-sizing: border-box;
+    font-size: 30px;
+    box-shadow: 0px 0px 35px -15px #ffffff;
+    overflow: hidden;
+}
+.trad:not(.trad:last-child) {
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.trad_inner {
+    /* padding: 25px; */
+    padding: 5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: 1px solid yellow; */
+    align-items: center;
+}
+
+
+.verse {
+    font-weight: 600;
+    white-space: nowrap;
+    /* background: #5d025d; */
+    text-align: center;
+}
+
+
+.wr_d_puntos {
+    font-family: monospace;
+    font-size: 100px;
+    color: #313131;
+    padding: 20px;
+    display: flex;
+    height: 80vh;
+    align-items: flex-end;
+}
+
+.tres_estrellas {
+    color: #313131;
+    text-align: center;
+    display: block;
+    font-size: 100px;
+}
+
+.wr_d_music {
+    padding: 20px;
+    display: flex;
+    width: 50vw;
+    height: 50vh;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    /* border: 3px solid #313131; */
+    /* border-radius: 50px; */
+}
+.wr_d_music img {
+    max-width: 300px;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* solo si hay que mostrar acordes para musicos */
+.show_music {
+
+    fieldset {
+        /* background: green; */
+        border-radius: 10px;
+        /* border-color: transparent; */
+        margin-inline: 8px;
+        padding: 2rem;
+        transition: 0.3s ease;
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    legend {
+        font-weight: bold;
+        color: #909090;
+        padding: 3px 10px;
+        /* background-color: #fff; */
+        margin-left: 0px;
+        /* background: #673AB7; */
+        border-radius: 10px;
+        font-style: italic;
+        background: #555353;
+        /* font-size: 0.5rem; */
+        text-align: center;
+        /* width: 100%; */
+        transition: 0.3s ease;
+    }
+
+    p {
+        font-weight: bolder;
+        font-family: monospace, Arial, Tahoma, 'sans serif';
+        line-height: 1em;
+        white-space: pre;
+    }
+
+
+    p.c, /* acordes*/
+    p.b /* bolas o puntitos */
+    {
+        padding: 0;
+        white-space: pre;
+        /* padding-top: 15px; */
+    }
+
+    /* c = chord, acorde */
+    p.c {
+        color: #00e2ff;
+        /* color: red; */
+        line-height: 0.7em;
+    }
+
+
+    /* b = bola, punto */
+    p.b {
+        padding-top: 0px;
+        padding-bottom: 15px;
+    }
+
+    /* n = nota */
+    p.n {
+        /* color: green; */
+        color: #909090;
+        font-weight: normal;
+        font-style: italic;
+        padding-top: 0;
+        padding-bottom: 15px;
+    }
+
+    /* t = texto */
+    p.t {
+        margin-bottom: 15px;
+    }
+}
+
+
+
+
+
+
+
+
+

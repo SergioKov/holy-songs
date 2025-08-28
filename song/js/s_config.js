@@ -1,6 +1,3 @@
-//=================================================================//
-// start - variables  
-//=================================================================//
 
 //en Header
 const header = document.querySelector('header');
@@ -258,7 +255,8 @@ let arr_lista = [] ;
 
 let made_draggable_once = false;
 
+let arr_pantalla;
 
-//=================================================================//
-// end - variables  
-//=================================================================//
+let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');//por defecto pantalla no se ve
+//pantallaShow = true;//test
+//pantallaShow = localStorage.setItem('pantallaShow', true);

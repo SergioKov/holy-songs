@@ -330,6 +330,9 @@ p.p_edit button {
     border: 1px solid #8d0000;
     color: white !important;
 }
+#block_esquema .btn_simple.btn_active {
+    box-shadow: 0 0 10px 10px white;
+}
 
 .dbtn {
     padding: 5px 10px;
@@ -446,9 +449,12 @@ legend span {
     color: #FFEB3B;
     border-radius: 5px;
 }
-.wr_vista_blocks legend span {
+
+.song_bloques legend span, 
+.wr_vista_blocks legend span 
+{
     padding: 2px 5px;
-    margin-right: -7px;
+    /* margin-right: -7px; */
 }
 .sp_titulo span {
     background: red;
@@ -1102,6 +1108,7 @@ tr.selected td.td_n {
     height: 650px;
     overflow-y: auto;
     margin-bottom: 10px;
+    position: relative;
 }
 .bl_parte_l .bloques_outer{
     background: #454545;
@@ -1137,7 +1144,8 @@ tr.selected td.td_n {
     gap: 20px;
     color: white;
     align-items: center;
-    /* width: fit-content; */
+    width: fit-content;
+    min-width: 100%;
 }
 .bloques > fieldset:last-child {
     margin-bottom: 20px;
@@ -1275,6 +1283,7 @@ tr.selected td.td_n {
 
 .btn_simple {
     padding: 5px;
+    scroll-margin-top: 5px;
 }
 .btn_simple .sp_titulo{
     margin-right: 0px;
@@ -1847,4 +1856,32 @@ p.p_sm b {
 }
 .d_aviso_sort.shown {
     opacity: 1;
+}
+
+#btn_pantallaShow {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+#btn_pantallaShow img{
+    padding-top: 3px;
+}
+
+
+
+.wr_full_block_inner fieldset{
+    border: 3px solid transparent !important;
+    box-shadow: none;
+    /* text-align: center;     */
+}
+.wr_full_block_inner legend {
+    display: none;
+}
+.wr_full_block_inner .song_titulo {
+    background: transparent;
+    color: #313131;
+}
+.tres_estrellas {
+    color: #313131;
+    text-align: center;
 }

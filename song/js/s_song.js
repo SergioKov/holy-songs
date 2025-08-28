@@ -1188,7 +1188,9 @@ async function ver_esquema(){
     wr_btns_action.innerHTML = '';//reset
 
     song_bloques.classList.add('solo_ver');
-
+    wr_vista_blocks.classList.remove('wr_full_block');
+    
+    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
     eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Ver esquema de la canción:';
     eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Bloques con las que se construyó la canción:';
     eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
@@ -1284,422 +1286,9 @@ async function ver_esquema(){
         <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
     `;
 
-}
-
-
-async function select_slide(){
-    console.log('=== function select_slide() ===');
-
-    if(!hay_id_song('select_slide()')){
-        return; // <- se detiene aquí si no hay id_song
-    }
-
-    console.log('obj_bloques esta vacio, lo creo...');
-    obj_bloques = await getSongBlocks();
-
-    console.log('obj_bloques: ', obj_bloques);
-
-    arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
-    console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
-    
-    song_bloques.innerHTML = '';//reset
-    wr_vista_btns.innerHTML = '';//reset
-    wr_vista_blocks.innerHTML = '';//reset
-    wr_btns_action.innerHTML = '';//reset
-
-    song_bloques.classList.add('solo_ver');
-    wr_vista_blocks.classList.add('wr_full_block');//para que ocupe todo el ancho posible
-
-    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Seleccionar una DIAPOSITIVA desde la esquema de la canción:';
-    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Diapositivas de la canción:';
-    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
-    eid_block_esquema.querySelector('.bl_parte_r h4').textContent = 'Vista previa de Diapositiva ACTUAL:';
-    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Diapositiva ACTUAL:';
-    
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
-
-    wr_esquema_actual.style.display = 'none';//oculto el contenedor de esquema actual por no hacer falta (y no duplicar vista de datos)
-
-
-
-    // Recorrer el bucle - btns y vista...
-    arr_esquema_bucle.forEach( (titulo, i, arr) => {
-        console.log('titulo: ', titulo);
-
-        // const slide_original = obj_bloques[titulo.nombre].slide;//as json
-        const slide_original = obj_bloques[titulo].slide;//bd
-        console.log('slide_original: ', slide_original);
-        
-        const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
-        console.log('slide_clone: ', slide_clone); 
-
-        const el_fieldset_cloned = slide_clone.querySelector('fieldset').cloneNode(true); // true para clonar también hijos
-        console.log('el_fieldset_cloned: ', el_fieldset_cloned);
-        
-
-        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
-        let titulo_text = titulo_orig;
-        console.log('titulo_text: ', titulo_text); 
-        
-        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
-        console.log('before --- titulo_count_veces: ', titulo_count_veces); 
-        
-        if(titulo_count_veces > 1){//si hay repeticion del titulo
-            titulo_text = `${titulo_text} <span>x${titulo_count_veces}</span>`;
-        }
-        console.log('after --- titulo_text: ', titulo_text); 
-
-        el_fieldset_cloned.dataset.idx_esquema = i;
-        el_fieldset_cloned.querySelector('legend').innerHTML = titulo_text;//pongo el titulo en el bloque
-
-        //añado al DOM
-        song_bloques.append(el_fieldset_cloned);
-
-
-
-
-
-
-
-        //Creo boton del bloque sin poder cerrarlo con 'X'
-        const btn_simple = document.createElement('button');
-        btn_simple.className = 'btn btn_simple';
-        btn_simple.dataset.titulo = titulo_orig;
-        btn_simple.dataset.idx = i;
-        btn_simple.innerHTML = `
-            <span class="sp_titulo">${i} --- ${titulo_text}</span>
-        `;
-        btn_simple.onclick = (e) => {
-            console.log('e.currentTarget: ', e.currentTarget);
-            console.log('e.target: ', e.target);
-
-            const btn_clicked = e.currentTarget;
-            
-            if(btn_clicked.dataset.titulo === '_titulo_cancion_'){
-                return;
-            }
-            
-            resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
-            btn_clicked.classList.add('btn_active');
-
-            const song_element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === btn_clicked.dataset.titulo);
-            console.log('song_element_legend: ', song_element_legend);
-
-            const song_element_fieldset = song_element_legend.closest('fieldset');
-            resetFldActive(song_bloques); 
-            console.log('song_element_fieldset: ', song_element_fieldset);
-
-            song_element_fieldset.classList.add('fld_active');
-            song_element_fieldset.scrollIntoView({behavior: 'smooth'}); 
-
-
-            
-            wr_vista_blocks.innerHTML = '';//reset
-            
-            const wr_full_block_inner = document.createElement('div');
-            wr_full_block_inner.className = 'wr_full_block_inner';
-            wr_vista_blocks.append(wr_full_block_inner);
-
-
-            const el_fieldset_cloned = song_element_fieldset.cloneNode(true); // true para
-            wr_full_block_inner.append(el_fieldset_cloned);
-
-            const contenedorSlideView = document.querySelector('.wr_full_block');
-
-            ajustarTextoContenedor(contenedorSlideView);
-
-        }
-        
-        //añado al DOM
-        wr_vista_btns.append(btn_simple);
-        //wr_vista_blocks.append(el_fieldset_cloned);
-    });
-
-    wr_btns_action.innerHTML = `
-        <button id="btn_crearSlides" class="btn" onclick="crearSlides();">Crear slides</button>
-        <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-    `;
+    pintParrafosAcordes();//para pintar barras de acordes como mas finas
 
 }
-
-
-function ajustarTextoContenedor(contenedor) {
-    if (!contenedor) return;
-
-    console.log('=== ajustarTextoContenedor ===');
-    console.log('contenedor:', contenedor);
-
-    const maxW = contenedor.clientWidth;
-    const maxH = contenedor.clientHeight;
-    if (maxW <= 0 || maxH <= 0) return;
-
-    const coef_legend = 0.6;
-    const legend_fontSize_max = 25;
-    const legend = contenedor.querySelector('legend');
-
-    let fontSize = 16; // Iniciar desde 1 para evitar error inicial
-
-    // Caja oculta para medir
-    const box = document.createElement('div');
-    box.style.position = 'absolute';
-    box.style.left = '-10000px';
-    box.style.top = '0';
-    box.style.visibility = 'hidden';
-    box.style.width = maxW + 'px';
-    box.style.boxSizing = 'border-box';
-    document.body.appendChild(box);
-
-    // Clon a medir dentro de la caja
-    const clone = contenedor.querySelector('.wr_full_block_inner').cloneNode(true);
-    // clone.style.width = '100%';
-    // clone.style.height = 'auto';
-    clone.style.margin = '0';
-    clone.style.position = 'static';
-    box.appendChild(clone);
-
-    // Bucle para ajustar fontSize
-    while (fontSize <= 100) {
-        clone.style.fontSize = fontSize + 'px';
-        console.log('pongo fontSize: ', fontSize);
-
-
-
-        const { width, height } = clone.getBoundingClientRect();
-        console.log('clone width: ', width);
-        console.log('clone height: ', height);
-
-        if (width > maxW || height > maxH) {
-            console.log('break fontSize: ', fontSize);
-            break;
-        }
-
-        // Comprobamos overflow
-        if (clone.scrollWidth > maxW || clone.scrollHeight > maxH) {
-            console.log('overflow break. fontSize: ', fontSize);           
-            
-            fontSize -= 1;
-            break;
-        }
-
-        fontSize++;
-        //console.log('aumento. fontSize: ', fontSize);  
-        //contenedor.style.fontSize = fontSize + 'px';
-
-    }
-
-    // Aplicar al contenedor real
-    contenedor.style.fontSize = fontSize + 'px';
-    console.log('contenedor. fontSize: ', fontSize);  
-    
-
-
-    if(legend){
-        const legend_fontSize = (fontSize - 1) * coef_legend;
-        const legend_fontSize_new = (legend_fontSize > legend_fontSize_max) 
-            ? legend_fontSize_max 
-            : legend_fontSize ;
-        legend.style.fontSize = legend_fontSize_new + 'px';
-    }
-
-
-
-    // Eliminar clon de prueba
-    document.body.removeChild(box);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-function old2_ajustarTextoContenedor(contenedor) {
-    console.log('=== function ajustarTextoContenedor() ===');
-    console.log('contenedor:', contenedor);
-
-    let maxW = contenedor.clientWidth;
-    let maxH = contenedor.clientHeight;
-
-    const coef_legend = 0.6; // Proporción para legend
-    const legend_fontSize_max = 50; // Tamaño máximo legend
-
-    const legend = contenedor.querySelector('legend');
-
-    let fontSize = 10;
-    contenedor.style.fontSize = fontSize + 'px';
-
-
-
-
-  // Caja de medida oculta que reproduce el ancho del contenedor
-  const box = document.createElement('div');
-  box.style.position = 'absolute';
-  box.style.left = '-10000px';
-  box.style.top = '0';
-  box.style.visibility = 'hidden';
-  box.style.width = maxW + 'px';           // ¡clave!: mismo ancho que el contenedor
-  box.style.boxSizing = 'border-box';
-  box.style.contain = 'layout style size'; // aísla el layout para medir más fielmente
-  document.body.appendChild(box);
-
-
-  // Clon a medir dentro de la caja
-  const clone = contenedor.cloneNode(true);
-  clone.style.width = '100%';     // respeta el ancho de la caja
-  clone.style.height = 'auto';
-  clone.style.margin = '0';
-  clone.style.position = 'static';
-  box.appendChild(clone);
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // // Crear clon oculto para medir
-    // const clone = contenedor.cloneNode(true);
-    // clone.style.position = 'absolute';
-    // clone.style.visibility = 'hidden';
-    // clone.style.left = '-9999px';
-    // clone.style.top = '-9999px';
-    // document.body.appendChild(clone);
-
-    // Incrementar font-size hasta que se pase del tamaño permitido
-    while (fontSize < 500) {
-        clone.style.fontSize = fontSize + 'px';
-        const { width, height } = clone.querySelector('.wr_full_block_inner').getBoundingClientRect();
-
-        if (width > maxW || height > maxH) {
-            console.log('break fontSize: ', fontSize);
-            break;
-        }
-
-        // Comprobamos overflow
-        if (clone.scrollWidth > maxW || clone.scrollHeight > maxH) {
-            fontSize--; // retrocedemos al último tamaño válido
-            break;
-        }
-
-        fontSize++;
-    }
-
-    // Asignar tamaño final
-    contenedor.style.fontSize = (fontSize - 1) + 'px';
-
-    // Ajustar legend si existe
-    if (legend) {
-        let legend_fontSize = (fontSize - 1) * coef_legend;
-        if (legend_fontSize > legend_fontSize_max) {
-            legend_fontSize = legend_fontSize_max;
-        }
-        legend.style.fontSize = legend_fontSize + 'px';
-    }
-
-    // Eliminar clon de prueba
-    document.body.removeChild(box);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function old_ajustarTextoContenedor(contenedor){
-    console.log('=== function ajustarTextoContenedor() ===');
-    console.log('contenedor: ', contenedor);
-
-    setTimeout(() => {
-
-        let maxW = contenedor.clientWidth;
-        let maxH = contenedor.clientHeight;
-        
-        const coef_legend = 0.6;// 2/3 del tamaño de la fuente de texto de kuplet
-        const legend_fontSize_max = 50;// tamaño maximo de la fuente de legend
-
-        const legend = contenedor.querySelector('legend');
-        console.log('legend: ', legend);
-
-        let fontSize = 10;
-        contenedor.style.fontSize = fontSize + 'px';
-
-        const clone = contenedor.cloneNode(true);
-        
-
-        //clone.style.position = 'absolute';
-        // clone.style.visibility = 'hidden';
-        // clone.style.left = '-9999px';
-        // document.body.appendChild(clone);
-
-        document.querySelector('.wr_full_block').appendChild(clone);
-
-        while (fontSize < 500) {//while() es mas rapido que for()
-            clone.style.fontSize = fontSize + 'px';
-            console.log('while --- pongo fontSize: ', fontSize);
-
-            const { width, height } = clone.getBoundingClientRect();
-            console.log('rect width: ', width);
-            console.log('rect height: ', height);
-
-
-            if (width > maxW || height > maxH) {
-                console.log('break fontSize: ', fontSize);
-                break;
-            }
-            fontSize++;
-        }
-
-        contenedor.style.fontSize = (fontSize - 1) + 'px';
-        if(legend){
-            const legend_fontSize = (fontSize - 1) * coef_legend;
-            const legend_fontSize_new = (legend_fontSize > legend_fontSize_max) 
-                ? legend_fontSize_max 
-                : legend_fontSize ;
-            legend.style.fontSize = legend_fontSize_new + 'px';
-        }
-        //document.body.removeChild(clone);
-        document.querySelector('.wr_full_block').removeChild(clone);
-
-    }, 1000);
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 async function crear_esquema(){
@@ -1725,7 +1314,9 @@ async function crear_esquema(){
     wr_btns_action.innerHTML = '';//reset
 
     song_bloques.classList.remove('solo_ver');
-
+    wr_vista_blocks.classList.remove('wr_full_block');
+    
+    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
     eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Crear esquema de la canción:';
     eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Bloques con las que se construye la canción:';
     eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Nueva estructura corta:';
@@ -1885,6 +1476,199 @@ async function crear_esquema(){
         song_bloques.append(slide_clone.querySelector('fieldset'));
         
     });
+
+    pintParrafosAcordes();//para pintar barras de acordes como mas finas
+}
+
+
+async function select_slide(){
+    console.log('=== function select_slide() ===');
+
+    if(!hay_id_song('select_slide()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    console.log('obj_bloques esta vacio, lo creo...');
+    obj_bloques = await getSongBlocks();
+
+    console.log('obj_bloques: ', obj_bloques);
+
+    arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
+    console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
+    
+    song_bloques.innerHTML = '';//reset
+    wr_vista_btns.innerHTML = '';//reset
+    wr_vista_blocks.innerHTML = '';//reset
+    wr_btns_action.innerHTML = '';//reset
+
+    song_bloques.classList.remove('solo_ver');
+    wr_vista_blocks.classList.add('wr_full_block');//para que ocupe todo el ancho posible
+
+    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Diapositiva para mostrar:';
+    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Selecciona una diapositiva de las disponibles:';
+    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
+    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Diapositiva ACTUAL:';
+
+    //creo el btn de pantallaShow
+    const btn_pantallaShow = document.createElement('div');
+    btn_pantallaShow.id = 'btn_pantallaShow';
+    btn_pantallaShow.className = 'btn';
+    btn_pantallaShow.title = 'Mostrar Pantalla';
+    btn_pantallaShow.innerHTML = `
+        <img src="images/monitor_1_white.png">
+    `;
+    btn_pantallaShow.onclick = () => { 
+        //alert('en sdesarrollo...')
+        enableDisablePantallaShow(); 
+    };
+    eid_block_esquema.querySelector('.bl_parte_r .bloques_outer').append(btn_pantallaShow);
+
+    check_pantallaShow();//reviso si marco en rojo o no
+    
+    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+
+    wr_esquema_actual.style.display = 'none';//oculto el contenedor de esquema actual por no hacer falta (y no duplicar vista de datos)
+
+    // Recorrer el bucle - btns y vista...
+    arr_esquema_bucle.forEach( (titulo, i, arr) => {
+        console.log('titulo: ', titulo);
+
+        const slide_original = obj_bloques[titulo].slide;//bd
+        console.log('slide_original: ', slide_original);
+        
+        const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
+        console.log('slide_clone: ', slide_clone);
+
+        
+        //Clono fieldset del bloque para añadirlo en la parte izda
+        const el_fieldset_cloned = slide_clone.querySelector('fieldset').cloneNode(true); // true para clonar también hijos
+        console.log('el_fieldset_cloned: ', el_fieldset_cloned);        
+
+        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
+        let titulo_text = titulo_orig;
+        console.log('titulo_text: ', titulo_text); 
+        
+        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
+        console.log('before --- titulo_count_veces: ', titulo_count_veces); 
+        
+        if(titulo_count_veces > 1){//si hay repeticion del titulo
+            titulo_text = `${titulo_text} <span>x${titulo_count_veces}</span>`;
+        }
+        console.log('after --- titulo_text: ', titulo_text); 
+
+        el_fieldset_cloned.dataset.titulo = titulo_orig;
+        el_fieldset_cloned.dataset.idx = i;
+        el_fieldset_cloned.querySelector('legend').innerHTML = titulo_text;//pongo el titulo en el bloque
+        el_fieldset_cloned.onclick = (e) => {
+            console.log('e.currentTarget: ', e.currentTarget);
+            console.log('e.target: ', e.target);
+            
+            showOneSlideFrom(e.currentTarget, arr_esquema_bucle);
+        }
+
+        //Creo boton del bloque sin poder cerrarlo con 'X'
+        const btn_simple = document.createElement('button');
+        btn_simple.className = 'btn btn_simple';
+        btn_simple.dataset.titulo = titulo_orig;
+        btn_simple.dataset.idx = i;
+        btn_simple.innerHTML = `
+            <span class="sp_titulo">${titulo_text}</span>
+        `;
+        btn_simple.onclick = (e) => {
+            console.log('e.currentTarget: ', e.currentTarget);
+            console.log('e.target: ', e.target);
+            
+            showOneSlideFrom(e.currentTarget, arr_esquema_bucle);
+        }
+        
+        //añado al DOM
+        song_bloques.append(el_fieldset_cloned);
+        wr_vista_btns.append(btn_simple);
+    });
+
+    wr_btns_action.innerHTML = `
+        <button id="btn_crearSlides" class="btn" onclick="crearSlides();">Crear slides</button>
+        <button id="btn_crearSlides" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
+        <button id="btn_crearSlides" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+        <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+    `;
+    
+    pintParrafosAcordes();//para pintar barras de acordes como mas finas
+}
+
+
+function ajustarTextoContenedor(contenedor) {
+    if (!contenedor) return;
+
+    console.log('=== ajustarTextoContenedor ===');
+    console.log('contenedor:', contenedor);
+
+    const maxW = contenedor.clientWidth;
+    const maxH = contenedor.clientHeight;
+    if (maxW <= 0 || maxH <= 0) return;
+
+    const coef_legend = 0.6;
+    const legend_fontSize_max = 25;
+    const legend = contenedor.querySelector('legend');
+
+    let fontSizeMin = 16;//para legend
+    let fontSize = 16; // Iniciar desde 1 para evitar error inicial
+
+    // Caja oculta para medir
+    const box = document.createElement('div');
+    box.style.position = 'absolute';
+    box.style.left = '-10000px';
+    box.style.top = '0';
+    box.style.visibility = 'hidden';
+    box.style.width = maxW + 'px';
+    box.style.boxSizing = 'border-box';
+    document.body.appendChild(box);
+
+    // Clon a medir dentro de la caja
+    const clone = contenedor.querySelector('.wr_full_block_inner').cloneNode(true);
+    clone.style.margin = '0';
+    clone.style.position = 'static';
+    box.appendChild(clone);
+
+    // Bucle para ajustar fontSize
+    while (fontSize <= 100) {
+        clone.style.fontSize = fontSize + 'px';
+        //console.log('pongo fontSize: ', fontSize);
+
+        const { width, height } = clone.getBoundingClientRect();
+        //console.log('clone width: ', width);
+        //console.log('clone height: ', height);
+
+        if (width > maxW || height > maxH) {
+            //console.log('break fontSize: ', fontSize);
+            break;
+        }
+
+        // Comprobamos overflow
+        if (clone.scrollWidth > maxW || clone.scrollHeight > maxH) {
+            //console.log('overflow break. fontSize: ', fontSize);           
+            
+            //fontSize -= 3;
+            break;
+        }
+
+        fontSize++;
+        //console.log('aumento. fontSize: ', fontSize);//debuguear  
+        //contenedor.style.fontSize = fontSize + 'px';//debuguear
+    }
+
+    fontSize -= 3;//reduzco un poco para que no llegue al borde
+
+    // Aplicar al contenedor real
+    contenedor.querySelector('fieldset').style.fontSize = fontSize + 'px';
+    //console.log('contenedor fieldset. fontSize: ', fontSize);  
+    
+    //por ahora dejo siempre igual legend
+    legend.style.fontSize = fontSizeMin + 'px';//16px minimo para legend
+
+    // Eliminar clon de prueba
+    document.body.removeChild(box);
 }
 
 
@@ -1947,6 +1731,15 @@ function resetBlockBuscar(){
 function resetBlockEsquema(){
     console.log('=== function resetBlockEsquema() ===');
 
+    resetBlockEsquemaSoloHTML()
+
+    arr_esquema_obj = [];
+    id_song = null;
+}
+
+function resetBlockEsquemaSoloHTML(){
+    console.log('=== function resetBlockEsquema() ===');
+
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
 
     eid_block_esquema.querySelector('.song_bloques').innerHTML = '...';//reset
@@ -1956,9 +1749,10 @@ function resetBlockEsquema(){
     
     eid_block_esquema.querySelector('.wr_esquema_actual').style.display = 'none';//reset
     eid_block_esquema.querySelector('.wr_vista_btns_actual').innerHTML = '...';//reset
+    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
 
-    arr_esquema_obj = [];
-    id_song = null;
+    song_bloques.classList.remove('solo_ver');
+    wr_vista_blocks.classList.remove('wr_full_block');
 }
 
 function resetBlockCancion(){

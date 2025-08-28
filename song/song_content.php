@@ -311,7 +311,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                 <div class="partes bl_parte_l" style="width: 43%;">
 
-                                    <H4>Ver/Crear esquema de la canción</H4>
+                                    <H4>Esquema de la canción</H4>
 
                                     <h5>Bloques con las que se construye la canción:</h5>
                                     <div class="bloques_outer">
@@ -324,7 +324,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div>
 
                                 <div class="partes bl_parte_c" style="width: 14%;">
-                                    <h4>Esquema</h4>
+                                    <h4>Esquema minimizada</h4>
                                     
                                     <h5>Nueva estructura corta:</h5>
                                     <div class="bloques_outer">
@@ -345,7 +345,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div>
 
                                 <div class="partes bl_parte_r" style="width: 43%;">
-                                    <h4>Vista previa de la canción</h4>
+                                    <h4>Vista previa</h4>
                                     
                                     <h5>Nueva estructura de la canción:</h5>
                                     <div class="bloques_outer">
