@@ -1567,8 +1567,6 @@ async function select_slide(){
 
     select_slide_wr_btns_action.innerHTML = `
         <button id="btn_crearSlides" class="btn btn_big" onclick="crearSlides();">Crear slides (Inicio)</button>
-        <button id="btn_pestania" class="btn btn_big" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
-        <button id="btn_ventana" class="btn btn_big" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
         <button id="btn_crearSlides_ver" class="btn btn_big" onclick="crearSlides(); closeAll();">Crear + Ver slides (inicio)</button>
     `;
     

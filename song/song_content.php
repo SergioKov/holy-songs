@@ -407,12 +407,21 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             </div>
                                         </div>
 
+                                        <div id="contenedor_sel_pantalla">
+                                            <div id="wr_sel_pantalla">
+                                                <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
+                                                <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+                                            </div>
+                                        </div>
+
                                         <div class="bloques_outer">
                                             <div class="bloques wr_vista_btns">
                                                 <!-- aki vista previa -->
                                                 ...
                                             </div>
                                         </div>
+
+                                                                                
                                     </div>
                                 
                                 </div><!--/.bl_parte_c-->
