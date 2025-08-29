@@ -70,12 +70,50 @@ const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
 const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
 
-const song_bloques = eid_block_esquema.querySelector('.song_bloques');
-const wr_vista_btns = eid_block_esquema.querySelector('.wr_vista_btns');
-const wr_esquema_actual = eid_block_esquema.querySelector('.wr_esquema_actual');
-const wr_vista_btns_actual = eid_block_esquema.querySelector('.wr_vista_btns_actual');
-const wr_vista_blocks = eid_block_esquema.querySelector('.wr_vista_blocks');
-const wr_btns_action = eid_block_esquema.querySelector('.wr_btns_action');
+
+//bl_parte_l
+//const song_bloques = eid_block_esquema.querySelector('.song_bloques');//antes
+const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
+const crear_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_crear_esquema .song_bloques');
+const select_slide_song_bloques = eid_block_esquema.querySelector('.vklad_select_slide .song_bloques');
+
+
+//bl_parte_c
+const ver_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_btns');
+
+const crear_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns');
+const crear_esquema_wr_vista_btns_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns_actual');
+const crear_esquema_wr_esquema_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_esquema_actual');//en crear_esquema
+
+const select_slide_wr_vista_btns = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_btns');
+
+//bl_parte_r
+const ver_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_blocks');
+const ver_esquema_wr_btns_action = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_btns_action');
+
+const crear_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_blocks');
+const crear_esquema_wr_btns_action = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_btns_action');
+
+const select_slide_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_blocks');
+const select_slide_wr_btns_action = eid_block_esquema.querySelector('.vklad_select_slide .wr_btns_action');
+
+
+
+
+const eid_contenedor_nav_pantalla = document.getElementById('contenedor_nav_pantalla');//aki se coloca div 'wr_btns_pantalla'
+const eid_pantalla_body = document.getElementById('pantalla_body');//para slide en select_slide()
+const eid_fondo_body = document.getElementById('fondo_body');//para slide en select_slide()
+const eid_contenedor_prev = document.getElementById('contenedor_prev');//para slide en select_slide()
+const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');//para slide en select_slide()
+//const eid_btn_pantallaShow = document.getElementById('btn_pantallaShow');//luego miro donde colocar...
+const eid_vklad_btn_pantallaShow = document.getElementById('vklad_btn_pantallaShow');
+
+
+
+
+
+
+
 
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
@@ -96,6 +134,7 @@ const form_ejemplo = eid_block_ejemplo.querySelector('form');
 
 const eid_song_text = document.getElementById('song_text');
 const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
+
 
 
 
@@ -126,7 +165,7 @@ const eid_h4_text = document.getElementById('h4_text');//text en el header de mo
 
 
 
-let arr_esquema_obj = [];//array de objetos
+
 
 const arr_titulos = [ //las palabras clave para separar el texto por bloques en buildSong()
     'Intro',
@@ -198,8 +237,14 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
 let modo_get_song = 'from_bd';
 let objSongBd = {};//datos de bd de song
 
-let obj_bloques = {};//elementos html de slides: kuplet, pripev bridge sin repetirse
+let obj_bloques = {};//elementos html de slides: kuplet, pripev bridge (SIN REPETIRSE)
+
+let arr_esquema_obj = [];//array de objetos temporal para guardar el esquema creada en crear_esquema()
 let arr_esquema_bucle = [];//array de objetos con los bloques de esquema, sin repetirse
+let arr_esquema_bd = [];//array de objetos de BD
+let arr_esquema_titlulos = [];// solo titulos ['Intro'], no obj {nombre: 'Intro', veces:2} 
+
+let arr_fieldsets = [];//todos los html slides// se asigna al crearSlides() y select_slide()
 
 let objSongDemo = {
     id_song: 1351,
@@ -260,3 +305,6 @@ let arr_pantalla;
 let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');//por defecto pantalla no se ve
 //pantallaShow = true;//test
 //pantallaShow = localStorage.setItem('pantallaShow', true);
+
+let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_esquema, crear_esquema, select_slide]
+//obj_ajustes.sidebarTabActive = sidebarTabActive;

@@ -138,7 +138,7 @@ function pintSongActive(e, arr, arr_words){//click en tr de la tabla de cancione
 
 
 
-function showOneSlideFrom(elementClicked, arr_esquema_bucle){
+function showOneSlideFrom(elementClicked){
     console.log('=== function showOneSlideFrom() ===');
     console.log('elementClicked: ', elementClicked);
 
@@ -149,19 +149,18 @@ function showOneSlideFrom(elementClicked, arr_esquema_bucle){
     const index_esquema = elementClicked.dataset.idx;
     console.log('index_esquema: ', index_esquema);
 
-    const elementBtnSimple = wr_vista_btns.querySelector(`.btn_simple[data-idx="${index_esquema}"]`);
+    const elementBtnSimple = select_slide_wr_vista_btns.querySelector(`.btn_simple[data-idx="${index_esquema}"]`);
     console.log('elementBtnSimple: ', elementBtnSimple);
 
-    const elementFieldset = song_bloques.querySelector(`fieldset[data-idx="${index_esquema}"]`);
+    const elementFieldset = select_slide_song_bloques.querySelector(`fieldset[data-idx="${index_esquema}"]`);
     console.log('elementFieldset: ', elementFieldset);
 
-    wr_vista_blocks.innerHTML = '';//reset
-    wr_vista_blocks.removeAttribute('style');// quitar font-size anterior
+    eid_contenedor_prev_inner.innerHTML = '';//reset
 
-    resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
+    resetBtnActive(select_slide_wr_vista_btns);//reseteo btn_active de botones en el contenedor
     elementBtnSimple.classList.add('btn_active');
 
-    resetFldActive(song_bloques);//reseteo fieldset active de kuplet's a la izda
+    resetFldActive(select_slide_song_bloques);//reseteo fieldset active de kuplet's a la izda
     elementFieldset.classList.add('fld_active');
 
     if(elementClicked === elementBtnSimple){
@@ -170,13 +169,11 @@ function showOneSlideFrom(elementClicked, arr_esquema_bucle){
     }else{
         console.log('es fieldset clicked');
         elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
-    }
-        
-    const wr_full_block_inner = document.createElement('div');
-    wr_full_block_inner.className = 'wr_full_block_inner';
-    wr_vista_blocks.append(wr_full_block_inner);
+    }        
 
-    const el_fieldset_cloned = song_bloques.querySelectorAll('fieldset')[index_esquema].cloneNode(true); // true para clonar hijos
+    // const el_fieldset_cloned = select_slide_song_bloques.querySelectorAll('fieldset')[index_esquema].cloneNode(true); // true para clonar hijos
+    //clono fieldset nuevo para vista en contenedor_prev ya que le cambiaré font-size
+    const el_fieldset_cloned = arr_fieldsets[index_esquema].cloneNode(true); // true para clonar hijos
 
     //Primer slide
     if(elementClicked.dataset.titulo === '_titulo_cancion_' || index_esquema == 0){
@@ -191,13 +188,45 @@ function showOneSlideFrom(elementClicked, arr_esquema_bucle){
         el_fieldset_cloned.append(p);//muestro ... en vez del título del slide 1
     }
 
-    wr_full_block_inner.append(el_fieldset_cloned);
+    eid_contenedor_prev_inner.append(el_fieldset_cloned);
 
-    const contenedorSlideView = document.querySelector('.wr_full_block');
+    const contenedorSlideView = eid_pantalla_body;
 
     ajustarTextoContenedor(contenedorSlideView);
 
-    make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle);
+    currentSlide = Number(index_esquema);
+
+    let btn_actual;
+
+    //si ya existe el btn_actual...
+    if(select_slide_wr_btns_action.querySelector('#btn_crearSlidesActual')){
+        btn_actual = select_slide_wr_btns_action.querySelector('#btn_crearSlidesActual');
+    }else{
+        // creo boton actual
+        btn_actual = document.createElement('button');
+        btn_actual.id = 'btn_crearSlidesActual';
+        btn_actual.className = 'btn btn_big';
+    }
+
+    if(slideContainer.dataset.id_song == id_song){
+        // ya están creados los slides en el contenedor. me muevo al slide actual
+        btn_actual.textContent = 'Mostrar slide (Actual)';
+        btn_actual.onclick = () => {
+            closeAll();//cierro todas las ventanas modales
+            scrollToSlide(currentSlide);
+        }
+    }else{
+        // no están creados los slides en el contenedor. los creo
+        btn_actual.textContent = 'Crear slides (Ver Actual)';
+        btn_actual.onclick = () => {
+            crearSlides(currentSlide);
+            closeAll();//cierro todas las ventanas modales
+        }
+    } 
+
+    select_slide_wr_btns_action.prepend(btn_actual);
+
+    make_arr_pantalla(currentSlide/*, el_fieldset_cloned, arr_esquema_bucle*/);
 }
 
 
@@ -205,14 +234,27 @@ function showOneSlideFrom(elementClicked, arr_esquema_bucle){
 
 
 
-function make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle){
+function make_arr_pantalla(currentSlide/*, el_fieldset_cloned, arr_esquema_bucle*/){
     console.log('=== function make_arr_pantalla() ===');
+    console.log('currentSlide: ',currentSlide);
+    console.log('arr_fieldsets: ', arr_fieldsets);
+    console.log('arr_esquema_bucle: ',arr_esquema_bucle);
+
+    if(arr_fieldsets.length == 0 || arr_esquema_bucle.length == 0){
+        return;
+    }
+    
+    const current_fieldset = arr_fieldsets[currentSlide];
+    console.log('current_fieldset: ',current_fieldset);
+
+    const current_fieldset_cloned = current_fieldset.cloneNode(true);
+    console.log('current_fieldset_cloned: ',current_fieldset_cloned);
 
     arr_pantalla = [];//reset   
     let song_text = '';
     let arr_p_text = [];
 
-    let p_textAll = el_fieldset_cloned.querySelectorAll('p.t');//solo texto
+    let p_textAll = current_fieldset_cloned.querySelectorAll('p.t');//solo texto
     console.log('p_textAll: ', p_textAll);
 
     p_textAll.forEach((p, i, arr) => {
@@ -225,13 +267,13 @@ function make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle){
     });
 
     //si es ultimo slide
-    if(el_fieldset_cloned.dataset.idx == arr_esquema_bucle.length - 1){
+    if(current_fieldset_cloned.dataset.idx == arr_esquema_bucle.length - 1){
         song_text += `<span class="tres_estrellas">* * *</span>`;
     }
 
     if(p_textAll.length == 0){//si no se encuentra el verse, no hago nada
         //alert('no hay texto en la diapositiva seleccionada. pero sigo...');
-        let hay_song_titulo = el_fieldset_cloned.querySelector('.song_titulo');
+        let hay_song_titulo = current_fieldset_cloned.querySelector('.song_titulo');
         if(hay_song_titulo){
             song_text += `
                 <div class="wr_d_puntos">
@@ -240,7 +282,7 @@ function make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle){
             `;
         }
 
-        let p_acordeAll = el_fieldset_cloned.querySelectorAll('p.c');
+        let p_acordeAll = current_fieldset_cloned.querySelectorAll('p.c');
         if(p_acordeAll.length > 0){
             song_text += `
                 <div class="wr_d_music">
@@ -270,7 +312,7 @@ function make_arr_pantalla(el_fieldset_cloned, arr_esquema_bucle){
 }
 
 
-function enableDisablePantallaShow(){//muestra 
+function enableDisablePantallaShow(){//muestra o oculta
     if(pantallaShow){
         pantallaShow = false;//siguiente accion
     }else{        
@@ -280,8 +322,8 @@ function enableDisablePantallaShow(){//muestra
 }
 
 function check_pantallaShow(){
-    //console.log('=== function check_pantallaShow() ===');
-    //console.log('pantallaShow: ', pantallaShow);
+    console.log('=== function check_pantallaShow() ===');
+    console.log('pantallaShow: ', pantallaShow);
 
     if(pantallaShow){
         mostrar_pantallaShow();
@@ -290,14 +332,11 @@ function check_pantallaShow(){
     }
 }
 
-function mostrar_pantallaShow(){
-    const eid_btn_pantallaShow = document.querySelector('#btn_pantallaShow');
-    eid_btn_pantallaShow.classList.add('btn_active');
-
+function mostrar_pantallaShow(){   
     // eid_btn_pantallaShow.classList.add('btn_active');
-    // eid_vklad_btn_pantallaShow.classList.add('btn_active');
-    //eid_contenedor.classList.add('shown');
-    //eid_fondo_body.classList.add('fondo_black');
+    eid_vklad_btn_pantallaShow.classList.add('btn_active');
+    eid_contenedor_prev.classList.add('shown');
+    eid_fondo_body.classList.add('fondo_black');
 
     localStorage.setItem('pantallaShow','true');
 
@@ -305,13 +344,10 @@ function mostrar_pantallaShow(){
 }
 
 function ocultar_pantallaShow(){
-    const eid_btn_pantallaShow = document.querySelector('#btn_pantallaShow');
-    eid_btn_pantallaShow.classList.remove('btn_active');
-
     // eid_btn_pantallaShow.classList.remove('btn_active');
-    // eid_vklad_btn_pantallaShow.classList.remove('btn_active');
-    //eid_contenedor.classList.remove('shown');
-    //eid_fondo_body.classList.remove('fondo_black');
+    eid_vklad_btn_pantallaShow.classList.remove('btn_active');
+    eid_contenedor_prev.classList.remove('shown');
+    eid_fondo_body.classList.remove('fondo_black');
     
     localStorage.setItem('pantallaShow','false');
 }
@@ -325,5 +361,59 @@ function ocultar_pantallaShow(){
 
 
 
+function check_vkladActive(){//antes check_sidebarTabActive
+    console.log('=== function check_vkladActive() ===');
+    if(eid_block_esquema_head.querySelector(`#btn_${vkladActive}`)){
+        showVklad(eid_block_esquema_head.querySelector(`#btn_${vkladActive}`), vkladActive);
+    }
+}
 
 
+function showVklad(btnElement, param){//antes showSidebarTab()
+    console.log('=== function showVklad() ===');
+
+    vkladActive = param;
+    update_vkladActive();
+
+    eid_block_esquema_head.querySelectorAll('button').forEach(btn =>{
+        //si el boton 'btnElement' no es el boton del bucle
+        if(btn == btnElement){
+            btn.classList.add('btn_active');            
+        }else{
+            btn.classList.remove('btn_active');
+        }
+    });
+
+    eid_block_esquema.querySelectorAll('.vklads').forEach(vklad =>{
+        let vklad_act = `vklad_${param}`;
+        if(vklad.classList.contains(vklad_act)){
+            vklad.style.display = 'block';
+        }else{
+            vklad.style.display = 'none';
+        }
+    });
+
+    switch (param) {
+        default:
+        case 'ver_esquema':
+            ver_esquema();
+            break;
+
+        case 'crear_esquema':
+            crear_esquema();
+            break;
+
+        case 'select_slide':
+            select_slide();
+            //make_arr_pantalla(currentSlide);    
+            break;
+    }           
+}
+
+function update_vkladActive(){
+    //console.log('=== function update_vkladActive() ===');    
+    localStorage.setItem('vkladActive', vkladActive);
+
+    // obj_ajustes.vkladActive = vkladActive;
+    // update_obj_ajustes();
+}

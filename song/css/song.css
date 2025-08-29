@@ -1170,25 +1170,6 @@ tr.selected td.td_n {
     width: 3px;
 }
 
-.wr_full_block {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.wr_full_block_inner {
-    /* background: #0e3138; */
-    /* border: 1px solid yellow; */
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
-}
 
 .song_bloques fieldset {
     cursor: pointer;
@@ -1869,19 +1850,141 @@ p.p_sm b {
 
 
 
-.wr_full_block_inner fieldset{
+.wr_full_block_inner fieldset,
+#contenedor_prev_inner fieldset
+{
     border: 3px solid transparent !important;
     box-shadow: none;
     /* text-align: center;     */
 }
-.wr_full_block_inner legend {
+.wr_full_block_inner legend,
+#contenedor_prev_inner legend 
+{
     display: none;
 }
-.wr_full_block_inner .song_titulo {
+.wr_full_block_inner .song_titulo ,
+#contenedor_prev_inner .song_titulo 
+{
     background: transparent;
     color: #313131;
 }
 .tres_estrellas {
     color: #313131;
     text-align: center;
+}
+
+
+
+#wr_btns_pantalla {
+    display: flex;
+    background: #000000;
+    /* gap: 5px; */
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 10px;
+}
+#vklad_btn_pantallaShow {
+    /* width: 100%; */
+    height: 22px;
+    gap: 10px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    outline: 3px solid white;
+    margin: 3px 0;
+}
+#vklad_btn_pantallaShow img{
+    width: 22px !important;
+    height: 22px !important;
+}
+#wr_btns_pantalla img {
+    height: 32px;
+    width: 32px;
+    padding: 2px;
+}
+
+#wr_btns_pantalla .dbtn {
+    display: flex;
+    align-items: center;
+    background: black;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    border: 1px solid transparent;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 2px;
+    border-radius: 3px;
+}
+#wr_btns_pantalla .dbtn:hover{
+    background: #424242;
+}
+#btn_ver_pantalla img {
+    width: 22px;
+}
+
+
+
+.wr_full_block {
+    background: pink;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    /* padding: 20px; */
+}
+
+#pantalla_body {
+    background: brown;
+    width: 100%;
+    height: 100%;
+    /* padding: 15px; */
+}
+
+#fondo_body {
+    margin: 0 auto;
+    padding: 0;
+    color: white;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif';
+    background: black;
+    /* background-image: url('../images/bible_open6.jpg'); */
+    background-image: url('../images/fondo_opera.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow: auto;
+    /* background: navy; */
+}
+
+#pantalla_body .fondo_black {
+    background: black !important;
+}
+
+#pantalla_body .shown {
+    opacity: 1 !important;
+    /* height: auto !important; */
+}
+
+#contenedor_prev {
+    background: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 1s;
+    overflow: hidden;
+    height: 100%;
+    align-content: center;
+    width: 100%;
+}
+#contenedor_prev_inner {
+    /* background: #0e3138; */
+    /* border: 1px solid yellow; */
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
 }

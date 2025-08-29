@@ -156,7 +156,7 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
             eid_bl_modalFull.style.display = 'block';
             
             setTimeout(()=>{
-                eid_myModalContent.querySelector('.modalContentFull .wr_modcont').classList.add('mooved');
+                eid_myModalContent.querySelector('.modalContentFull .wr_modcont')?.classList.add('mooved');
             },10);
             
             switch (action) {

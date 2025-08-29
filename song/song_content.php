@@ -302,65 +302,186 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         <div id="block_esquema" class="edit_blocks">
                             
                             <div id="block_esquema_head" class="edit_blocks_head">
-                                <button id="btn_ver_esquema" class="btn" onclick="ver_esquema()">Ver esquema</button>
-                                <button id="btn_crear_esquema" class="btn" onclick="crear_esquema()">Crear esquema</button>
-                                <button id="btn_select_slide" class="btn" onclick="select_slide()">Select Slide</button>
+                                <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver esquema</button>
+                                <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear esquema</button>
+                                <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Select Slide</button>
                             </div>
                             
+
+
                             <div class="bl_partes">
 
                                 <div class="partes bl_parte_l" style="width: 43%;">
 
-                                    <H4>Esquema de la canción</H4>
-
-                                    <h5>Bloques con las que se construye la canción:</h5>
-                                    <div class="bloques_outer">
-                                        <div class="bloques song_bloques">
-                                            <!-- aki bloques de la cancion -->
-                                             <p class="prim">No has seleccionado la canción para crear su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Ver esquema'</b> o <b>'Crear esquema'</b> en la vista previa de la canción...</p>
+                                    <div class="vklad_ver_esquema vklads" style="display: block;">
+                                        <H4>1. Esquema actual de la canción</H4>
+                                        <h5>Bloques únicos con las que se construye la canción:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques song_bloques solo_ver">
+                                                <!-- aki bloques de la cancion -->
+                                                <p class="prim">No has seleccionado la canción para ver su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Ver esquema'</b> en la vista previa de la canción...</p>
+                                            </div>
                                         </div>
                                     </div>
 
-                                </div>
+
+                                    <div class="vklad_crear_esquema vklads" style="display: none;">
+                                        <H4>2. Crear esquema nueva de la canción</H4>
+                                        <h5>Bloques únicos con las que se construye la canción:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques song_bloques">
+                                                <!-- aki bloques de la cancion -->
+                                                <p class="prim">No has seleccionado la canción para crear su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Crear esquema'</b> en la vista previa de la canción...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="vklad_select_slide vklads" style="display: none;">
+                                        <H4>3. Diapositivas</H4>
+                                        <h5>Selecciona una diapositiva de las disponibles para mostrar:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques song_bloques">
+                                                <!-- aki bloques de la cancion -->
+                                                <p class="prim">No has seleccionado la canción para mostrar su texto para el público. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Pantalla'</b> en la vista previa de la canción...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+
+                                </div><!--/.bl_parte_l-->
 
                                 <div class="partes bl_parte_c" style="width: 14%;">
-                                    <h4>Esquema minimizada</h4>
                                     
-                                    <h5>Nueva estructura corta:</h5>
-                                    <div class="bloques_outer">
-                                        <div class="bloques wr_vista_btns">
-                                            <!-- aki vista previa -->
-                                            ...
+                                    <div class="vklad_ver_esquema vklads" style="display: block;">
+                                        <h4>1. Esquema minimizada</h4>
+                                        <h5>Estructura actual corta:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques wr_vista_btns">
+                                                <!-- aki botones vista previa -->
+                                                ...
+                                            </div>                                            
+                                        </div>
+                                    </div>
+
+
+                                    <div class="vklad_crear_esquema vklads" style="display: none;">
+                                        <h4>2. Esquema minimizada</h4>
+                                        <h5>Nueva estructura corta:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques wr_vista_btns">
+                                                <!-- aki botones vista previa -->
+                                                 ...
+                                            </div>
+
+                                            <div class="wr_esquema_actual">
+                                                <h5>Esquema actual corta:</h5>
+                                                <div class="bloques wr_vista_btns_actual">
+                                                    <!-- aki vista previa -->
+                                                    ...
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="vklad_select_slide vklads" style="display: none;">
+                                        <h4>3. Esquema minimizada</h4>
+                                        <h5>Estructura actual corta:</h5>
+
+                                        <div id="contenedor_nav_pantalla">
+                                            <div id="wr_btns_pantalla">
+                                                <div id="vklad_btn_slideGoPrev" class="dbtn" title="Previous slide" onclick="slideGo('prev')">
+                                                    <img src="images/arrow_left_r_icon_white.svg">
+                                                </div>
+
+                                                <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
+                                                    <img src="images/monitor_1_white.png">
+                                                    <span id="verse_ref_shown">1</span>
+                                                </div>
+
+                                                <div id="vklad_btn_slideGoNext" class="dbtn" data-dic="" title="Next slidew" onclick="slideGo('next')">
+                                                    <img src="images/arrow_right_r_icon_white.svg">
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <div class="wr_esquema_actual" style="display: none;">
-                                            <h5>Esquema actual corta:</h5>
-                                            <div class="bloques wr_vista_btns_actual">
+                                        <div class="bloques_outer">
+                                            <div class="bloques wr_vista_btns">
                                                 <!-- aki vista previa -->
                                                 ...
                                             </div>
                                         </div>
                                     </div>
                                 
-                                </div>
+                                </div><!--/.bl_parte_c-->
+
+
 
                                 <div class="partes bl_parte_r" style="width: 43%;">
-                                    <h4>Vista previa</h4>
                                     
-                                    <h5>Nueva estructura de la canción:</h5>
-                                    <div class="bloques_outer">
-                                        <div class="bloques wr_vista_blocks">
-                                            <!-- aki vista previa -->
+                                    <div class="vklad_ver_esquema vklads" style="display: block;">
+                                        <h4>1. Vista previa</h4>                                    
+                                        <h5>Estructura de la canción (bloques pueden repetirse):</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques wr_vista_blocks">
+                                                <!-- aki vista previa -->
+                                                ...
+                                            </div>
+                                        </div>                                    
+                                        <div class="wr_btns_action">
+                                            <!-- aki botones de reset y guardar -->
                                             ...
                                         </div>
                                     </div>
-                                    
-                                    <div class="wr_btns_action">
-                                        <!-- aki botones de reset y guardar -->
-                                        ...
+                                
+
+                                    <div class="vklad_crear_esquema vklads" style="display: none;">
+                                        <h4>2. Vista previa</h4>                                    
+                                        <h5>Nueva estructura de la canción:</h5>
+                                        <div class="bloques_outer">
+                                            <div class="bloques wr_vista_blocks">
+                                                <!-- aki vista previa -->
+                                                ...
+                                            </div>
+                                        </div>                                    
+                                        <div class="wr_btns_action">
+                                            <!-- aki botones de reset y guardar -->
+                                            ...
+                                        </div>
                                     </div>
                                 
-                                </div>
+
+                                    <div class="vklad_select_slide vklads" style="display: none;">
+                                        
+                                        <h4>3. Vista previa</h4>                                    
+                                        <h5>Diapositiva actual:</h5>
+
+                                        <div class="bloques_outer">                                            
+                                            <div class="bloques wr_vista_blocks wr_full_block">
+                                                
+                                                <div id="pantalla_body">
+                                                    <div id="fondo_body" class="">
+                                                        <div id="contenedor_prev" class="shown">
+                                                            <div id="contenedor_prev_inner">
+                                                                <!-- aki vista previa -->
+                                                                <p class="prim">Aquí se mostrará el texto que verá el público en una ventana separada que tienes que abrir en el otro monitor, televisór o proyector. No has seleccionado la canción para mostrar su texto. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Seleccionar diapositiva'</b> en la vista previa de la canción...</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>  
+                                        </div>  
+                                              
+                                        <div class="wr_btns_action">
+                                            <!-- aki botones de reset y guardar -->
+                                            ...
+                                        </div>
+                                    </div>
+                                
+                                </div><!--/.bl_parte_r-->
                             
                             </div>
 

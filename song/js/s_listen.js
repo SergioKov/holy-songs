@@ -445,9 +445,6 @@ function handleFormInput(e, container_block){
 
     let arr_esquema = Object.keys(obj_bloques);
 
-    //arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
-    //console.log('hendleFormInput() --- arr_esquema_bucle: ', arr_esquema_bucle);
-
     //const vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');//antes
     const vista_blocks = container_block.querySelector('.wr_vista_blocks');
     vista_blocks.innerHTML = '';//reset

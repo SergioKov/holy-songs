@@ -44,6 +44,8 @@ function scrollToSlide(index) {
 
     localStorage.setItem('currentSlide', index);
     pintSlideActive(index);
+
+    make_arr_pantalla(currentSlide);
 }
 
 
@@ -675,6 +677,7 @@ async function getSongBlocks(){
     }
        
     objSongBd = await getSongTextFromBd();
+    arr_esquema_bd = objSongBd.arr_esquema;
     
     let texto = objSongBd['song_text'];
     //console.log('text:', texto);
@@ -929,18 +932,21 @@ function crear_arr_esquema_bucle(obj_bloques){
     let arr_esquema = Object.keys(obj_bloques);
     console.log('arr_esquema: ', arr_esquema);
     
-    let arr_esquema_bd;
+    //let arr_esquema_bd;
+    //let arr_esquema_titlulos;//es global
 
     if(objSongBd.arr_esquema && objSongBd.arr_esquema?.length > 0){
-        arr_esquema_bd = objSongBd.arr_esquema.map(el => el.nombre)
+        // arr_esquema_bd = objSongBd.arr_esquema.map(el => el.nombre);//desde BD
+        arr_esquema_titlulos = objSongBd.arr_esquema.map(el => el.nombre);//desde BD
     }else{
-        arr_esquema_bd = Object.keys(obj_bloques).map(el => el);
+        arr_esquema_titlulos = Object.keys(obj_bloques).map(el => el);
     }
     console.log('arr_esquema_bd: ', arr_esquema_bd);
+    console.log('arr_esquema_titlulos: ', arr_esquema_titlulos);
 
 
-    if(arr_esquema_bd){
-        arr_esquema_bucle = arr_esquema_bd;
+    if(arr_esquema_titlulos.length > 0){
+        arr_esquema_bucle = arr_esquema_titlulos;
     }else{
         const arr_obj = arr_esquema.map(el => el = {'nombre': el, veces: 1});//arr_esquema convierto en array de objetos
         arr_esquema_bucle = arr_obj;//lo reasigno
@@ -957,12 +963,19 @@ function crear_arr_esquema_bucle(obj_bloques){
 }
 
 
-async function crearSlides(){
+async function crearSlides(goToSlide = null){
     console.log('=== function crearSlides() ===');
 
     if(!hay_id_song('crearSlides()')){
         return; // <- se detiene aquí si no hay id_song
     }
+
+    if(goToSlide){
+        currentSlide = goToSlide;//mostrar desde slide seleccionado
+    }else{
+        currentSlide = 0;//reset al cargar nueva cancion, mostrar desde inicio
+    }
+
 
     obj_bloques = await getSongBlocks();
     console.log('obj_bloques: ', obj_bloques);
@@ -982,7 +995,9 @@ function buildSong(){
 
     stepsContainer.innerHTML = '';//reset
     slideContainer.innerHTML = '';//reset
-    currentSlide = 0;//reset al cargar nueva cancion
+    slideContainer.dataset.id_song = objSongBd.id_song;
+
+    arr_fieldsets = [];//reset    
     totalSlides = arr_esquema_bucle.length;//total de slides a pintar
 
     if(Object.keys(obj_bloques).length > 0){
@@ -1064,6 +1079,9 @@ function buildSong(){
             stepsContainer.append(step_linea);
         }
         
+        arr_fieldsets.push(slide_clone.querySelector('fieldset'));
+        console.log('crearSlides() --- arr_fieldsets: ', arr_fieldsets);
+
         slideContainer.append(slide_clone);
     });
 
@@ -1117,8 +1135,8 @@ async function crear_esquema_btns_actual(){//para 'bloques wr_vista_btns_actual'
     arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
 
-    wr_esquema_actual.style.display = 'block';//muestro el contenedor de esquema actual
-    wr_vista_btns_actual.innerHTML = '';//reset
+    crear_esquema_wr_esquema_actual.style.display = 'block';//muestro el contenedor de esquema actual
+    crear_esquema_wr_vista_btns_actual.innerHTML = '';//reset
 
     // Recorrer el bucle - btns y vista...
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
@@ -1160,7 +1178,7 @@ async function crear_esquema_btns_actual(){//para 'bloques wr_vista_btns_actual'
             <span class="sp_titulo">${titulo_text}</span>
         `;
         
-        wr_vista_btns_actual.append(btn_simple);
+        crear_esquema_wr_vista_btns_actual.append(btn_simple);
     });
 }
 
@@ -1182,27 +1200,15 @@ async function ver_esquema(){
     arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
     
-    song_bloques.innerHTML = '';//reset
-    wr_vista_btns.innerHTML = '';//reset
-    wr_vista_blocks.innerHTML = '';//reset
-    wr_btns_action.innerHTML = '';//reset
+    ver_esquema_song_bloques.innerHTML = '';//reset
+    ver_esquema_wr_vista_btns.innerHTML = '';//reset
+    ver_esquema_wr_vista_blocks.innerHTML = '';//reset
+    ver_esquema_wr_btns_action.innerHTML = '';//reset
+       
+    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    //eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
 
-    song_bloques.classList.add('solo_ver');
-    wr_vista_blocks.classList.remove('wr_full_block');
-    
-    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
-    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Ver esquema de la canción:';
-    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Bloques con las que se construyó la canción:';
-    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
-    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Estructura de la canción:';
-    
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
-
-    wr_esquema_actual.style.display = 'none';//oculto el contenedor de esquema actual por no hacer falta (y no duplicar vista de datos)
-
-
-    //Recorrer el bucle - partes de song...
+    //Recorrer el bucle - partes de song (SIN REPETIRSE)...
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
@@ -1212,11 +1218,11 @@ async function ver_esquema(){
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
         console.log('slide_clone: ', slide_clone);  
                 
-        song_bloques.append(slide_clone.querySelector('fieldset'));
+        ver_esquema_song_bloques.append(slide_clone.querySelector('fieldset'));
     });
 
 
-    // Recorrer el bucle - btns y vista...
+    // Recorrer el bucle - btns y vista... (CON REPETIRSE)
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
@@ -1260,34 +1266,33 @@ async function ver_esquema(){
             console.log('e.target: ', e.target);
 
             const btn_clicked = e.currentTarget;
-            resetBtnActive(wr_vista_btns);//reseteo btn_active de botones en el contenedor
+            resetBtnActive(ver_esquema_wr_vista_btns);//reseteo btn_active de botones en el contenedor
             btn_clicked.classList.add('btn_active');
 
 
-            const song_element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
+            const song_element_legend = [...ver_esquema_song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
             const song_element_fieldset = song_element_legend.closest('fieldset');
-            resetFldActive(song_bloques);            
+            resetFldActive(ver_esquema_song_bloques);            
             song_element_fieldset.classList.add('fld_active');
             song_element_fieldset.scrollIntoView({behavior: 'smooth'});            
             
-            const element_legend = wr_vista_blocks.querySelectorAll('legend')[e.currentTarget.dataset.idx];
+            const element_legend = ver_esquema_wr_vista_blocks.querySelectorAll('legend')[e.currentTarget.dataset.idx];
             const element_fieldset = element_legend.closest('fieldset');
-            resetFldActive(wr_vista_blocks);            
+            resetFldActive(ver_esquema_wr_vista_blocks);            
             element_fieldset.classList.add('fld_active');
             element_fieldset.scrollIntoView({behavior: 'smooth'});
         }
         
-        wr_vista_btns.append(btn_simple);
-        wr_vista_blocks.append(el_fieldset_cloned);
+        ver_esquema_wr_vista_btns.append(btn_simple);
+        ver_esquema_wr_vista_blocks.append(el_fieldset_cloned);
     });
 
-    wr_btns_action.innerHTML = `
-        <button id="btn_crearSlides" class="btn" onclick="crearSlides();">Crear slides</button>
-        <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+    ver_esquema_wr_btns_action.innerHTML = `
+        <button id="btn_crearSlides" class="btn btn_big" onclick="crearSlides();">Crear slides</button>
+        <button id="btn_crearSlides_ver" class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
     `;
 
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
-
 }
 
 
@@ -1308,35 +1313,25 @@ async function crear_esquema(){
     console.log('obj_bloques: ', obj_bloques);
     console.log('arr_esquema: ', arr_esquema);
 
-    song_bloques.innerHTML = '';//reset
-    wr_vista_btns.innerHTML = '';//reset
-    wr_vista_blocks.innerHTML = '';//reset
-    wr_btns_action.innerHTML = '';//reset
+    crear_esquema_song_bloques.innerHTML = '';//reset
+    crear_esquema_wr_vista_btns.innerHTML = '';//reset
+    crear_esquema_wr_vista_blocks.innerHTML = '';//reset
+    crear_esquema_wr_btns_action.innerHTML = '';//reset
 
-    song_bloques.classList.remove('solo_ver');
-    wr_vista_blocks.classList.remove('wr_full_block');
-    
-    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
-    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Crear esquema de la canción:';
-    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Bloques con las que se construye la canción:';
-    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Nueva estructura corta:';
-    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Nueva estructura de la canción';
-
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
+    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    //eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
 
     const sp_prim = document.createElement('span');
     sp_prim.className = 'sp_prim';
     sp_prim.innerHTML = `
-        Haz clic en un bloque para añadirlo al esquema de la canción...
+        Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...
     `;
 
-    wr_vista_btns.append(sp_prim);
-    wr_vista_blocks.append(sp_prim.cloneNode(true));
+    crear_esquema_wr_vista_btns.append(sp_prim);
+    crear_esquema_wr_vista_blocks.append(sp_prim.cloneNode(true));
 
-    //creo esquema de botones cortos actual
+    //Creo esquema de botones cortos actual
     crear_esquema_btns_actual();
-    wr_esquema_actual.style.display = 'block';//muestro el contenedor de esquema actual
 
     //Recorrer el bucle...
     arr_esquema.forEach( (titulo, i, arr) => {
@@ -1355,8 +1350,8 @@ async function crear_esquema(){
             console.log('(text) legend: ', e.currentTarget.querySelector('legend').innerText);
             
             if(titulo !== '_titulo_cancion_'){//no pinto el titulo de la cancion
-                wr_vista_btns.querySelector('.sp_prim')?.remove();
-                wr_vista_blocks.querySelector('.sp_prim')?.remove();
+                crear_esquema_wr_vista_btns.querySelector('.sp_prim')?.remove();
+                crear_esquema_wr_vista_blocks.querySelector('.sp_prim')?.remove();
     
                 const el_fieldset_cloned = e.currentTarget.cloneNode(true); // true para clonar también hijos 
                 el_fieldset_cloned.classList.remove('fld_active');
@@ -1387,8 +1382,8 @@ async function crear_esquema(){
     
                     console.log('titulo_count: ', window.titulo_count);
     
-                    wr_vista_blocks.lastElementChild?.remove();//elimino el anterior bloque
-                    wr_vista_btns.lastElementChild?.remove();//elimino el anterior btn
+                    crear_esquema_wr_vista_btns.lastElementChild?.remove();//elimino el anterior btn
+                    crear_esquema_wr_vista_blocks.lastElementChild?.remove();//elimino el anterior bloque
                     arr_esquema_obj.pop();//elimino el último elemento del array
     
                 }else{
@@ -1414,10 +1409,10 @@ async function crear_esquema(){
                     console.log('e.currentTarget: ', e.currentTarget);
                     console.log('e.target: ', e.target);
     
-                    const element_legend = [...song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
+                    const element_legend = [...crear_esquema_song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
                     
                     const element_fieldset = element_legend.closest('fieldset');
-                    resetFldActive(song_bloques);
+                    resetFldActive(crear_esquema_song_bloques);
                     
                     element_fieldset.classList.add('fld_active');
                     element_fieldset.scrollIntoView({behavior: 'smooth'});
@@ -1425,13 +1420,13 @@ async function crear_esquema(){
                     if(e.target.className === 'sp_close'){
                         //alert('voy a eliminar este boton...');
                         arr_esquema_obj.splice(e.currentTarget.dataset.idx_esquema, 1);
-                        const vista_block_to_remove = [...wr_vista_blocks.querySelectorAll('fieldset')].find(el => el.dataset.idx_esquema === e.currentTarget.dataset.idx_esquema);
+                        const vista_block_to_remove = [...crear_esquema_wr_vista_blocks.querySelectorAll('fieldset')].find(el => el.dataset.idx_esquema === e.currentTarget.dataset.idx_esquema);
                         vista_block_to_remove?.remove();
                         e.currentTarget.remove();
     
                         if(arr_esquema_obj.length === 0){
                             //si no hay bloques, oculto los botones de acción
-                            wr_btns_action.innerHTML = '';
+                            crear_esquema_wr_btns_action.innerHTML = '';
                         }
                     }
                 }
@@ -1458,27 +1453,28 @@ async function crear_esquema(){
     
                 el_fieldset_cloned.dataset.idx_esquema = idx_vista_prev;
     
-                wr_vista_blocks.append(el_fieldset_cloned);
+                crear_esquema_wr_vista_blocks.append(el_fieldset_cloned);
                 el_fieldset_cloned.scrollIntoView({behavior: 'smooth'});
     
-                wr_btns_action.innerHTML = `
-                    <button id="btn_resetEsquema" class="btn" onclick="resetEsquema()">Reset</button>
-                    <button id="btn_guardarEsquema" class="btn" onclick="guardarEsquema()">Guardar</button>
-                    <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Ver slides</button>
-                    <button id="btn_crearSlides_ver" class="btn" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</button>
+                crear_esquema_wr_btns_action.innerHTML = `
+                    <button id="btn_resetEsquema" class="btn btn_big" onclick="resetEsquema()">Reset</button>
+                    <button id="btn_guardarEsquema" class="btn btn_big" onclick="guardarEsquema()">Guardar</button>
+                    <button id="btn_crearSlides_ver" class="btn btn_big" onclick="crearSlides(); closeAll()">Ver slides</button>
+                    <button id="btn_crearSlides_ver" class="btn btn_big" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</button>
                 `;
     
-                wr_vista_btns.append(btn_close);
+                crear_esquema_wr_vista_btns.append(btn_close);
             }
     
         }// end onclick
         
-        song_bloques.append(slide_clone.querySelector('fieldset'));
+        crear_esquema_song_bloques.append(slide_clone.querySelector('fieldset'));
         
     });
 
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
 }
+
 
 
 async function select_slide(){
@@ -1496,39 +1492,18 @@ async function select_slide(){
     arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
     
-    song_bloques.innerHTML = '';//reset
-    wr_vista_btns.innerHTML = '';//reset
-    wr_vista_blocks.innerHTML = '';//reset
-    wr_btns_action.innerHTML = '';//reset
-
-    song_bloques.classList.remove('solo_ver');
-    wr_vista_blocks.classList.add('wr_full_block');//para que ocupe todo el ancho posible
-
-    eid_block_esquema.querySelector('.bl_parte_l h4').textContent = 'Diapositiva para mostrar:';
-    eid_block_esquema.querySelector('.bl_parte_l h5').textContent = 'Selecciona una diapositiva de las disponibles:';
-    eid_block_esquema.querySelector('.bl_parte_c h5').textContent = 'Estructura corta:';
-    eid_block_esquema.querySelector('.bl_parte_r h5').textContent = 'Diapositiva ACTUAL:';
-
-    //creo el btn de pantallaShow
-    const btn_pantallaShow = document.createElement('div');
-    btn_pantallaShow.id = 'btn_pantallaShow';
-    btn_pantallaShow.className = 'btn';
-    btn_pantallaShow.title = 'Mostrar Pantalla';
-    btn_pantallaShow.innerHTML = `
-        <img src="images/monitor_1_white.png">
-    `;
-    btn_pantallaShow.onclick = () => { 
-        //alert('en sdesarrollo...')
-        enableDisablePantallaShow(); 
-    };
-    eid_block_esquema.querySelector('.bl_parte_r .bloques_outer').append(btn_pantallaShow);
+    select_slide_song_bloques.innerHTML = '';//reset
+    select_slide_wr_vista_btns.innerHTML = '';//reset
+    eid_contenedor_prev_inner.innerHTML = '';//reset
+    select_slide_wr_btns_action.innerHTML = '';//reset
+    
+    arr_fieldsets = [];//reset
 
     check_pantallaShow();//reviso si marco en rojo o no
     
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    //eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
 
-    wr_esquema_actual.style.display = 'none';//oculto el contenedor de esquema actual por no hacer falta (y no duplicar vista de datos)
 
     // Recorrer el bucle - btns y vista...
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
@@ -1564,7 +1539,7 @@ async function select_slide(){
             console.log('e.currentTarget: ', e.currentTarget);
             console.log('e.target: ', e.target);
             
-            showOneSlideFrom(e.currentTarget, arr_esquema_bucle);
+            showOneSlideFrom(e.currentTarget);
         }
 
         //Creo boton del bloque sin poder cerrarlo con 'X'
@@ -1579,19 +1554,22 @@ async function select_slide(){
             console.log('e.currentTarget: ', e.currentTarget);
             console.log('e.target: ', e.target);
             
-            showOneSlideFrom(e.currentTarget, arr_esquema_bucle);
+            showOneSlideFrom(e.currentTarget);
         }
+
+        arr_fieldsets.push(el_fieldset_cloned);
+        console.log('crearSlides() --- arr_fieldsets: ', arr_fieldsets);
         
         //añado al DOM
-        song_bloques.append(el_fieldset_cloned);
-        wr_vista_btns.append(btn_simple);
+        select_slide_song_bloques.append(el_fieldset_cloned);
+        select_slide_wr_vista_btns.append(btn_simple);
     });
 
-    wr_btns_action.innerHTML = `
-        <button id="btn_crearSlides" class="btn" onclick="crearSlides();">Crear slides</button>
-        <button id="btn_crearSlides" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
-        <button id="btn_crearSlides" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
-        <button id="btn_crearSlides_ver" class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+    select_slide_wr_btns_action.innerHTML = `
+        <button id="btn_crearSlides" class="btn btn_big" onclick="crearSlides();">Crear slides (Inicio)</button>
+        <button id="btn_pestania" class="btn btn_big" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
+        <button id="btn_ventana" class="btn btn_big" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+        <button id="btn_crearSlides_ver" class="btn btn_big" onclick="crearSlides(); closeAll();">Crear + Ver slides (inicio)</button>
     `;
     
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
@@ -1626,7 +1604,8 @@ function ajustarTextoContenedor(contenedor) {
     document.body.appendChild(box);
 
     // Clon a medir dentro de la caja
-    const clone = contenedor.querySelector('.wr_full_block_inner').cloneNode(true);
+    // const clone = contenedor.querySelector('.wr_full_block_inner').cloneNode(true);
+    const clone = contenedor.querySelector('#contenedor_prev_inner').cloneNode(true);
     clone.style.margin = '0';
     clone.style.position = 'static';
     box.appendChild(clone);
@@ -1682,7 +1661,6 @@ async function guardarEsquema(){
         alert('id_song no está indicado... hago return.');
     }
 
-    //obj_lista[id_song].arr_esquema = arr_esquema_obj;
     objSong.arr_esquema = arr_esquema_obj;
 
     const result = await insertarSongDatos(objSong);
@@ -1693,14 +1671,18 @@ async function guardarEsquema(){
 }
 
 function resetEsquema(){
-    const wr_vista_btns = document.querySelector('.wr_vista_btns');
-    wr_vista_btns.innerHTML = '';//reset
+    crear_esquema_wr_vista_btns.innerHTML = '';//reset
+    crear_esquema_wr_vista_blocks.innerHTML = '';//reset
+    crear_esquema_wr_btns_action.innerHTML = '';//reset
 
-    const wr_vista_blocks = document.querySelector('.wr_vista_blocks');
-    wr_vista_blocks.innerHTML = '';//reset
+    // const sp_prim = document.createElement('span');
+    // sp_prim.className = 'sp_prim';
+    // sp_prim.innerHTML = `
+    //     (reset) Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...
+    // `;
 
-    const wr_btns_action = eid_block_esquema.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = '';//reset
+    // crear_esquema_wr_vista_btns.append(sp_prim);
+    // crear_esquema_wr_vista_blocks.append(sp_prim.cloneNode(true));
 
     arr_esquema_obj = [];
 }
@@ -1742,17 +1724,29 @@ function resetBlockEsquemaSoloHTML(){
 
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
 
-    eid_block_esquema.querySelector('.song_bloques').innerHTML = '...';//reset
-    eid_block_esquema.querySelector('.wr_vista_btns').innerHTML = '...';//reset
-    eid_block_esquema.querySelector('.wr_vista_blocks').innerHTML = '...';//reset
-    eid_block_esquema.querySelector('.wr_btns_action').innerHTML = '...';//reset
-    
-    eid_block_esquema.querySelector('.wr_esquema_actual').style.display = 'none';//reset
-    eid_block_esquema.querySelector('.wr_vista_btns_actual').innerHTML = '...';//reset
-    eid_block_esquema.querySelector('.bloques_outer #btn_pantallaShow')?.remove();//quito btn que solo esta en select_slide()
+    //eid_block_esquema.querySelector('.song_bloques').innerHTML = '...';//reset
+    ver_esquema_song_bloques.innerHTML = '...';//reset
+    crear_esquema_song_bloques.innerHTML = '...';//reset
+    select_slide_song_bloques.innerHTML = '...';//reset
 
-    song_bloques.classList.remove('solo_ver');
-    wr_vista_blocks.classList.remove('wr_full_block');
+    //eid_block_esquema.querySelector('.wr_vista_btns').innerHTML = '...';//reset
+    ver_esquema_wr_vista_btns.innerHTML = '...';//reset
+    crear_esquema_wr_vista_btns.innerHTML = '...';//reset
+    select_slide_wr_vista_btns.innerHTML = '...';//reset
+
+    //eid_block_esquema.querySelector('.wr_vista_blocks').innerHTML = '...';//reset
+    ver_esquema_wr_vista_blocks.innerHTML = '...';//reset
+    crear_esquema_wr_vista_blocks.innerHTML = '...';//reset
+    eid_contenedor_prev_inner.innerHTML = '...';//reset
+
+    // eid_block_esquema.querySelector('.wr_btns_action').innerHTML = '...';//reset
+    ver_esquema_wr_btns_action.innerHTML = '...';//reset
+    crear_esquema_wr_btns_action.innerHTML = '...';//reset
+    select_slide_wr_btns_action.innerHTML = '...';//reset
+    
+    crear_esquema_wr_vista_btns_actual.innerHTML = '...';//reset
+
+    //ver_esquema_wr_vista_blocks.classList.remove('wr_full_block');
 }
 
 function resetBlockCancion(){
