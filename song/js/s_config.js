@@ -107,6 +107,7 @@ const eid_contenedor_prev = document.getElementById('contenedor_prev');//para sl
 const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');//para slide en select_slide()
 //const eid_btn_pantallaShow = document.getElementById('btn_pantallaShow');//luego miro donde colocar...
 const eid_vklad_btn_pantallaShow = document.getElementById('vklad_btn_pantallaShow');
+const eid_titulo_shown = document.getElementById('titulo_shown');
 
 
 

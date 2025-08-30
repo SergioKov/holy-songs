@@ -175,9 +175,12 @@ function showOneSlideFrom(elementClicked){
     //clono fieldset nuevo para vista en contenedor_prev ya que le cambiaré font-size
     const el_fieldset_cloned = arr_fieldsets[index_esquema].cloneNode(true); // true para clonar hijos
 
+    eid_titulo_shown.textContent = el_fieldset_cloned.querySelector('legend').textContent;
+
     //Primer slide
     if(elementClicked.dataset.titulo === '_titulo_cancion_' || index_esquema == 0){
         el_fieldset_cloned.querySelector('.song_titulo').textContent = '...';//muestro ... en vez del título del slide 1
+        eid_titulo_shown.textContent = 'Título canción';
     }
 
     //Ultimo slide
@@ -416,4 +419,79 @@ function update_vkladActive(){
 
     // obj_ajustes.vkladActive = vkladActive;
     // update_obj_ajustes();
+}
+
+
+function old_hayElementosModalesAbiertos() {
+    return [...document.querySelectorAll('.elementos_modales')]
+        .some(modal => {
+            if (!modal.offsetParent) return false; // no visible en DOM
+            const rect = modal.getBoundingClientRect();
+            return rect.width > 0 &&
+                   rect.height > 0 &&
+                   rect.bottom > 0 &&
+                   rect.right > 0 &&
+                   rect.top < window.innerHeight &&
+                   rect.left < window.innerWidth;
+        });
+}
+
+function hayElementosModalesAbiertos(opciones = { parcial: true }) {
+    const modales = document.querySelectorAll('.elementos_modales');
+
+    return [...modales].some(modal => {
+        // Si tiene la clase 'shown', se considera visible sin más comprobaciones
+        if (modal.classList.contains('shown')) {
+            return true;
+        }
+
+        // Comprobar si está oculto en el DOM
+        if (!modal.offsetParent) return false;
+
+        // Obtener posición y dimensiones relativas a la ventana
+        const rect = modal.getBoundingClientRect();
+
+        // Comprobar tamaño
+        if (rect.width === 0 || rect.height === 0) return false;
+
+        // Verificar visibilidad según la opción parcial o total
+        if (opciones.parcial) {
+            return (
+                rect.bottom > 0 &&
+                rect.right > 0 &&
+                rect.top < window.innerHeight &&
+                rect.left < window.innerWidth
+            );
+        } else {
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= window.innerHeight &&
+                rect.right <= window.innerWidth
+            );
+        }
+    });
+}
+//ejemplos de uso:
+//hayElementosModalesAbiertos({ parcial: false });// Exigir que estén totalmente dentro de la ventana
+//hayElementosModalesAbiertos();// Permitir modales parcialmente visibles
+
+
+
+function esElementoVisible(elemento) {
+    if (!elemento) return false; // No existe en el DOM
+
+    // 1. Comprobar si está oculto con display:none o visibility:hidden
+    if (!elemento.offsetParent) return false;
+
+    // 2. Comprobar si está dentro del viewport
+    const rect = elemento.getBoundingClientRect();
+    return (
+        rect.width > 0 &&
+        rect.height > 0 &&
+        rect.bottom > 0 &&
+        rect.right > 0 &&
+        rect.top < window.innerHeight &&
+        rect.left < window.innerWidth
+    );
 }

@@ -92,6 +92,10 @@ carousel.addEventListener('click', (e) => {
     //     }
     // }
 
+    if(hayElementosModalesAbiertos()){
+        console.log('hay algun elemento modal abierto. no dejo ir al slide');
+        return;
+    }
 
 
 
@@ -99,10 +103,15 @@ carousel.addEventListener('click', (e) => {
     const half = window.innerWidth / 2;
     if (e.clientX > half && currentSlide < totalSlides - 1) {
         currentSlide++;
+        scrollToSlide(currentSlide);
+        
+        //slideGo('next');//DORABOTAT!!!
     } else if (e.clientX <= half && currentSlide > 0) {
         currentSlide--;
+        scrollToSlide(currentSlide);
+        
+        //slideGo('prev');//DORABOTAT!!!
     }
-    scrollToSlide(currentSlide);
     console.log(`Clic general, cambio a slide ${currentSlide}`);
 });
 
@@ -121,10 +130,34 @@ async function checkKey(e) {//funciona .codigo mas limpio aunque .keyCode is dep
     //console.log('e.ctrlKey: ', e.ctrlKey);
 
     if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        slideGo('prev');
+        //slideGo('prev');
+
+        if(hayElementosModalesAbiertos()){
+            if(esElementoVisible(select_slide_wr_vista_btns)){
+                console.log('en select_slide hago flecha left');
+                slideGo('prev');
+            }else{
+                console.log('fuera de select_slide hago flecha left - no cambio slide');
+            }
+        }else{
+            console.log('en carusel  hago flecha left')
+            slideGo('prev');
+        }
     }
     if(e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        slideGo('next');
+        //slideGo('next');
+
+        if(hayElementosModalesAbiertos()){
+            if(esElementoVisible(select_slide_wr_vista_btns)){
+                console.log('en select_slide hago flecha right');
+                slideGo('next');
+            }else{
+                console.log('fuera de select_slide hago flecha right - no cambio slide');
+            }
+        }else{
+            console.log('en carusel hago flecha right')
+            slideGo('next');
+        }        
     }
 
 }

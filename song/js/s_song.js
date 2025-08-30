@@ -308,7 +308,7 @@ function pintActTranspose(valor){
 
 function slideGo(dir){
     if(dir == 'next'){
-        if(currentSlide < totalSlides - 1){
+        if(currentSlide < (totalSlides - 1) || currentSlide < (arr_esquema_bucle.length - 1) ){
             currentSlide++;
             scrollToSlide(currentSlide);
         }
@@ -320,6 +320,12 @@ function slideGo(dir){
             scrollToSlide(currentSlide);
         }
     }
+
+    const btn_simple = select_slide_wr_vista_btns.querySelector(`.btn[data-idx="${currentSlide}"]`);
+    if(esElementoVisible(btn_simple)){
+        btn_simple.click();
+    }
+
 }
 
 function showMenu(){
@@ -1498,6 +1504,7 @@ async function select_slide(){
     select_slide_wr_btns_action.innerHTML = '';//reset
     
     arr_fieldsets = [];//reset
+    currentSlide = 0;//aki siempre para con click dcho empezar desde inicio de canción
 
     check_pantallaShow();//reviso si marco en rojo o no
     
@@ -2434,7 +2441,7 @@ async function findWordsSong(){
         console.log('no hay coincidencias...');
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="td_no_data">
+                <td colspan="9" class="td_no_data">
                     <p class="prim">No se encontraron canciones con la frase: "<b>${frase}</b>"</p>
                 </td>
             </tr>

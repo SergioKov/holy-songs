@@ -1878,10 +1878,12 @@ p.p_sm b {
 #wr_btns_pantalla {
     display: flex;
     background: #000000;
-    /* gap: 5px; */
+    gap: 7px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     margin: 0 0 10px;
+    padding: 5px 5px;
+    /* overflow: overlay; */
 }
 
 #wr_sel_pantalla {
@@ -1921,17 +1923,34 @@ p.p_sm b {
     align-content: center;
     flex-direction: row;
     border: 1px solid transparent;
-    justify-content: center;
     cursor: pointer;
     transition: 0.3s;
-    padding: 2px;
+    padding: 0px;
     border-radius: 3px;
+    gap: 5px;
+    justify-content: space-between;
 }
 #wr_btns_pantalla .dbtn:hover{
     background: #424242;
 }
 #btn_ver_pantalla img {
     width: 22px;
+}
+
+#vklad_btn_pantallaShow {
+    height: auto;
+    width: 66%;
+    padding: 0px 2px;
+}
+#titulo_shown {
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    width: 100%;
+    /* background: green; */
+    align-items: center;
+    font-size: 0.9rem;
+    gap: 5px;
 }
 
 

@@ -35,7 +35,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
         <span>L</span>
     </div>
 
-    <div id="menu_contenido">
+    <div id="menu_contenido" class="elementos_modales">
         <div id="menu_contenido_inner">
 
             <div id="head_block_l">
@@ -78,7 +78,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
         </div>
     </div>
 
-    <div id="puntosMenu">
+    <div id="puntosMenu" class="elementos_modales">
         <ul>
             <li onclick="showEdit('buscar')">Buscar</li>
             <li onclick="showEdit('esquema')">Esquema</li>
@@ -127,7 +127,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 <div id="calculando">Calculando el tamaño de texto.... <br>Espera.</div>
 
 
-<div id="edit_contenido" class="shown">
+<div id="edit_contenido" class="elementos_modales shown">
     <div id="edit_contenido_inner">
 
         <div class="edit_head">
@@ -398,7 +398,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                                 <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
                                                     <img src="images/monitor_1_white.png">
-                                                    <span id="verse_ref_shown">1</span>
+                                                    <span id="titulo_shown">...</span>
                                                 </div>
 
                                                 <div id="vklad_btn_slideGoNext" class="dbtn" data-dic="" title="Next slidew" onclick="slideGo('next')">
@@ -901,71 +901,71 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
         <div class="wr_modcont">
 
-        <header id="modcont_header">
-            <div class="inner">
-                <h4>
-                    <span id="h4_text">aki modal content header</span>
-                    <span class="close" onclick="closeModal(null,true)">&#10005;</span><!-- x -->
-                </h4>
-            </div>
-            <div id="bl_modalFilter">
-                <div id="bl_modalFilter_inner"></div>
-            </div>
-        </header>
-
-        <div id="modcont_body">
-            <div class="inner">
-
-                <div id="bl_modalTop" class="body_bls" style="display:none;">
-                    <div id="bl_modalTopInner">
-
-                        <div id="topLogin" style="display: none;">
-                            <div id="topLoginInner">
-                            </div><!--/#topLoginInner-->
-                        </div><!--/#topLogin-->
-
-                        <div id="topMenu" style="display: none;">
-                            <div id="topMenuInner">
-                            </div><!--/#topMenuInner-->
-                        </div><!--/#topMenu-->
-                                        
-                    </div><!--/#bl_modalTopInner-->
-                </div><!--/#bl_modalTop-->
-
-
-                <div id="bl_modalCenter" class="body_bls" style="display:none;">
-                    <div id="bl_modalCenterInner">
-                        ...
-                    </div>
+            <header id="modcont_header" class="elementos_modales">
+                <div class="inner">
+                    <h4>
+                        <span id="h4_text">aki modal content header</span>
+                        <span class="close" onclick="closeModal(null,true)">&#10005;</span><!-- x -->
+                    </h4>
                 </div>
+                <div id="bl_modalFilter">
+                    <div id="bl_modalFilter_inner"></div>
+                </div>
+            </header>
+
+            <div id="modcont_body" class="elementos_modales">
+                <div class="inner">
+
+                    <div id="bl_modalTop" class="body_bls" style="display:none;">
+                        <div id="bl_modalTopInner">
+
+                            <div id="topLogin" style="display: none;">
+                                <div id="topLoginInner">
+                                </div><!--/#topLoginInner-->
+                            </div><!--/#topLogin-->
+
+                            <div id="topMenu" style="display: none;">
+                                <div id="topMenuInner">
+                                </div><!--/#topMenuInner-->
+                            </div><!--/#topMenu-->
+                                            
+                        </div><!--/#bl_modalTopInner-->
+                    </div><!--/#bl_modalTop-->
 
 
-                <div id="bl_modalBottom" class="body_bls" style="display:none;">
-                    <div id="bl_modalBottomInner">
-                        ...
+                    <div id="bl_modalCenter" class="body_bls" style="display:none;">
+                        <div id="bl_modalCenterInner">
+                            ...
+                        </div>
                     </div>
 
-                </div>
 
+                    <div id="bl_modalBottom" class="body_bls" style="display:none;">
+                        <div id="bl_modalBottomInner">
+                            ...
+                        </div>
 
-                <div id="bl_modalFull" class="body_bls" style="display:none;">
-                    <div id="bl_modalFullInner" class="vyb_trans">
-                        ...
                     </div>
+
+
+                    <div id="bl_modalFull" class="body_bls" style="display:none;">
+                        <div id="bl_modalFullInner" class="vyb_trans">
+                            ...
+                        </div>
+                    </div>
+
+
+                </div><!--/inner-->
+            </div><!--/modcont_body-->
+
+            <footer id="modcont_footer" class="elementos_modales" style="display:none;">
+                <div class="inner">
+                    <p>
+                        <span class="close" onclick="closeModal(null,true)">&#10005;</span> 
+                        aki modal content footer 
+                    </p>
                 </div>
-
-
-            </div><!--/inner-->
-        </div><!--/modcont_body-->
-
-        <footer id="modcont_footer" style="display:none;">
-            <div class="inner">
-                <p>
-                    <span class="close" onclick="closeModal(null,true)">&#10005;</span> 
-                    aki modal content footer 
-                </p>
-            </div>
-        </footer>
+            </footer>
 
         </div><!--/wr_modcont-->
 
