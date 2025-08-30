@@ -201,6 +201,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Puente',
     'Outro',
     'Final',
+    'Finalización',
     'Coda',
     'Estructura',
     'Esquema',
@@ -215,6 +216,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Брідж',
     'Кінцівка',
     'Кода',
+    'Закінчення:',
     'Структура',
     'Схема',
     
@@ -228,6 +230,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Бридж',
     'Концовка',
     'Кода',
+    'Окончание',
     'Структура',
     'Схема',
 
