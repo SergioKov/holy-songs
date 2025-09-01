@@ -164,7 +164,7 @@ function prepararQuery($conn, $query, $arr_params, $sign = '?') {
 
 
 
-function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [], &$types = "") {
+function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [], &$types = "", $arr_songbooks) {
     
     $where = "";
     $texto = trim($texto);
@@ -172,6 +172,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
     switch ($modo) {
 
         // 1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)
+        default:
         case 1:
             $palabras = preg_split('/\s+/', $texto);
             $ands = [];
@@ -184,7 +185,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
                 }
                 $ands[] = "(" . implode(" OR ", $ors) . ")";
             }
-            $where = implode(" AND ", $ands);
+            $where .= implode(" AND ", $ands);
             break;
 
 
@@ -201,7 +202,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
             }
             $ands[] = "(" . implode(" OR ", $ors) . ")";
         }
-        $where = implode(" AND ", $ands);
+        $where .= implode(" AND ", $ands);
         break;
         
 
@@ -222,7 +223,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
             }
 
             // Con OR global: basta con que una de las palabras esté
-            $where = "(" . implode(" OR ", $orsGlobal) . ")";
+            $where .= "(" . implode(" OR ", $orsGlobal) . ")";
             break;            
 
 
@@ -239,7 +240,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
                 $params[] = $pattern;
                 $types .= "s";
             }
-            $where = "(" . implode(" OR ", $ors) . ")";
+            $where .= "(" . implode(" OR ", $ors) . ")";
             break; 
             
             
@@ -251,7 +252,7 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
                 $params[] = "%" . $texto . "%";
                 $types .= "s";
             }
-            $where = "(" . implode(" OR ", $ors) . ")";
+            $where .= "(" . implode(" OR ", $ors) . ")";
             break;
 
 
@@ -268,9 +269,29 @@ function buildWhere($modo, $texto, $campos = ["array de campos"], &$params = [],
                 }
                 $ands[] = "(" . implode(" OR ", $ors) . ")";
             }
-            $where = implode(" AND ", $ands);
+            $where .= implode(" AND ", $ands);
             break;
 
+    }
+
+    //si se ha indicado songbook donde buscar
+    if(!empty($arr_songbooks)){
+        $ids = [];
+        foreach ($arr_songbooks as $songbook) {
+            if (filter_var($songbook, FILTER_VALIDATE_INT) !== false) {
+                //si quero meter en la consulta directamente ' AND s.songbook IN (1,2,3) '
+                //$ids[] = $songbook;
+                
+                //si quiero meter como ' AND s.songbook IN (?,?,?) ' y convertir en ' AND s.songbook IN (1,2,3) '
+                $ids[] = "?";
+                $params[] = $songbook;
+                $types .= "i"; // tipo entero
+            }
+        }
+
+        if (!empty($ids)) {
+            $where .= " AND s.songbook IN (" . implode(",", $ids) . ") ";
+        }
     }
 
     return $where;

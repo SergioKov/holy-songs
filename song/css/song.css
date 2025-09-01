@@ -2018,3 +2018,135 @@ p.p_sm b {
     gap: 20px;
     position: relative;
 }
+
+
+#contenedor_sb {
+    position: relative;
+}
+#wr_sb_checkboxes {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    color: white;
+}
+
+#wr_sb_checkboxes label {
+    display: flex;
+    gap: 10px;
+    background: darkslategrey;
+    padding: 0;
+    color: white;
+    width: 100%;
+    position: initial;
+    transform: none;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#wr_sb_checkboxes p {
+    display: flex;
+    gap: 10px;
+    background: brown;
+    padding: 10px;
+    color: #ffffff;
+    width: 100px;
+    border: 1px solid black;
+    width: 100%;
+    border-radius: 3px;
+}
+
+#wr_sb_checkboxes input[type="checkbox"] {
+    width: auto;
+}
+
+
+
+
+.bl_set {
+    /* display: none; */
+    /* background: red; */
+    height: 0px;
+    position: relative;
+    z-index: 20;
+}
+.bl_set_inner {
+    background: #a3a3a3;
+    position: absolute;
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #434343;
+    color: black;
+    font-size: 16px;
+    transition: height 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+}
+.bl_closed {
+    height: 0;
+    padding: 0 5px;
+}
+.bl_opened {
+    height: 450px;
+    padding: 5px;
+}
+
+.bl_set_inner .sp_close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.bl_set_inner .inner_content {
+    background: #FF9800;
+    margin: 0px;
+    padding: 10px;
+}
+.bl_set_inner .inner_content h4 {
+    border-bottom: 1px solid #5e5e5e;
+    padding: 0 0 5px;
+}
+
+
+#btn_sel_sb {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+}
+
+
+.sp_close {
+    min-width: 22px!important;
+    padding: 0 0 2px;
+    font-size: 15px;
+    border: none;
+    opacity: 0.4;
+    background-color: transparent;
+    /* background: red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+.sp_close:hover {
+    background-color: red;
+    color: white;
+    opacity: 1;
+}
+
+.sp_prim {
+    font-size: 14px;
+    display: block;
+    color: #d8d8d8;
+    background: black;
+    padding: 5px 10px;
+    border-radius: 3px;
+    text-align: center;
+    border: 1px solid #5a5a5a;
+    width: 100%;
+    white-space: normal;
+    line-height: normal;
+    margin-bottom: 5px;
+    font-family: Arial;
+}

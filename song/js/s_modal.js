@@ -792,7 +792,7 @@ async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el
 async function getSongTextFromBdByFind(objFindParams){
     console.log('=== function getSongTextFromBdByFind(words_input) ===');
 
-    let {words_input, modo, buscar_en} = objFindParams;
+    let {words_input, modo, buscar_en, arr_songbooks_search} = objFindParams;
 
     try {
         
@@ -808,6 +808,7 @@ async function getSongTextFromBdByFind(objFindParams){
             },
             body: JSON.stringify({
                 words_input,
+                arr_songbooks_search,
                 modo,
                 buscar_en
             }), // Convertir los datos a formato JSON
@@ -819,7 +820,7 @@ async function getSongTextFromBdByFind(objFindParams){
 
         const data = await response.json();
         //const data = await response.text();//test
-        // console.log('data: ', data);  
+        console.log('data: ', data);  
         
         if(data.success){
             console.log('success is true');

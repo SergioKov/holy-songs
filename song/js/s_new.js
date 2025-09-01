@@ -495,3 +495,63 @@ function esElementoVisible(elemento) {
         rect.left < window.innerWidth
     );
 }
+
+
+
+
+
+
+
+
+// hideShowSettings('nav');
+
+function hideShowDiv(id_div){
+    console.log('=== function hideShowDiv() ===');
+    console.log('id_div: ',id_div);
+
+    const divElement = document.getElementById(id_div);
+    const block_css = window.getComputedStyle(divElement);
+    const block_display = block_css.display;
+   
+    if(block_display == 'block'){//oculto
+        closeDiv(divElement);
+    }else{//muestro
+        openDiv(divElement);
+    }    
+}
+
+function closeDiv(divElement){
+    //console.log('=== function closeDiv() ===');
+    
+    const innerElement = divElement.querySelector('.bl_set_inner');    
+    
+    innerElement.classList.remove('bl_opened');
+    innerElement.classList.add('bl_closed');
+    setTimeout(()=>{
+        divElement.style.display = 'none';
+    },300);
+}
+
+function openDiv(divElement){
+    //console.log('=== function openDiv() ===');
+
+    const innerElement = divElement.querySelector('.bl_set_inner');
+    const innerElementContent = divElement.querySelector('.inner_content');
+
+    divElement.style.display = 'block';
+    setTimeout(()=>{//importante para que se ejecute la animación
+        innerElement.classList.remove('bl_closed');
+        innerElement.classList.add('bl_opened');
+    },3);
+
+    //Para que se abra mas bonito , pongo el sig. código. 
+    //No pongo en css 'overflow:auto;' ya que al desplegar el block muestra scroll y luego lo quita, lo que no es bonito
+    //con js lo soluciono
+    setTimeout(()=>{
+        if(innerElementContent.offsetHeight > innerElement.offsetHeight){
+            innerElement.style.overflow = 'auto';//no hago comprobacion si ya esta esto, para no añadir un código mas. lo reescribo y ya está.
+        }else{
+            innerElement.removeAttribute('style');
+        }
+    },300);//300 es 0.3s de transition css
+}

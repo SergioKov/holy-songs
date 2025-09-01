@@ -198,6 +198,14 @@ eid_edit_contenido.addEventListener('click', (e) => {
     console.log('e.currentTarget: ', e.currentTarget);
     console.log('e.target: ', e.target);
 
+    //si es click fuera del block de ajustes de find_settings
+    if(!e.target.closest('.bl_set') && !e.target.closest('.btn_set')) {
+        //console.log('click en el elemento = e.target: ', e.target);
+
+        //alert('1. click fuera de block bl_songbook_search');
+        closeDiv(document.querySelector('#bl_songbook_search'));
+    }
+
     if (!eid_edit_contenido_inner.contains(e.target)) {
         // Click fue dentro de eid_edit_contenido pero fuera de eid_edit_contenido_inner
         console.log('click fuera de edit_contenido_inner');

@@ -119,9 +119,11 @@ switch ($buscar_en) {
         break;
 }
 
+$arr_songbooks = [];//es necesario este parametro para buildWhere() con valor []
+
 
 // Buscar "Jesús Pedro" en varios campos
-$where = buildWhere($modo, $words_input, $arr_campos, $params, $types);
+$where = buildWhere($modo, $words_input, $arr_campos, $params, $types, $arr_songbooks);
 
 
 //test modos de where

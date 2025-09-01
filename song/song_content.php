@@ -204,6 +204,45 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     </div><!--/.wr_nav-->
 
 
+                                    <div id="d_sel_songbooks" class="wr_sb m_0">
+                                        <h5>Songbooks donde buscar (separados por coma):</h5>
+                                        <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>                                        
+
+                                        <div id="bl_songbook_search" class="bl_set" style="display: none;">
+                                            <div class="bl_set_inner bl_closed" style="overflow: auto;">
+                                                <div class="inner_content">
+                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
+
+                                                    <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+                                                    <div id="wr_sb_checkboxes">
+                                                        <label>
+                                                            <p>
+                                                                <input type="checkbox" name="songbooks" value="1">
+                                                                <span>Songbook 1</span> 
+                                                            </p>
+                                                        </label>
+                                                        <label>
+                                                            <p>
+                                                                <input type="checkbox" name="songbooks" value="1">
+                                                                <span>Songbook 1</span> 
+                                                            </p>
+                                                        </label>
+                                                        <label>
+                                                            <p>
+                                                                <input type="checkbox" name="songbooks" value="1">
+                                                                <span>Songbook 1</span> 
+                                                            </p>
+                                                        </label>
+                                                    </div>
+
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                    </div><!--/.wr_sb-->
+
                                     <h5>Modo de búsqueda:</h5>
                                     <div class="wr_sel_song m_0">
                                         <select id="modo" class="sel_song">

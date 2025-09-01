@@ -2,14 +2,16 @@
 // start - F U N C T I O N S  
 //=================================================================//
 
-function init() {
+async function init() {
     ajustarTexto();
     pintParrafosAcordes();
     pintTipoAcorde();
     transponerTodosLosAcordes(currentTransposition);
     scrollToSlide(currentSlide);
 
-    crear_objSongbooks();
+    await crear_objSongbooks();
+    //pintSongbooksOptionsEnBuscar(eid_songbook_search);//relleno select de songbook para buscar en
+    pintSongbooksCheckboxEnBuscar(eid_wr_sb_checkboxes);//relleno contenedor de checkboxes
 }
 
 async function crear_objSongbooks(){
@@ -17,6 +19,89 @@ async function crear_objSongbooks(){
 
     objSongbooks = await getSongbooksFromBd();
     console.log(`objSongbooks: `, objSongbooks);
+}
+
+
+function pintSongbooksOptionsEnBuscar(selectElement){
+    console.log('=== function pintSongbooksOptionsEnBuscar() ===');
+    
+    selectElement.innerHTML = '';//reset
+    //Recorrer objSongbooks
+    Object.values(objSongbooks).forEach( (songbook, i) => {
+        if(i == 0){
+            const option_def = document.createElement('option');
+            option_def.value = '';
+            option_def.innerHTML = `All songbooks`;
+            selectElement.append(option_def);
+        }
+
+        const option = document.createElement('option');
+        option.value = songbook.id_songbook;
+        option.innerHTML = `${songbook.id_songbook}. ${songbook.title}`;
+        selectElement.append(option);
+    });
+}
+
+let arr_songbooks = [];
+
+function pintSongbooksCheckboxEnBuscar(divElement){
+    console.log('=== function pintSongbooksCheckboxEnBuscar() ===');
+    
+    divElement.innerHTML = '';//reset
+    //Recorrer objSongbooks
+    Object.values(objSongbooks).forEach( (songbook, i) => {
+
+        const el_label = document.createElement('label');
+        el_label.dataset.id = songbook.id_songbook;
+        el_label.innerHTML = `
+            <p>
+                <input type="checkbox" name="songbooks" value="${songbook.id_songbook}">
+                <span>${songbook.id_songbook}. ${songbook.title}</span>
+            </p>
+        `;
+        el_label.onclick = (e) => {
+            const cbox = e.currentTarget.querySelector('input[type="checkbox"]');
+            const int_val = Number(e.currentTarget.dataset.id);
+
+            if(cbox.checked){
+                if(!arr_songbooks.includes(int_val)){
+                    arr_songbooks.push(int_val);
+                }
+            }else{
+                const index = arr_songbooks.indexOf(int_val);
+                if (index !== -1) {
+                    arr_songbooks.splice(index, 1); // Elimina 1 elemento en esa posición
+                }
+            }
+            check_arr_songbooks();
+        }
+        divElement.append(el_label);
+    });
+}
+
+
+function check_arr_songbooks(){
+    console.log('=== function check_arr_songbooks() ===');
+    console.log('arr_songbooks: ', arr_songbooks);
+
+    btn_sel_sb.innerHTML = '';//reset
+    
+    arr_songbooks = arr_songbooks.sort((a, b) => a - b); // Orden ascendente 1,2,3
+    console.log('(sorted) --- arr_songbooks: ', arr_songbooks);
+    
+    let arr_songbooks_str = arr_songbooks.join(', ');
+    console.log('arr_songbooks_str: ', arr_songbooks_str);
+
+
+    if(arr_songbooks.length > 0){
+        btn_sel_sb.innerHTML = `
+            Songbooks seleccionados (sólo ids): ${arr_songbooks_str}
+        `;
+    }else{
+        btn_sel_sb.innerHTML = `
+            Selecciona songbook:
+        `;
+    }
 }
 
 
@@ -2373,10 +2458,18 @@ async function findWordsSong(){
     //console.log('--- frase: ', frase);
     console.time('time_findWordsNew');
 
-
     let frase = eid_inpt_find.value;
     let modo = eid_modo.value;
     let buscar_en = eid_buscar_en.value;
+
+    // 1) Coger todos los checkbox marcados
+    const checkboxes = eid_wr_sb_checkboxes.querySelectorAll('input[name="songbooks"]:checked');
+    console.log('--- checkboxes: ', checkboxes);
+
+    // 2) Meter los valores en un array
+    let arr_songbooks_search = Array.from(checkboxes).map(cb => cb.value);
+    console.log('Valores seleccionados. arr_songbooks_search:', arr_songbooks_search);
+
 
     let words_input = frase.trim();
     if(words_input == ''){
@@ -2399,6 +2492,7 @@ async function findWordsSong(){
     objFindParams.words_input = words_input;
     objFindParams.modo = modo;
     objFindParams.buscar_en = buscar_en;
+    objFindParams.arr_songbooks_search = arr_songbooks_search;
 
     const objData = await getSongTextFromBdByFind(objFindParams);
     console.log('objData: ', objData);

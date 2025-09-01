@@ -48,6 +48,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $words_input = $datos['words_input'];
         $modo = $datos['modo'];
         $buscar_en = $datos['buscar_en'];
+        $arr_songbooks_search = $datos['arr_songbooks_search'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
@@ -55,6 +56,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $words_input = isset($_GET['words_input']) ? $_GET['words_input'] : null ;
         $modo = isset($_GET['modo']) ? $_GET['modo'] : 1 ;
         $buscar_en = isset($_GET['buscar_en']) ? $_GET['buscar_en'] : 1 ;
+        $arr_songbooks_search = isset($_GET['arr_songbooks_search']) ? $_GET['arr_songbooks_search'] : [] ;
 
         if ($words_input === null) {
             http_response_code(400);
@@ -76,6 +78,10 @@ include('includes/connect_db.php');
 $words_input = $conn->real_escape_string($words_input);//aki importante
 $modo = $conn->real_escape_string($modo);
 $buscar_en = $conn->real_escape_string($buscar_en);
+
+$arr_songbooks_search_string = json_encode($arr_songbooks_search, JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+$arr_songbooks_search_array = $arr_songbooks_search;//ya viene decodificado desde: $datos = json_decode($inputJSON, true);
+
 //echo_json_x($datos, 'datos');
 //echo_json_x($words_input);
 //echo_json_x($modo);
@@ -129,6 +135,25 @@ $buscar_en = $conn->real_escape_string($buscar_en);
 $params = [];
 $types  = "";
 $arr_campos = [];
+$arr_songbooks = [];
+// $arr_songbooks = ['2'];//test
+
+if(empty($arr_songbooks_search)){
+    $arr_songbooks = [];//si no se indica arr_songbooks_search (si valor es []), es arr vacio
+    //echo_json_x('entro en if');
+}else{
+    //con explode hago array
+    //con array_filter filtro solo los numeros enteros
+    $arr_songbooks = array_filter($arr_songbooks_search_array, function($item) {
+        return filter_var($item, FILTER_VALIDATE_INT) !== false && (int)$item !== 0;
+    });
+    $arr_songbooks = array_map('intval', $arr_songbooks);
+
+    //echo_json_x('entro en else');
+    //echo_json_x($arr_songbooks, 'arr_songbooks');//hay que convertirlo en string para ver como .json()
+}
+//echo_json_x($arr_songbooks, 'arr_songbooks');
+
 
 switch ($buscar_en) {
     case '1'://Todos los campos por defecto disponibles (rápido)
@@ -181,8 +206,10 @@ switch ($buscar_en) {
         break;
 }
 
+
+
 // Buscar "Jesús Pedro" en varios campos
-$where = buildWhere($modo, $words_input, $arr_campos, $params, $types);
+$where = buildWhere($modo, $words_input, $arr_campos, $params, $types, $arr_songbooks);
 
 
 //test modos de where
@@ -209,7 +236,7 @@ $sql_init = "SELECT
             LEFT JOIN songbooks sb 
                 ON sb.id_songbook = s.songbook
             WHERE $where
-            ORDER BY s.title, s.song_number, s.id_song
+            ORDER BY s.title, s.song_number, s.id_song, s.songbook
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):
@@ -223,6 +250,8 @@ foreach ($params as $p) {
     }
 }
 //debug_x($finalSQL, 'finalSQL');//para ver la consulta preparada para debuguear
+//echo_json_x($finalSQL, 'finalSQL');//para ver la consulta preparada para debuguear
+
 
 $stmt = $conn->prepare($sql_init);
 $stmt->bind_param($types, ...$params);

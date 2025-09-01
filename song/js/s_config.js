@@ -138,6 +138,10 @@ const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
 
 
 
+const eid_d_sel_songbooks = document.getElementById('d_sel_songbooks');
+const eid_bl_songbook_search = document.getElementById('bl_songbook_search');
+const eid_wr_sb_checkboxes = document.getElementById('wr_sb_checkboxes');
+const btn_sel_sb = document.getElementById('btn_sel_sb');
 
 //==================================================================//
 //start - modal.js
