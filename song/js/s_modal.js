@@ -910,20 +910,28 @@ async function insertarSongDatos(objSong) {
         }
 
         console.log('objSong: ',objSong);
+        
+        const objSong_str = JSON.stringify(objSong);
+        console.log('objSong_str: ', objSong_str);
 
         const response = await fetch('insertar_song_datos.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(objSong)
+            body: objSong_str
         });
 
         if (!response.ok) {
             throw new Error('Error al obtener datos');
         }
-
-        const data = await response.json();
+        
+        let data;
+        if(debug){
+            data = await response.text();//test
+        }else{
+            data = await response.json();
+        }
         console.log('data: ',data); 
         
         return data;

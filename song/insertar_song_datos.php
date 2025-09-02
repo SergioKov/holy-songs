@@ -35,16 +35,27 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         //debug($jsonString, 'jsonString');
     } 
     
+
+    // limpiar caracteres de control ilegales
+    //$jsonString = cleanControlChars($jsonString);
+    $jsonString = escapeControlChars($jsonString);
+	//echo_json_x($jsonString, 'jsonString');
+
+    // escapar saltos de línea
+    $jsonString = escapeNewlines($jsonString);
+	//echo_json_x($jsonString, 'jsonString');
+
     
-    // Recuperar datos JSON
-    $datos = json_decode($jsonString, true);
-    //debug($datos, 'datos');
-	//echo_json($datos, 'datos');
-	//echo_json_x($datos, 'datos');
+    
 
 
-    // Validar si la decodificación fue exitosa
-    if (json_last_error() === JSON_ERROR_NONE) {
+    if (isValidJson($jsonString)) {
+        //echo "JSON válido";
+
+        // decodificar
+        $datos = json_decode($jsonString, true); // Decodificación a array asociativo
+        //echo_json_x($datos, 'datos');
+
         // Validar estructura y contenido del JSON
         if (isset($datos['song_text']) ) {
             //echo "JSON es válido y contiene las claves esperadas.";
@@ -59,19 +70,56 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             ]);
             exit;
         }
-    } else {
-        //echo "Error al decodificar JSON: " . json_last_error_msg();
-        //writeLog("Error al decodificar JSON. Error: [" . json_last_error_msg() . "]", 'ERROR');
 
+    } else {
+        //echo "JSON inválido";
         http_response_code(400);
         echo json_encode([
             'success' => false,
-            'error' => 'Error al decodificar JSON.',
+            'error' => 'Error al decodificar JSON. jsonErrorMessage: ' . jsonErrorMessage($jsonString),
             'json_last_error_msg' => json_last_error_msg(),
             'dic_code' => 'd302'
         ]);
         exit;
     }
+
+
+    //$datos = json_decode($jsonString, true);
+    //debug($datos, 'datos');
+	//echo_json($datos, 'datos');
+	//echo_json_x($datos, 'datos');
+
+
+
+    // // Validar si la decodificación fue exitosa
+    // if (json_last_error() === JSON_ERROR_NONE) {
+    //     // Validar estructura y contenido del JSON
+    //     if (isset($datos['song_text']) ) {
+    //         //echo "JSON es válido y contiene las claves esperadas.";
+    //         //sigo adelante...
+    //     } else {
+    //         //echo "JSON no contiene las claves esperadas.";
+    //         http_response_code(400);
+    //         echo json_encode([
+    //             'success' => false,
+    //             'error' => 'Error al procesar el JSON. El objeto no contiene las claves esperadas.',
+    //             'dic_code' => 'd301'
+    //         ]);
+    //         exit;
+    //     }
+    // } else {
+    //     //echo "Error al decodificar JSON: " . json_last_error_msg();
+    //     //writeLog("Error al decodificar JSON. Error: [" . json_last_error_msg() . "]", 'ERROR');
+
+    //     http_response_code(400);
+    //     echo json_encode([
+    //         'success' => false,
+    //         'error' => 'Error al decodificar JSON.',
+    //         'json_last_error_msg' => json_last_error_msg(),
+    //         'dic_code' => 'd302'
+    //     ]);
+    //     exit;
+    // }
 
     // Verificar que se decodificó correctamente
     if ($datos === null) {
@@ -122,7 +170,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $category  = $conn->real_escape_string($datos['category']);//get parameter
     $songbook  = $conn->real_escape_string($datos['songbook']);//get parameter
     $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
-    $arr_esquema = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+    
+    //$arr_esquema = $datos['arr_esquema'];
+    $arr_esquema_array = $datos['arr_esquema'];
+    //echo_json_x($arr_esquema_array, 'arr_esquema_array');
+
+    $arr_esquema_string = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+
     $tune  = $conn->real_escape_string($datos['tune']);//get parameter
     $lang  = $conn->real_escape_string($datos['lang']);//get parameter
     $notes  = $conn->real_escape_string($datos['notes']);//get parameter
@@ -131,7 +185,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //debug($tabla);
     //debug($campo);
     //debug($arr, 'arr');
-    //echo_json_x($arr, 'arr');
+    //echo_json_x($arr_esquema, 'arr_esquema');
+    //echo_json_x($arr_esquema_array, 'arr_esquema_array');
 
     //exit('<br>hasta aki-2');
 
@@ -169,19 +224,39 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     // Realizar la inserción o (update) en la base de datos 
     if($hay_id_song_en_tabla){
         //hago update
-        $sql2_up_init = "UPDATE songs SET
-                song_number = '$song_number',
-                title = '$title',
-                category = '$category',
-                songbook = '$songbook',
-                song_text = '$song_text',
-                arr_esquema = '$arr_esquema',
-                tune = '$tune',
-                lang = '$lang',
-                notes = '$notes',
-                updated_at = '$fechaHoraActual'
-            WHERE id_song = '$id_song'
-        ";
+        if (is_array($arr_esquema_array) && !empty($arr_esquema_array) ) {// Es un array y tiene elementos
+            $action_tipo = 'is_update_arr_esquema_ok';
+            //arr_esquema = '$arr_esquema_string', es obligatorio en la consulta
+            $sql2_up_init = "UPDATE songs SET
+                    song_number = '$song_number',
+                    title = '$title',
+                    category = '$category',
+                    songbook = '$songbook',
+                    song_text = '$song_text',
+                    arr_esquema = '$arr_esquema_string',
+                    tune = '$tune',
+                    lang = '$lang',
+                    notes = '$notes',
+                    updated_at = '$fechaHoraActual'
+                WHERE id_song = '$id_song'
+            ";
+            //echo_json_x($sql2_up_init, 'sql2_up_init');
+        }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
+            $action_tipo = 'is_update_arr_esquema_vacio';
+            $sql2_up_init = "UPDATE songs SET
+                    song_number = '$song_number',
+                    title = '$title',
+                    category = '$category',
+                    songbook = '$songbook',
+                    song_text = '$song_text',
+                    arr_esquema = '',
+                    tune = '$tune',
+                    lang = '$lang',
+                    notes = '$notes',
+                    updated_at = '$fechaHoraActual'
+                WHERE id_song = '$id_song'
+            ";
+        }
         //$sql2_up_prep = "UPDATE $tabla SET 
         //            $campo = $sign,
         //            updated_at = '$fechaHoraActual' 
@@ -196,13 +271,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }else{
         
         //hago insert
-        if (is_array($arr_esquema) && !empty($arr_esquema)) {// Es un array y tiene elementos
+        if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
+            $action_tipo = 'is_insert_arr_esquema_ok';
             $sql2_in_init = "INSERT INTO songs 
                     (song_number,      title,    category,    songbook,   song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema_array', '$tune', '$lang', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
+            $action_tipo = 'is_insert_arr_esquema_vacio';
             $sql2_in_init = "INSERT INTO songs 
                     (song_number,      title,    category,    songbook,    song_text,    tune,    lang,    notes,    created_at) 
                 VALUES 
@@ -230,6 +307,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'success' => true,
                 'id_song' => $id_song,
                 'action' => 'is_update',
+                'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos actualizados correctamente.'
             ];
         }else{
@@ -253,6 +331,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'success' => true,
                 'id_song' => $id_song_bd,
                 'action' => 'is_insert',
+                'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos insertados correctamente.'
             ];
         }

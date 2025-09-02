@@ -38,11 +38,11 @@ function echo_json($variable, $name_var = null){
     if($name_var != null){
         echo json_encode([
             $name_var => $variable
-        ]);    
+        ], JSON_UNESCAPED_UNICODE);    
     }else{
         echo json_encode([
             'variable' => $variable
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     }    
     exit;
 }
@@ -51,16 +51,74 @@ function echo_json_x($variable, $name_var = null){//con exit;
     if($name_var != null){
         echo json_encode([
             $name_var => $variable,
+            'funcion' => 'echo_json_x()',
             'hago_exit' => true
         ], JSON_UNESCAPED_UNICODE);    
     }else{
         echo json_encode([
             'variable' => $variable,
+            'funcion' => 'echo_json_x()',
             'hago_exit' => true
         ], JSON_UNESCAPED_UNICODE);
     }    
     exit;
 }
+
+function isValidJson(string $jsonString): bool {
+    // Decodificar sin convertir a array
+    json_decode($jsonString);
+    return (json_last_error() === JSON_ERROR_NONE);
+}
+
+function cleanControlChars(string $jsonString): string {
+    // elimina todos los caracteres de control excepto \n, \r y \t
+    return preg_replace('/[^\P{C}\n\r\t]+/u', '', $jsonString);
+}
+
+function escapeControlChars(string $jsonString): string {
+    // Escapa todos los caracteres de control de ASCII (0-31) excepto \n, \r, \t
+    return preg_replace_callback('/[\x00-\x1F]/', function($matches) {
+        $char = $matches[0];
+        switch ($char) {
+            case "\n": return "\\n";
+            case "\r": return "\\r";
+            case "\t": return "\\t";
+            default:
+                return sprintf("\\u%04x", ord($char));
+        }
+    }, $jsonString);
+}
+
+
+function escapeNewlines(string $jsonString): string {
+    // reemplaza saltos de línea que no estén escapados
+    // Solo reemplaza saltos de línea que no están escapados.
+    // Mantiene intactos los \\n correctos.
+    return preg_replace('/(?<!\\\\)\n/', '\\\\n', $jsonString);
+}
+
+function jsonErrorMessage(string $jsonString): string {
+    json_decode($jsonString);
+    $error = json_last_error();
+
+    switch ($error) {
+        case JSON_ERROR_NONE:
+            return 'OK';
+        case JSON_ERROR_DEPTH:
+            return 'Excedida la profundidad máxima de la pila';
+        case JSON_ERROR_STATE_MISMATCH:
+            return 'Desajuste de modos o underflow';
+        case JSON_ERROR_CTRL_CHAR:
+            return 'Error de carácter de control';
+        case JSON_ERROR_SYNTAX:
+            return 'Error de sintaxis';
+        case JSON_ERROR_UTF8:
+            return 'Caracteres UTF-8 malformados';
+        default:
+            return 'Error desconocido (código ' . $error . ')';
+    }
+}
+
 
 function interpolateQuery($query, $params) {//$params es un array
     // Dividir la consulta en partes utilizando '?' como delimitador

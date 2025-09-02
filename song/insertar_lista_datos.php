@@ -164,19 +164,20 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     // Realizar la inserción o (update) en la base de datos 
     if($hay_id_lista_en_tabla){
+        //hago update
         //echo_json_x($arr_lista_array, 'en hay_id_lista_en_tabla --- arr_lista_array');
-
         if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
+            $action_tipo = 'is_update_arr_lista_ok';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
-                    arr_lista = $arr_lista_string,
+                    arr_lista = '$arr_lista_string',
                     notes = '$notes',
                     fecha = '$fecha',
                     updated_at = '$fechaHoraActual'
                 WHERE id_lista = '$id_lista'
             ";
         }else{//no es array o está vacío. no incluyo arr_lista en la SQL
-            //hago update
+            $action_tipo = 'is_update_arr_lista_vacio';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
                     arr_lista = '',
@@ -197,16 +198,17 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $result2 = $conn->query($sql2_up_init);
         //debug_x($sql2_up_preparada, 'sql2_up_preparada');
         //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');	
-    }else{
-        
+    }else{        
         //hago insert
         if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
+            $action_tipo = 'is_insert_arr_lista_ok';
             $sql2_in_init = "INSERT INTO listas 
                     (  title,   arr_lista,   fecha,    notes,    created_at) 
                 VALUES 
                     ('$title', $arr_lista_string, '$fecha', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_lista en la SQL
+            $action_tipo = 'is_insert_arr_lista_vacio';
             $sql2_in_init = "INSERT INTO listas 
                     (  title,    fecha,    notes,    created_at) 
                 VALUES 
@@ -234,6 +236,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'success' => true,
                 'id_lista' => $id_lista,
                 'action' => 'is_update',
+                'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos actualizados correctamente.'
             ];
         }else{
@@ -257,6 +260,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'success' => true,
                 'id_lista' => $id_lista_bd,
                 'action' => 'is_insert',
+                'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos insertados correctamente.'
             ];
         }

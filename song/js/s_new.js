@@ -20,14 +20,14 @@ function pintSongActive(e, arr, arr_words){//click en tr de la tabla de cancione
 
     const wr_btns_action = document.querySelector('.wr_btns_action');
     wr_btns_action.innerHTML = `
-        <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-        <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-        <button class="btn" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</button>
-        <button class="btn" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</button>
-        <button class="btn" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</button>
-        <button class="btn" onclick="crearSlides()">Crear slides</button>
-        <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-        <button class="btn" onclick="addToLista();">Añadir a la Lista</button>
+        <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+        <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+        <button class="btn btn_big" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</button>
+        <button class="btn btn_big" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</button>
+        <button class="btn btn_big" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</button>
+        <button class="btn btn_big" onclick="crearSlides()">Crear slides</button>
+        <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+        <button class="btn btn_big" onclick="addToLista();">Añadir a la Lista</button>
     `;
 
     //dejo '==' en vez de '===' porque id_song viene como string "925"

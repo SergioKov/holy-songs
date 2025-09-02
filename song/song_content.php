@@ -656,22 +656,39 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <select id="tune" class="sel_opt" required="">
                                                                 <option value="" disabled selected hidden></option>
                                                                 <option value="C">C</option>
+                                                                <option value="Cm">Cm</option>
                                                                 <option value="C#">C#</option>
+                                                                <option value="C#m">C#m</option>
                                                                 <option value="Db">Db</option>
+                                                                <option value="Dbm">Dbm</option>
                                                                 <option value="D">D</option>
+                                                                <option value="Dm">Dm</option>
                                                                 <option value="D#">D#</option>
+                                                                <option value="D#m">D#m</option>
                                                                 <option value="Eb">Eb</option>
+                                                                <option value="Ebm">Ebm</option>
                                                                 <option value="E">E</option>
+                                                                <option value="Em">Em</option>
                                                                 <option value="F">F</option>
+                                                                <option value="Fm">Fm</option>
                                                                 <option value="F#">F#</option>
+                                                                <option value="F#m">F#m</option>
                                                                 <option value="Gb">Gb</option>
+                                                                <option value="Gbm">Gbm</option>
                                                                 <option value="G">G</option>
+                                                                <option value="Gm">Gm</option>
                                                                 <option value="G#">G#</option>
+                                                                <option value="G#m">G#m</option>
                                                                 <option value="Ab">Ab</option>
+                                                                <option value="Abm">Abm</option>
                                                                 <option value="A">A</option>
+                                                                <option value="Am">Am</option>
                                                                 <option value="A#">A#</option>
+                                                                <option value="A#m">A#m</option>
                                                                 <option value="Bb">Bb</option>
+                                                                <option value="Bbm">Bbm</option>
                                                                 <option value="H">H</option>
+                                                                <option value="Hm">Hm</option>
                                                             </select>
                                                             <label for="tune">Tonalidad</label>
                                                         </div>

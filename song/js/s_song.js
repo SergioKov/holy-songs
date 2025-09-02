@@ -1753,8 +1753,73 @@ async function guardarEsquema(){
 
     objSong.arr_esquema = arr_esquema_obj;
 
-    const result = await insertarSongDatos(objSong);
-    console.log('result: ', result);
+    const data = await insertarSongDatos(objSong);
+    console.log('data: ', data);
+
+    if(data.success){
+        
+        // let text_show;
+
+        // switch (data.action_tipo) {
+        //     case 'is_update_arr_esquema_ok':
+        //         text_show = 'Datos de la Canción y su Esquema han sido actualizados con éxito.';
+        //         break;
+        
+        //     case 'is_update_arr_esquema_vacio':
+        //         text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido actualizados con éxito.';
+        //         break;
+        
+        //     case 'is_insert_arr_esquema_ok':
+        //         text_show = 'Datos de la Canción y su Esquema han sido añadidos con éxito.';
+        //         break;
+        
+        //     case 'is_insert_arr_esquema_vacio':
+        //         text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido añadidos con éxito.';
+        //         break;
+                
+        //     default:
+        //         text_show = '1. Aquí texto de resultado de guardar...';
+        //         break;
+        // }
+        // console.log(text_show);
+
+        // form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+        // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+        // if(data.id_song){
+        //     console.log('id_song: ', data.id_song);
+        //     id_song = data.id_song;//guardo el id de la canción recién creada
+        //     objSong = objSongToSend;//reasigno el objeto song con los datos del formulario
+        //     objSong.id_song = id_song;//añado el id_song al objeto song
+
+        //     cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
+        //     cancion_form_container.querySelector('#id_song').value = id_song;
+
+        //     cancion_wr_btns_action.innerHTML = `
+        //         <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+        //         <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+        //         <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+        //     `;
+        // }
+        
+    }else{
+        console.log(`Error al guardar canción.`);
+        
+        // //"Error al registrar el usuario";
+        // console.error(data.error);
+        // console.error(data.dic_code);
+
+        // let error_text = 'Error al guardar la canción.';
+
+        // form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+        // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+    }
+
+
+
+
+
+
 
     crearSlides();
     crear_esquema_btns_actual();//actualizo los botones de esquema actual
@@ -1913,12 +1978,23 @@ async function guardarSong(event){
             cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             return;
         }
+        
+        let arr_esquema_guardar = '';
+        if(arr_esquema_obj.length > 0){
+            arr_esquema_guardar = arr_esquema_obj;//neuvo arr
+        }else{
+            arr_esquema_guardar = objSong.arr_esquema;//de bd
+        }
+        console.log('arr_esquema_guardar: ', arr_esquema_guardar);
+        alert('dorabotat aki ')
+
 
         const objSongToSend = {
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
             song_number: song_number,
             title: title,
-            arr_esquema: '', //no hay esquema al crear/editar una canción. se guarda en guardarEsquema()
+            //arr_esquema: '', //no hay esquema al crear/editar una canción. se guarda en guardarEsquema()
+            arr_esquema: arr_esquema_guardar, //o '' o arr //new
             category: category,
             songbook: songbook,
             tune: tune,
@@ -1928,18 +2004,34 @@ async function guardarSong(event){
         }
         console.log('objSongToSend: ',objSongToSend);
     
-        const data = await insertarSongDatos(objSongToSend);;
+        const data = await insertarSongDatos(objSongToSend);
         console.log('data: ',data);         
 
     
-        if(data.success){                
+        if(data.success){
             
             let text_show;
 
-            if(data.action == 'is_insert'){
-                text_show = 'Canción añadida con éxito.';
-            }else if(data.action == 'is_update'){
-                text_show = 'Canción actualizada con éxito.';
+            switch (data.action_tipo) {
+                case 'is_update_arr_esquema_ok':
+                    text_show = 'Datos de la Canción y su Esquema han sido actualizados con éxito.';
+                    break;
+            
+                case 'is_update_arr_esquema_vacio':
+                    text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido actualizados con éxito.';
+                    break;
+            
+                case 'is_insert_arr_esquema_ok':
+                    text_show = 'Datos de la Canción y su Esquema han sido añadidos con éxito.';
+                    break;
+            
+                case 'is_insert_arr_esquema_vacio':
+                    text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido añadidos con éxito.';
+                    break;
+                    
+                default:
+                    text_show = '1. Aquí texto de resultado de guardar...';
+                    break;
             }
             console.log(text_show);
     
@@ -1956,9 +2048,9 @@ async function guardarSong(event){
                 cancion_form_container.querySelector('#id_song').value = id_song;
 
                 cancion_wr_btns_action.innerHTML = `
-                    <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-                    <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-                    <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+                    <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+                    <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+                    <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
                 `;
             }
            
@@ -2145,10 +2237,26 @@ async function guardarLista(event){
             
             let text_show;
 
-            if(data.action == 'is_insert'){
-                text_show = 'Lista añadida con éxito.';
-            }else if(data.action == 'is_update'){
-                text_show = 'Lista actualizada con éxito.';
+            switch (data.action_tipo) {
+                case 'is_update_arr_esquema_ok':
+                    text_show = 'Datos de la Lista y sus canciones han sido actualizados con éxito.';
+                    break;
+            
+                case 'is_update_arr_esquema_vacio':
+                    text_show = 'Datos de la Lista (SIN CANCIONES) han sido actualizados con éxito.';
+                    break;
+            
+                case 'is_insert_arr_esquema_ok':
+                    text_show = 'Datos de la Lista y sus canciones han sido añadidos con éxito.';
+                    break;
+            
+                case 'is_insert_arr_esquema_vacio':
+                    text_show = 'Datos de la Lista (SIN CANCIONES) han sido añadidos con éxito.';
+                    break;
+                    
+                default:
+                    text_show = 'Aquí texto de resultado de guardar...';
+                    break;
             }
             console.log(text_show);
     
@@ -2784,10 +2892,10 @@ function editar_song(modo){
     handleFormInput(cancion_form_container.querySelector('#song_text'), eid_block_cancion);
 
     cancion_wr_btns_action.innerHTML = `
-        <button class="btn" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-        <button class="btn" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-        <button class="btn" onclick="crearSlides();">Crear slides</button>
-        <button class="btn" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+        <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
+        <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
+        <button class="btn btn_big" onclick="crearSlides();">Crear slides</button>
+        <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
     `;
 
     

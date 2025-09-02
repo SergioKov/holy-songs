@@ -316,3 +316,6 @@ let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');/
 
 let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_esquema, crear_esquema, select_slide]
 //obj_ajustes.sidebarTabActive = sidebarTabActive;
+
+
+let debug = false;//hacer test
