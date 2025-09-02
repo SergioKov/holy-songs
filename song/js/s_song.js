@@ -1126,7 +1126,7 @@ function buildSong(){
         step.dataset.index = i;
 
         let titulo_text;
-        if(esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema[i].veces > 1){//si hay repeticion del titulo
+        if(esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0 && objSongBd.arr_esquema[i].veces > 1){//si hay repeticion del titulo
             titulo_text = `${titulo} <span>x${objSongBd.arr_esquema[i].veces}</span>`;
         }else{
             titulo_text = titulo;
@@ -1244,11 +1244,11 @@ async function crear_esquema_btns_actual(){//para 'bloques wr_vista_btns_actual'
         console.log('el_fieldset_cloned: ', el_fieldset_cloned);
         
 
-        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
+        let titulo_orig = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
         let titulo_text = titulo_orig;
         console.log('titulo_text: ', titulo_text); 
         
-        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
+        let titulo_count_veces = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.veces : 1 ;
         console.log('before --- titulo_count_veces: ', titulo_count_veces); 
         
         if(titulo_count_veces > 1){//si hay repeticion del titulo
@@ -1328,11 +1328,11 @@ async function ver_esquema(){
         console.log('el_fieldset_cloned: ', el_fieldset_cloned);
         
 
-        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
+        let titulo_orig = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
         let titulo_text = titulo_orig;
         console.log('titulo_text: ', titulo_text); 
         
-        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
+        let titulo_count_veces = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.veces : 1 ;
         console.log('before --- titulo_count_veces: ', titulo_count_veces); 
         
         if(titulo_count_veces > 1){//si hay repeticion del titulo
@@ -1612,11 +1612,11 @@ async function select_slide(){
         const el_fieldset_cloned = slide_clone.querySelector('fieldset').cloneNode(true); // true para clonar también hijos
         console.log('el_fieldset_cloned: ', el_fieldset_cloned);        
 
-        let titulo_orig = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
+        let titulo_orig = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.nombre : titulo ;
         let titulo_text = titulo_orig;
         console.log('titulo_text: ', titulo_text); 
         
-        let titulo_count_veces = (objSongBd.arr_esquema) ? objSongBd.arr_esquema[i]?.veces : 1 ;
+        let titulo_count_veces = (esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0) ? objSongBd.arr_esquema[i]?.veces : 1 ;
         console.log('before --- titulo_count_veces: ', titulo_count_veces); 
         
         if(titulo_count_veces > 1){//si hay repeticion del titulo
@@ -1980,14 +1980,21 @@ async function guardarSong(event){
         }
         
         let arr_esquema_guardar = '';
+
         if(arr_esquema_obj.length > 0){
+            console.log('cojo arr_esquema creado nuevo');
             arr_esquema_guardar = arr_esquema_obj;//neuvo arr
         }else{
-            arr_esquema_guardar = objSong.arr_esquema;//de bd
+            //si hay id_song y cancion se edita
+            if(id_song && objSong.arr_esquema){
+                console.log(' cojo arr_esquema de cancion bd');
+                arr_esquema_guardar = objSong.arr_esquema;//de bd
+            }else{//se crea nueva cancion con arr_esquema vacio
+                console.log(' meto arr_esquema vacio ya que se crea una nueva canción');
+                arr_esquema_guardar = [];//vacio
+            }
         }
         console.log('arr_esquema_guardar: ', arr_esquema_guardar);
-        alert('dorabotat aki ')
-
 
         const objSongToSend = {
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
@@ -2255,7 +2262,7 @@ async function guardarLista(event){
                     break;
                     
                 default:
-                    text_show = 'Aquí texto de resultado de guardar...';
+                    text_show = '2. Aquí texto de resultado de guardar...';
                     break;
             }
             console.log(text_show);
@@ -2602,31 +2609,48 @@ async function findWordsSong(){
     objFindParams.buscar_en = buscar_en;
     objFindParams.arr_songbooks_search = arr_songbooks_search;
 
-    const objData = await getSongTextFromBdByFind(objFindParams);
-    console.log('objData: ', objData);
+    objDataSongsBd = await getSongTextFromBdByFind(objFindParams);
+    console.log('objDataSongsBd: ', objDataSongsBd);
 
-    if(esObjeto(objData) && objData.arr_data.length > 0){
+    if(esObjeto(objDataSongsBd) && objDataSongsBd.arr_data.length > 0){
         console.log('hay coincidencias...');
+        
+        //Clono objeto
+        objDataSongs = structuredClone(objDataSongsBd);
+        console.log('objDataSongs: ', objDataSongs);
 
         tbody.innerHTML = '';//reset
 
         eid_titulo_tabla_song.querySelector('b').style.display = 'inline';
-        eid_titulo_tabla_song.querySelector('b').textContent = objData.arr_data.length;
+        eid_titulo_tabla_song.querySelector('b').textContent = objDataSongs.arr_data.length;
 
         //Recorrer canciones encontradas...
-        objData.arr_data.forEach((el, i, arr) => {
+        objDataSongs.arr_data.forEach((el, i, arr) => {
             //console.log('el: ', el);
 
             const tr = document.createElement('tr');
             tr.className = 'tr_song';
             tr.dataset.id = el.id_song;
 
+            let hay_esquema_texto;
+
+            //convierto arr_esquema (string) en array correcto
+            if(esString(el.arr_esquema) && el.arr_esquema != ''){
+                el.arr_esquema = JSON.parse(el.arr_esquema);
+                hay_esquema_texto = 'Sí';
+            }else{
+                el.arr_esquema = [];
+                hay_esquema_texto = '';
+            }
+            console.log('(parseado) --- el.arr_esquema: ', el.arr_esquema);
+
+
             tr.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_song" data-id_song="${el.id_song}" title="${el.id_song}">${el.id_song}</td>
                 <td class="td_numero">${el.song_number || ''}</td>
                 <td class="td_titulo">${el.title}</td>
-                <td class="td_esquema">${el.arr_esquema?.length ? 'Sí' : ''}</td>            
+                <td class="td_esquema">${hay_esquema_texto}</td>            
                 <td class="td_category" data-category="${el.category}">${el.category_name || ''}</td>            
                 <td class="td_songbook" data-songbook="${el.songbook}">${el.songbook_title || ''}</td>            
                 <td class="td_idioma" data-lang_name="${el.lang_name}">${obj_lang_names[el.lang] || el.lang}</td>
@@ -2634,7 +2658,13 @@ async function findWordsSong(){
             `;
 
             tr.onclick = (e)=>{
-                pintSongActive(e, arr, arr_words);//en la ventana a la derecha de la tabla de lista
+                console.log('e.currentTarget: ', e.currentTarget);
+
+                id_song = e.currentTarget.dataset.id;
+                console.log('asigno global --- id_song: ', id_song);               
+                
+                // pintSongActive(e, arr, arr_words);//en la ventana a la derecha de la tabla de lista
+                pintSongActive(arr_words);//en la ventana a la derecha de la tabla de lista
             }//end - tr.onclick
 
             tbody.append(tr);
@@ -2684,25 +2714,41 @@ async function findWordsLista(){
     objFindListaParams.buscar_en = buscar_en;
 
 
-    const objData = await getListaTextFromBdByFind(objFindListaParams);
-    console.log('objData: ', objData);
+    objDataListasBd = await getListaTextFromBdByFind(objFindListaParams);
+    console.log('objDataListasBd: ', objDataListasBd);
 
 
-    if(esObjeto(objData) && objData.arr_data.length > 0){
+    if(esObjeto(objDataListasBd) && objDataListasBd.arr_data.length > 0){
         console.log('hay coincidencias...');
+
+        //Clono objeto
+        objDataListas = structuredClone(objDataListasBd);
+        console.log('objDataListas: ', objDataListas);
 
         tbody_lista.innerHTML = '';//reset
 
         eid_titulo_tabla_lista.querySelector('b').style.display = 'inline';
-        eid_titulo_tabla_lista.querySelector('b').textContent = objData.arr_data.length;
+        eid_titulo_tabla_lista.querySelector('b').textContent = objDataListas.arr_data.length;
 
-        //Recorrer canciones encontradas...
-        objData.arr_data.forEach((el, i, arr) => {
+        //Recorrer listas encontradas...
+        objDataListas.arr_data.forEach((el, i, arr) => {
             console.log('el: ', el);
 
             const tr = document.createElement('tr');
             tr.className = 'tr_lista';
             tr.dataset.id = el.id_lista;
+
+            let hay_lista_texto;
+
+            //convierto arr_esquema (string) en array correcto
+            if(esString(el.arr_lista) && el.arr_lista != ''){
+                el.arr_lista = JSON.parse(el.arr_lista);
+                hay_lista_texto = 'Sí';
+            }else{
+                el.arr_lista = [];
+                hay_lista_texto = '';
+            }
+            console.log('(parseado) --- el.arr_lista: ', el.arr_lista);            
 
             let fecha_str = (el.fecha && el.fecha !== '0000-00-00') ? el.fecha : '' ;
             let diaSemana_val = '';
@@ -2719,11 +2765,16 @@ async function findWordsLista(){
                 <td class="td_titulo">${el.title}</td>
                 <td class="td_dia_semana">${diaSemana_val}</td>            
                 <td class="td_fecha">${fecha_val}</td>            
-                <td class="td_lista">${(el.arr_lista) ? 'Sí' : ''}</td>
+                <td class="td_lista">${hay_lista_texto}</td>
             `;
 
             tr.onclick = (e) => {                
-                pintListaActive(e, arr, arr_words);//en la ventana a la derecha de la tabla de lista
+                console.log('e.currentTarget: ', e.currentTarget);
+    
+                id_lista = e.currentTarget.dataset.id;
+                console.log('asigno global --- id_lista: ', id_lista);                
+                
+                pintListaActive(/*e, arr, */arr_words);//en la ventana a la derecha de la tabla de lista
             }//end - tr.onclick
 
             tbody_lista.append(tr);
@@ -3179,263 +3230,7 @@ async function crearSlidesForSongOfLista(e, lista_id_song) {
 }
 
 
-function pintListaActive(e, arr, arr_words){
-    console.log('=== function pintListaActive(e) === ');
-    
-    console.log('e.currentTarget: ', e.currentTarget);
-    id_lista = e.currentTarget.dataset.id;
-    console.log('asigno global --- id_lista: ', id_lista);
 
-    resetTrSelected(tbody_lista);
-    e.currentTarget.classList.add('selected');
-
-    lista_wr_vista_song.style.gap = '5px';
-    lista_wr_vista_song.innerHTML = `
-        <div class="vista_song_content">...</div>
-    `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
-
-    const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
-    vista_song_content.innerHTML = '';//reset
-
-    const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
-    `;
-
-    //dejo '==' en vez de '===' porque id_song viene como string "925"
-    const objListaBD = arr.find(s => s.id_lista == id_lista);
-    console.log('objListaBD: ', objListaBD);                
-
-    // Normalizamos palabras
-    const arr_normalized = arr_words.map(normalize);
-    console.log('arr_normalized: ', arr_normalized);
-
-    //const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//antes - busco las palabras del input
-    // console.log('regex: ', regex);
-
-    // Creamos regex sin acentos
-    const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
-    console.log('regex: ', regex);
-
-    //Titulo lista
-    if(objListaBD.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objListaBD.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-
-        const d_titulo = document.createElement('div');
-        d_titulo.className = 'parte_lista';
-        d_titulo.innerHTML = `
-            <p class="p_titulo">Título Lista:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-        vista_song_content.append(d_titulo);
-    }
-
-    //Fecha
-    if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
-        //Marco en rojo las palabras encontradas en title 
-        //En BD busco '2025-08-03' 
-        //pero como el formato para mostrar es '03/08/2025'
-        //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
-        let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
-        const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
-        console.log('regex_fecha: ', regex_fecha);
-
-        // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
-        let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
-        fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        console.log('fecha_text_red: ', fecha_text_red);
-
-        const d_fecha = document.createElement('div');
-        d_fecha.className = 'parte_lista';
-        d_fecha.innerHTML = `
-            <p class="p_titulo">Fecha:</p>
-            <p class="texto_norm t_big">${fecha_text_red}</p>
-        `;
-        vista_song_content.append(d_fecha);
-    }
-
-    // resetBlockLista();
-    // resetLineasXinBlock(eid_block_lista);
-
-    //Canciones
-    const d_canciones_lista = document.createElement('div');
-    d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_song_content.append(d_canciones_lista);
-
-    
-    console.log('antes --- objListaBD.arr_lista: ', objListaBD.arr_lista);
-    objLista = structuredClone(objListaBD);//equivale a JSON.parse(JSON.stringify(objListaBD));
-    console.log('ahora --- objLista: ', objLista);
-
-    if(objListaBD.arr_lista == '' || objListaBD.arr_lista == '[]'){
-        objLista.arr_lista = [];
-    }else{
-        objLista.arr_lista = JSON.parse(objListaBD.arr_lista);
-    }
-    console.log('despues --- objLista.arr_lista: ', objLista.arr_lista);
-
-    
-    arr_lista = objLista.arr_lista;//importante. reasigno desde bd
-
-    let arr_lista_bd = objLista.arr_lista;
-    console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
-
-    buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
-
-    if(objListaBD.notes){
-        //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objListaBD.notes.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        const d_notas = document.createElement('div');
-        d_notas.className = 'parte_lista';
-        d_notas.innerHTML = `
-            <p class="p_titulo">Notas:</p>
-            <p class="texto_norm">${notas_text_red}</p>
-        `;
-        vista_song_content.append(d_notas);
-    }
-
-}
-
-
-function pintListaActiveSoloDatos(objLista){
-    console.log('=== function pintListaActiveSoloDatos() === ');
-
-    //comprobar si existe tr_lista de lalista activa
-    const tr_lista = tbody_lista.querySelector(`tr[data-id="${objLista.id_lista}"]`);
-    console.log('tr_lista: ', tr_lista);
-    
-    if(!tr_lista){
-        return;
-    }
-
-    //actualizo datos de tr_lista
-    tr_lista.querySelector('.td_titulo').textContent = objLista.title || 'kuku';
-    tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
-    tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
-    tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? 'Sí' :  '';
-
-    const objListaBD = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objListaBD));
-    console.log('objListaBD: ', objListaBD);
-
-    let words_input = eid_inpt_find_lista.value.trim();
-    let arr_words = [];
-    if(words_input.includes(' ')){
-        arr_words = words_input.split(' ');
-    }else{
-        arr_words = [words_input];
-    }
-
-    
-
-    //resetTrSelected(tbody_lista);
-
-    lista_wr_vista_song.style.gap = '5px';
-    lista_wr_vista_song.innerHTML = `
-        <div class="vista_song_content">...</div>
-    `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
-
-    const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
-    vista_song_content.innerHTML = '';//reset
-
-    const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar lista</button>
-    `;
-
-
-    // Normalizamos palabras
-    //const arr_normalized = arr_words.map(normalize);//modo corto de escribir la func abajo
-    const arr_normalized = arr_words.map( palabra => {
-        return normalize(palabra);
-    });
-    console.log('arr_normalized: ', arr_normalized);
-
-
-    // Creamos regex sin acentos
-    const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
-    console.log('regex: ', regex);
-
-    //Titulo lista
-    if(objListaBD.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objListaBD.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-
-        const d_titulo = document.createElement('div');
-        d_titulo.className = 'parte_lista';
-        d_titulo.innerHTML = `
-            <p class="p_titulo">Título Lista:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-        vista_song_content.append(d_titulo);
-    }
-
-    //Fecha
-    if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
-        //Marco en rojo las palabras encontradas en title 
-        //En BD busco '2025-08-03' 
-        //pero como el formato para mostrar es '03/08/2025'
-        //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
-        let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
-        const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
-        console.log('regex_fecha: ', regex_fecha);
-
-        // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
-        let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
-        fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        console.log('fecha_text_red: ', fecha_text_red);
-
-        const d_fecha = document.createElement('div');
-        d_fecha.className = 'parte_lista';
-        d_fecha.innerHTML = `
-            <p class="p_titulo">Fecha:</p>
-            <p class="texto_norm t_big">${fecha_text_red}</p>
-        `;
-        vista_song_content.append(d_fecha);
-    }
-
-    // resetBlockLista();
-
-    //Canciones
-    const d_canciones_lista = document.createElement('div');
-    d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_song_content.append(d_canciones_lista);
-
-    let arr_lista_bd = objLista.arr_lista;
-    console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
-
-    buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
-
-    if(objListaBD.notes){
-        //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objListaBD.notes.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        const d_notas = document.createElement('div');
-        d_notas.className = 'parte_lista';
-        d_notas.innerHTML = `
-            <p class="p_titulo">Notas:</p>
-            <p class="texto_norm">${notas_text_red}</p>
-        `;
-        vista_song_content.append(d_notas);
-    }
-
-}
 
 
 function eliminarSongDeLista(id_song){

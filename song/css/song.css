@@ -861,10 +861,11 @@ h5 {
     border: 3px solid #505050;
     padding: 10px;
     border-radius: 10px;
-    background: #e5e5e5;
+    background: #ffffff;
     width: fit-content;
     margin: 15px auto;
     color: black;
+    min-width: 260px;
 }
 
 .p_titulo {
@@ -884,7 +885,7 @@ h5 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .p_titulo,
@@ -2149,4 +2150,25 @@ p.p_sm b {
     line-height: normal;
     margin-bottom: 5px;
     font-family: Arial;
+}
+
+
+
+.linea {
+    display: flex;
+    align-items: center;
+    font-style: italic;
+}
+.titulo {
+    margin-right: 8px;
+}
+
+.puntos {
+    flex: 1;
+    border-bottom: 1px dashed #000;
+    margin: 0 8px;
+}
+
+.veces {
+    margin-left: 8px;
 }

@@ -243,6 +243,13 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
 //obtener datos de los ficheros json o de la base de datos
 //let modo_get_song = 'from_json';
 let modo_get_song = 'from_bd';
+
+let objDataSongsBd = {};//objeto con datos de BD de todas las canciones encontradas en 'Buscar' 
+let objDataSongs = {};//objeto con datos de todas las canciones encontradas en 'Buscar' 
+
+let objDataListasBd = {};//objeto con datos de BD de todas las listas encontradas en 'Lista' 
+let objDataListas = {};//objeto con datos de todas las listas encontradas en 'Lista' 
+
 let objSongBd = {};//datos de bd de song
 
 let obj_bloques = {};//elementos html de slides: kuplet, pripev bridge (SIN REPETIRSE)

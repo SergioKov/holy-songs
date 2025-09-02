@@ -76,20 +76,29 @@ $id_song = $conn->real_escape_string($datos['id_song']);//aki importante
 
 //busco si hay registro
 // Preparar y ejecutar la consulta
-$sql_init = "SELECT 
-                id_song, 
-                song_number, 
-                title, 
-                category, 
-                song_text, 
-                arr_esquema, 
-                tune, 
-                notes, 
-                count, 
-                created_at, 
-                updated_at  
-            FROM songs 
-            WHERE id_song = '$id_song'
+$sql_init = "SELECT
+                s.id_song, 
+                s.song_number, 
+                s.title, 
+                s.category,
+                ct.name AS category_name,
+                ct.lang_name AS lang_name,
+                s.songbook,
+                sb.title AS songbook_title,
+                s.song_text, 
+                s.arr_esquema, 
+                s.tune, 
+                s.lang,
+                s.notes, 
+                s.count, 
+                s.created_at, 
+                s.updated_at
+            FROM songs s
+            LEFT JOIN category_translations ct 
+                ON ct.id_category = s.category AND ct.lang = s.lang
+            LEFT JOIN songbooks sb 
+                ON sb.id_songbook = s.songbook
+            WHERE s.id_song = '$id_song'
 ";
 //-- AND id_song = '$id_song'
 //$sql_prep = "SELECT $campo 
@@ -116,9 +125,14 @@ if($result->num_rows > 0){
         'song_number' => $row['song_number'],
         'title' => $row['title'],
         'category' => $row['category'],
+        'category_name' => $row['category_name'],
+        'songbook' => $row['songbook'],
+        'songbook_title' => $row['songbook_title'],
+        'lang_name' => $row['lang_name'],
         'song_text' => $row['song_text'],
         'arr_esquema' => $row['arr_esquema'],
         'tune' => $row['tune'],
+        'lang' => $row['lang'],
         'notes' => $row['notes'],
         'count' => $row['count'],
         'created_at' => $row['created_at'],

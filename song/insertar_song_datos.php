@@ -276,7 +276,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_in_init = "INSERT INTO songs 
                     (song_number,      title,    category,    songbook,   song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema_array', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema_string', '$tune', '$lang', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
             $action_tipo = 'is_insert_arr_esquema_vacio';
