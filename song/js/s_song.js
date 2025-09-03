@@ -1297,8 +1297,8 @@ async function ver_esquema(){
     ver_esquema_wr_vista_blocks.innerHTML = '';//reset
     ver_esquema_wr_btns_action.innerHTML = '';//reset
        
-    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    //eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
+    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
 
     //Recorrer el bucle - partes de song (SIN REPETIRSE)...
     arr_esquema.forEach( (titulo, i, arr) => {
@@ -1413,8 +1413,8 @@ async function crear_esquema(){
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
     crear_esquema_wr_btns_action.innerHTML = '';//reset
 
-    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    //eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
+    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
 
     const sp_prim = document.createElement('span');
     sp_prim.className = 'sp_prim';
@@ -2950,6 +2950,33 @@ function editar_song(modo){
 
     handleFormInput(cancion_form_container.querySelector('#song_text'), eid_block_cancion);
 
+
+    buildEsquemaSoloTitulos(cancion_form_container.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
+
+    let vista_html = '';
+
+    if(objSong.arr_esquema.length > 0){
+        vista_html += `
+            <p class="p_titulo">Esquema:</p>
+        `;
+        objSong.arr_esquema.forEach( (item, i)=>{
+            if(i != 0){
+                vista_html += `
+                    <p class="texto_norm linea">
+                        <span class="titulo">(${item.nombre})</span> 
+                        ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
+                    </p>
+                `;
+            }
+        });
+    }else{
+        vista_html += `
+            <p class="p_titulo">Esquema:</p>
+            <p class="texto_norm">No</p>
+        `;
+    }
+    console.log('vista_html: ' ,vista_html);
+
     cancion_wr_btns_action.innerHTML = `
         <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
         <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
@@ -3234,6 +3261,29 @@ async function crearSlidesForSongOfLista(e, lista_id_song) {
 
     crearSlides();
     closeAll();
+    closeModal(null,true);
+}
+
+
+async function editSongOfLista(e, lista_id_song) {
+    console.log('=== function editSongOfLista() ===');
+
+    resetBlockBuscar();//quito song anterior si hay
+    resetBlockEsquema();
+    resetBlockCancion();
+
+    resetPListaActive();
+    e.currentTarget.classList.add('active');
+
+    id_song = lista_id_song;
+    console.log('lista_id_song: ', lista_id_song);
+
+    //cojo datos de la song de la lista desde BD
+    objSong = await getSongTextFromBd();
+
+    showEdit('cancion');
+    editar_song('editar');
+
     closeModal(null,true);
 }
 

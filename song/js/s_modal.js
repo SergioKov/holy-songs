@@ -540,6 +540,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                 <span class="l_title">${item.title}</span>
                 <span class="l_tune">${item.tune || ''}</span>
                 <span class="l_id">${item.id_song}</span>
+                <span class="l_edit"><img src="images/icon_edit_white.svg"></span>
                 <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>
             `;
             p.onclick = (e) => {
@@ -552,6 +553,14 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                     e.stopPropagation();//evita que se dispare el onclick del padre
 
                     eliminarSongDeLista(lista_id_song);
+
+                }else if(e.target.closest('.l_edit')){
+                    //Editar canción de la lista
+                    console.log('Editar canción de la lista. id_song: ', lista_id_song);
+                    e.stopPropagation();//evita que se dispare el onclick del padre
+
+                    editSongOfLista(e, lista_id_song);
+
                 }else{
                     crearSlidesForSongOfLista(e, lista_id_song);
                 }
@@ -587,7 +596,139 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
         contenedor.append(wr_p_lista);
     }
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function buildEsquemaSoloTitulos(contenedor, arr_esquema_bucle){
+    console.log('=== function buildEsquemaSoloTitulos() ===');
+
+    contenedor.innerHTML = '';//reset - SIEMPRE
+    
+    const wr_p_esquema = document.createElement('div');
+    wr_p_esquema.className = 'wr_p_esquema';
+            
+    //Head
+    const d_esquema_head = document.createElement('div');
+    d_esquema_head.className = 'esquema_head';
+    d_esquema_head.innerHTML = `
+        <span>Esquema:</span>
+        <div>
+            <button class="btn btn_ver_esquema">Ver</button>
+            <button class="btn btn_crear_esquema">Editar</button>
+        </div>
+    `;
+    d_esquema_head.onclick = (e) => {
+        e.preventDefault();
+        console.log('click en esquema_head');
+
+        if(e.target.closest('.btn_ver_esquema')){
+            showEdit('esquema');
+            showVklad(e.currentTarget,'ver_esquema');
+        }
+        
+        if(e.target.closest('.btn_crear_esquema')){
+            showEdit('esquema');
+            showVklad(e.currentTarget,'crear_esquema');
+        }
+    }
+    wr_p_esquema.append(d_esquema_head);
+
+
+    //Body
+    const d_esquema_body = document.createElement('div');
+    d_esquema_body.className = 'canciones_body';
+    wr_p_esquema.append(d_esquema_body);
+
+    if(Array.isArray(arr_esquema_bucle) && arr_esquema_bucle.length > 0){
+
+        //Recorrer array
+        arr_esquema_bucle.forEach((item, i) => {
+            console.log('item: ', item);
+
+            if(i == 0){
+                return;//no dejo mostrar '_titulo_cancion_'
+            }
+
+            const p = document.createElement('p');            
+            p.className = 'p_esquema linea';
+
+            let veces_html = '';
+            if(item.veces > 1){
+                veces_html = `<span class="veces">(x${item.veces})</span>`;
+            }
+
+            p.innerHTML = `
+                <span class="titulo">${item.nombre}</span>
+                ${veces_html}
+            `;
+
+            d_esquema_body.append(p);
+        });
+
+        contenedor.append(wr_p_esquema);        
+
+    }else{//lista vacía
+            
+        const p = document.createElement('p');
+        p.className = 'prim';
+        p.innerHTML = `
+            La esquema por efecto. <br>Las partes de la canción se verán tal cual como en el texto de la canción.
+        `;
+        d_esquema_body.append(p);
+
+        contenedor.append(wr_p_esquema);
+    }
+
 } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function buildListaSort(contenedor, arr_lista_bucle){

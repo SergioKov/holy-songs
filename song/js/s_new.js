@@ -3,7 +3,7 @@
 //============================================================//
 
 
-function pintSongActive(/*e, arr, */arr_words){//click en tr de la tabla de canciones
+function pintSongActive(arr_words){//click en tr de la tabla de canciones
     console.log('=== function pintSongActive(e) === ');
 
     //console.log('e.currentTarget: ', e.currentTarget);
@@ -118,6 +118,11 @@ function pintSongActive(/*e, arr, */arr_words){//click en tr de la tabla de canc
         `;
     }
 
+    //añado contenedor para d_esquema
+    vista_html += `
+        <div class="d_esquema_titulos"></div>
+    `;
+
     if(objSong.notes){
         //Marco en rojo las palabras encontradas en notes 
         let notas_text_red = objSong.notes.replace(regex, (x) => {
@@ -129,29 +134,32 @@ function pintSongActive(/*e, arr, */arr_words){//click en tr de la tabla de canc
         `;
     }
 
-    if(objSong.arr_esquema.length > 0){
-        vista_html += `
-            <p class="p_titulo">Esquema:</p>
-        `;
-        objSong.arr_esquema.forEach( (item, i)=>{
-            if(i != 0){
-                vista_html += `
-                    <p class="texto_norm linea">
-                        <span class="titulo">(${item.nombre})</span> 
-                        ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
-                    </p>
-                `;
-            }
-        });
-    }else{
-        vista_html += `
-            <p class="p_titulo">Esquema:</p>
-            <p class="texto_norm">No</p>
-        `;
-    }
 
+    // if(objSong.arr_esquema.length > 0){
+    //     vista_html += `
+    //         <p class="p_titulo">Esquema:</p>
+    //     `;
+    //     objSong.arr_esquema.forEach( (item, i)=>{
+    //         if(i != 0){
+    //             vista_html += `
+    //                 <p class="texto_norm linea">
+    //                     <span class="titulo">(${item.nombre})</span> 
+    //                     ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
+    //                 </p>
+    //             `;
+    //         }
+    //     });
+    // }else{
+    //     vista_html += `
+    //         <p class="p_titulo">Esquema:</p>
+    //         <p class="texto_norm">No</p>
+    //     `;
+    // }
 
     vista_song_content.innerHTML = vista_html;
+
+    //construllo titulos de esquema después de añadir vista_html al DOM
+    buildEsquemaSoloTitulos(vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 
     resetBlockEsquemaSoloHTML();
     resetBlockCancion();

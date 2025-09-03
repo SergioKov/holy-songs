@@ -1397,7 +1397,8 @@ form > .form_group:last-child {
   margin-bottom: 0px; /* Solo el último hijo directo */
 }
 
-form .d_canciones_lista.parte_lista {
+form .d_canciones_lista.parte_lista ,
+form .d_esquema_titulos.parte_lista {
     margin-bottom: 40px;
 }
 
@@ -1589,6 +1590,28 @@ p.p_aviso a {
     white-space: nowrap;
 }
 
+
+p.p_esquema {
+    background: #000000;
+    width: 100%;
+    display: flex;
+    padding: 5px 10px;
+    gap: 20px;
+    color: white;
+    font-family: arial;
+    border-radius: 3px;
+    /* cursor: pointer; */
+    transition: background-color 0.3s ease;
+    white-space: normal;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+p.p_esquema:hover {
+    background: #494949;
+}
+
+
 p.p_lista {
     background: #000000;
     width: 100%;
@@ -1660,6 +1683,20 @@ p.p_lista:hover {
     height: 2px;
     background: white;
 }
+.l_edit {
+    position: relative;
+    top: 2px;
+}
+.l_edit img {
+    /* background: red; */
+    width: 24px;
+    height: 24px;
+    opacity: 0.4;
+    transition: 0.3s;
+}
+.l_edit img:hover{
+    opacity: 1;
+}
 
 .btn_song_x {
     /* background: #E91E63; */
@@ -1691,18 +1728,22 @@ p.p_lista:hover {
 
 
 
-.wr_p_lista {
+.wr_p_lista,
+.wr_p_esquema
+ {
     /* background: #2196F3; */
     padding: 0px;
     border-radius: 3px;
     overflow: hidden;
 }
-.form_container wr_p_lista {
+.form_container .wr_p_lista {
     border-radius: 5px;
     margin-bottom: 35px;
 }
 
-.canciones_head {
+.canciones_head,
+.esquema_head
+ {
     padding: 5px 5px 5px 10px;
     background: #333333;
     color: white;
@@ -1719,6 +1760,15 @@ p.p_lista:hover {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    width: 100%;
+    position: relative;
+}
+.esquema_body {
+    background: #737373;
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     width: 100%;
     position: relative;
 }
@@ -2262,4 +2312,14 @@ p.p_sm b {
 .btn_inactive {
     opacity: 0.2 !important;
     cursor: not-allowed !important;
+}
+
+
+
+.vista_song_content .d_esquema_titulos {
+    margin-top: 25px;
+}
+
+.esquema_head .btn {
+    min-width: 60px;
 }
