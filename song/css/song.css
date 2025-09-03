@@ -2172,3 +2172,94 @@ p.p_sm b {
 .veces {
     margin-left: 8px;
 }
+
+
+
+
+/* contenedor de los toasts */
+#toast_container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Mostrar */
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Tipos */
+.toast.ok {
+    background: #0fbc57;
+}
+
+.toast.error {
+    background: #f03f2b;
+}
+
+.toast.info {
+    background: #3498db;
+}
+.toast.warn {
+    background: #d57c08;
+}
+
+/* Estilo base del toast */
+.toast {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-width: 220px;
+    max-width: 300px;
+    padding: 12px 12px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s, transform 0.5s;
+    gap: 10px;
+}
+
+/* ocultar */
+.toast.hide {
+    opacity: 0;
+}
+
+/* Mostrar */
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Botón de cerrar */
+.toast .toast_close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+    transition: 0.3s ease;
+}
+.toast .toast_close:hover {
+    background: #ff1100;
+}
+
+
+.btn_inactive {
+    opacity: 0.2 !important;
+    cursor: not-allowed !important;
+}

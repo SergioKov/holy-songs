@@ -1028,7 +1028,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     </div><!--/myModalContent-->
 </div><!--/myModal-->    
 
-
+<!-- contenedor de toasts -->
+<div id="toast_container"></div>
+<!--/ contenedor de toasts -->
     
 <script src="js/s_config.js"></script>
 <script src="js/s_obj_lista.js"></script>

@@ -169,7 +169,13 @@ const eid_h4_text = document.getElementById('h4_text');//text en el header de mo
 //==================================================================//
 
 
-
+//==================================================================//
+//start - toast
+//==================================================================//
+const eid_toast_container = document.getElementById("toast_container");
+//==================================================================//
+//end - toast
+//==================================================================//
 
 
 const arr_titulos = [ //las palabras clave para separar el texto por bloques en buildSong()

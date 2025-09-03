@@ -1096,13 +1096,14 @@ function buildSong(){
         
     }else{//DORABOTAT!!!
         console.log('obj_bloques es vacio: ');
-        alert('obj_bloques es vacio. edita el texto de la cancion para poder separarlo en bloques');
-        
-        // showEdit('cancion');
-        // showBlockName('cancion'); 
-        // editar_song('ver');
-        // return;
+        let aviso_text = `No sa ha podido dividir el texto de la canción en bloques para mostrarla. Edita el texto de la cancion para poder separarlo en bloques. Mira en la pestaña 'Ejemplo' como hacerlo.`;
 
+        showToast('error', aviso_text);
+        
+        showEdit('cancion');
+        editar_song('editar');
+        document.querySelector('#song_text').focus();
+        return;
     }
 
     //recorrer el bucle...
@@ -1317,7 +1318,6 @@ async function ver_esquema(){
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        // const slide_original = obj_bloques[titulo.nombre].slide;//as json
         const slide_original = obj_bloques[titulo].slide;//bd
         console.log('slide_original: ', slide_original);
         
@@ -1365,13 +1365,17 @@ async function ver_esquema(){
             const song_element_fieldset = song_element_legend.closest('fieldset');
             resetFldActive(ver_esquema_song_bloques);            
             song_element_fieldset.classList.add('fld_active');
-            song_element_fieldset.scrollIntoView({behavior: 'smooth'});            
+            //song_element_fieldset.scrollIntoView({behavior: 'smooth'});
+            //scrollToElement(document.querySelector('.bl_parte_l .vklad_ver_esquema .bloques_outer'), song_element_fieldset);            
+            scrollIntoViewInContainer(document.querySelector('.bl_parte_l .vklad_ver_esquema .bloques_outer'), song_element_fieldset, true, 'top');            
             
             const element_legend = ver_esquema_wr_vista_blocks.querySelectorAll('legend')[e.currentTarget.dataset.idx];
             const element_fieldset = element_legend.closest('fieldset');
             resetFldActive(ver_esquema_wr_vista_blocks);            
             element_fieldset.classList.add('fld_active');
-            element_fieldset.scrollIntoView({behavior: 'smooth'});
+            //element_fieldset.scrollIntoView({behavior: 'smooth'});
+            //scrollToElement(document.querySelector('.bl_parte_r .vklad_ver_esquema .bloques_outer'), element_fieldset);
+            scrollIntoViewInContainer(document.querySelector('.bl_parte_r .vklad_ver_esquema .bloques_outer'), element_fieldset, true, 'top');
         }
         
         ver_esquema_wr_vista_btns.append(btn_simple);
@@ -2042,8 +2046,10 @@ async function guardarSong(event){
             }
             console.log(text_show);
     
-            form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            //form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+            //cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('ok', text_show, 5000);
 
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
@@ -2070,8 +2076,10 @@ async function guardarSong(event){
 
             let error_text = 'Error al guardar la canción.';
     
-            form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            //form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+            //cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('error', error_text, 5000);
         }
     
     } catch (error) {

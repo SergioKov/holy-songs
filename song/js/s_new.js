@@ -840,3 +840,115 @@ function openDiv(divElement){
         }
     },300);//300 es 0.3s de transition css
 }
+
+
+
+
+
+
+
+
+
+function showToast(tipo = 'info', mensaje, duration = null) {
+    
+    // Crear toast
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.innerHTML = `
+      <div class="toast_mensaje">${mensaje}</div>
+      <!-- aki btn de cerrar toast -->
+    `;
+
+    //si no hay duration, muestro btn de cerrar
+    if(!duration || duration  <= 1000){
+        let ejemplo_btn = '<button class="toast_close" onclick="this.parentElement.remove()">×</button>';
+
+        const toast_close = document.createElement('button');
+        toast_close.className = 'toast_close';
+        toast_close.textContent = '×';
+        toast_close.onclick = (e) =>{
+            e.currentTarget.parentElement.remove();
+        }
+        //añado al toast
+        toast.append(toast_close);
+    }
+
+    //Añado al DOM
+    eid_toast_container.appendChild(toast);
+
+    // Forzar reflow para activar transición
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    if(duration > 1000){
+       console.log('hay duration: ', duration);
+        // Auto eliminar
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 1000);
+        }, duration);
+    }
+}
+
+
+function scrollToElement(contenedor, elemento) {
+    //const contenedor = document.getElementById("contenedor");
+    //const elemento = document.getElementById(id);
+
+    // Calcular posición relativa del elemento dentro del contenedor
+    const offsetTop = elemento.offsetTop - contenedor.offsetTop;
+
+    // Ajustar scrollTop del contenedor
+    contenedor.scrollTo({
+        top: offsetTop,
+        behavior: "smooth"
+    });
+}
+
+
+
+
+/**
+ * Hace que un elemento se muestre dentro de su contenedor sin mover el resto de la página
+ * @param {HTMLElement} container - Contenedor con overflow scroll/auto
+ * @param {HTMLElement} element - Elemento a mostrar
+ * @param {boolean} smooth - Si true hace scroll suave
+ * @param {string} block - 'top', 'center' hace scroll al top de contenedor o el centro verticalmente
+ */
+function scrollIntoViewInContainer(container, element, smooth = true, block = 'top') {
+    if (!element || !container) return;
+
+    // Posición del elemento relativa al contenedor
+    const elementTop = element.offsetTop - container.offsetTop;
+    const elementHeight = element.offsetHeight;
+    const containerHeight = container.clientHeight;
+
+    let targetScroll;
+    let margin_top = 0;
+
+    if (block === 'top') {
+        // Scroll para alinear el elemento con la parte superior del contenedor
+        targetScroll = elementTop + margin_top;
+    } else if (block === 'center') {
+        // Scroll para centrar el elemento en el contenedor
+        targetScroll = elementTop - (containerHeight / 2) + (elementHeight / 2) + margin_top;
+    } else {
+        // Por defecto usamos 'top'
+        targetScroll = elementTop + margin_top;
+    }
+
+    // Evitar scroll negativo
+    if (targetScroll < 0) targetScroll = 0 + margin_top;
+
+    // Evitar pasar del máximo scroll
+    const maxScroll = container.scrollHeight - containerHeight;
+    if (targetScroll > maxScroll) targetScroll = maxScroll;
+
+    // Aplicar scroll
+    if (smooth && 'scrollTo' in container) {
+        container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    } else {
+        container.scrollTop = targetScroll;
+    }
+}

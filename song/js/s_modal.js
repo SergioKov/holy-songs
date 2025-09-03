@@ -724,7 +724,7 @@ async function getSongTextFromBd(){
             let song_title = data.title; 
             let song_text = data.song_text; 
             // data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : data.arr_esquema ; 
-            data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : [] ;// test arr vacio 
+            data.arr_esquema = (esString(data.arr_esquema) && data.arr_esquema != '' && data.arr_esquema.length > 0) ? JSON.parse(data.arr_esquema) : [] ;// test arr vacio 
 
             console.log(`id_song: [${id_song}] --- song_title: [${song_title}] --- song_text: [${song_text}] --- data.arr_esquema: `, data.arr_esquema);
 
