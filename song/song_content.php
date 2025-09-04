@@ -12,6 +12,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     <title>Song</title>
     <link rel="icon" type="image/png" href="../images/hs.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="./css/song.css">
     <link rel="stylesheet" href="./css/song_modal.css">
     <link rel="stylesheet" href="./css/song_scroll.css">
@@ -23,20 +24,25 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 <body>
 
+    <!-- Header de arriba - contenedor de ajustes de Transponer... -->
     <header>
-
+        
+        <!-- Boton hamburguesa Menu a la Izquierda -->
         <div id="btn_menu" class="shown">
             <div class="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-        </div>
-
+        </div><!--/#btn_menu-->
+        
+        <!-- Boton L de Lista a la Derechaa -->
         <div id="btn_lista_fix" class="shown" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">
             <span>L</span>
-        </div>
+        </div><!--/#btn_lista_fix-->
 
+        
+        <!-- Menu de Header arriba - contenedor de transponer arriba ... -->
         <div id="menu_contenido" class="elementos_modales">
             <div id="menu_contenido_inner">
 
@@ -78,8 +84,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                 </div>
 
             </div>
-        </div>
-
+        </div><!--/#menu_contenido-->
+        
+        <!-- Puntos Menu - contenedor de menu desplegable... -->
         <div id="puntosMenu" class="elementos_modales">
             <ul>
                 <li onclick="showEdit('buscar')">Buscar</li>
@@ -93,19 +100,20 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/home">Salir de Song a Home</a></li>
             </ul>
-        </div>
+        </div><!--/#puntosMenu-->
 
-
-
+        
+        <!-- barra_estado - contenedor de steps... -->
         <div class="barra_estado">
             <div class="steps_container">
                 <div class="step" data-index="0">Instrucción:</div>
             </div>
-        </div>
+        </div><!--/.barra_estado-->
 
-    </header>
+    </header><!--/header--><!---->
 
 
+    <!-- Carousel - contenedor de slides... -->
     <div id="carousel">
         <div class="slide_container">
 
@@ -123,12 +131,15 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
         </div><!--/.slide_container-->
-    </div><!--/#carousel-->
+    </div><!--/#carousel--><!---->
 
 
+    <!-- Calculando - texto a mostrar mientras se calcula font-size... -->
     <div id="calculando">Calculando el tamaño de texto.... <br>Espera.</div>
+    <!--/#calculando -  --><!---->
 
 
+    <!-- Edit Contenido -  -->
     <div id="edit_contenido" class="elementos_modales shown">
         <div id="edit_contenido_inner">
 
@@ -139,33 +150,41 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                         <span class="close" onclick="hideEdit()">✕</span><!-- x -->
                     </h4>
                 </div>
-            </div><!--/.edit_body-->
+            </div><!--/.edit_head-->
 
 
             <div class="edit_body">
                 <div class="inner">
-
-                    <div class="wr_head_body">
-
+                    
+                    <!--.bl_outer-->
+                    <div class="bl_outer">
+                        
+                        <!--.bl_head-->
                         <div class="bl_head">
                             <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar">Buscar</div>
                             <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema">Esquema</div>
                             <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion">Canción</div>
                             <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo">Ejemplo</div>
                             <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista">Lista</div>
-                        </div>
-
+                        </div><!--/.bl_head-->
+                        
+                        <!--.bl_body-->
                         <div class="bl_body">
 
-
+                            <!--/#block_buscar-->
                             <div id="block_buscar" class="edit_blocks">
-                                <div class="bl_partes">
+                                
+                                <div id="block_buscar_head" class="edit_blocks_head">
+                                    <button class="btn">btn 1</button>
+                                    <button class="btn">btn 2</button>
+                                </div><!--/#block_buscar_head-->
+    
+                            
+                                <div id="block_buscar_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
 
-                                        <H4>Selecciona canción</H4>
-
-                                        <h5>Buscar:</h5>
+                                        <H4>Buscar canción:</H4>
                                         <div class="wr_nav">
                                             <div class="wr_inpt_x">
                                                 <input
@@ -182,7 +201,104 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
                                             </button>
 
+                                            <button id="btn_find_settings" class="btn btn_set" onclick="hideShowDiv('bl_find_settings');" data-dic="" title="Ajustes">
+                                                <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
+                                            </button>
+
                                         </div><!--/.wr_nav-->
+
+
+                                        <div id="bl_find_settings" class="bl_set" style="display:none;">
+                                            <div class="bl_set_inner bl_closed">
+                                                <div class="inner_content">
+
+                                                    <div class="wr_title_btn_close">
+                                                        <span>Marca parametros de búsqueda:</span>
+                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_settings'))">✕</span>
+                                                    </div>                                                    
+
+                                                    <h5>Modo de búsqueda:</h5>
+                                                    <div class="wr_sel_song m_0">
+                                                        <select id="modo" class="sel_song">
+                                                            <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                                            <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                            <option value="3">3) Coincidir al menos una palabra</option>
+                                                            <option value="4">4) Palabras en el orden establecido</option>
+                                                            <option value="5">5) Frase exacta</option>
+                                                            <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <h5>Campos de búsqueda:</h5>
+                                                    <div class="wr_sel_song">
+                                                        <select id="buscar_en" class="sel_song">
+                                                            <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
+                                                            <option value="2">2) Todos los campos disponibles (lento)</option>
+
+                                                            <option value="3">3) Todos los campos de texto disponibles</option>
+                                                            <option value="4">4) Sólo el título de canción</option>
+                                                            <option value="5">5) Sólo el texto de canción</option>
+                                                            <option value="6">6) Sólo las notas de canción</option>
+                                                            <option value="7">7) Identificador y número de canción</option>
+                                                            <option value="8">8) Sólo el identificador de canción</option>
+                                                            <option value="9">9) Sólo el número de canción</option>
+                                                            <option value="10">10) Sólo el identificador de categoría</option>
+                                                            <option value="10">10) Sólo el nombre de categoría</option>
+                                                            <option value="11">11) Sólo el idioma</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div id="d_sel_songbooks" class="wr_sb m_0">
+                                            <h5>Songbooks donde buscar (separados por coma):</h5>
+                                            <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>
+
+                                            <div id="bl_songbook_search" class="bl_set" style="display: none;">
+                                                <div class="bl_set_inner bl_closed" style="overflow: auto;">
+                                                    <div class="inner_content">
+
+                                                        <div class="wr_title_btn_close">
+                                                            <span>Marca parametros de búsqueda:</span>
+                                                            <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
+                                                        </div>
+                                                        
+                                                        <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+
+                                                        <div id="wr_sb_checkboxes" class="wr_checkboxes">
+                                                            <label>
+                                                                <p>
+                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                    <span>Songbook 1</span>
+                                                                </p>
+                                                            </label>
+                                                            <label>
+                                                                <p>
+                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                    <span>Songbook 1</span>
+                                                                </p>
+                                                            </label>
+                                                            <label>
+                                                                <p>
+                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                    <span>Songbook 1</span>
+                                                                </p>
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div><!--/#d_sel_songbooks-->
+
+
+
+
+
 
 
                                         <h5 style="display:none;">Filtrar en los títulos de canciones presentes en la tabla abajo:</h5>
@@ -204,75 +320,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_nav-->
 
 
-                                        <div id="d_sel_songbooks" class="wr_sb m_0">
-                                            <h5>Songbooks donde buscar (separados por coma):</h5>
-                                            <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>
 
-                                            <div id="bl_songbook_search" class="bl_set" style="display: none;">
-                                                <div class="bl_set_inner bl_closed" style="overflow: auto;">
-                                                    <div class="inner_content">
-                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
-
-                                                        <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
-                                                        <div id="wr_sb_checkboxes">
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </div><!--/.wr_sb-->
-
-                                        <h5>Modo de búsqueda:</h5>
-                                        <div class="wr_sel_song m_0">
-                                            <select id="modo" class="sel_song">
-                                                <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
-                                                <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                <option value="3">3) Coincidir al menos una palabra</option>
-                                                <option value="4">4) Palabras en el orden establecido</option>
-                                                <option value="5">5) Frase exacta</option>
-                                                <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                            </select>
-                                        </div>
-
-                                        <h5>Campos de búsqueda:</h5>
-                                        <div class="wr_sel_song">
-                                            <select id="buscar_en" class="sel_song">
-                                                <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
-                                                <option value="2">2) Todos los campos disponibles (lento)</option>
-
-                                                <option value="3">3) Todos los campos de texto disponibles</option>
-                                                <option value="4">4) Sólo el título de canción</option>
-                                                <option value="5">5) Sólo el texto de canción</option>
-                                                <option value="6">6) Sólo las notas de canción</option>
-                                                <option value="7">7) Identificador y número de canción</option>
-                                                <option value="8">8) Sólo el identificador de canción</option>
-                                                <option value="9">9) Sólo el número de canción</option>
-                                                <option value="10">10) Sólo el identificador de categoría</option>
-                                                <option value="10">10) Sólo el nombre de categoría</option>
-                                                <option value="11">11) Sólo el idioma</option>
-                                            </select>
-                                        </div>
 
                                         <h5 id="titulo_tabla_song" class="titulo_tabla">Canciones encontradas: <b></b></h5>
                                         <div class="wr_tabla">
@@ -313,9 +361,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     </div>
 
                                     <div class="partes bl_parte_r">
-                                        <h4>Vista previa</h4>
-
-                                        <h5>Texto de la canción seleccionada:</h5>
+                                        
+                                        <h4>Vista previa:</h4>
                                         <div class="bloques_outer">
                                             <div class="bloques wr_vista_song">
                                                 <div class="vista_song_content">
@@ -334,30 +381,30 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div>
 
-                                </div>
+                                </div><!--/#block_buscar_body-->
+
                             </div><!--/#block_buscar-->
 
-
+                            <!--#block_esquema-->
                             <div id="block_esquema" class="edit_blocks">
 
                                 <div id="block_esquema_head" class="edit_blocks_head">
-                                    <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver esquema</button>
-                                    <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear esquema</button>
-                                    <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Select Slide</button>
-                                </div>
+                                    <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
+                                    <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
+                                    <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                </div><!--/#block_esquema_head-->
 
 
-
-                                <div class="bl_partes">
+                                <div id="block_esquema_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l" style="width: 43%;">
 
                                         <div class="vklad_ver_esquema vklads" style="display: block;">
-                                            <H4>1. Esquema actual de la canción</H4>
-                                            <h5>Bloques únicos con las que se construye la canción:</h5>
+                                            <H4>1. Bloques actuales:</H4>
                                             <div class="bloques_outer">
                                                 <div class="bloques song_bloques solo_ver">
                                                     <!-- aki bloques de la cancion -->
+                                                    <p class="prim">Bloques únicos con las que se construye la canción</p>
                                                     <p class="prim">No has seleccionado la canción para ver su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Ver esquema'</b> en la vista previa de la canción...</p>
                                                 </div>
                                             </div>
@@ -365,11 +412,11 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                         <div class="vklad_crear_esquema vklads" style="display: none;">
-                                            <H4>2. Crear esquema nueva de la canción</H4>
-                                            <h5>Bloques únicos con las que se construye la canción:</h5>
+                                            <H4>2. Crear esquema nueva</H4>
                                             <div class="bloques_outer">
                                                 <div class="bloques song_bloques">
                                                     <!-- aki bloques de la cancion -->
+                                                    <p class="prim">Bloques únicos con las que se construye la canción</p>
                                                     <p class="prim">No has seleccionado la canción para crear su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Crear esquema'</b> en la vista previa de la canción...</p>
                                                 </div>
                                             </div>
@@ -378,10 +425,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                         <div class="vklad_select_slide vklads" style="display: none;">
                                             <H4>3. Diapositivas</H4>
-                                            <h5>Selecciona una diapositiva de las disponibles para mostrar:</h5>
                                             <div class="bloques_outer">
                                                 <div class="bloques song_bloques">
                                                     <!-- aki bloques de la cancion -->
+                                                    <p class="prim">Selecciona una diapositiva de las disponibles para mostrar</p>
                                                     <p class="prim">No has seleccionado la canción para mostrar su texto para el público. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Pantalla'</b> en la vista previa de la canción...</p>
                                                 </div>
                                             </div>
@@ -394,8 +441,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="partes bl_parte_c" style="width: 14%;">
 
                                         <div class="vklad_ver_esquema vklads" style="display: block;">
-                                            <h4>1. Esquema minimizada</h4>
-                                            <h5>Estructura actual corta:</h5>
+                                            <h4>1. Esquema actual:</h4>
+                                            
                                             <div class="bloques_outer">
                                                 <div class="bloques wr_vista_btns">
                                                     <!-- aki botones vista previa -->
@@ -406,8 +453,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                         <div class="vklad_crear_esquema vklads" style="display: none;">
-                                            <h4>2. Esquema minimizada</h4>
-                                            <h5>Nueva estructura corta:</h5>
+                                            <h4>2. Esquema nueva corta</h4>
+
                                             <div class="bloques_outer">
                                                 <div class="bloques wr_vista_btns">
                                                     <!-- aki botones vista previa -->
@@ -426,8 +473,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                         <div class="vklad_select_slide vklads" style="display: none;">
-                                            <h4>3. Esquema minimizada</h4>
-                                            <h5>Estructura actual corta:</h5>
+                                            <h4>3. Esquema actual corta:</h4>
 
                                             <div id="contenedor_nav_pantalla">
                                                 <div id="wr_btns_pantalla">
@@ -470,8 +516,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="partes bl_parte_r" style="width: 43%;">
 
                                         <div class="vklad_ver_esquema vklads" style="display: block;">
-                                            <h4>1. Vista previa</h4>
-                                            <h5>Estructura de la canción (bloques pueden repetirse):</h5>
+                                            <h4>1. Vista actual:</h4>
+
                                             <div class="bloques_outer">
                                                 <div class="bloques wr_vista_blocks">
                                                     <!-- aki vista previa -->
@@ -486,8 +532,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                         <div class="vklad_crear_esquema vklads" style="display: none;">
-                                            <h4>2. Vista previa</h4>
-                                            <h5>Nueva estructura de la canción:</h5>
+                                            <h4>2. Estructura nueva:</h4>
+
                                             <div class="bloques_outer">
                                                 <div class="bloques wr_vista_blocks">
                                                     <!-- aki vista previa -->
@@ -502,9 +548,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                         <div class="vklad_select_slide vklads" style="display: none;">
-
-                                            <h4>3. Vista previa</h4>
-                                            <h5>Diapositiva actual:</h5>
+                                            <h4>3. Diapositiva actual:</h4>
 
                                             <div class="bloques_outer">
                                                 <div class="bloques wr_vista_blocks wr_full_block">
@@ -531,13 +575,11 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div><!--/.bl_parte_r-->
 
-                                </div>
-
-
+                                </div><!--/#block_esquema_body-->
 
                             </div><!--/#block_esquema-->
 
-
+                            <!--#block_cancion-->
                             <div id="block_cancion" class="edit_blocks">
 
                                 <div id="block_cancion_head" class="edit_blocks_head">
@@ -546,9 +588,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva canción</button>
                                     <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar canción</button>
                                     <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
-                                </div>
+                                </div><!--/#block_cancion_head-->
 
-                                <div class="bl_partes">
+
+                                <div id="block_cancion_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
                                         <H4>Datos de la canción</H4>
@@ -751,11 +794,11 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div>
 
-                                </div>
+                                </div><!--/#block_cancion_body-->
 
                             </div><!--/#block_cancion-->
 
-
+                            <!--#block_ejemplo-->
                             <div id="block_ejemplo" class="edit_blocks">
 
                                 <div id="block_ejemplo_head" class="edit_blocks_head">
@@ -763,9 +806,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Пример (Рус.)</button>
                                     <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Ejemplo (Esp.)</button>
                                     <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Example (Eng.)</button>
-                                </div>
+                                </div><!--/#block_ejemplo_head-->
 
-                                <div class="bl_partes">
+
+                                <div id="block_ejemplo_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
                                         <H4>Ejemplo de canción</H4>
@@ -809,15 +853,11 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div>
 
-                                </div>
-
-
-
-
+                                </div><!--/#block_ejemplo_body-->
 
                             </div><!--/#block_ejemplo-->
 
-
+                            <!--#block_lista-->
                             <div id="block_lista" class="edit_blocks d-block">
 
                                 <div id="block_lista_head" class="edit_blocks_head">
@@ -827,9 +867,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
                                     <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
                                     <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
-                                </div>
+                                </div><!--/#block_lista_head-->
 
-                                <div class="bl_partes">
+                                <div id="block_lista_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
 
@@ -934,24 +974,24 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                     </div>
 
-                                </div>
+                                </div><!--/#block_lista_body-->
+
                             </div><!--/#block_lista-->
 
 
                         </div><!--/.bl_body-->
 
-                    </div>
+                    </div><!--/.bl_outer-->
 
-                </div>
+                </div><!--/.inner-->
             </div><!--/.edit_body-->
 
 
         </div><!--/edit_contenido_inner-->
-    </div><!--/edit_contenido-->
+    </div><!--/edit_contenido--><!---->
 
 
-
-    <!-- The Modal -->
+    <!-- Modal -->
     <div id="myModal" class="modal">
 
         <!-- Modal Content -->
@@ -1028,11 +1068,13 @@ include __DIR__ . '/../includes/templates/check_auth.php';
             </div><!--/wr_modcont-->
 
         </div><!--/myModalContent-->
-    </div><!--/myModal-->
+    </div><!--/myModal--><!---->
 
-    <!-- contenedor de toasts -->
+
+    <!-- Contenedor de Toasts - ventanas emergentes -->
     <div id="toast_container"></div>
-    <!--/ contenedor de toasts -->
+    <!--/ contenedor de toasts --><!---->
+
 
     <script src="js/s_config.js"></script>
     <script src="js/s_obj_lista.js"></script>
@@ -1044,5 +1086,4 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     <script src="js/s_test.js"></script>
 
 </body>
-
 </html>

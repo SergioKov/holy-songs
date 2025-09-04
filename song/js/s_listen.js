@@ -203,6 +203,7 @@ eid_edit_contenido.addEventListener('click', (e) => {
         //console.log('click en el elemento = e.target: ', e.target);
 
         //alert('1. click fuera de block bl_songbook_search');
+        closeDiv(document.querySelector('#bl_find_settings'));
         closeDiv(document.querySelector('#bl_songbook_search'));
     }
 

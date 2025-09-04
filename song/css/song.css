@@ -787,7 +787,7 @@ legend span {
     display: flex;
     gap: 3px;
     justify-content: flex-start;
-    overflow: auto;
+    overflow-x: auto;
 }
 .bl_body {
     background: grey;
@@ -826,8 +826,7 @@ legend span {
 }
 
 .partes h4 {
-    border-bottom: 1px solid #404040;
-    padding: 0px 0 10px;
+    padding: 0px 0 5px;
 }
 h5 {
     padding: 10px 0 5px;
@@ -992,6 +991,14 @@ b.c_green {
     height: 24px;
 }
 
+.btn_set img {
+    position: relative;
+    top: 2px;
+    width: 24px;
+    height: 24px;
+    left: -1px;
+}
+
 #inpt_find,
 #inpt_find_lista
  {
@@ -1111,9 +1118,17 @@ tr.selected td.td_n {
     margin-bottom: 10px;
     position: relative;
 }
+
 .bl_parte_l .bloques_outer{
     background: #454545;
 }
+.bl_parte_c .bloques_outer{
+    background: #000000;
+}
+.bl_parte_r .bloques_outer{
+    background: #000000;
+}
+
 .datos_eliminados::before {
     content: ' ';
     height: 18px;
@@ -1162,9 +1177,24 @@ tr.selected td.td_n {
 .wr_vista_btns {
     background: #000000;
 }
+
+.wr_esquema_actual {
+    display: block;
+    padding: 5px;
+    margin: 5px;
+}
+.wr_esquema_actual h5 {
+    color: white;
+    background: #454545;
+    padding: 5px 10px;
+    border-radius: 3px 3px 0 0;
+}
 .wr_vista_btns_actual {
     background: #bdbdbd;
+    border-radius: 0 0 5px 5px;
 }
+
+
 .vert_linea {
     background: #909090;
     height: 10px;
@@ -2074,14 +2104,14 @@ p.p_sm b {
 #contenedor_sb {
     position: relative;
 }
-#wr_sb_checkboxes {
+.wr_checkboxes {
     display: flex;
     gap: 5px;
     flex-direction: column;
     color: white;
 }
 
-#wr_sb_checkboxes label {
+.wr_checkboxes label {
     display: flex;
     gap: 10px;
     background: darkslategrey;
@@ -2094,7 +2124,7 @@ p.p_sm b {
     cursor: pointer;
 }
 
-#wr_sb_checkboxes p {
+.wr_checkboxes p {
     display: flex;
     gap: 10px;
     background: brown;
@@ -2106,7 +2136,7 @@ p.p_sm b {
     border-radius: 3px;
 }
 
-#wr_sb_checkboxes input[type="checkbox"] {
+.wr_checkboxes input[type="checkbox"] {
     width: auto;
 }
 
@@ -2140,16 +2170,28 @@ p.p_sm b {
     padding: 5px;
 }
 
+
+.wr_title_btn_close {
+    /* background: green; */
+    margin-bottom: 10px;
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
 .bl_set_inner .sp_close {
-    position: absolute;
-    right: 8px;
-    top: 8px;
+    /* position: absolute; */
+    /* right: 8px; */
+    /* top: 8px; */
+    font-size: 18px;
 }
 
 .bl_set_inner .inner_content {
     background: #FF9800;
     margin: 0px;
-    padding: 10px;
+    padding: 5px;
 }
 .bl_set_inner .inner_content h4 {
     border-bottom: 1px solid #5e5e5e;
@@ -2323,3 +2365,8 @@ p.p_sm b {
 .esquema_head .btn {
     min-width: 60px;
 }
+
+
+
+
+
