@@ -2564,13 +2564,13 @@ function hideEdit(){
 function mySizeEdit(){
     console.log('=== function mySizeEdit() ===');    
     
-    let edit_body_max_h = 
+    let edit_body_h = 
       window.innerHeight 
     - ecl_edit_head.offsetHeight 
     ;
 
-    console.log('edit_body_max_h: ', edit_body_max_h);    
-    ecl_edit_body.style.maxHeight = edit_body_max_h + 'px';//comento para no duplicat
+    console.log('edit_body_h: ', edit_body_h);    
+    ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicat
 }
 
 
@@ -2629,8 +2629,30 @@ async function findWordsSong(){
 
         tbody.innerHTML = '';//reset
 
+        
         eid_titulo_tabla_song.querySelector('b').style.display = 'inline';
         eid_titulo_tabla_song.querySelector('b').textContent = objDataSongs.arr_data.length;
+        
+        
+        eid_sp_icon_filtro.classList.remove('d-none');//muestro el boton de filtro
+        //eid_d_filter_results.style.display = 'block';//muestro el contenedor de filtro
+
+        //Parametros para filtrar resultados de buscar
+        const contenedor_filtro = eid_d_filter_results;
+        const sp_icon_filtro = eid_sp_icon_filtro;
+        const el_input = eid_inpt_filter;
+        const selector_items = '.tr_song';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        const arr_spans = [
+            '.td_id_song',    
+            '.td_numero',    
+            '.td_titulo',    
+            '.td_esquema',    
+            '.td_category',    
+            '.td_songbook',    
+            '.td_idioma',  
+            '.td_tonalidad'
+        ];//se buscará texto en cada elemento de estos span's
+        addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
 
         //Recorrer canciones encontradas...
         objDataSongs.arr_data.forEach((el, i, arr) => {
@@ -2679,6 +2701,10 @@ async function findWordsSong(){
         });
     }else{
         console.log('no hay coincidencias...');
+        
+        eid_sp_icon_filtro.classList.remove('d-none');//oculto el boton de filtro ya que no hay nada para filtrar
+        //eid_d_filter_results.style.display = 'none';//oculto el contenedor de filtro
+        
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" class="td_no_data">

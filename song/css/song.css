@@ -247,13 +247,14 @@ header:not(#myModal header) {
     background: #333;
     overflow: hidden;
     display: flex;
-    justify-content: space-between;
     flex-wrap: nowrap;
     flex-direction: column;
+    height: 100vh;
+    /* justify-content: space-between; */
 }
 
 .edit_head {
-    /* background: pink; */
+    background: purple;
 }
 .edit_body {
     background: #494949;
@@ -791,8 +792,9 @@ legend span {
 }
 .bl_body {
     background: grey;
+    background: pink;
+    overflow: hidden;
 }
-
 
 
 .bl_partes {
@@ -829,7 +831,7 @@ legend span {
     padding: 0px 0 5px;
 }
 h5 {
-    padding: 10px 0 5px;
+    padding: 15px 0 5px;
 }
 
 .wr_sel_song {
@@ -936,9 +938,8 @@ b.c_green {
     gap: 5px;
     justify-content: space-between;
 }
-#inpt_nav, 
-#inpt_find, 
-#inpt_find_lista 
+
+.inpt_vvod 
 {
     padding: 3px 3px 3px 5px;
     width: 100%;
@@ -951,6 +952,7 @@ b.c_green {
     font-size: 1.3rem;/*18px;*/
     margin-left: 0px;
 }
+
 .wr_inpt_x {
     width: 100%;
     display: flex;
@@ -960,7 +962,7 @@ b.c_green {
     background: #ffffff;
     overflow: hidden;
 }
-#clear_inpt {
+.clear_inpt {
     width: 34px;
     height: 34px;
     text-align: center;
@@ -974,7 +976,7 @@ b.c_green {
     color: black;
     transition: background-color 0.3s, opacity 0.3s, color 0.3s;
 }
-#clear_inpt:hover {
+.clear_inpt:hover {
     opacity: 0.8;
     background: #fa0000;
 }
@@ -992,27 +994,10 @@ b.c_green {
 }
 
 .btn_set img {
-    position: relative;
-    top: 2px;
-    width: 24px;
-    height: 24px;
-    left: -1px;
+    width: 20px;
+    height: 20px;
 }
 
-#inpt_find,
-#inpt_find_lista
- {
-    padding: 5px;
-    width: 100%;
-    overflow: hidden;
-    margin-right: 3px;
-    border: none;
-    outline: none;
-    font-weight: bold;
-    color: #474747;
-    font-size: 1.3rem;
-    margin-left: 0px;
-}
 
 
 
@@ -1313,6 +1298,11 @@ tr.selected td.td_n {
     display: none !important;
 }
 
+/* para ocultar al filtrar */
+.hidden{
+    display: none !important;
+}
+
 .edit_blocks{
     display: none;
 }
@@ -1592,7 +1582,7 @@ form p.mensaje {
 .titulo_tabla b {
     background: green;
     border: 1px solid #006000;
-    padding: 2px 5px;
+    padding: 0px 5px;
     border-radius: 5px;
     color: white;
     display: none;
@@ -2189,7 +2179,7 @@ p.p_sm b {
 }
 
 .bl_set_inner .inner_content {
-    background: #FF9800;
+    /* background: #FF9800; */
     margin: 0px;
     padding: 5px;
 }
@@ -2370,3 +2360,74 @@ p.p_sm b {
 
 
 
+.filter_result {
+    display: none;
+}
+
+.filter_result_inner {
+    background: #858585;
+    padding: 5px;
+    color: #000000;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.btn_search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    width: 36px;
+}
+
+.titulo_y_tabla {
+    padding-top: 15px;
+}
+
+.wr_titulo_tabla {
+    /* background: #858585; */
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sp_filtro {
+    /* background: black; */
+    display: inline-block;
+    width: 32px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+.sp_filtro.active,
+.sp_filtro:hover
+{
+    opacity: 1;
+}
+.sp_filtro img {
+    width: 22px;
+    height: 22px;
+    transition: 0.5s;
+}
+
+.sp_filtro img.razv
+{
+    transform: rotate(360deg);
+}
+
+
+.contenedor_filter{
+    display: none;
+}
+.contenedor_filter.shown{
+    display: block;
+}

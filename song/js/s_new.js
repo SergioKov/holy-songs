@@ -960,3 +960,96 @@ function scrollIntoViewInContainer(container, element, smooth = true, block = 't
         container.scrollTop = targetScroll;
     }
 }
+
+
+
+
+
+function hideShowDesktopFilter(contenedor_filtro, sp_icon_filtro){
+    if(contenedor_filtro.classList.contains('shown')){//si es mostrado
+        hideDesktopFilter(contenedor_filtro, sp_icon_filtro);
+    }else{
+        showDesktopFilter(contenedor_filtro, sp_icon_filtro);
+    }    
+}
+
+function hideDesktopFilter(contenedor_filtro, sp_icon_filtro){
+    contenedor_filtro.classList.remove('shown');//lo oculto
+    const sp_filtro_img = sp_icon_filtro.querySelector('img');
+    if(sp_filtro_img){
+        sp_filtro_img.classList.remove('razv');
+    }
+    //const el_div = contenedor_filtro.parentElement;
+    //getMySizeByDiv(el_div);
+}
+
+function showDesktopFilter(contenedor_filtro, sp_icon_filtro){
+    contenedor_filtro.classList.add('shown');//lo muestro
+    const sp_filtro_img = sp_icon_filtro.querySelector('img');
+    if(sp_filtro_img){
+        sp_filtro_img.classList.add('razv');
+    }
+    contenedor_filtro.querySelector('.inpt_vvod').focus();
+    //const el_div = contenedor_filtro.parentElement;
+    //getMySizeByDiv(el_div);
+}
+
+
+
+
+
+
+function mySizeBuscar(){
+    console.log('=== function mySizeBuscar() ===');
+
+    // Get the height of the element, including margins
+    // const sidebarInner_margins_h = 
+    // parseInt(sidebarInner_computedStyle.marginTop) + 
+    // parseInt(sidebarInner_computedStyle.marginBottom);
+
+
+    let window_w = window.innerWidth;
+    let window_h = window.innerHeight;
+    console.log('window_w: ', window_w);    
+    console.log('window_h: ', window_h);    
+    
+    
+    let edit_head_h = ecl_edit_head.offsetHeight;
+    console.log('edit_head_h: ', edit_head_h);    
+
+    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);    
+    
+    let bl_head_h = ecl_bl_head.offsetHeight;
+    console.log('bl_head_h: ', bl_head_h);    
+    
+    
+
+    let edit_body_h = 
+      window_h 
+    - ecl_edit_head.offsetHeight 
+    ;
+
+    // console.log('edit_body_h: ', edit_body_h);    
+    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicat
+
+
+
+    let bl_body_h = 
+      edit_body_h 
+    - ecl_bl_head.offsetHeight
+    - (10 * 2) //margin-top y margin-bottom de '.inner' contenedor 
+    ;
+
+    console.log('bl_body_h: ', bl_body_h);    
+    ecl_bl_body.style.height = bl_body_h + 'px';//comento para no duplicat
+
+    let parte_variable_h = 
+      bl_body_h 
+    - ecl_bl_body.querySelector('.parte_fija').offsetHeight;
+    - (10 * 2) //test...
+    ;
+    console.log('parte_variable_h: ', parte_variable_h);    
+    ecl_bl_body.querySelector('.parte_variable').style.height = parte_variable_h + 'px';//comento para no duplicat
+
+    
+}

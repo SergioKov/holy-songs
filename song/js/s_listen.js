@@ -505,3 +505,148 @@ function handleFormInput(e, container_block){
         vista_blocks.append(slide_clone.querySelector('fieldset'));
     });
 }
+
+
+
+
+
+
+
+function addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans){
+    console.log('=== function addFilterListener ===');
+
+    // console.log('contenedor_filtro: ', contenedor_filtro);
+    // console.log('el_input: ', el_input);
+    // console.log('selector_items: ', selector_items);
+    // console.log('arr_spans: ', arr_spans);
+
+    //Filtrar resultados de búsqueda
+    el_input.onkeyup = (e) => {        
+        console.log('el_input.onkeyup --- 2. e.currentTarget', e.currentTarget);
+        // console.log('2. e.target', e.target);            
+        filtrarLista(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
+    }
+    contenedor_filtro.onclick = (e) => {
+        if(e.target.className == 'clear_inpt'){
+            clear_inpt('filter');
+            clear_filter_result(contenedor_filtro, sp_icon_filtro, selector_items);
+        }
+    }
+}
+
+
+function clear_filter_result(contenedor_filtro, sp_icon_filtro, selector_items){
+    console.log(' === function onclick_sp_x(e) ===');
+
+    console.log('12. contenedor_filtro', contenedor_filtro);
+    console.log('12. selector_items', selector_items);
+
+    sp_icon_filtro.classList.remove('active');//opacity: 0.5; no hay filtro aplicado -> se ve gris
+
+    const el_input = contenedor_filtro.querySelector('input');
+    el_input.value = '';//reset campo de input
+
+    const ecl_filter_result = contenedor_filtro.querySelector('.filter_result');
+    ecl_filter_result.style.display = 'none'; 
+
+    const ecl_f_num = ecl_filter_result.querySelector('.f_num');
+    ecl_f_num.textContent = '...';//reset
+
+    document.querySelectorAll(selector_items).forEach(item => {
+        if(item.classList.contains('hidden')){
+            item.classList.remove('hidden');
+        }
+    });
+
+    switch (contenedor_filtro) {
+        case eid_d_filter_results://buscar canción
+            //mySizeBuscar();
+            break;
+    
+        default:
+            break;
+    }
+
+}
+
+
+// filtrar datos en listas de TR.tr_song
+function filtrarLista(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans) {
+    console.log('=== function filtrarLista() ===');    
+    
+    // console.log('contenedor_filtro: ', contenedor_filtro);
+    // console.log('el_input: ', el_input);
+    // console.log('selector_items: ', selector_items);
+    // console.log('arr_spans: ', arr_spans);
+
+    // Obtén el valor del input y conviértelo a minúsculas.
+    let filter = el_input.value.toLowerCase().trim();
+    console.log('filter: ', filter);
+
+
+    // Obtén todos los elementos 'li' o 'cl_trans' de la lista, donde buscar
+    let items = document.querySelectorAll(selector_items);//son los 'p' o 'tr' donde está el texto
+    //console.log('items: ', items);
+
+    let count_f_result = 0;
+
+    // Recorre todos los elementos 'li' de la lista.
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
+        //console.log('an item: ', item);
+
+        let matchFound = false;
+
+        // Recorre los spans dentro del 'li'
+        for (let j = 0; j < arr_spans.length; j++) {
+            // let spanText = spans[j].textContent.toLowerCase();//antes
+            let span_buscado = item.querySelector(arr_spans[j]);
+            if(span_buscado == null){
+                continue;
+            }
+            //console.log(span_buscado);
+
+            let spanText = span_buscado.textContent.toLowerCase();
+            //console.log('spanText: ', spanText);                        
+
+            // Si alguno de los span contiene el valor del filtro, muestra el 'li'.
+            if (spanText.includes(filter)) {
+                matchFound = true;
+                //console.log(`[IF] - OK - el texto '${filter}' se ha encontrado en el span_buscado: `, span_buscado);
+                break; // Si se encuentra una coincidencia, no es necesario revisar más spans.
+            }else{
+                //console.log(`[ELSE] --- el texto '${filter}' NO se ha encontrado en el span_buscado: `, span_buscado);
+            }
+        }
+
+        // Si se encontró una coincidencia, muestra el 'li', de lo contrario, ocúltalo.
+        if (matchFound) {
+            count_f_result++;
+            item.classList.remove("hidden");
+        } else {
+            item.classList.add("hidden");
+        }
+    }//end for
+
+    const ecl_filter_result = contenedor_filtro.querySelector('.filter_result');
+    
+    if(filter == ''){
+        ecl_filter_result.style.display = 'none';
+        sp_icon_filtro.classList.remove('active');//opacity: 0.5; no hay filtro aplicado -> se ve gris
+    }else{
+        ecl_filter_result.style.display = 'block';
+        sp_icon_filtro.classList.add('active');//opacity: 1; //hay filtro aplicado -> se ve blanco
+    }
+
+    switch (contenedor_filtro) {
+        case eid_d_filter_results://buscar canción
+            //mySizeBuscar();
+            break;
+    
+        default:
+            break;
+    }
+
+    const ecl_f_num = ecl_filter_result.querySelector('.f_num');
+    ecl_f_num.textContent = count_f_result;
+}

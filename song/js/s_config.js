@@ -35,11 +35,17 @@ const d_currentTransposition = document.getElementById('d_currentTransposition')
 const btn_diez = document.getElementById('btn_diez');
 const btn_bemol = document.getElementById('btn_bemol');
 
+//==================================================================//
 //edit
+//==================================================================//
 const eid_edit_contenido = document.getElementById('edit_contenido');
 const eid_edit_contenido_inner = document.getElementById('edit_contenido_inner');
+
 const ecl_edit_head = eid_edit_contenido.querySelector('.edit_head');
 const ecl_edit_body = eid_edit_contenido.querySelector('.edit_body');
+
+const ecl_bl_head = eid_edit_contenido.querySelector('.bl_head');
+const ecl_bl_body = eid_edit_contenido.querySelector('.bl_body');
 
 const eid_block_buscar = document.getElementById('block_buscar');
 const eid_block_esquema = document.getElementById('block_esquema');
@@ -61,6 +67,10 @@ const eid_block_lista_head = document.getElementById('block_lista_head');
 const eid_inpt_find = document.getElementById('inpt_find');
 const eid_modo = document.getElementById('modo');
 const eid_buscar_en = document.getElementById('buscar_en');
+
+const eid_sp_icon_filtro = document.getElementById('sp_icon_filtro');
+const eid_d_filter_results = document.getElementById('d_filter_results');
+const eid_inpt_filter = document.getElementById('inpt_filter');
 
 const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
 const eid_modo_lista = document.getElementById('modo_lista');

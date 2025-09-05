@@ -183,182 +183,204 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_buscar_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
+                                        
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
 
-                                        <H4>Buscar canción:</H4>
-                                        <div class="wr_nav">
-                                            <div class="wr_inpt_x">
-                                                <input
-                                                    id="inpt_find"
-                                                    type="text"
-                                                    placeholder="Введите слово или фразу для поиска..."
-                                                    data-dic=""
-                                                    va-lue="боже"
-                                                    value="zzz">
-                                                <div id="clear_inpt" onclick="clear_inpt('find')">&times;</div>
-                                            </div>
-
-                                            <button id="btn_ok_find" class="btn" title="Buscar" onclick="findWordsSong()">
-                                                <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
-                                            </button>
-
-                                            <button id="btn_find_settings" class="btn btn_set" onclick="hideShowDiv('bl_find_settings');" data-dic="" title="Ajustes">
-                                                <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
-                                            </button>
-
-                                        </div><!--/.wr_nav-->
-
-
-                                        <div id="bl_find_settings" class="bl_set" style="display:none;">
-                                            <div class="bl_set_inner bl_closed">
-                                                <div class="inner_content">
-
-                                                    <div class="wr_title_btn_close">
-                                                        <span>Marca parametros de búsqueda:</span>
-                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_settings'))">✕</span>
-                                                    </div>                                                    
-
-                                                    <h5>Modo de búsqueda:</h5>
-                                                    <div class="wr_sel_song m_0">
-                                                        <select id="modo" class="sel_song">
-                                                            <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
-                                                            <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                            <option value="3">3) Coincidir al menos una palabra</option>
-                                                            <option value="4">4) Palabras en el orden establecido</option>
-                                                            <option value="5">5) Frase exacta</option>
-                                                            <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <h5>Campos de búsqueda:</h5>
-                                                    <div class="wr_sel_song">
-                                                        <select id="buscar_en" class="sel_song">
-                                                            <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
-                                                            <option value="2">2) Todos los campos disponibles (lento)</option>
-
-                                                            <option value="3">3) Todos los campos de texto disponibles</option>
-                                                            <option value="4">4) Sólo el título de canción</option>
-                                                            <option value="5">5) Sólo el texto de canción</option>
-                                                            <option value="6">6) Sólo las notas de canción</option>
-                                                            <option value="7">7) Identificador y número de canción</option>
-                                                            <option value="8">8) Sólo el identificador de canción</option>
-                                                            <option value="9">9) Sólo el número de canción</option>
-                                                            <option value="10">10) Sólo el identificador de categoría</option>
-                                                            <option value="10">10) Sólo el nombre de categoría</option>
-                                                            <option value="11">11) Sólo el idioma</option>
-                                                        </select>
-                                                    </div>
-                                                    
+                                            <H4>Buscar canción:</H4>
+                                            <div class="wr_nav">
+                                                <div class="wr_inpt_x">
+                                                    <input
+                                                        id="inpt_find"
+                                                        class="inpt_vvod"
+                                                        type="text"
+                                                        placeholder="Введите слово или фразу для поиска..."
+                                                        data-dic=""
+                                                        va-lue="боже"
+                                                        value="zzz">
+                                                    <div class="clear_inpt" onclick="clear_inpt('find')">&times;</div>
                                                 </div>
-                                            </div>
-                                        </div>
 
+                                                <button id="btn_ok_find" class="btn btn_search" title="Buscar" onclick="findWordsSong()">
+                                                    <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
+                                                </button>
 
-                                        <div id="d_sel_songbooks" class="wr_sb m_0">
-                                            <h5>Songbooks donde buscar (separados por coma):</h5>
-                                            <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>
+                                                <!-- <button id="" class="btn btn_search">
+                                                    <img class="btn_img" src="./images/icon_filter_white_22x22.svg">
+                                                </button> -->
 
-                                            <div id="bl_songbook_search" class="bl_set" style="display: none;">
-                                                <div class="bl_set_inner bl_closed" style="overflow: auto;">
+                                                <button id="btn_find_settings" class="btn btn_set btn_search" onclick="hideShowDiv('bl_find_settings');" data-dic="" title="Ajustes">
+                                                    <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
+                                                </button>
+
+                                            </div><!--/.wr_nav-->
+
+                                            <div id="bl_find_settings" class="bl_set" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
                                                     <div class="inner_content">
 
                                                         <div class="wr_title_btn_close">
                                                             <span>Marca parametros de búsqueda:</span>
-                                                            <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
+                                                            <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_settings'))">✕</span>
+                                                        </div>                                                    
+
+                                                        <h5>Modo de búsqueda:</h5>
+                                                        <div class="wr_sel_song m_0">
+                                                            <select id="modo" class="sel_song">
+                                                                <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                <option value="3">3) Coincidir al menos una palabra</option>
+                                                                <option value="4">4) Palabras en el orden establecido</option>
+                                                                <option value="5">5) Frase exacta</option>
+                                                                <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <h5>Campos de búsqueda:</h5>
+                                                        <div class="wr_sel_song">
+                                                            <select id="buscar_en" class="sel_song">
+                                                                <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
+                                                                <option value="2">2) Todos los campos disponibles (lento)</option>
+
+                                                                <option value="3">3) Todos los campos de texto disponibles</option>
+                                                                <option value="4">4) Sólo el título de canción</option>
+                                                                <option value="5">5) Sólo el texto de canción</option>
+                                                                <option value="6">6) Sólo las notas de canción</option>
+                                                                <option value="7">7) Identificador y número de canción</option>
+                                                                <option value="8">8) Sólo el identificador de canción</option>
+                                                                <option value="9">9) Sólo el número de canción</option>
+                                                                <option value="10">10) Sólo el identificador de categoría</option>
+                                                                <option value="10">10) Sólo el nombre de categoría</option>
+                                                                <option value="11">11) Sólo el idioma</option>
+                                                            </select>
                                                         </div>
                                                         
-                                                        <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
-
-                                                        <div id="wr_sb_checkboxes" class="wr_checkboxes">
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                            <label>
-                                                                <p>
-                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                    <span>Songbook 1</span>
-                                                                </p>
-                                                            </label>
-                                                        </div>
-
                                                     </div>
                                                 </div>
                                             </div>
 
-                                        </div><!--/#d_sel_songbooks-->
+                                            <div id="d_sel_songbooks" class="wr_sb m_0">
+                                                <h5>Songbooks donde buscar (separados por coma):</h5>
+                                                <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>
+
+                                                <div id="bl_songbook_search" class="bl_set" style="display: none;">
+                                                    <div class="bl_set_inner bl_closed" style="overflow: auto;">
+                                                        <div class="inner_content">
+
+                                                            <div class="wr_title_btn_close">
+                                                                <span>Marca parametros de búsqueda:</span>
+                                                                <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
+                                                            </div>
+                                                            
+                                                            <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+
+                                                            <div id="wr_sb_checkboxes" class="wr_checkboxes">
+                                                                <label>
+                                                                    <p>
+                                                                        <input type="checkbox" name="songbooks" value="1">
+                                                                        <span>Songbook 1</span>
+                                                                    </p>
+                                                                </label>
+                                                                <label>
+                                                                    <p>
+                                                                        <input type="checkbox" name="songbooks" value="1">
+                                                                        <span>Songbook 1</span>
+                                                                    </p>
+                                                                </label>
+                                                                <label>
+                                                                    <p>
+                                                                        <input type="checkbox" name="songbooks" value="1">
+                                                                        <span>Songbook 1</span>
+                                                                    </p>
+                                                                </label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div><!--/#d_sel_songbooks-->
+                                        
+                                        </div><!--/.parte_fija-->
+                                        
 
 
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+                                            <div class="d_titulo_y_tabla">
+                                            
+                                                <div id="titulo_tabla_song" class="wr_titulo_tabla">
+                                                    <h5 class="titulo_tabla">Canciones encontradas: <b>...</b></h5>
+                                                    <span id="sp_icon_filtro" class="sp_filtro d-none" onclick="hideShowDesktopFilter(eid_d_filter_results, this);">
+                                                        <img class="btn_img" src="./images/icon_filter_white_22x22.svg">
+                                                    </span>                                        
+                                                </div>
+
+                                                <div id="d_filter_results" class="contenedor_filter">                                        
+                                                    <div class="wr_nav">
+                                                        <div class="wr_inpt_x">
+                                                            <input
+                                                                id="inpt_filter"
+                                                                class="inpt_vvod"
+                                                                type="text"
+                                                                placeholder="Введите слово или фразу для фильтра..."
+                                                                data-dic=""
+                                                                value="">
+                                                            <div class="clear_inpt" onclick="clear_inpt('filter')">&times;</div>
+                                                        </div>
+                                                    </div><!--/.wr_nav-->
+                                                        
+                                                    <div class="filter_result" style="display: none;">
+                                                        <div class="filter_result_inner">
+                                                            <span>Filtrado:</span> 
+                                                            <span class="f_num">...</span>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div><!--/#d_filter_results-->
+
+                                                
+                                                <div class="wr_tabla">
+                                                    <div class="wr_tabla_inner">
+
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="td_n">Nº</th>
+                                                                    <th class="td_id_song">id_song</th>
+                                                                    <th class="td_numero">Número</th>
+                                                                    <th class="td_titulo">Título</th>
+                                                                    <th class="td_esquema">Esquema</th>
+                                                                    <th class="td_category">Categoría</th>
+                                                                    <th class="td_songbook">Songbook</th>
+                                                                    <th class="td_idioma">Idioma</th>
+                                                                    <th class="td_tonalidad">Tonalidad</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="td_n">...</td>
+                                                                    <td class="td_id_song">...</td>
+                                                                    <td class="td_numero">...</td>
+                                                                    <td class="td_titulo">...</td>
+                                                                    <td class="td_esquema">...</td>
+                                                                    <td class="td_category">...</td>
+                                                                    <td class="td_songbook">...</td>
+                                                                    <td class="td_idioma">...</td>
+                                                                    <td class="td_tonalidad">...</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+
+                                            </div><!--/.d_filter_results-->
+                                        </div><!--/.parte_variable-->
+
+                                    </div><!--/.bl_parte_l-->
 
 
-
-
-
-                                        <h5 style="display:none;">Filtrar en los títulos de canciones presentes en la tabla abajo:</h5>
-                                        <div class="wr_nav" style="display:none;">
-                                            <div class="wr_inpt_x">
-                                                <input
-                                                    id="inpt_filter"
-                                                    type="text"
-                                                    placeholder="Введите слово или фразу для фильтра..."
-                                                    data-dic=""
-                                                    value="">
-                                                <div id="clear_inpt" onclick="clear_inpt('find')">&times;</div>
-                                            </div>
-
-                                            <button id="btn_ok_find" class="btn" title="Filtrar" onclick="findWordsNew(this.value)">
-                                                <img class="btn_img" src="./images/icon_filter_white_22x22.svg"><!--Filtro-->
-                                            </button>
-
-                                        </div><!--/.wr_nav-->
-
-
-
-
-                                        <h5 id="titulo_tabla_song" class="titulo_tabla">Canciones encontradas: <b></b></h5>
-                                        <div class="wr_tabla">
-                                            <div class="wr_tabla_inner">
-
-                                                <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="td_n">Nº</th>
-                                                            <th class="td_id_song">id_song</th>
-                                                            <th class="td_numero">Número</th>
-                                                            <th class="td_titulo">Título</th>
-                                                            <th class="td_esquema">Esquema</th>
-                                                            <th class="td_category">Categoría</th>
-                                                            <th class="td_songbook">Songbook</th>
-                                                            <th class="td_idioma">Idioma</th>
-                                                            <th class="td_tonalidad">Tonalidad</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="td_n">...</td>
-                                                            <td class="td_id_song">...</td>
-                                                            <td class="td_numero">...</td>
-                                                            <td class="td_titulo">...</td>
-                                                            <td class="td_esquema">...</td>
-                                                            <td class="td_category">...</td>
-                                                            <td class="td_songbook">...</td>
-                                                            <td class="td_idioma">...</td>
-                                                            <td class="td_tonalidad">...</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
 
                                     <div class="partes bl_parte_r">
                                         
@@ -379,7 +401,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div>
 
 
-                                    </div>
+                                    </div><!--/.bl_parte_r-->
 
                                 </div><!--/#block_buscar_body-->
 
@@ -880,11 +902,12 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             <div class="wr_inpt_x">
                                                 <input
                                                     id="inpt_find_lista"
+                                                    class="inpt_vvod"
                                                     type="text"
                                                     placeholder="Введите слово или фразу для поиска..."
                                                     data-dic=""
                                                     value="2025">
-                                                <div id="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
+                                                <div class="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
                                             </div>
 
                                             <button id="btn_ok_find_lista" class="btn" title="Buscar" onclick="findWordsLista()">
