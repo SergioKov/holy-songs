@@ -2477,3 +2477,8 @@ p.p_sm b {
     outline: 1px solid white;
     box-shadow: 0 0 5px 2px white;
 }
+
+
+.edit_blocks_head .btn {
+    min-width: 60px !important;
+}

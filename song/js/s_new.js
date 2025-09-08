@@ -1114,6 +1114,7 @@ function mySizeEsquema(){
     console.log('=== end func ===');
 }
 
+
 function mySizeEsquemaByClassVklad(cl_vklad, bl_body_h, block_esquema_head_h, inner_margins){
     console.log('=== function mySizeEsquemaByClassVklad() ===');
 
@@ -1167,3 +1168,97 @@ function mySizeEsquemaByClassVklad(cl_vklad, bl_body_h, block_esquema_head_h, in
     eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_r .parte_variable`).style.height = parte_variable_r_h + 'px';
 
 }
+
+
+
+
+
+
+
+function mySizeCancion(){
+    console.log('=== function mySizeCancion() ===');
+
+    let window_w = window.innerWidth;
+    let window_h = window.innerHeight;
+    console.log('window_w: ', window_w);    
+    console.log('window_h: ', window_h);
+    
+    let inner_margins = parseInt(inner_computedStyle.marginTop) + parseInt(inner_computedStyle.marginBottom);//10 * 2;    
+    
+    let edit_head_h = ecl_edit_head.offsetHeight;
+    console.log('edit_head_h: ', edit_head_h);    
+    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);
+    
+    let bl_head_h = ecl_bl_head.offsetHeight;
+    console.log('bl_head_h: ', bl_head_h);    
+
+    let edit_body_h = 
+      window_h 
+    - ecl_edit_head.offsetHeight 
+    ;
+    // console.log('edit_body_h: ', edit_body_h);    
+    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicar
+
+    let bl_body_h = 
+      edit_body_h 
+    - ecl_bl_head.offsetHeight
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor 
+    ;
+    console.log('bl_body_h: ', bl_body_h);    
+    ecl_bl_body.style.height = bl_body_h + 'px';//comento para no duplicat
+
+    let block_cancion_head_h = eid_block_cancion.querySelector('#block_cancion_head').offsetHeight;
+    console.log('block_cancion_head_h: ', block_cancion_head_h);  
+    
+
+    //=========================================================================================//
+    //bl_parte_l
+    //=========================================================================================//    
+    let parte_fija_l_h = eid_block_cancion.querySelector('.bl_parte_l .parte_fija').offsetHeight;
+    console.log('parte_fija_l_h: ', parte_fija_l_h);
+
+    let parte_variable_l_h = 
+      bl_body_h //858
+    - block_cancion_head_h //43
+    - parte_fija_l_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_l_h: ', parte_variable_l_h);    
+    eid_block_cancion.querySelector('.bl_parte_l .parte_variable').style.height = parte_variable_l_h + 'px';//comento para no duplicat
+
+
+    // let titulo_tabla_song_h = eid_block_cancion.querySelector('#titulo_tabla_song').offsetHeight;
+    // let d_filter_results_h = eid_block_cancion.querySelector('#d_filter_results').offsetHeight;
+    // let wr_tabla_paddings = parseInt(wr_tabla_computedStyle.paddingTop) + parseInt(wr_tabla_computedStyle.paddingBottom);//10 * 2;
+
+    // let wr_tabla_inner_h = 
+    //   parte_variable_l_h //645
+    // - titulo_tabla_song_h //38
+    // - d_filter_results_h //0
+    // - wr_tabla_paddings //20
+    // ;
+    // console.log('wr_tabla_inner_h: ', wr_tabla_inner_h); 
+
+    // //pongo max-height para que scroll esté arriba si hay pocos registros 
+    // eid_block_cancion.querySelector('.bl_parte_l .wr_tabla_inner').style.maxHeight = wr_tabla_inner_h + 'px';//'max-height', no 'height'
+
+    
+    //=========================================================================================//
+    //bl_parte_r
+    //=========================================================================================//
+    let parte_fija_r_h = eid_block_cancion.querySelector('.bl_parte_r .parte_fija').offsetHeight;
+    console.log('parte_fija_r_h: ', parte_fija_r_h);
+
+    let parte_variable_r_h = 
+      bl_body_h //858
+    - block_cancion_head_h //43
+    - parte_fija_r_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_r_h: ', parte_variable_r_h);    
+    eid_block_cancion.querySelector('.bl_parte_r .parte_variable').style.height = parte_variable_r_h + 'px';//comento para no duplicat
+
+    console.log('=== end func ===');
+}
+
+

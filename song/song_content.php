@@ -781,7 +781,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div><!--/#block_esquema_body-->
 
 
-
                             </div><!--/#block_esquema-->
 
 
@@ -808,10 +807,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_cancion" class="edit_blocks">
 
                                 <div id="block_cancion_head" class="edit_blocks_head">
-                                    <button id="btn_song_ver" class="btn" onclick="editar_song('ver')">Ver canción</button>
-                                    <button id="btn_song_editar" class="btn" onclick="editar_song('editar')">Editar canción</button>
-                                    <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva canción</button>
-                                    <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar canción</button>
+                                    <button id="btn_song_ver" class="btn" onclick="editar_song('ver')">Ver</button>
+                                    <button id="btn_song_editar" class="btn" onclick="editar_song('editar')">Editar</button>
+                                    <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
+                                    <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
                                     <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
                                 </div><!--/#block_cancion_head-->
 
@@ -819,203 +818,244 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_cancion_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
-                                        <H4>Datos de la canción</H4>
+                                        
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
+                                            <H4>Datos de la canción</H4>
+                                        </div><!--/.parte_fija-->
 
-                                        <h5>Añade los datos de la nueva canción:</h5>
-                                        <div class="bloques_outer">
-                                            <div class="bloques song_bloques">
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
 
-                                                <div class="puntos_def" style="display: block;">...</div>
+                                            <div class="bloques_outer">
+                                                <div class="bloques song_bloques">
 
-                                                <div class="form_container" style="display: none;">
-                                                    <form>
+                                                    <div class="puntos_def" style="display: block;">...</div>
 
-                                                        <p class="mensaje" data-dic="">
-                                                            Rellena los campos del formulario con los datos de la nueva canción.
-                                                        </p>
+                                                    <div class="form_container" style="display: none;">
+                                                        <form>
 
-                                                        <div class="form_group">
-                                                            <input type="text" id="title" name="title" required="" placeholder=" ">
-                                                            <label for="title">Título de la canción (o su primera frase)</label>
-                                                        </div>
+                                                            <p class="mensaje" data-dic="">
+                                                                Rellena los campos del formulario con los datos de la nueva canción.
+                                                            </p>
 
-                                                        <div class="wr_sel_category select_container">
-                                                            <select id="category" class="sel_opt" required="">
-                                                                <option value="" disabled selected hidden></option>
-                                                                <option value="1">1. Наприкінці церковного зібрання</option>
-                                                                <option value="2">2. На рукопокладення</option>
-                                                                <option value="3">3. Хрещення</option>
-                                                                <option value="4">4. Перед церковним зібранням</option>
-                                                                <option value="5">5. Біблійні історії</option>
-                                                                <option value="6">6. Заклик до покаяння</option>
-                                                                <option value="7">7. Діти та сім'я</option>
-                                                                <option value="8">8. Християнська радість</option>
-                                                                <option value="9">9. Різдво</option>
-                                                                <option value="10">10. Церква</option>
-                                                                <option value="11">11. Утіха та підбадьорення</option>
-                                                                <option value="12">12. Рішучість і вірність</option>
-                                                                <option value="13">13. Слідування за Христом</option>
-                                                                <option value="14">14. Для новонавернених</option>
-                                                                <option value="15">15. Похорон</option>
-                                                                <option value="16">16. Бог, Його любов і велич</option>
-                                                                <option value="17">17. Євангеліє</option>
-                                                                <option value="18">18. Жнива</option>
-                                                                <option value="19">19. Небесне житло</option>
-                                                                <option value="20">20. Святий Дух</option>
-                                                                <option value="21">21. Настанови та самоперевірка</option>
-                                                                <option value="22">22. Ісус Христос</option>
-                                                                <option value="23">23. Шлях віри, віра і надія</option>
-                                                                <option value="24">24. Останні дні</option>
-                                                                <option value="25">25. Любов</option>
-                                                                <option value="26">26. Мама</option>
-                                                                <option value="27">27. Новий рік</option>
-                                                                <option value="28">28. Вечеря Господня</option>
-                                                                <option value="29">29. Різне</option>
-                                                                <option value="30">30. Практичне життя з Богом</option>
-                                                                <option value="31" selected>31. Хвала і подяка</option>
-                                                                <option value="32">32. Молитва</option>
-                                                                <option value="33">33. Спасіння</option>
-                                                                <option value="34">34. Духовна боротьба і перемога</option>
-                                                                <option value="35">35. Страждання і смерть Христа</option>
-                                                                <option value="36">36. Захід / Схід сонця</option>
-                                                                <option value="37">37. Воскресіння Христа</option>
-                                                                <option value="38">38. Слово Боже</option>
-                                                                <option value="39">39. Заклик до праці</option>
-                                                                <option value="40">40. Друге пришестя Христа і суд</option>
-                                                                <option value="41">41. Час</option>
-                                                                <option value="42">42. Різні християнські свята</option>
-                                                                <option value="43">43. Весілля</option>
-                                                                <option value="44">44. Привітання та прощання</option>
-                                                                <option value="45">45. Молодь</option>
-                                                                <option value="46">46. Інструментальна</option>
-                                                                <option value="47">47. Колискові</option>
-                                                                <option value="48">48. Дитячі</option>
-                                                                <option value="49">49. Табірні</option>
-                                                                <option value="50">50. Зцілення</option>
-                                                                <option value="51">51. Прощення</option>
-                                                                <option value="52">52. В’їзд до Єрусалима</option>
-                                                                <option value="53">53. Вознесіння Господнє</option>
-                                                                <option value="54">54. Пасхальні</option>
-                                                                <option value="55">55. Трійця</option>
-                                                            </select>
-                                                            <label for="category">Category</label>
-                                                        </div>
-
-                                                        <div class="wr_sel_category select_container">
-                                                            <select id="songbook" class="sel_opt" required="">
-                                                                <!-- se pintan los songbook aki desde bd -->
-                                                            </select>
-                                                            <label for="songbook">Пісенник (Збірник пісень)</label>
-                                                        </div>
-
-                                                        <div class="wr_group">
-
-                                                            <div class="form_group wr_id_song">
-                                                                <input type="number" id="id_song" name="id_song" required="" placeholder=" ">
-                                                                <label for="id_song">Id</label>
+                                                            <div class="form_group">
+                                                                <input type="text" id="title" name="title" required="" placeholder=" ">
+                                                                <label for="title">Título de la canción (o su primera frase)</label>
                                                             </div>
 
-                                                            <div class="form_group wr_song_number">
-                                                                <input type="text" id="song_number" name="song_number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
-                                                                <label for="song_number">Número</label>
-                                                            </div>
-
-                                                            <div class="form_group wr_tune select_container">
-                                                                <select id="tune" class="sel_opt" required="">
+                                                            <div class="wr_sel_category select_container">
+                                                                <select id="category" class="sel_opt" required="">
                                                                     <option value="" disabled selected hidden></option>
-                                                                    <option value="C">C</option>
-                                                                    <option value="Cm">Cm</option>
-                                                                    <option value="C#">C#</option>
-                                                                    <option value="C#m">C#m</option>
-                                                                    <option value="Db">Db</option>
-                                                                    <option value="Dbm">Dbm</option>
-                                                                    <option value="D">D</option>
-                                                                    <option value="Dm">Dm</option>
-                                                                    <option value="D#">D#</option>
-                                                                    <option value="D#m">D#m</option>
-                                                                    <option value="Eb">Eb</option>
-                                                                    <option value="Ebm">Ebm</option>
-                                                                    <option value="E">E</option>
-                                                                    <option value="Em">Em</option>
-                                                                    <option value="F">F</option>
-                                                                    <option value="Fm">Fm</option>
-                                                                    <option value="F#">F#</option>
-                                                                    <option value="F#m">F#m</option>
-                                                                    <option value="Gb">Gb</option>
-                                                                    <option value="Gbm">Gbm</option>
-                                                                    <option value="G">G</option>
-                                                                    <option value="Gm">Gm</option>
-                                                                    <option value="G#">G#</option>
-                                                                    <option value="G#m">G#m</option>
-                                                                    <option value="Ab">Ab</option>
-                                                                    <option value="Abm">Abm</option>
-                                                                    <option value="A">A</option>
-                                                                    <option value="Am">Am</option>
-                                                                    <option value="A#">A#</option>
-                                                                    <option value="A#m">A#m</option>
-                                                                    <option value="Bb">Bb</option>
-                                                                    <option value="Bbm">Bbm</option>
-                                                                    <option value="H">H</option>
-                                                                    <option value="Hm">Hm</option>
+                                                                    <option value="1">1. Наприкінці церковного зібрання</option>
+                                                                    <option value="2">2. На рукопокладення</option>
+                                                                    <option value="3">3. Хрещення</option>
+                                                                    <option value="4">4. Перед церковним зібранням</option>
+                                                                    <option value="5">5. Біблійні історії</option>
+                                                                    <option value="6">6. Заклик до покаяння</option>
+                                                                    <option value="7">7. Діти та сім'я</option>
+                                                                    <option value="8">8. Християнська радість</option>
+                                                                    <option value="9">9. Різдво</option>
+                                                                    <option value="10">10. Церква</option>
+                                                                    <option value="11">11. Утіха та підбадьорення</option>
+                                                                    <option value="12">12. Рішучість і вірність</option>
+                                                                    <option value="13">13. Слідування за Христом</option>
+                                                                    <option value="14">14. Для новонавернених</option>
+                                                                    <option value="15">15. Похорон</option>
+                                                                    <option value="16">16. Бог, Його любов і велич</option>
+                                                                    <option value="17">17. Євангеліє</option>
+                                                                    <option value="18">18. Жнива</option>
+                                                                    <option value="19">19. Небесне житло</option>
+                                                                    <option value="20">20. Святий Дух</option>
+                                                                    <option value="21">21. Настанови та самоперевірка</option>
+                                                                    <option value="22">22. Ісус Христос</option>
+                                                                    <option value="23">23. Шлях віри, віра і надія</option>
+                                                                    <option value="24">24. Останні дні</option>
+                                                                    <option value="25">25. Любов</option>
+                                                                    <option value="26">26. Мама</option>
+                                                                    <option value="27">27. Новий рік</option>
+                                                                    <option value="28">28. Вечеря Господня</option>
+                                                                    <option value="29">29. Різне</option>
+                                                                    <option value="30">30. Практичне життя з Богом</option>
+                                                                    <option value="31" selected>31. Хвала і подяка</option>
+                                                                    <option value="32">32. Молитва</option>
+                                                                    <option value="33">33. Спасіння</option>
+                                                                    <option value="34">34. Духовна боротьба і перемога</option>
+                                                                    <option value="35">35. Страждання і смерть Христа</option>
+                                                                    <option value="36">36. Захід / Схід сонця</option>
+                                                                    <option value="37">37. Воскресіння Христа</option>
+                                                                    <option value="38">38. Слово Боже</option>
+                                                                    <option value="39">39. Заклик до праці</option>
+                                                                    <option value="40">40. Друге пришестя Христа і суд</option>
+                                                                    <option value="41">41. Час</option>
+                                                                    <option value="42">42. Різні християнські свята</option>
+                                                                    <option value="43">43. Весілля</option>
+                                                                    <option value="44">44. Привітання та прощання</option>
+                                                                    <option value="45">45. Молодь</option>
+                                                                    <option value="46">46. Інструментальна</option>
+                                                                    <option value="47">47. Колискові</option>
+                                                                    <option value="48">48. Дитячі</option>
+                                                                    <option value="49">49. Табірні</option>
+                                                                    <option value="50">50. Зцілення</option>
+                                                                    <option value="51">51. Прощення</option>
+                                                                    <option value="52">52. В’їзд до Єрусалима</option>
+                                                                    <option value="53">53. Вознесіння Господнє</option>
+                                                                    <option value="54">54. Пасхальні</option>
+                                                                    <option value="55">55. Трійця</option>
                                                                 </select>
-                                                                <label for="tune">Tonalidad</label>
+                                                                <label for="category">Category</label>
                                                             </div>
 
-                                                            <div class="form_group wr_lang">
-                                                                <select id="lang" class="sel_opt" required="">
-                                                                    <option value="" disabled selected hidden></option>
-                                                                    <option value="ua">Українська</option>
-                                                                    <option value="ru">Русский</option>
-                                                                    <option value="es">Español</option>
-                                                                    <option value="en">English</option>
+                                                            <div class="wr_sel_category select_container">
+                                                                <select id="songbook" class="sel_opt" required="">
+                                                                    <!-- se pintan los songbook aki desde bd -->
                                                                 </select>
-                                                                <label for="lang">Idioma</label>
+                                                                <label for="songbook">Пісенник (Збірник пісень)</label>
                                                             </div>
 
-                                                        </div>
+                                                            <div class="wr_group">
 
-                                                        <div class="form_group">
-                                                            <textarea id="song_text" name="song_text" rows="25" required="" placeholder=" "></textarea>
-                                                            <label class="lab_textarea" for="song_text">Texto de la canción</label>
-                                                        </div>
-                                                        
-                                                        <!-- Esquema -->
-                                                        <div class="d_esquema_titulos parte_lista"></div>
+                                                                <div class="form_group wr_id_song">
+                                                                    <input type="number" id="id_song" name="id_song" required="" placeholder=" ">
+                                                                    <label for="id_song">Id</label>
+                                                                </div>
 
-                                                        <div class="form_group">
-                                                            <textarea id="notes" name="notes" rows="3" required="" placeholder=" "></textarea>
-                                                            <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
-                                                        </div>
+                                                                <div class="form_group wr_song_number">
+                                                                    <input type="text" id="song_number" name="song_number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                                                                    <label for="song_number">Número</label>
+                                                                </div>
+
+                                                                <div class="form_group wr_tune select_container">
+                                                                    <select id="tune" class="sel_opt" required="">
+                                                                        <option value="" disabled selected hidden></option>
+                                                                        <option value="C">C</option>
+                                                                        <option value="Cm">Cm</option>
+                                                                        <option value="C#">C#</option>
+                                                                        <option value="C#m">C#m</option>
+                                                                        <option value="Db">Db</option>
+                                                                        <option value="Dbm">Dbm</option>
+                                                                        <option value="D">D</option>
+                                                                        <option value="Dm">Dm</option>
+                                                                        <option value="D#">D#</option>
+                                                                        <option value="D#m">D#m</option>
+                                                                        <option value="Eb">Eb</option>
+                                                                        <option value="Ebm">Ebm</option>
+                                                                        <option value="E">E</option>
+                                                                        <option value="Em">Em</option>
+                                                                        <option value="F">F</option>
+                                                                        <option value="Fm">Fm</option>
+                                                                        <option value="F#">F#</option>
+                                                                        <option value="F#m">F#m</option>
+                                                                        <option value="Gb">Gb</option>
+                                                                        <option value="Gbm">Gbm</option>
+                                                                        <option value="G">G</option>
+                                                                        <option value="Gm">Gm</option>
+                                                                        <option value="G#">G#</option>
+                                                                        <option value="G#m">G#m</option>
+                                                                        <option value="Ab">Ab</option>
+                                                                        <option value="Abm">Abm</option>
+                                                                        <option value="A">A</option>
+                                                                        <option value="Am">Am</option>
+                                                                        <option value="A#">A#</option>
+                                                                        <option value="A#m">A#m</option>
+                                                                        <option value="Bb">Bb</option>
+                                                                        <option value="Bbm">Bbm</option>
+                                                                        <option value="H">H</option>
+                                                                        <option value="Hm">Hm</option>
+                                                                    </select>
+                                                                    <label for="tune">Tonalidad</label>
+                                                                </div>
+
+                                                                <div class="form_group wr_lang">
+                                                                    <select id="lang" class="sel_opt" required="">
+                                                                        <option value="" disabled selected hidden></option>
+                                                                        <option value="ua">Українська</option>
+                                                                        <option value="ru">Русский</option>
+                                                                        <option value="es">Español</option>
+                                                                        <option value="en">English</option>
+                                                                    </select>
+                                                                    <label for="lang">Idioma</label>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="form_group">
+                                                                <textarea id="song_text" name="song_text" rows="25" required="" placeholder=" "></textarea>
+                                                                <label class="lab_textarea" for="song_text">Texto de la canción</label>
+                                                            </div>
+                                                            
+                                                            <!-- Esquema -->
+                                                            <div class="d_esquema_titulos parte_lista"></div>
+
+                                                            <div class="form_group">
+                                                                <textarea id="notes" name="notes" rows="3" required="" placeholder=" "></textarea>
+                                                                <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
+                                                            </div>
 
 
-                                                        <div class="wr_btns_form">
-                                                            <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
-                                                            <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarSong(event)">Guardar</button>
-                                                        </div>
+                                                            <div class="wr_btns_form">
+                                                                <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
+                                                                <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarSong(event)">Guardar</button>
+                                                            </div>
 
-                                                    </form>
+                                                        </form>
+                                                    </div>
+
                                                 </div>
-
                                             </div>
-                                        </div>
+
+                                        </div><!--/.parte_variable-->
 
                                     </div>
 
                                     <div class="partes bl_parte_r">
-                                        <h4>Vista previa de la canción</h4>
 
-                                        <h5>Estructura (bloques) de la canción:</h5>
-                                        <div class="bloques_outer">
-                                            <div class="bloques wr_vista_blocks">
-                                                <!-- aki vista previa -->
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
+                                            <h4 class="h4_vista_previa">
+                                                <span>Vista previa:</span>
+                                                <button id="btn_actions_cancion" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_cancion');" title="Acciones">
+                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                </button>
+                                            </h4>
+                                        </div><!--/.parte_fija-->                                        
+
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+
+                                            <div class="bloques_outer">
+                                                
+                                                <div id="bl_actions_cancion" class="bl_set bl_actions" style="display:none;">
+                                                    <div class="bl_set_inner bl_closed">
+                                                        <div class="inner_content">
+
+                                                            <div class="wr_title_btn_close">
+                                                                <span>Escoge acción con la canción:</span>
+                                                                <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_cancion'))">✕</span>
+                                                            </div>                                                    
+
+                                                            <ul class="ul_action">
+                                                                <!-- <li class="li_action">aki los li's</li>-->
+                                                                <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
+                                                            </ul>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            
+                                                <div class="bloques wr_vista_blocks">
+                                                    <!-- aki vista previa -->
+                                                    ...
+                                                </div>
+                                            </div>
+
+                                            <div class="wr_btns_action" style="display: none;">
+                                                <!-- aki botones de reset y guardar -->
                                                 ...
                                             </div>
-                                        </div>
 
-                                        <div class="wr_btns_action">
-                                            <!-- aki botones de reset y guardar -->
-                                            ...
-                                        </div>
+                                        </div><!--/.parte_variable-->
 
                                     </div>
 

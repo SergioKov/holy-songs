@@ -65,7 +65,7 @@ const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
 const eid_block_lista_head = document.getElementById('block_lista_head');
 
 //========================================================//
-//block_buscar - start
+//start - block_buscar
 //========================================================//
 const eid_block_buscar_head = document.getElementById('block_buscar_head');
 const eid_block_buscar_body = document.getElementById('block_buscar_body');
@@ -86,14 +86,14 @@ const buscar_ul_action = eid_block_buscar.querySelector('.ul_action');
 const buscar_vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
 
 //========================================================//
-//block_buscar - end
+//end - block_buscar
 //========================================================//
 
 
 
 
 //========================================================//
-//block_esquema - start
+//start - block_esquema
 //========================================================//
 //bl_parte_l
 const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
@@ -102,61 +102,24 @@ const ver_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_ver_es
 //bl_parte_r
 const ver_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_blocks');
 const ver_esquema_ul_action = eid_block_esquema.querySelector('.ul_action');
-
-
-
-
-
-
-
+//--------------------------------------------------------------------------//
 //bl_parte_l
 const crear_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_crear_esquema .song_bloques');
-const select_slide_song_bloques = eid_block_esquema.querySelector('.vklad_select_slide .song_bloques');
-
-
 //bl_parte_c
 const crear_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns');
 const crear_esquema_wr_vista_btns_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns_actual');
 const crear_esquema_wr_esquema_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_esquema_actual');//en crear_esquema
-
-const select_slide_wr_vista_btns = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_btns');
-
 //bl_parte_r
 const crear_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_blocks');
 const crear_esquema_ul_action = eid_block_esquema.querySelector('.vklad_crear_esquema .ul_action');
-
+//--------------------------------------------------------------------------//
+//bl_parte_l
+const select_slide_song_bloques = eid_block_esquema.querySelector('.vklad_select_slide .song_bloques');
+//bl_parte_c
+const select_slide_wr_vista_btns = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_btns');
+//bl_parte_r
 const select_slide_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_blocks');
 const select_slide_ul_action = eid_block_esquema.querySelector('.vklad_select_slide .ul_action');
-
-
-
-
-
-//========================================================//
-//block_esquema - end
-//========================================================//
-
-
-
-
-
-const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
-const eid_modo_lista = document.getElementById('modo_lista');
-const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
-
-
-
-const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
-
-
-
-
-
-
-
-
-
-
 
 const eid_contenedor_nav_pantalla = document.getElementById('contenedor_nav_pantalla');//aki se coloca div 'wr_btns_pantalla'
 const eid_pantalla_body = document.getElementById('pantalla_body');//para slide en select_slide()
@@ -166,33 +129,95 @@ const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner
 //const eid_btn_pantallaShow = document.getElementById('btn_pantallaShow');//luego miro donde colocar...
 const eid_vklad_btn_pantallaShow = document.getElementById('vklad_btn_pantallaShow');
 const eid_titulo_shown = document.getElementById('titulo_shown');
+//========================================================//
+//end - block_esquema
+//========================================================//
 
 
 
-
-
-
-
-
+//========================================================//
+//start - block_cancion
+//========================================================//
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
 const cancion_wr_btns_action = eid_block_cancion.querySelector('.wr_btns_action');
 const cancion_form_container = eid_block_cancion.querySelector('.form_container');
 
+const form = eid_block_cancion.querySelector('form');
 const form_mensaje = cancion_form_container.querySelector('form .mensaje');
+const eid_song_text = document.getElementById('song_text');
 
+
+
+
+//========================================================//
+//end - block_cancion
+//========================================================//
+
+
+
+//========================================================//
+//start - block_ejemplo
+//========================================================//
 const ejemplo_song_bloques = eid_block_ejemplo.querySelector('.song_bloques');
 const ejemplo_wr_vista_blocks = eid_block_ejemplo.querySelector('.wr_vista_blocks');
 const ejemplo_form_container = eid_block_ejemplo.querySelector('.form_container');
+const form_ejemplo = eid_block_ejemplo.querySelector('form');
+const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
+
+//========================================================//
+//end - block_ejemplo
+//========================================================//
+
+
+
+//========================================================//
+//start - block_lista
+//========================================================//
+const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
+const eid_modo_lista = document.getElementById('modo_lista');
+const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
+
+const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
 
 const lista_wr_vista_song = eid_block_lista.querySelector('.wr_vista_song');
 const lista_wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
+//========================================================//
+//end - block_lista
+//========================================================//
 
-const form = eid_block_cancion.querySelector('form');
-const form_ejemplo = eid_block_ejemplo.querySelector('form');
 
-const eid_song_text = document.getElementById('song_text');
-const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -200,6 +225,8 @@ const eid_d_sel_songbooks = document.getElementById('d_sel_songbooks');
 const eid_bl_songbook_search = document.getElementById('bl_songbook_search');
 const eid_wr_sb_checkboxes = document.getElementById('wr_sb_checkboxes');
 const btn_sel_sb = document.getElementById('btn_sel_sb');
+
+
 
 //==================================================================//
 //start - modal.js

@@ -2536,6 +2536,7 @@ function showBlockName(blockName){
         case 'cancion':
             bl_titulo.textContent = 'Crear / Editar canción';
             showOnlyBlock(blockName);
+            mySizeCancion();
             break;
 
         case 'ejemplo':
@@ -2575,6 +2576,7 @@ function mySizeEdit(){
 
     mySizeBuscar();
     mySizeEsquema();
+    mySizeCancion();
 }
 
 
@@ -2894,9 +2896,7 @@ async function nueva_song(){
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
-    eid_block_cancion.querySelector('.bl_parte_l h5').textContent = 'Añade los datos de la nueva canción:';
-    eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la nueva canción:';
-    eid_block_cancion.querySelector('.bl_parte_r h5').textContent = 'Estructura (bloques) de la canción:';
+    //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la nueva canción:';
     form_mensaje.textContent = 'Rellena los campos del formulario con los datos de la nueva canción.';
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
@@ -2932,9 +2932,7 @@ function editar_song(modo){
         makeInputsDisabled(cancion_form_container, true);
         //Partes left-right
         eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
-        eid_block_cancion.querySelector('.bl_parte_l h5').textContent = 'Los datos de la canción seleccionada:';
-        eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción seleccionada:';
-        eid_block_cancion.querySelector('.bl_parte_r h5').textContent = 'Estructura (bloques) de la canción:';
+        //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción seleccionada:';
         form_mensaje.textContent = 'Mira los campos del formulario de la canción.';
 
         resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
@@ -2944,9 +2942,7 @@ function editar_song(modo){
         makeInputsDisabled(cancion_form_container, false);
         //Partes left-right
         eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
-        eid_block_cancion.querySelector('.bl_parte_l h5').textContent = 'Edita los datos de la canción seleccionada:';
-        eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción editada:';
-        eid_block_cancion.querySelector('.bl_parte_r h5').textContent = 'Estructura (bloques) de la canción:';
+        //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción editada:';
         form_mensaje.textContent = 'Edita los campos del formulario de la canción.';
 
         resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
@@ -3031,9 +3027,7 @@ function eliminar_song(){
     makeInputsDisabled(cancion_form_container, true);
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Eliminar canción:';
-    eid_block_cancion.querySelector('.bl_parte_l h5').textContent = 'Los datos de la canción para eliminar:';
-    eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción para eliminar:';
-    eid_block_cancion.querySelector('.bl_parte_r h5').textContent = 'Estructura (bloques) de la canción:';
+    //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa:';
     form_mensaje.textContent = 'Revisa los campos del formulario de la canción que se va a eliminar.';
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
