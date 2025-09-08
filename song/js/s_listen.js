@@ -205,12 +205,18 @@ eid_edit_contenido.addEventListener('click', (e) => {
         //alert('1. click fuera de block bl_songbook_search');
         closeDiv(document.querySelector('#bl_find_settings'));
         closeDiv(document.querySelector('#bl_songbook_search'));
+
+        closeDiv(document.querySelector('#bl_actions_buscar'));
+        closeDiv(document.querySelector('#bl_actions_ver_esquema'));
+        closeDiv(document.querySelector('#bl_actions_crear_esquema'));
+        //closeDiv(document.querySelector('#bl_actions_select_slide_l'));//parte left -> pantalla o ventana
+        closeDiv(document.querySelector('#bl_actions_select_slide'));
     }
 
     if (!eid_edit_contenido_inner.contains(e.target)) {
         // Click fue dentro de eid_edit_contenido pero fuera de eid_edit_contenido_inner
         console.log('click fuera de edit_contenido_inner');
-        if(e.target.className != 'sp_close' && e.target.id != 'btn_resetEsquema'){
+        if(e.target.className != 'sp_close' && e.target.id != 'li_resetEsquema'){
             hideEdit(); // o cualquier lógica de cierre
         }else{
             //no hago nada
@@ -558,15 +564,7 @@ function clear_filter_result(contenedor_filtro, sp_icon_filtro, selector_items){
         }
     });
 
-    switch (contenedor_filtro) {
-        case eid_d_filter_results://buscar canción
-            //mySizeBuscar();
-            break;
-    
-        default:
-            break;
-    }
-
+    doMySizeByContenedor(contenedor_filtro);
 }
 
 
@@ -638,15 +636,22 @@ function filtrarLista(contenedor_filtro, sp_icon_filtro, el_input, selector_item
         sp_icon_filtro.classList.add('active');//opacity: 1; //hay filtro aplicado -> se ve blanco
     }
 
+    const ecl_f_num = ecl_filter_result.querySelector('.f_num');
+    ecl_f_num.textContent = count_f_result;
+
+    doMySizeByContenedor(contenedor_filtro);
+}
+
+
+function doMySizeByContenedor(contenedor_filtro){
+    if(!contenedor_filtro) return;
     switch (contenedor_filtro) {
         case eid_d_filter_results://buscar canción
-            //mySizeBuscar();
+            mySizeBuscar();
             break;
     
         default:
             break;
     }
-
-    const ecl_f_num = ecl_filter_result.querySelector('.f_num');
-    ecl_f_num.textContent = count_f_result;
 }
+

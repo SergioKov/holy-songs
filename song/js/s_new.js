@@ -6,44 +6,29 @@
 function pintSongActive(arr_words){//click en tr de la tabla de canciones
     console.log('=== function pintSongActive(e) === ');
 
-    //console.log('e.currentTarget: ', e.currentTarget);
-
-    //id_song = e.currentTarget.dataset.id;
     console.log('asignado global --- id_song: ', id_song);
 
     resetTrSelected(tbody);
-    //e.currentTarget.classList.add('selected');
     tbody.querySelector(`.tr_song[data-id="${id_song}"]`).classList.add('selected');
 
     //song_text
-    const vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
-    vista_song_content.innerHTML = '';//reset
+    buscar_vista_song_content.innerHTML = '';//reset
 
-    const wr_btns_action = document.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-        <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-        <button class="btn btn_big" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</button>
-        <button class="btn btn_big" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</button>
-        <button class="btn btn_big" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</button>
-        <button class="btn btn_big" onclick="crearSlides()">Crear slides</button>
-        <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-        <button class="btn btn_big" onclick="addToLista();">Añadir a la Lista</button>
+    buscar_ul_action.innerHTML = `
+        <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
+        <li class="li_action" onclick="crearSlides()">Crear slides</li>
+        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
     `;
 
     //dejo '==' en vez de '===' porque id_song viene como string "925"
     // objSong = arr.find(s => s.id_song == id_song);
     objSong = objDataSongs.arr_data.find(s => s.id_song == id_song);
     console.log('objSong: ', objSong);
-
-    // //convierto arr_esquema (string) en array correcto
-    // if(esString(objSong.arr_esquema) && objSong.arr_esquema != ''){
-    //     objSong.arr_esquema = JSON.parse(objSong.arr_esquema);
-    // }else{
-    //     objSong.arr_esquema = [];
-    // }
-    // console.log('(parseado) --- objSong: ', objSong);
-
 
     const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
     console.log('regex: ', regex);
@@ -156,10 +141,10 @@ function pintSongActive(arr_words){//click en tr de la tabla de canciones
     //     `;
     // }
 
-    vista_song_content.innerHTML = vista_html;
+    buscar_vista_song_content.innerHTML = vista_html;
 
     //construllo titulos de esquema después de añadir vista_html al DOM
-    buildEsquemaSoloTitulos(vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
+    buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 
     resetBlockEsquemaSoloHTML();
     resetBlockCancion();
@@ -167,25 +152,21 @@ function pintSongActive(arr_words){//click en tr de la tabla de canciones
 }
 
 
-function pintListaActive(/*e, arr, */arr_words){
+function pintListaActive(arr_words){
     console.log('=== function pintListaActive(e) === ');
-    
-    //console.log('e.currentTarget: ', e.currentTarget);
-    
-    //id_lista = e.currentTarget.dataset.id;
+        
     console.log('asignado global --- id_lista: ', id_lista);
 
     resetTrSelected(tbody_lista);
-    //e.currentTarget.classList.add('selected');
     tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
 
     lista_wr_vista_song.style.gap = '5px';
     lista_wr_vista_song.innerHTML = `
-        <div class="vista_song_content">...</div>
+        <div class="vista_lista_content">...</div>
     `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
 
-    const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
-    vista_song_content.innerHTML = '';//reset
+    const vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
+    vista_lista_content.innerHTML = '';//reset
 
     const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
     wr_btns_action.innerHTML = `
@@ -224,7 +205,7 @@ function pintListaActive(/*e, arr, */arr_words){
             <p class="p_titulo">Título Lista:</p>
             <p class="texto_norm t_big">${titulo_text_red}</p>
         `;
-        vista_song_content.append(d_titulo);
+        vista_lista_content.append(d_titulo);
     }
 
     //Fecha
@@ -250,7 +231,7 @@ function pintListaActive(/*e, arr, */arr_words){
             <p class="p_titulo">Fecha:</p>
             <p class="texto_norm t_big">${fecha_text_red}</p>
         `;
-        vista_song_content.append(d_fecha);
+        vista_lista_content.append(d_fecha);
     }
 
     // resetBlockLista();
@@ -259,21 +240,13 @@ function pintListaActive(/*e, arr, */arr_words){
     //Canciones
     const d_canciones_lista = document.createElement('div');
     d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_song_content.append(d_canciones_lista);
+    vista_lista_content.append(d_canciones_lista);
 
     
     console.log('antes --- objLista.arr_lista: ', objLista.arr_lista);
     
     //objLista = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objLista));
     console.log('ahora --- objLista: ', objLista);
-
-    // if(objLista.arr_lista == '' || objLista.arr_lista == '[]'){
-    //     objLista.arr_lista = [];
-    // }else{
-    //     objLista.arr_lista = JSON.parse(objLista.arr_lista);
-    // }
-    // console.log('despues --- objLista.arr_lista: ', objLista.arr_lista);
-
     
     arr_lista = objLista.arr_lista;//importante. reasigno desde bd
 
@@ -293,7 +266,7 @@ function pintListaActive(/*e, arr, */arr_words){
             <p class="p_titulo">Notas:</p>
             <p class="texto_norm">${notas_text_red}</p>
         `;
-        vista_song_content.append(d_notas);
+        vista_lista_content.append(d_notas);
     }
 
 }
@@ -333,11 +306,11 @@ function pintListaActiveSoloDatos(objLista){
 
     lista_wr_vista_song.style.gap = '5px';
     lista_wr_vista_song.innerHTML = `
-        <div class="vista_song_content">...</div>
-    `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
+        <div class="vista_lista_content">...</div>
+    `;//reset. ya que debe existir el 'div.vista_lista_content' lo meto de nuevo.
 
-    const vista_song_content = eid_block_lista.querySelector('.vista_song_content');
-    vista_song_content.innerHTML = '';//reset
+    const vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
+    vista_lista_content.innerHTML = '';//reset
 
     const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
     wr_btns_action.innerHTML = `
@@ -372,7 +345,7 @@ function pintListaActiveSoloDatos(objLista){
             <p class="p_titulo">Título Lista:</p>
             <p class="texto_norm t_big">${titulo_text_red}</p>
         `;
-        vista_song_content.append(d_titulo);
+        vista_lista_content.append(d_titulo);
     }
 
     //Fecha
@@ -398,7 +371,7 @@ function pintListaActiveSoloDatos(objLista){
             <p class="p_titulo">Fecha:</p>
             <p class="texto_norm t_big">${fecha_text_red}</p>
         `;
-        vista_song_content.append(d_fecha);
+        vista_lista_content.append(d_fecha);
     }
 
     // resetBlockLista();
@@ -406,7 +379,7 @@ function pintListaActiveSoloDatos(objLista){
     //Canciones
     const d_canciones_lista = document.createElement('div');
     d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_song_content.append(d_canciones_lista);
+    vista_lista_content.append(d_canciones_lista);
 
     let arr_lista_bd = objLista.arr_lista;
     console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
@@ -424,7 +397,7 @@ function pintListaActiveSoloDatos(objLista){
             <p class="p_titulo">Notas:</p>
             <p class="texto_norm">${notas_text_red}</p>
         `;
-        vista_song_content.append(d_notas);
+        vista_lista_content.append(d_notas);
     }
 
 }
@@ -492,37 +465,37 @@ function showOneSlideFrom(elementClicked){
 
     currentSlide = Number(index_esquema);
 
-    let btn_actual;
+    let li_actual;
 
-    //si ya existe el btn_actual...
-    if(select_slide_wr_btns_action.querySelector('#btn_crearSlidesActual')){
-        btn_actual = select_slide_wr_btns_action.querySelector('#btn_crearSlidesActual');
+    //si ya existe el li_actual...
+    if(select_slide_ul_action.querySelector('#li_crearSlidesActual') ){
+        li_actual = select_slide_ul_action.querySelector('#li_crearSlidesActual');
     }else{
         // creo boton actual
-        btn_actual = document.createElement('button');
-        btn_actual.id = 'btn_crearSlidesActual';
-        btn_actual.className = 'btn btn_big';
+        li_actual = document.createElement('li');
+        li_actual.id = 'li_crearSlidesActual';
+        li_actual.className = 'li_action';
     }
 
     if(slideContainer.dataset.id_song == id_song){
         // ya están creados los slides en el contenedor. me muevo al slide actual
-        btn_actual.textContent = 'Mostrar slide (Actual)';
-        btn_actual.onclick = () => {
+        li_actual.textContent = 'Ir al slide (Actual)';
+        li_actual.onclick = () => {
             closeAll();//cierro todas las ventanas modales
             scrollToSlide(currentSlide);
         }
     }else{
         // no están creados los slides en el contenedor. los creo
-        btn_actual.textContent = 'Crear slides (Ver Actual)';
-        btn_actual.onclick = () => {
+        li_actual.textContent = 'Crear slides (Ver Actual)';
+        li_actual.onclick = () => {
             crearSlides(currentSlide);
             closeAll();//cierro todas las ventanas modales
         }
     } 
 
-    select_slide_wr_btns_action.prepend(btn_actual);
+    select_slide_ul_action.prepend(li_actual);
 
-    make_arr_pantalla(currentSlide/*, el_fieldset_cloned, arr_esquema_bucle*/);
+    make_arr_pantalla(currentSlide);
 }
 
 
@@ -530,7 +503,7 @@ function showOneSlideFrom(elementClicked){
 
 
 
-function make_arr_pantalla(currentSlide/*, el_fieldset_cloned, arr_esquema_bucle*/){
+function make_arr_pantalla(currentSlide){
     console.log('=== function make_arr_pantalla() ===');
     console.log('currentSlide: ',currentSlide);
     console.log('arr_fieldsets: ', arr_fieldsets);
@@ -815,6 +788,7 @@ function hideShowDiv(id_div){
 
 function closeDiv(divElement){
     //console.log('=== function closeDiv() ===');
+    if(!divElement) return;
     
     const innerElement = divElement.querySelector('.bl_set_inner');    
     
@@ -970,7 +944,8 @@ function hideShowDesktopFilter(contenedor_filtro, sp_icon_filtro){
         hideDesktopFilter(contenedor_filtro, sp_icon_filtro);
     }else{
         showDesktopFilter(contenedor_filtro, sp_icon_filtro);
-    }    
+    }
+    mySizeBuscar();   
 }
 
 function hideDesktopFilter(contenedor_filtro, sp_icon_filtro){
@@ -1007,49 +982,188 @@ function mySizeBuscar(){
     // parseInt(sidebarInner_computedStyle.marginTop) + 
     // parseInt(sidebarInner_computedStyle.marginBottom);
 
-
     let window_w = window.innerWidth;
     let window_h = window.innerHeight;
     console.log('window_w: ', window_w);    
-    console.log('window_h: ', window_h);    
+    console.log('window_h: ', window_h);
     
+    let inner_margins = parseInt(inner_computedStyle.marginTop) + parseInt(inner_computedStyle.marginBottom);//10 * 2;    
     
     let edit_head_h = ecl_edit_head.offsetHeight;
     console.log('edit_head_h: ', edit_head_h);    
-
-    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);    
+    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);
     
     let bl_head_h = ecl_bl_head.offsetHeight;
     console.log('bl_head_h: ', bl_head_h);    
-    
-    
 
     let edit_body_h = 
       window_h 
     - ecl_edit_head.offsetHeight 
     ;
-
     // console.log('edit_body_h: ', edit_body_h);    
-    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicat
-
-
+    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicar
 
     let bl_body_h = 
       edit_body_h 
     - ecl_bl_head.offsetHeight
-    - (10 * 2) //margin-top y margin-bottom de '.inner' contenedor 
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor 
     ;
-
     console.log('bl_body_h: ', bl_body_h);    
     ecl_bl_body.style.height = bl_body_h + 'px';//comento para no duplicat
 
-    let parte_variable_h = 
-      bl_body_h 
-    - ecl_bl_body.querySelector('.parte_fija').offsetHeight;
-    - (10 * 2) //test...
+    let block_buscar_head_h = eid_block_buscar.querySelector('#block_buscar_head').offsetHeight;
+    console.log('block_buscar_head_h: ', block_buscar_head_h);  
+    
+
+    //=========================================================================================//
+    //bl_parte_l
+    //=========================================================================================//    
+    let parte_fija_l_h = eid_block_buscar.querySelector('.bl_parte_l .parte_fija').offsetHeight;
+    console.log('parte_fija_l_h: ', parte_fija_l_h);
+
+    let parte_variable_l_h = 
+      bl_body_h //858
+    - block_buscar_head_h //43
+    - parte_fija_l_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
     ;
-    console.log('parte_variable_h: ', parte_variable_h);    
-    ecl_bl_body.querySelector('.parte_variable').style.height = parte_variable_h + 'px';//comento para no duplicat
+    console.log('parte_variable_l_h: ', parte_variable_l_h);    
+    eid_block_buscar.querySelector('.bl_parte_l .parte_variable').style.height = parte_variable_l_h + 'px';//comento para no duplicat
+
+
+    let titulo_tabla_song_h = eid_block_buscar.querySelector('#titulo_tabla_song').offsetHeight;
+    let d_filter_results_h = eid_block_buscar.querySelector('#d_filter_results').offsetHeight;
+    let wr_tabla_paddings = parseInt(wr_tabla_computedStyle.paddingTop) + parseInt(wr_tabla_computedStyle.paddingBottom);//10 * 2;
+
+    let wr_tabla_inner_h = 
+      parte_variable_l_h //645
+    - titulo_tabla_song_h //38
+    - d_filter_results_h //0
+    - wr_tabla_paddings //20
+    ;
+    console.log('wr_tabla_inner_h: ', wr_tabla_inner_h); 
+
+    //pongo max-height para que scroll esté arriba si hay pocos registros 
+    eid_block_buscar.querySelector('.bl_parte_l .wr_tabla_inner').style.maxHeight = wr_tabla_inner_h + 'px';//'max-height', no 'height'
 
     
+    //=========================================================================================//
+    //bl_parte_r
+    //=========================================================================================//
+    let parte_fija_r_h = eid_block_buscar.querySelector('.bl_parte_r .parte_fija').offsetHeight;
+    console.log('parte_fija_r_h: ', parte_fija_r_h);
+
+    let parte_variable_r_h = 
+      bl_body_h //858
+    - block_buscar_head_h //43
+    - parte_fija_r_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_r_h: ', parte_variable_r_h);    
+    eid_block_buscar.querySelector('.bl_parte_r .parte_variable').style.height = parte_variable_r_h + 'px';//comento para no duplicat
+
+    console.log('=== end func ===');
+}
+
+
+function mySizeEsquema(){
+    console.log('=== function mySizeEsquema() ===');
+
+    let window_w = window.innerWidth;
+    let window_h = window.innerHeight;
+    console.log('window_w: ', window_w);    
+    console.log('window_h: ', window_h);
+    
+    let inner_margins = parseInt(inner_computedStyle.marginTop) + parseInt(inner_computedStyle.marginBottom);//10 * 2;    
+    
+    let edit_head_h = ecl_edit_head.offsetHeight;
+    console.log('edit_head_h: ', edit_head_h);    
+    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);
+    
+    let bl_head_h = ecl_bl_head.offsetHeight;
+    console.log('bl_head_h: ', bl_head_h);    
+
+    let edit_body_h = 
+      window_h 
+    - ecl_edit_head.offsetHeight 
+    ;
+    // console.log('edit_body_h: ', edit_body_h);    
+    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicar
+
+    let bl_body_h = 
+      edit_body_h 
+    - ecl_bl_head.offsetHeight
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor 
+    ;
+    console.log('bl_body_h: ', bl_body_h);    
+    ecl_bl_body.style.height = bl_body_h + 'px';//comento para no duplicat
+
+    let block_esquema_head_h = eid_block_esquema.querySelector('#block_esquema_head').offsetHeight;
+    console.log('block_esquema_head_h: ', block_esquema_head_h);
+    
+    //recorrer todas las 'vklads'
+    eid_block_esquema.querySelectorAll('.vklads').forEach((vklad, i)=>{
+        if(esElementoVisible(vklad)){
+            console.log('vklad es visible. vklad: ', vklad);
+            
+            const cl_vklad = vklad.classList[0];
+            mySizeEsquemaByClassVklad(cl_vklad, bl_body_h, block_esquema_head_h, inner_margins);
+        }
+    });
+
+    console.log('=== end func ===');
+}
+
+function mySizeEsquemaByClassVklad(cl_vklad, bl_body_h, block_esquema_head_h, inner_margins){
+    console.log('=== function mySizeEsquemaByClassVklad() ===');
+
+    //=========================================================================================//
+    //bl_parte_l
+    //=========================================================================================//    
+    let parte_fija_l_h = eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_l .parte_fija`).offsetHeight;
+    console.log('parte_fija_l_h: ', parte_fija_l_h);
+
+    let parte_variable_l_h = 
+      bl_body_h //858
+    - block_esquema_head_h //43
+    - parte_fija_l_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_l_h: ', parte_variable_l_h);    
+    eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_l .parte_variable`).style.height = parte_variable_l_h + 'px';
+
+    //si hay parte CENTRAL
+    if( eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_c`) ){
+        //=========================================================================================//
+        //bl_parte_c
+        //=========================================================================================//    
+        let parte_fija_c_h = eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_c .parte_fija`).offsetHeight;
+        console.log('parte_fija_c_h: ', parte_fija_c_h);
+    
+        let parte_variable_c_h = 
+          bl_body_h //858
+        - block_esquema_head_h //43
+        - parte_fija_c_h //150
+        - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+        ;
+        console.log('parte_variable_c_h: ', parte_variable_c_h);    
+        eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_c .parte_variable`).style.height = parte_variable_c_h + 'px';
+    }
+
+    
+    //=========================================================================================//
+    //bl_parte_r
+    //=========================================================================================//
+    let parte_fija_r_h = eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_r .parte_fija`).offsetHeight;
+    console.log('parte_fija_r_h: ', parte_fija_r_h);
+
+    let parte_variable_r_h = 
+      bl_body_h //858
+    - block_esquema_head_h //43
+    - parte_fija_r_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_r_h: ', parte_variable_r_h);    
+    eid_block_esquema.querySelector(`.${cl_vklad} .bl_parte_r .parte_variable`).style.height = parte_variable_r_h + 'px';
+
 }

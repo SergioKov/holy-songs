@@ -64,6 +64,13 @@ const eid_block_cancion_head = document.getElementById('block_cancion_head');
 const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
 const eid_block_lista_head = document.getElementById('block_lista_head');
 
+//========================================================//
+//block_buscar - start
+//========================================================//
+const eid_block_buscar_head = document.getElementById('block_buscar_head');
+const eid_block_buscar_body = document.getElementById('block_buscar_body');
+
+//bl_parte_l
 const eid_inpt_find = document.getElementById('inpt_find');
 const eid_modo = document.getElementById('modo');
 const eid_buscar_en = document.getElementById('buscar_en');
@@ -72,25 +79,42 @@ const eid_sp_icon_filtro = document.getElementById('sp_icon_filtro');
 const eid_d_filter_results = document.getElementById('d_filter_results');
 const eid_inpt_filter = document.getElementById('inpt_filter');
 
-const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
-const eid_modo_lista = document.getElementById('modo_lista');
-const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
-
-
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
-const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
+
+//bl_parte_r
+const buscar_ul_action = eid_block_buscar.querySelector('.ul_action');
+const buscar_vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
+
+//========================================================//
+//block_buscar - end
+//========================================================//
+
+
+
+
+//========================================================//
+//block_esquema - start
+//========================================================//
+//bl_parte_l
+const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
+//bl_parte_c
+const ver_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_btns');
+//bl_parte_r
+const ver_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_blocks');
+const ver_esquema_ul_action = eid_block_esquema.querySelector('.ul_action');
+
+
+
+
+
 
 
 //bl_parte_l
-//const song_bloques = eid_block_esquema.querySelector('.song_bloques');//antes
-const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
 const crear_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_crear_esquema .song_bloques');
 const select_slide_song_bloques = eid_block_esquema.querySelector('.vklad_select_slide .song_bloques');
 
 
 //bl_parte_c
-const ver_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_btns');
-
 const crear_esquema_wr_vista_btns = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns');
 const crear_esquema_wr_vista_btns_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_btns_actual');
 const crear_esquema_wr_esquema_actual = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_esquema_actual');//en crear_esquema
@@ -98,14 +122,38 @@ const crear_esquema_wr_esquema_actual = eid_block_esquema.querySelector('.vklad_
 const select_slide_wr_vista_btns = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_btns');
 
 //bl_parte_r
-const ver_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_vista_blocks');
-const ver_esquema_wr_btns_action = eid_block_esquema.querySelector('.vklad_ver_esquema .wr_btns_action');
-
 const crear_esquema_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_vista_blocks');
-const crear_esquema_wr_btns_action = eid_block_esquema.querySelector('.vklad_crear_esquema .wr_btns_action');
+const crear_esquema_ul_action = eid_block_esquema.querySelector('.vklad_crear_esquema .ul_action');
 
 const select_slide_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_select_slide .wr_vista_blocks');
-const select_slide_wr_btns_action = eid_block_esquema.querySelector('.vklad_select_slide .wr_btns_action');
+const select_slide_ul_action = eid_block_esquema.querySelector('.vklad_select_slide .ul_action');
+
+
+
+
+
+//========================================================//
+//block_esquema - end
+//========================================================//
+
+
+
+
+
+const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
+const eid_modo_lista = document.getElementById('modo_lista');
+const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
+
+
+
+const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
+
+
+
+
+
+
+
 
 
 
@@ -186,6 +234,12 @@ const eid_toast_container = document.getElementById("toast_container");
 //==================================================================//
 //end - toast
 //==================================================================//
+
+
+
+// Get the computed style, including margins
+const inner_computedStyle = window.getComputedStyle(document.querySelector('.inner'));//margin: 10px;
+const wr_tabla_computedStyle = window.getComputedStyle(document.querySelector('.wr_tabla'));//padding: 10px;
 
 
 const arr_titulos = [ //las palabras clave para separar el texto por bloques en buildSong()
