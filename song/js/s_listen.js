@@ -246,25 +246,10 @@ eid_puntosMenu.addEventListener('click', (e) => {
 });
 
 
-//uso listeners ya que se añaden una vez al cargar la web
-eid_song_text.addEventListener('input', (e) => {
-    handleFormInput(e, eid_block_cancion);
-});
 
 eid_song_text_ejemplo.addEventListener('input', (e) => {
     handleFormInput(e, eid_block_ejemplo);
 });
-
-
-//puedo usar 'oninput' para no duplicar los escuchadores, pero aki no se duplican
-//ya que se añade una vez al cargar la web
-// eid_song_text.oninput = (e) => {
-//     handleFormInput(e, eid_block_cancion);
-// };
-
-// eid_song_text_ejemplo.oninput = (e) => {
-//     handleFormInput(e, eid_block_ejemplo);
-// };
 
 
 

@@ -1426,6 +1426,19 @@ form .form_group {
 form > .form_group:last-child {
   margin-bottom: 0px; /* Solo el último hijo directo */
 }
+form > .form_group:last-of-type {
+  margin-bottom: 0;
+}
+form > .form_group:has(+ .wr_btns_form),
+form > .form_group:has(+ .wr_btns_eliminar) 
+{
+  margin-bottom: 0;
+}
+
+/* para id.notes */
+.form_group_last {
+    margin-bottom: 0;
+}
 
 form .d_canciones_lista.parte_lista ,
 form .d_esquema_titulos.parte_lista {
@@ -1505,14 +1518,15 @@ textarea:not(:placeholder-shown) + label
     width: 100%;
 }
 
-.wr_btns_form {
-    padding: 25px 0 0;
+.wr_btns_form,
+.wr_btns_eliminar 
+{
     /* background: #e4e4e4; */
-    /* margin: 0 0 10px; */
+    /* border-top: 1px solid #dddddd; */
+    padding: 25px 0 0;
     display: flex;
     gap: 5px;
     justify-content: space-between;
-    border-top: 1px solid #dddddd;
 }
 
 #contenedor_lista_sm .wr_btns_eliminar {
@@ -2481,4 +2495,12 @@ p.p_sm b {
 
 .edit_blocks_head .btn {
     min-width: 60px !important;
+}
+
+.form_cancion{
+    width: 100%;
+}
+
+.razdel {
+    padding-top: 10px;
 }

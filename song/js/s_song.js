@@ -1913,12 +1913,11 @@ function resetBlockCancion(){
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset  
+    // cancion_ul_action.innerHTML = '...';//reset  
     
-    cancion_song_bloques.querySelector('.puntos_def').style.display = 'block';//muestro '...'
-    cancion_form_container.style.display = 'none';//oculto formulario de canción
-
-    cancion_form_container.querySelector('form').reset();//reseteo formulario
+    //cancion_song_bloques.querySelector('.puntos_def').style.display = 'block';//muestro '...'
+    //cancion_form_container.style.display = 'none';//oculto formulario de canción
+    //cancion_form_container.querySelector('form').reset();//reseteo formulario
 }
 
 function resetBlockLista(){
@@ -1933,9 +1932,16 @@ function resetBlockLista(){
 }
 
 
-async function guardarSong(event){
+async function guardarSong(event, id_contenedor, cancion_action){
     console.log('=== function guardarSong() ===');
     event.preventDefault();
+
+    const contenedor = document.getElementById(id_contenedor);
+
+    if(!contenedor){
+        alert('no hay contenedor de form. hago return...');
+        return;
+    }
 
     try {
         
@@ -1946,14 +1952,16 @@ async function guardarSong(event){
         //     return;
         // }
 
-        let title = document.getElementById("title").value.trim();
-        let category = document.getElementById("category").value.trim();
-        let songbook = document.getElementById("songbook").value.trim();
-        let song_number = document.getElementById("song_number").value.trim();
-        let tune = document.getElementById("tune").value.trim();
-        let lang = document.getElementById("lang").value.trim();
-        let song_text = document.getElementById("song_text").value.trim();
-        let notes = document.getElementById("notes").value.trim();
+        const form = contenedor.querySelector("form");
+
+        let title = form.elements["title"].value.trim();
+        let category = form.elements["category"].value.trim();
+        let songbook = form.elements["songbook"].value.trim();
+        let song_number = form.elements["song_number"].value.trim();
+        let tune = form.elements["tune"].value.trim();
+        let lang = form.elements["lang"].value.trim();
+        let song_text = form.elements["song_text"].value.trim();
+        let notes = form.elements["notes"].value.trim();
     
         let errors = [];
 
@@ -1977,8 +1985,9 @@ async function guardarSong(event){
             errors.forEach(error => {
                 error_text += ' - ' + error + '<br>';
             });            
-            form_mensaje.innerHTML = `<span class="add_result add_error">Por favor, introduce: <br> ${error_text}</span>`;
-            cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">Por favor, introduce: <br> ${error_text}</span>`;
+            // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             return;
         }
         
@@ -2003,7 +2012,6 @@ async function guardarSong(event){
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
             song_number: song_number,
             title: title,
-            //arr_esquema: '', //no hay esquema al crear/editar una canción. se guarda en guardarEsquema()
             arr_esquema: arr_esquema_guardar, //o '' o arr //new
             category: category,
             songbook: songbook,
@@ -2015,8 +2023,7 @@ async function guardarSong(event){
         console.log('objSongToSend: ',objSongToSend);
     
         const data = await insertarSongDatos(objSongToSend);
-        console.log('data: ',data);         
-
+        console.log('data: ',data);
     
         if(data.success){
             
@@ -2045,8 +2052,8 @@ async function guardarSong(event){
             }
             console.log(text_show);
     
-            //form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-            //cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+            //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
             showToast('ok', text_show, 5000);
 
@@ -2056,14 +2063,35 @@ async function guardarSong(event){
                 objSong = objSongToSend;//reasigno el objeto song con los datos del formulario
                 objSong.id_song = id_song;//añado el id_song al objeto song
 
-                cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
-                cancion_form_container.querySelector('#id_song').value = id_song;
+                let objForUpdate = objDataSongs.arr_data.find(v => v.id_song == objSong.id_song);
+
+                const item = objDataSongs.arr_data.find(v => v.id_song == objSong.id_song);
+                if (item) {
+                    Object.assign(item, objSong);
+                    // el objeto dentro de arr_data ya está actualizado
+                } else {
+                    console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
+                }
+
+                form.elements['id_song'].disabled = true;//deshabilito input id_song   
+                form.elements['id_song'].value = id_song;
+
+                //si guardo desde el modal, recargo datos de song en el block activo
+                // if(contenedor.id == 'bl_modalFullInner' && cancion_song_bloques.querySelector('form')){
+                //     alert('voy a actualizar con buildFormCancion()...');
+                //     buildFormCancion(cancion_song_bloques, 'editar');//siempre 'editar'!!!
+                // }
+                editar_song('editar');
 
                 cancion_wr_btns_action.innerHTML = `
-                    <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-                    <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-                    <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
+                    <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
+                    <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+                    <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
                 `;
+
+                //Actualizo tr_song, 
+                pintSongActiveSoloDatos(objSong);//en la ventana a la derecha de la tabla de lista
+
             }
            
         }else{
@@ -2075,8 +2103,8 @@ async function guardarSong(event){
 
             let error_text = 'Error al guardar la canción.';
     
-            //form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-            //cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+            //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
             showToast('error', error_text, 5000);
         }
@@ -2086,78 +2114,105 @@ async function guardarSong(event){
         console.error('guardarSong. error: ',error);
     }
 
-    //crearSlides();
-    //crear_esquema_btns_actual();//actualizo los botones de esquema actual
 }
 
-async function deleteSong(){
+async function deleteSong(event, id_contenedor, cancion_action){
     console.log('=== function deleteSong() ===');
+    event.preventDefault();
 
-    id_song = objSong.id_song;
-    console.log('id_song: ', id_song);
+    const contenedor = document.getElementById(id_contenedor);
 
-    if(!id_song){
-        alert('id_song no está indicado... hago return.');
-    }
-
-    const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la canción con los siguientes datos? \nID: ${id_song} \ntítulo: '${objSong.title}' \n\nEsta acción no se podrá deshacer.`);
-    if(respuesta){
-        console.log('sigo adelante para eliminar la canción...'); //clic en "Aceptar"
-    } else {
-        //console.log("7755. Cancelar..."); //clic en "Cancelar"
+    if(!contenedor){
+        alert('no hay contenedor de form. hago return...');
         return;
     }
 
-    const data = await deleteSongFromBd();
-    console.log('data: ',data);
+    try {
+    
+        id_song = objSong.id_song;
+        console.log('id_song: ', id_song);
 
-    if(data.success){
-        
-        let text_show;
-        text_show = 'Canción eliminada con éxito.';
-        console.log(text_show);
-
-        form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-        cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
-
-        if(data.id_song){
-            console.log('id_song: ', data.id_song);
-
-            //Elimino elemento tr de la tabla tbody con la cancion eliminada
-            tbody.querySelector(`.tr_song[data-id="${id_song}"]`).remove();
-
-            cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
-            cancion_form_container.querySelector('#id_song').value = id_song;
-
-            resetBlockBuscar();
-            resetBlockEsquema();
-
-            pintLineasXinBlock(eid_block_cancion);
-
-            // eid_block_cancion.querySelector('bl_parte_l .bloques_outer').classList.add('datos_eliminados');
-            // eid_block_cancion.querySelector('bl_parte_r .bloques_outer').classList.add('datos_eliminados');
-
-            cancion_wr_btns_action.innerHTML = `
-                <p class="prim bg_red">Canción eliminada</p>
-                <button class="btn" onclick="showBlockName('buscar');">Buscar</button>
-            `;
-
-            id_song = null;
-            objSong = {};//reseteo objeto song
+        if(!id_song){
+            alert('id_song no está indicado... hago return.');
         }
-        
-    }else{
-        console.log(`Error al eliminar la canción.`);
-        
-        //"Error al registrar el usuario";
-        console.error(data.error);
-        console.error(data.dic_code);
 
-        let error_text = 'Error al eliminar la canción.';
+        const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la canción con los siguientes datos? \nID: ${id_song} \ntítulo: '${objSong.title}' \n\nEsta acción no se podrá deshacer.`);
+        if(respuesta){
+            console.log('sigo adelante para eliminar la canción...'); //clic en "Aceptar"
+        } else {
+            //console.log("7755. Cancelar..."); //clic en "Cancelar"
+            return;
+        }
 
-        form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-        cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        const data = await deleteSongFromBd();
+        console.log('data: ',data);
+
+        const form = contenedor.querySelector("form");
+
+        if(data.success){
+            
+            let text_show;
+            text_show = 'Canción eliminada con éxito.';
+            console.log(text_show);
+
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+            contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('ok', text_show, 5000);
+
+            if(data.id_song){
+                console.log('id_song: ', data.id_song);
+
+                //Elimino elemento tr de la tabla tbody con la cancion eliminada
+                tbody.querySelector(`.tr_song[data-id="${id_song}"]`).remove();
+
+                form.elements['id_song'].disabled = true;//deshabilito input id_song   
+                form.elements['id_song'].value = id_song;
+
+                resetBlockBuscar();
+                resetBlockEsquema();
+
+                pintLineasXinBlock(eid_block_cancion);
+
+                cancion_ul_action.innerHTML = `
+                    <p class="prim bg_red">Canción eliminada</p>
+                    <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
+                `;
+
+                id_song = null;
+                objSong = {};//reseteo objeto song
+
+                setTimeout(()=>{
+                    const aviso_outer = document.createElement('div');
+                    aviso_outer.className = 'aviso_outer';
+                    aviso_outer.innerHTML = `
+                    <p class="p_aviso">${text_show}</p>
+                    <p class="p_aviso">Busca una canción según tus criterios en la pestaña <b>Buscar</b>.</p>
+                    <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('buscar');">Buscar</button>
+                    `;
+                    openModal('center','Aviso Eliminar Canción',aviso_outer,'showAviso2');
+                }, 1000);
+            }
+            
+        }else{
+            console.log(`Error al eliminar la canción.`);
+            
+            console.error('data.error: ', data.error);
+            console.error('data.dic_code: ',data.dic_code);
+
+            let text_show = 'Error al eliminar la canción.';
+
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
+            contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('ok', text_show, 5000);
+        }
+
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('deleteSong. error: ',error);        
     }
+
 }
 
 
@@ -2699,7 +2754,6 @@ async function findWordsSong(){
                 id_song = e.currentTarget.dataset.id;
                 console.log('asigno global --- id_song: ', id_song);               
                 
-                // pintSongActive(e, arr, arr_words);//en la ventana a la derecha de la tabla de lista
                 pintSongActive(arr_words);//en la ventana a la derecha de la tabla de lista
             }//end - tr.onclick
 
@@ -2877,7 +2931,7 @@ function pintSongbooksOptions(selectElement){
 
 
 
-async function nueva_song(){
+async function old_nueva_song(){
     console.log('=== function nueva_song() ===');
 
     id_song = null;//reset id_song -> ya que es nueva canción
@@ -2919,7 +2973,38 @@ async function nueva_song(){
 }
 
 
-function editar_song(modo){
+async function nueva_song(){
+    console.log('=== function nueva_song() ===');
+
+    id_song = null;//reset id_song -> ya que es nueva canción
+
+    //reseteo datos de la song anterior para evitar confusión
+    resetBlockBuscar();
+    resetBlockEsquema();
+    resetLineasXinBlock(eid_block_cancion);
+
+    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_btns_action.innerHTML = '...';//reset 
+    cancion_song_bloques.classList.add('solo_ver');
+
+    buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
+
+
+    //Partes left-right
+    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
+
+    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+    eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active')
+
+    cancion_ul_action.innerHTML = `
+        <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
+    `;
+    
+    console.log('fin');
+}
+
+
+function old_editar_song(modo){
     console.log('=== function editar_song() ===');
 
     if(!hay_id_song('editar_song()')){
@@ -2933,7 +3018,7 @@ function editar_song(modo){
         //Partes left-right
         eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
         //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción seleccionada:';
-        form_mensaje.textContent = 'Mira los campos del formulario de la canción.';
+        //form_mensaje.textContent = 'Mira los campos del formulario de la canción.';
 
         resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
         eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');
@@ -2943,7 +3028,7 @@ function editar_song(modo){
         //Partes left-right
         eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
         //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción editada:';
-        form_mensaje.textContent = 'Edita los campos del formulario de la canción.';
+        //form_mensaje.textContent = 'Edita los campos del formulario de la canción.';
 
         resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
         eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
@@ -2975,7 +3060,6 @@ function editar_song(modo){
     cancion_form_container.querySelector('#notes').value = objSong.notes || '';
 
     handleFormInput(cancion_form_container.querySelector('#song_text'), eid_block_cancion);
-
 
     buildEsquemaSoloTitulos(cancion_form_container.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 
@@ -3015,7 +3099,50 @@ function editar_song(modo){
 }
 
 
-function eliminar_song(){
+function editar_song(modo){
+    console.log('=== function editar_song() ===');
+
+    if(!hay_id_song('editar_song()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    resetLineasXinBlock(eid_block_cancion);
+
+    if(modo == 'ver'){
+        //makeInputsDisabled(cancion_form_container, true);
+        //Partes left-right
+        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
+
+        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+        eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');
+    }
+    else if(modo == 'editar'){
+        //makeInputsDisabled(cancion_form_container, false);
+        //Partes left-right
+        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
+
+        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+        eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
+    }
+
+    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_btns_action.innerHTML = '...';//reset 
+    cancion_song_bloques.classList.add('solo_ver');
+
+    buildFormCancion(cancion_song_bloques, cancion_action = modo);//'ver', 'editar'
+
+    cancion_ul_action.innerHTML = `
+        <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="crearSlides();">Crear slides</li>
+        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+    `;
+    
+    console.log('fin');    
+}
+
+
+function old_eliminar_song(){
     console.log('=== function eliminar_song() ===');
 
     if(!hay_id_song('eliminar_song()')){
@@ -3059,6 +3186,36 @@ function eliminar_song(){
     cancion_wr_btns_action.innerHTML = `
         <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>                
         <button class="btn btn_big btn_eliminar" onclick="deleteSong();">Eliminar Canción DEFINITIVAMENTE</button>                
+    `;
+    
+    console.log('fin');    
+}
+
+
+function eliminar_song(){
+    console.log('=== function eliminar_song() ===');
+
+    if(!hay_id_song('eliminar_song()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    resetLineasXinBlock(eid_block_cancion);
+
+    //Partes left-right
+    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Eliminar canción:';
+
+    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+    eid_block_cancion_head.querySelector('#btn_song_eliminar').classList.add('btn_active');
+
+    //cancion_wr_vista_blocks.innerHTML = '...';//reset
+    //cancion_ul_action.innerHTML = '...';//reset    
+    cancion_song_bloques.classList.add('solo_ver');
+
+    buildFormCancion(cancion_song_bloques, cancion_action = 'eliminar');
+
+    cancion_ul_action.innerHTML = `
+        <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>                
+        <li class="li_action btn_eliminar" onclick="deleteSong(event);">Eliminar Canción DEFINITIVAMENTE</li>                
     `;
     
     console.log('fin');    

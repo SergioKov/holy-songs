@@ -15,14 +15,24 @@ function pintSongActive(arr_words){//click en tr de la tabla de canciones
     buscar_vista_song_content.innerHTML = '';//reset
 
     buscar_ul_action.innerHTML = `
+        <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        
+        <div class="razdel">Canción:</div>
         <li class="li_action" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
+        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+        
+        <div class="razdel">Modal:</div>
+        <li class="li_action" onclick="openModal('full','Ver Canción',null,'buildFormCancion',true, 'ver')">Ver canción</li>
+        <li class="li_action" onclick="openModal('full','Editar Canción',null,'buildFormCancion',true, 'editar')">Editar canción</li>
+        <li class="li_action" onclick="openModal('full','Eliminar Canción',null,'buildFormCancion',true, 'eliminar')">Eliminar canción</li>
+        
+        <div class="razdel">Diapositivas:</div>
         <li class="li_action" onclick="crearSlides()">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
-        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
     `;
 
     //dejo '==' en vez de '===' porque id_song viene como string "925"
@@ -30,121 +40,7 @@ function pintSongActive(arr_words){//click en tr de la tabla de canciones
     objSong = objDataSongs.arr_data.find(s => s.id_song == id_song);
     console.log('objSong: ', objSong);
 
-    const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//busco las palabras del input
-    console.log('regex: ', regex);
-
-    let vista_html = '';
-
-    if(objSong.id_song){
-        //Marco en rojo las palabras encontradas en title 
-        let id_song_text_red = objSong.id_song.toString().replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-
-        vista_html += `
-            <p class="p_titulo">Id:</p>
-            <p class="texto_norm t_big">${id_song_text_red}</p>
-        `;
-    }
-
-    if(objSong.song_number){
-        //Marco en rojo las palabras encontradas en title 
-        let song_number_text_red = objSong.song_number.toString().replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-
-        vista_html += `
-            <p class="p_titulo">Número:</p>
-            <p class="texto_norm t_big">${song_number_text_red}</p>
-        `;
-    }
-
-    if(objSong.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objSong.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Título Canción:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-    }
-
-    if(objSong.category_name){
-        //Marco en rojo las palabras encontradas en title 
-        let category_name_text_red = objSong.category_name.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Categoría:</p>
-            <p class="texto_norm t_big">${category_name_text_red}</p>
-        `;
-    }
-
-    if(objSong.songbook_title){
-        //Marco en rojo las palabras encontradas en title 
-        let songbook_title_text_red = objSong.songbook_title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Songbook:</p>
-            <p class="texto_norm t_big">${songbook_title_text_red}</p>
-        `;
-    }
-
-    if(objSong.song_text){
-        //Marco en rojo las palabras encontradas en song_text 
-        let song_text_red = objSong.song_text.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Texto:</p>
-            <div class="texto_pre">${song_text_red}</div>
-        `;
-    }
-
-    //añado contenedor para d_esquema
-    vista_html += `
-        <div class="d_esquema_titulos"></div>
-    `;
-
-    if(objSong.notes){
-        //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objSong.notes.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Notas:</p>
-            <p class="texto_norm">${notas_text_red}</p>
-        `;
-    }
-
-
-    // if(objSong.arr_esquema.length > 0){
-    //     vista_html += `
-    //         <p class="p_titulo">Esquema:</p>
-    //     `;
-    //     objSong.arr_esquema.forEach( (item, i)=>{
-    //         if(i != 0){
-    //             vista_html += `
-    //                 <p class="texto_norm linea">
-    //                     <span class="titulo">(${item.nombre})</span> 
-    //                     ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
-    //                 </p>
-    //             `;
-    //         }
-    //     });
-    // }else{
-    //     vista_html += `
-    //         <p class="p_titulo">Esquema:</p>
-    //         <p class="texto_norm">No</p>
-    //     `;
-    // }
-
-    buscar_vista_song_content.innerHTML = vista_html;
-
-    //construllo titulos de esquema después de añadir vista_html al DOM
-    buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
+    pintSongActiveSoloDatos(objSong);
 
     resetBlockEsquemaSoloHTML();
     resetBlockCancion();
@@ -268,6 +164,166 @@ function pintListaActive(arr_words){
         `;
         vista_lista_content.append(d_notas);
     }
+
+}
+
+
+function pintSongActiveSoloDatos(objSong){
+    console.log('=== function pintSongActiveSoloDatos() === ');
+
+    //comprobar si existe tr_lista de lalista activa
+    const tr_song = tbody.querySelector(`.tr_song[data-id="${objSong.id_song}"]`);
+    console.log('tr_song: ', tr_song);
+    
+    if(!tr_song){
+        return;
+    }
+
+    //actualizo datos de tr_song
+    tr_song.querySelector('.td_numero').textContent = objSong.song_number || '';
+    tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
+    tr_song.querySelector('.td_esquema').textContent = (objSong.arr_esquema.length > 0) ? 'Sí' :  '';
+    tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
+    tr_song.querySelector('.td_category').textContent = objSong.category_name || '';
+    tr_song.querySelector('.td_songbook').dataset.songbook = objSong.songbook || '';
+    tr_song.querySelector('.td_songbook').textContent = objSong.songbook_title || '';
+    tr_song.querySelector('.td_idioma').textContent = obj_lang_names[objSong.lang] || '';
+    tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
+
+
+
+    let words_input = eid_inpt_find.value.trim();
+    let arr_words = [];
+    if(words_input.includes(' ')){
+        arr_words = words_input.split(' ');
+    }else{
+        arr_words = [words_input];
+    }
+
+    
+
+   // Normalizamos palabras
+    //const arr_normalized = arr_words.map(normalize);//modo corto de escribir la func abajo
+    const arr_normalized = arr_words.map( palabra => {
+        return normalize(palabra);
+    });
+    console.log('arr_normalized: ', arr_normalized);
+        
+    const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');//busco las palabras del input
+    console.log('regex: ', regex);
+
+    let vista_html = '';
+
+    if(objSong.id_song){
+        //Marco en rojo las palabras encontradas en title 
+        let id_song_text_red = objSong.id_song.toString().replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+
+        vista_html += `
+            <p class="p_titulo">Id:</p>
+            <p class="texto_norm t_big">${id_song_text_red}</p>
+        `;
+    }
+
+    if(objSong.song_number){
+        //Marco en rojo las palabras encontradas en title 
+        let song_number_text_red = objSong.song_number.toString().replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+
+        vista_html += `
+            <p class="p_titulo">Número:</p>
+            <p class="texto_norm t_big">${song_number_text_red}</p>
+        `;
+    }
+
+    if(objSong.title){
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_text_red = objSong.title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Título Canción:</p>
+            <p class="texto_norm t_big">${titulo_text_red}</p>
+        `;
+    }
+
+    if(objSong.category_name){
+        //Marco en rojo las palabras encontradas en title 
+        let category_name_text_red = objSong.category_name.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Categoría:</p>
+            <p class="texto_norm t_big">${category_name_text_red}</p>
+        `;
+    }
+
+    if(objSong.songbook_title){
+        //Marco en rojo las palabras encontradas en title 
+        let songbook_title_text_red = objSong.songbook_title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Songbook:</p>
+            <p class="texto_norm t_big">${songbook_title_text_red}</p>
+        `;
+    }
+
+    if(objSong.song_text){
+        //Marco en rojo las palabras encontradas en song_text 
+        let song_text_red = objSong.song_text.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Texto:</p>
+            <div class="texto_pre">${song_text_red}</div>
+        `;
+    }
+
+    //añado contenedor para d_esquema
+    vista_html += `
+        <div class="d_esquema_titulos"></div>
+    `;
+
+    if(objSong.notes){
+        //Marco en rojo las palabras encontradas en notes 
+        let notas_text_red = objSong.notes.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Notas:</p>
+            <p class="texto_norm">${notas_text_red}</p>
+        `;
+    }
+
+
+    // if(objSong.arr_esquema.length > 0){
+    //     vista_html += `
+    //         <p class="p_titulo">Esquema:</p>
+    //     `;
+    //     objSong.arr_esquema.forEach( (item, i)=>{
+    //         if(i != 0){
+    //             vista_html += `
+    //                 <p class="texto_norm linea">
+    //                     <span class="titulo">(${item.nombre})</span> 
+    //                     ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
+    //                 </p>
+    //             `;
+    //         }
+    //     });
+    // }else{
+    //     vista_html += `
+    //         <p class="p_titulo">Esquema:</p>
+    //         <p class="texto_norm">No</p>
+    //     `;
+    // }
+
+    buscar_vista_song_content.innerHTML = vista_html;
+
+    //construllo titulos de esquema después de añadir vista_html al DOM
+    buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 
 }
 

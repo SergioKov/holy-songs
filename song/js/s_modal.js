@@ -191,6 +191,20 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
 
                     buildLista(lista_action);
                     break;
+
+                case 'buildFormCancion':
+                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    console.log('aki llamar buildFormCancion()');
+                    // alert('hasta aki...');
+                    let contenedor = eid_bl_modalFullInner;//solo aki
+                    let cancion_action = args;
+                    console.log('contenedor:', contenedor);
+                    console.log('cancion_action:', cancion_action);
+
+                    buildFormCancion(contenedor, cancion_action);
+                    break;
             
                 default:
                     //console.log('indica action en openModal()');
@@ -306,6 +320,340 @@ function buildEsquema(){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+function buildFormCancion(contenedor, cancion_action = null){
+    console.log('=== function buildFormCancion() ===');
+
+    console.log('cancion_action: ', cancion_action);
+    console.log('objSong: ', objSong);
+
+    if(!contenedor){
+        alert('no hay contenedor, hago return...');
+        return;
+    }
+
+    let id_vstavka = '';
+    if(contenedor.id == 'bl_modalFullInner'){
+        id_vstavka = 'mod_';
+    }
+
+
+    //eid_bl_modalFullInner.innerHTML = '';//reset
+    contenedor.innerHTML = '';//reset
+
+    let mensaje_html = '';
+    //let contenedor;//general. se asigna luego
+
+    if(cancion_action !== 'nueva'){
+        if(!hay_id_song('buildFormCancion()')){
+            const aviso_outer = document.createElement('div');
+            aviso_outer.className = 'aviso_outer';
+            aviso_outer.innerHTML = `
+                <p class="p_aviso">No has seleccionado ninguna canción.</p>
+                <p class="p_aviso">Busca una canción introduciendo el texto en la pestaña <b>Buscar</b>.</p>
+                <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('Buscar');">Buscar</button>
+            `;
+            openModal('center','Aviso Lista',aviso_outer,'showAviso2');
+            return; // <- se detiene aquí si no hay id_lista
+        }
+    }
+  
+
+    //Botones ELIMINAR - FORMULARIO
+    const wr_btns_eliminar = document.createElement('div');
+    wr_btns_eliminar.className = 'wr_btns_eliminar';
+    wr_btns_eliminar.innerHTML = `
+        <button class="btn btn_big" onclick="openModal('full','Editar Canción',null,'buildFormCancion',true, 'editar');">Editar</button>
+        <button class="btn btn_big btn_eliminar" onclick="deleteSong(event, '${contenedor.id}','${cancion_action}');">Eliminar Canción DEFINITIVAMENTE</button>
+    `;
+
+    
+    //Botones GUARDAR - FORMULARIO
+    const wr_btns_form = document.createElement('div');
+    wr_btns_form.className = 'wr_btns_form';
+    wr_btns_form.innerHTML = `
+        <button id="btn_ResetForm" class="btn btn_big" type="reset">Limpiar</button>
+        <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarSong(event, '${contenedor.id}','${cancion_action}');">Guardar</button>
+    `;
+
+
+    //FORMULARIO
+    const form_cancion = document.createElement('div');
+    //form_cancion.id = 'form_cancion';
+    form_cancion.className = 'form_cancion';
+    form_cancion.innerHTML = `
+        <div class="form_container">
+            <form>
+                
+                <p class="mensaje"></p>
+
+                <div class="form_group wr_title">
+                    <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" ">
+                    <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
+                </div>
+
+                <div class="wr_sel_category select_container">
+                    <select id="${id_vstavka}category" name="category" class="sel_opt" required="">
+                        <option value="" disabled selected hidden></option>
+                        <option value="1">1. Наприкінці церковного зібрання</option>
+                        <option value="2">2. На рукопокладення</option>
+                        <option value="3">3. Хрещення</option>
+                        <option value="4">4. Перед церковним зібранням</option>
+                        <option value="5">5. Біблійні історії</option>
+                        <option value="6">6. Заклик до покаяння</option>
+                        <option value="7">7. Діти та сім'я</option>
+                        <option value="8">8. Християнська радість</option>
+                        <option value="9">9. Різдво</option>
+                        <option value="10">10. Церква</option>
+                        <option value="11">11. Утіха та підбадьорення</option>
+                        <option value="12">12. Рішучість і вірність</option>
+                        <option value="13">13. Слідування за Христом</option>
+                        <option value="14">14. Для новонавернених</option>
+                        <option value="15">15. Похорон</option>
+                        <option value="16">16. Бог, Його любов і велич</option>
+                        <option value="17">17. Євангеліє</option>
+                        <option value="18">18. Жнива</option>
+                        <option value="19">19. Небесне житло</option>
+                        <option value="20">20. Святий Дух</option>
+                        <option value="21">21. Настанови та самоперевірка</option>
+                        <option value="22">22. Ісус Христос</option>
+                        <option value="23">23. Шлях віри, віра і надія</option>
+                        <option value="24">24. Останні дні</option>
+                        <option value="25">25. Любов</option>
+                        <option value="26">26. Мама</option>
+                        <option value="27">27. Новий рік</option>
+                        <option value="28">28. Вечеря Господня</option>
+                        <option value="29">29. Різне</option>
+                        <option value="30">30. Практичне життя з Богом</option>
+                        <option value="31" selected>31. Хвала і подяка</option>
+                        <option value="32">32. Молитва</option>
+                        <option value="33">33. Спасіння</option>
+                        <option value="34">34. Духовна боротьба і перемога</option>
+                        <option value="35">35. Страждання і смерть Христа</option>
+                        <option value="36">36. Захід / Схід сонця</option>
+                        <option value="37">37. Воскресіння Христа</option>
+                        <option value="38">38. Слово Боже</option>
+                        <option value="39">39. Заклик до праці</option>
+                        <option value="40">40. Друге пришестя Христа і суд</option>
+                        <option value="41">41. Час</option>
+                        <option value="42">42. Різні християнські свята</option>
+                        <option value="43">43. Весілля</option>
+                        <option value="44">44. Привітання та прощання</option>
+                        <option value="45">45. Молодь</option>
+                        <option value="46">46. Інструментальна</option>
+                        <option value="47">47. Колискові</option>
+                        <option value="48">48. Дитячі</option>
+                        <option value="49">49. Табірні</option>
+                        <option value="50">50. Зцілення</option>
+                        <option value="51">51. Прощення</option>
+                        <option value="52">52. В’їзд до Єрусалима</option>
+                        <option value="53">53. Вознесіння Господнє</option>
+                        <option value="54">54. Пасхальні</option>
+                        <option value="55">55. Трійця</option>
+                    </select>
+                    <label for="${id_vstavka}category">Category</label>
+                </div>
+
+                <div class="wr_sel_category select_container">
+                    <select id="${id_vstavka}songbook" name="songbook" class="sel_opt" required="">
+                        <!-- se pintan los songbook aki desde bd -->
+                    </select>
+                    <label for="${id_vstavka}songbook">Пісенник (Збірник пісень)</label>
+                </div>
+
+                <div class="wr_group">
+
+                    <div class="form_group wr_id_song">
+                        <input id="${id_vstavka}id_song" name="id_song" class="inpt_id_song" type="number" required="" placeholder=" ">
+                        <label for="${id_vstavka}id_song">Id</label>
+                    </div>
+
+                    <div class="form_group wr_song_number">
+                        <input id="${id_vstavka}song_number" name="song_number" type="text" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                        <label for="${id_vstavka}song_number">Número</label>
+                    </div>
+
+                    <div class="form_group wr_tune select_container">
+                        <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
+                            <option value="" disabled selected hidden></option>
+                            <option value="C">C</option>
+                            <option value="Cm">Cm</option>
+                            <option value="C#">C#</option>
+                            <option value="C#m">C#m</option>
+                            <option value="Db">Db</option>
+                            <option value="Dbm">Dbm</option>
+                            <option value="D">D</option>
+                            <option value="Dm">Dm</option>
+                            <option value="D#">D#</option>
+                            <option value="D#m">D#m</option>
+                            <option value="Eb">Eb</option>
+                            <option value="Ebm">Ebm</option>
+                            <option value="E">E</option>
+                            <option value="Em">Em</option>
+                            <option value="F">F</option>
+                            <option value="Fm">Fm</option>
+                            <option value="F#">F#</option>
+                            <option value="F#m">F#m</option>
+                            <option value="Gb">Gb</option>
+                            <option value="Gbm">Gbm</option>
+                            <option value="G">G</option>
+                            <option value="Gm">Gm</option>
+                            <option value="G#">G#</option>
+                            <option value="G#m">G#m</option>
+                            <option value="Ab">Ab</option>
+                            <option value="Abm">Abm</option>
+                            <option value="A">A</option>
+                            <option value="Am">Am</option>
+                            <option value="A#">A#</option>
+                            <option value="A#m">A#m</option>
+                            <option value="Bb">Bb</option>
+                            <option value="Bbm">Bbm</option>
+                            <option value="H">H</option>
+                            <option value="Hm">Hm</option>
+                        </select>
+                        <label for="${id_vstavka}tune">Tonalidad</label>
+                    </div>
+
+                    <div class="form_group wr_lang">
+                        <select id="${id_vstavka}lang" name="lang" class="sel_opt" required="">
+                            <option value="" disabled selected hidden></option>
+                            <option value="ua">Українська</option>
+                            <option value="ru">Русский</option>
+                            <option value="es">Español</option>
+                            <option value="en">English</option>
+                        </select>
+                        <label for="${id_vstavka}lang">Idioma</label>
+                    </div>
+
+                </div>
+
+                <div class="form_group">
+                    <textarea id="${id_vstavka}song_text" name="song_text" rows="25" required="" placeholder=" "></textarea>
+                    <label for="${id_vstavka}song_text" class="lab_textarea">Texto de la canción</label>
+                </div>
+                
+                <!-- Esquema -->
+                <div class="d_esquema_titulos parte_lista"></div>
+
+                <div class="form_group">
+                    <textarea id="${id_vstavka}notes" name="notes" rows="3" required="" placeholder=" "></textarea>
+                    <label for="${id_vstavka}notes" class="lab_textarea">Notas (apuntes personales)</label>
+                </div>
+
+            </form>
+        </div>     
+    `;
+
+
+    const form = form_cancion.querySelector('form');
+
+
+    switch (cancion_action) {
+        case 'nueva'://Nueva lista
+            mensaje_html = `
+                <span>Canción <b class="c_blue">NUEVA</b>.</span>
+            `;
+            id_song = null;
+            form_cancion.querySelector('.mensaje').innerHTML = mensaje_html;
+            form.reset();//reseteo formulario
+            form.elements["id_song"].disabled = true;//deshabilito input id_song   
+            form.querySelector('.wr_id_song').style.display = 'none';//oculto el wr_id_song
+            
+            pintSongbooksOptions(form.elements['songbook']); 
+            
+            //2. escucho al cambiar el texto...
+            form.elements['song_text'].oninput = (e) => {
+                handleFormInput(e, eid_block_cancion);
+            }           
+            break;
+                    
+        default:
+        case 'ver'://Ver Cancion - FORMULARIO
+        case 'editar'://Editar Cancion - FORMULARIO
+        case 'eliminar'://Eliminar Cancion - FORMULARIO
+            mensaje_html = `
+                <span class="sp_id">
+                    <span>Id: <b class="c_green">${id_song}</b></span>
+                    <span><b class="actual">(ACTUAL)</b></span>
+                </span>
+            `;
+            form.querySelector('.mensaje').innerHTML = mensaje_html;
+
+            pintSongbooksOptions(form.elements['songbook']);   
+            
+            // cancion_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
+            // cancion_form_container.style.display = 'block';//mostrar formulario de canción
+
+
+
+            form.reset();//reseteo formulario    
+            
+            form.elements['title'].value = objSong.title || '';
+            form.elements['category'].value = objSong.category || '';
+            form.elements['songbook'].value = objSong.songbook || '';
+            form.elements['id_song'].value = objSong.id_song;
+            form.elements['id_song'].disabled = true;//deshabilito input id_song
+            form.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
+            form.elements['song_number'].value = objSong.song_number || '';
+            form.elements['tune'].value = objSong.tune || '';
+            form.elements['lang'].value = objSong.lang;
+            form.elements['song_text'].value = objSong.song_text || '';
+            form.elements['notes'].value = objSong.notes || '';
+
+            //1. importante para que pinte bloques al añadir form (si hacer oninput)
+            handleFormInput(form.elements['song_text'], eid_block_cancion);
+
+            //2. escucho al cambiar el texto...
+            form.elements['song_text'].oninput = (e) => {
+                handleFormInput(e, eid_block_cancion);
+            }
+
+            buildEsquemaSoloTitulos(form.querySelector('.d_esquema_titulos'), objSong.arr_esquema);             
+            break;
+    }
+
+    if(['ver'].includes(cancion_action)){
+        //no apendo nada;
+        makeInputsDisabled(form_cancion, true);//deshabilito los inputs
+    }else if(['nueva','editar'].includes(cancion_action)){
+        form_cancion.querySelector('form').append(wr_btns_form);
+        if(['nueva'].includes(cancion_action)){
+            makeInputsDisabled(form_cancion, false);//habilito los inputs
+        }
+    }else if(['eliminar'].includes(cancion_action)){
+        form_cancion.querySelector('form').append(wr_btns_eliminar);
+        makeInputsDisabled(form_cancion, true);//deshabilito los inputs
+    }
+
+    //añado al DOM
+    // eid_bl_modalFullInner.append(form_cancion);
+    contenedor.append(form_cancion);
+
+    console.log('fin func --- buildFormCancion');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function buildLista(lista_action = null){
     console.log('=== function buildLista() ===');
 
@@ -389,7 +737,7 @@ function buildLista(lista_action = null){
 
     //Botones ELIMINAR - SM
     const wr_btns_eliminar = document.createElement('div');
-    wr_btns_eliminar.className = 'wr_btns_form wr_btns_eliminar';
+    wr_btns_eliminar.className = 'wr_btns_eliminar';
     wr_btns_eliminar.innerHTML = `
         <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
         <button class="btn btn_big btn_eliminar" onclick="deleteLista();">Eliminar Lista DEFINITIVAMENTE</button>
@@ -479,7 +827,6 @@ function buildLista(lista_action = null){
     }else{
         buildListaSoloSongs(contenedor.querySelector('.d_canciones_lista'), arr_lista_bucle);        
     }
-
 
     eid_bl_modalFullInner.append(contenedor);
 

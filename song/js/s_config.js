@@ -141,15 +141,10 @@ const eid_titulo_shown = document.getElementById('titulo_shown');
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
 const cancion_wr_btns_action = eid_block_cancion.querySelector('.wr_btns_action');
+const cancion_ul_action = eid_block_cancion.querySelector('.ul_action');
 const cancion_form_container = eid_block_cancion.querySelector('.form_container');
 
 const form = eid_block_cancion.querySelector('form');
-const form_mensaje = cancion_form_container.querySelector('form .mensaje');
-const eid_song_text = document.getElementById('song_text');
-
-
-
-
 //========================================================//
 //end - block_cancion
 //========================================================//
@@ -423,3 +418,6 @@ let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_es
 
 
 let debug = false;//hacer test
+
+
+let arr_words;//para buscar cancion
