@@ -61,7 +61,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                         <div class="separador"></div>
                         <button id="btn_lista" class="btn" onclick="showEdit('lista')">Buscar Lista</button>
-                        <button id="btn_lista" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver Lista</button>
                         <div class="separador"></div>
 
                         <div id="d_currentTipoAcorde">Tipo acorde (si hay): </div>

@@ -80,7 +80,6 @@ $sql_init = "SELECT
                 id_lista, 
                 title, 
                 notes, 
-                arr_lista, 
                 arr_lista_ids, 
                 fecha, 
                 created_at, 
@@ -156,6 +155,7 @@ if($result->num_rows > 0){
         'arr_lista' => $arr_lista_from_table_songs,
         'arr_lista_ids' => $row['arr_lista_ids'],
         'fecha' => $row['fecha'],
+        'fecha_ver' => convertirFecha($row['fecha'], '/'),
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
         'valorData' => 'hay_datos'

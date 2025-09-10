@@ -2190,14 +2190,14 @@ async function guardarLista(event){
         }
 
         //Creo array de solo ids de canciones. si arr_lista es vacío, retorna arr_lista_ids vacío
-        arr_lista_ids = arr_lista.map(item => item.id_song);
+        arr_lista_ids = arr_lista.map(item => parseInt(item.id_song));
+        console.log('arr_lista_ids: ', arr_lista_ids);
 
-        let arr_lista_str;//debe ser string ya se mete en la bd como string
+
         let arr_lista_ids_str;//debe ser string ya se mete en la bd como string
 
         if(id_lista == null){
             console.log('es lista NUEVA');
-            arr_lista_str = JSON.stringify(arr_lista);
             arr_lista_ids_str = JSON.stringify(arr_lista_ids);
 
             if(arr_lista.length == 0){
@@ -2209,10 +2209,8 @@ async function guardarLista(event){
         }else{
             console.log('es lista EDITADA');
             if(esString(objLista.arr_lista)){
-                arr_lista_str = objLista.arr_lista;
                 arr_lista_ids_str = JSON.stringify(JSON.parse(objLista.arr_lista).map(item => parseInt(item.id_song)));
             }else{
-                arr_lista_str = JSON.stringify(objLista.arr_lista);
                 arr_lista_ids_str = JSON.stringify(objLista.arr_lista.map(item => parseInt(item.id_song)));
             }
 
@@ -2223,13 +2221,11 @@ async function guardarLista(event){
             }
         }
 
-        console.log('arr_lista_str: ', arr_lista_str);
         console.log('arr_lista_ids_str: ', arr_lista_ids_str);
 
         const objListaToSend = {
             id_lista: id_lista || null, //ya que se añade una nueva lista, no hay id_lista
             title: title,
-            arr_lista: arr_lista_str, //como STRING siempre aki
             arr_lista_ids: arr_lista_ids_str, //como STRING siempre aki
             fecha: fecha,
             fecha_ver: convertirFecha(fecha, 'ver','/'),
@@ -2287,11 +2283,6 @@ async function guardarLista(event){
             if(data.id_lista){
                 console.log('id_lista: ', data.id_lista);
                 id_lista = data.id_lista;//guardo el id de la canción recién creada
-
-                // objLista = objListaToSend;//reasigno el objeto lista con los datos del formulario                
-                // objLista.id_lista = id_lista;//añado el id_lista al objeto lista
-                //objLista.arr_lista = arr_lista;//formato array correcto
-                //console.log('objLista: ', objLista);
 
                 //Cojo datos de la lista desde BD
                 objLista = await getDataListaFromBd();//IMPORTANTE para cojer todos los datos necesarios
@@ -3445,7 +3436,7 @@ function makeItemsDraggable(id_contenedor, class_element){
             make_arrListaFromItems(`.${class_element}`);
             console.log('arr_lista actualizado: ', arr_lista);
 
-            buildListaSoloSongs(eid_block_lista.querySelector('.vista_lista_content .d_canciones_lista'), arr_lista);
+            buildListaSoloSongs(eid_block_lista.querySelector('.vista_lista_content .d_canciones_lista'), arr_lista);           
 
             // const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');//no funciona
             const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #d_canciones_body_drag');

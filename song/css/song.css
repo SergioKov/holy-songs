@@ -1430,6 +1430,7 @@ form > .form_group:last-of-type {
   margin-bottom: 0;
 }
 form > .form_group:has(+ .wr_btns_form),
+form > .form_group:has(+ .wr_btns_guardar),
 form > .form_group:has(+ .wr_btns_eliminar) 
 {
   margin-bottom: 0;
@@ -1519,6 +1520,7 @@ textarea:not(:placeholder-shown) + label
 }
 
 .wr_btns_form,
+.wr_btns_guardar,
 .wr_btns_eliminar 
 {
     /* background: #e4e4e4; */
@@ -1796,7 +1798,15 @@ p.p_lista:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 5px;
 }
+
+.sp_canciones{
+    width: 100%;
+}
+.canciones_head .btn {
+    min-width: 70px;
+} 
 
 .canciones_body {
     background: #737373;

@@ -654,10 +654,13 @@ function buildLista(lista_action = null){
 
     eid_bl_modalFullInner.innerHTML = '';//reset
 
+    // Formato YYYY-MM-DD que necesita <input type="date">
+    const fecha_hoy = new Date().toISOString().split("T")[0];
+
     let id_lista_val = '';
     let title_val = '';
     let diaSemana_val = '';
-    let fecha_val = '';
+    let fecha_val = fecha_hoy;
     let notes_val = '';
     let mensaje_html = '';
     let arr_lista_bucle = [];
@@ -726,6 +729,14 @@ function buildLista(lista_action = null){
             break;
     }
     
+
+    //Botones GUARDAR - SM
+    // const wr_btns_guardar = document.createElement('div');
+    // wr_btns_guardar.className = 'wr_btns_guardar';
+    // wr_btns_guardar.innerHTML = `
+    //     <button class="btn btn_big" onclick="showEdit('lista'); closeModal(null,true);">Buscar Lista</button>
+    //     <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
+    // `;
 
     //Botones ELIMINAR - SM
     const wr_btns_eliminar = document.createElement('div');
@@ -841,18 +852,26 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span>Canciones:</span>
+            <span class="sp_canciones">Canciones:</span>
         `;
         wr_p_lista.append(d_canciones_head);
 
-        const btn_head_action = document.createElement('button');
-        btn_head_action.className = 'btn';
         if(!sort){
-            btn_head_action.textContent = 'Ordenar';
-            btn_head_action.onclick = () => {
+            const btn_action_ordenar = document.createElement('button');
+            btn_action_ordenar.className = 'btn btn_action_ordenar';
+            btn_action_ordenar.textContent = 'Ordenar';
+            btn_action_ordenar.onclick = () => {
                 openModal('full','Ordenar lista',null,'buildLista',true, 'sort');
-            }
-            d_canciones_head.append(btn_head_action);
+            }        
+            d_canciones_head.append(btn_action_ordenar);
+
+            const btn_action_editar = document.createElement('button');
+            btn_action_editar.className = 'btn btn_action_editar';
+            btn_action_editar.textContent = 'Editar';
+            btn_action_editar.onclick = () => {
+                openModal('full','Editar lista',null,'buildLista',true, 'editar');
+            }        
+            d_canciones_head.append(btn_action_editar);
         }
 
         //Body
@@ -1085,17 +1104,25 @@ function buildListaSort(contenedor, arr_lista_bucle){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span>Canciones:</span>
+            <span class="sp_canciones">Canciones:</span>
         `;
         wr_p_lista.append(d_canciones_head);
         
-        const btn_head_action = document.createElement('button');
-        btn_head_action.className = 'btn';
-        btn_head_action.textContent = 'Ver';
-        btn_head_action.onclick = () => {
+        const btn_action_ver = document.createElement('button');
+        btn_action_ver.className = 'btn btn_action_ver';
+        btn_action_ver.textContent = 'Ver';
+        btn_action_ver.onclick = () => {
             openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');
         }        
-        d_canciones_head.append(btn_head_action);
+        d_canciones_head.append(btn_action_ver);
+
+        const btn_action_editar = document.createElement('button');
+        btn_action_editar.className = 'btn btn_action_editar';
+        btn_action_editar.textContent = 'Editar';
+        btn_action_editar.onclick = () => {
+            openModal('full','Editar lista',null,'buildLista',true, 'editar');
+        }        
+        d_canciones_head.append(btn_action_editar);
 
         //Body
         const d_canciones_body = document.createElement('div');
@@ -1609,7 +1636,7 @@ async function deleteListaFromBd(){
 
             let lista_title = data.title; 
             let lista_nota = data.notes; 
-            data.arr_lista = (data.arr_lista != '') ? JSON.parse(data.arr_lista) : data.arr_lista ; 
+            //data.arr_lista = (data.arr_lista != '') ? JSON.parse(data.arr_lista) : data.arr_lista ; 
 
             console.log(`[ELIMINADA] id_lista: [${id_lista}] --- lista_title: [${lista_title}] --- lista_nota: [${lista_nota}] --- data.arr_lista: `, data.arr_lista);
 

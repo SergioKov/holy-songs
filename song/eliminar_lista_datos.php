@@ -79,7 +79,7 @@ $id_lista = $conn->real_escape_string($datos['id_lista']);//aki importante
 $sql_init = "SELECT 
                 id_lista, 
                 title, 
-                arr_lista, 
+                arr_lista_ids, 
                 notes, 
                 fecha, 
                 created_at, 
@@ -109,7 +109,7 @@ if($result->num_rows > 0){
         'success' => true,
         'id_lista' => $row['id_lista'],
         'title' => $row['title'],
-        'arr_lista' => $row['arr_lista'],
+        'arr_lista_ids' => $row['arr_lista_ids'],
         'notes' => $row['notes'],
         'fecha' => $row['fecha'],
         'created_at' => $row['created_at'],

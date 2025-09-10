@@ -119,13 +119,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     $id_lista = $conn->real_escape_string($datos['id_lista']);//get parameter
     $title = $conn->real_escape_string($datos['title']);//get parameter
-    $notes  = $conn->real_escape_string($datos['notes']);//get parameter
-    //$arr_lista = json_encode($datos['arr_lista'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
-    $arr_lista_string = json_encode($datos['arr_lista'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
-    $arr_lista_array = json_decode($datos['arr_lista'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
-    $arr_lista_ids_string = json_encode($datos['arr_lista_ids'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
-    $arr_lista_ids_array = json_decode($datos['arr_lista_ids'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
+    $notes  = $conn->real_escape_string($datos['notes']);//get parameter   
     $fecha  = $conn->real_escape_string($datos['fecha']);//get parameter
+    $arr_lista_ids_string = $conn->real_escape_string($datos['arr_lista_ids']);
+    $arr_lista_ids_array = json_decode($datos['arr_lista_ids'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
+    
 
     //debug($title);
     //debug($arr, 'arr');
@@ -167,12 +165,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     // Realizar la inserción o (update) en la base de datos 
     if($hay_id_lista_en_tabla){
         //hago update
-        //echo_json_x($arr_lista_array, 'en hay_id_lista_en_tabla --- arr_lista_array');
-        if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
+        //echo_json_x($arr_lista_ids_array, 'en hay_id_lista_en_tabla --- arr_lista_ids_array');
+        if (is_array($arr_lista_ids_array) && !empty($arr_lista_ids_array) ) {// Es un array y tiene elementos
             $action_tipo = 'is_update_arr_lista_ok';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
-                    arr_lista = '$arr_lista_string',
                     arr_lista_ids = '$arr_lista_ids_string',
                     notes = '$notes',
                     fecha = '$fecha',
@@ -183,7 +180,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $action_tipo = 'is_update_arr_lista_vacio';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
-                    arr_lista = '',
                     arr_lista_ids = '',
                     notes = '$notes',
                     fecha = '$fecha',
@@ -204,12 +200,12 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');	
     }else{        
         //hago insert
-        if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
+        if (is_array($arr_lista_ids_array) && !empty($arr_lista_ids_array) ) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_lista_ok';
             $sql2_in_init = "INSERT INTO listas 
-                    (  title,   arr_lista,         arr_lista_ids,          fecha,    notes,    created_at) 
+                    (  title,   arr_lista_ids,          fecha,    notes,    created_at) 
                 VALUES 
-                    ('$title', $arr_lista_string, $arr_lista_ids_string, '$fecha', '$notes', '$fechaHoraActual')
+                    ('$title', '$arr_lista_ids_string', '$fecha', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_lista en la SQL
             $action_tipo = 'is_insert_arr_lista_vacio';

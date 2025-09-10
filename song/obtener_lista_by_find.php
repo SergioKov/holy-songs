@@ -95,7 +95,7 @@ switch ($buscar_en) {
         break;
 
     case '2'://Todos los campos disponibles, los títulos de canciones incluidos - (lento)
-        $arr_campos = ['id_lista', 'title', 'arr_lista', 'notes', 'fecha'];
+        $arr_campos = ['id_lista', 'title', 'notes', 'fecha'];
         break;
     
     case '3'://Todos los campos de texto disponibles
@@ -131,7 +131,6 @@ $sql_init = "SELECT
                 id_lista, 
                 title,
                 notes,
-                arr_lista,
                 arr_lista_ids,
                 fecha,
                 created_at,
@@ -237,9 +236,8 @@ if($result->num_rows > 0){
             'id_lista' => $row['id_lista'],
             'title' => $row['title'],
             'notes' => $row['notes'],
-            //'arr_lista' => $row['arr_lista'],
-            'arr_lista_ids' => $row['arr_lista_ids'],
             'arr_lista' => $arr_lista_from_table_songs,
+            'arr_lista_ids' => $row['arr_lista_ids'],
             'fecha' => $row['fecha'],
             'fecha_ver' => convertirFecha($row['fecha'], '/'),
             'created_at' => $row['created_at'],

@@ -421,6 +421,6 @@ let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_es
 let debug = false;//hacer test
 
 
-let arr_words;//para buscar cancion en 'buscar'
-let arr_words_lista;//para buscar cancion en 'buscar'
+let arr_words = [];//para buscar cancion en pestaña 'buscar'
+let arr_words_lista = [];//para buscar lista en pestaña 'lista'
 
