@@ -123,6 +123,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //$arr_lista = json_encode($datos['arr_lista'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
     $arr_lista_string = json_encode($datos['arr_lista'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
     $arr_lista_array = json_decode($datos['arr_lista'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
+    $arr_lista_ids_string = json_encode($datos['arr_lista_ids'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+    $arr_lista_ids_array = json_decode($datos['arr_lista_ids'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
     $fecha  = $conn->real_escape_string($datos['fecha']);//get parameter
 
     //debug($title);
@@ -171,6 +173,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
                     arr_lista = '$arr_lista_string',
+                    arr_lista_ids = '$arr_lista_ids_string',
                     notes = '$notes',
                     fecha = '$fecha',
                     updated_at = '$fechaHoraActual'
@@ -181,6 +184,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
                     arr_lista = '',
+                    arr_lista_ids = '',
                     notes = '$notes',
                     fecha = '$fecha',
                     updated_at = '$fechaHoraActual'
@@ -203,9 +207,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         if (is_array($arr_lista_array) && !empty($arr_lista_array) ) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_lista_ok';
             $sql2_in_init = "INSERT INTO listas 
-                    (  title,   arr_lista,   fecha,    notes,    created_at) 
+                    (  title,   arr_lista,         arr_lista_ids,          fecha,    notes,    created_at) 
                 VALUES 
-                    ('$title', $arr_lista_string, '$fecha', '$notes', '$fechaHoraActual')
+                    ('$title', $arr_lista_string, $arr_lista_ids_string, '$fecha', '$notes', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_lista en la SQL
             $action_tipo = 'is_insert_arr_lista_vacio';
@@ -291,8 +295,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     // Enviar respuesta al cliente en formato JSON
     header('Content-Type: application/json');
-    echo json_encode($respuesta);
-	
+    echo json_encode($respuesta);	
 }
 
 ?>

@@ -26,3 +26,16 @@ function generarSQLInsertMultiple(datos, id_songbook, lang_val) {
 
 
 
+
+async function getSong(id_song){
+    const obj = await getDataSongFromBd();//IMPORTANTE para cojer todos los datos necesarios
+    console.log('(getSong) --- obj: ', obj);
+}
+
+
+async function getLista(id_lista_pram){
+    id_lista = id_lista_pram;
+    const obj = await getDataListaFromBd();//IMPORTANTE para cojer todos los datos necesarios
+    console.log('(getLista) --- obj: ', obj);
+}
+

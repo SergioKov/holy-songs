@@ -1180,6 +1180,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     <script src="js/s_modal.js"></script>
     <script src="js/s_listen.js"></script>
     <script src="js/s_new.js"></script>
+    <script src="js/s_old.js"></script>
     <script src="js/s_test.js"></script>
 
 </body>

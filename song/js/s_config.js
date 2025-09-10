@@ -401,7 +401,8 @@ let objFindListaParams = {
 };
 
 // let arr_lista = JSON.parse(localStorage.getItem('arr_lista')) || [] ;
-let arr_lista = [] ;
+let arr_lista = [];
+let arr_lista_ids = [];//[8051,8052] - solo los id_song
 
 
 
@@ -420,4 +421,6 @@ let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_es
 let debug = false;//hacer test
 
 
-let arr_words;//para buscar cancion
+let arr_words;//para buscar cancion en 'buscar'
+let arr_words_lista;//para buscar cancion en 'buscar'
+

@@ -262,7 +262,7 @@ function mySizeModal(){
 
 
 
-function buildTest(){
+function buildTest(){//NO SE USA
     console.log('=== function buildTest() ===');
 
     eid_bl_modalFullInner.innerHTML = '';//reset
@@ -279,10 +279,6 @@ function buildTest(){
         </div>      
     `;
 
-    const p = document.createElement('p');
-    p.className = '';
-    p.innerHTML = songText;
-
     const d_ejemplo = document.createElement('div');
     d_ejemplo.innerHTML = ejemplo_html;
 
@@ -291,7 +287,7 @@ function buildTest(){
 }
 
 
-function buildEsquema(){
+function buildEsquema(){//NO SE USA
     console.log('=== function buildEsquema() ===');
 
     eid_bl_modalFullInner.innerHTML = '';//reset
@@ -307,10 +303,6 @@ function buildEsquema(){
             </div>
         </div>      
     `;
-
-    const p = document.createElement('p');
-    p.className = '';
-    p.innerHTML = songText;
 
     const d_ejemplo = document.createElement('div');
     d_ejemplo.innerHTML = ejemplo_html;
@@ -373,7 +365,7 @@ function buildFormCancion(contenedor, cancion_action = null){
     wr_btns_eliminar.className = 'wr_btns_eliminar';
     wr_btns_eliminar.innerHTML = `
         <button class="btn btn_big" onclick="openModal('full','Editar Canción',null,'buildFormCancion',true, 'editar');">Editar</button>
-        <button class="btn btn_big btn_eliminar" onclick="deleteSong(event, '${contenedor.id}','${cancion_action}');">Eliminar Canción DEFINITIVAMENTE</button>
+        <button class="btn btn_big btn_eliminar" onclick="deleteSong(event, '${contenedor.id}');">Eliminar Canción DEFINITIVAMENTE</button>
     `;
 
     
@@ -1179,12 +1171,12 @@ function buildListaSort(contenedor, arr_lista_bucle){
 
 
 
-async function getSongTextFromBd(){
-    console.log('=== function getSongTextFromBd() ===');
+async function getDataSongFromBd(){
+    console.log('=== function getDataSongFromBd() ===');
 
     try {
         
-        if(!hay_id_song('getSongTextFromBd()')){
+        if(!hay_id_song('getDataSongFromBd()')){
             return; // <- se detiene aquí si no hay id_song
         } 
                
@@ -1229,12 +1221,65 @@ async function getSongTextFromBd(){
 }
 
 
+async function getDataListaFromBd(){
+    console.log('=== function getDataListaFromBd() ===');
+
+    try {
+        
+        if(!hay_id_lista('getDataListaFromBd()')){
+            return; // <- se detiene aquí si no hay id_lista
+        } 
+               
+        const response = await fetch('obtener_lista_datos.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify({
+                id_lista: id_lista
+            }), // Convertir los datos a formato JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        let data;
+
+        if(debug){
+            data = await response.text();//test
+        }else{
+            data = await response.json();
+        }
+        console.log('data:', data);  
+        
+        if(data.success){
+            console.log('success is true');
+
+            let lista_title = data.title; 
+            //data.arr_lista = (esString(data.arr_lista) && data.arr_lista != '' && data.arr_lista.length > 0) ? JSON.parse(data.arr_lista) : [] ;// test arr vacio 
+
+            console.log(`id_lista: [${id_lista}] --- lista_title: [${lista_title}] --- data.arr_lista: `, data.arr_lista);
+
+            return data;
+
+        }else{
+            console.log('success is false');
+            return 'no_hay_datos';
+        }
+
+    } catch (error) {
+        console.error('Error en getDataListaFromBd(): error.message: ', error.message);
+    }
+}
+
+
 async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el <select></select>
     console.log('=== function getSongbooksFromBd() ===');
 
     try {
         
-        // if(!hay_id_song('getSongTextFromBd()')){
+        // if(!hay_id_song('getDataSongFromBd()')){
         //     return; // <- se detiene aquí si no hay id_song
         // } 
                
@@ -1278,8 +1323,8 @@ async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el
 
 
 
-async function getSongTextFromBdByFind(objFindParams){
-    console.log('=== function getSongTextFromBdByFind(words_input) ===');
+async function getDataSongsFromBdByFind(objFindParams){
+    console.log('=== function getDataSongsFromBdByFind(words_input) ===');
 
     let {words_input, modo, buscar_en, arr_songbooks_search} = objFindParams;
 
@@ -1325,13 +1370,13 @@ async function getSongTextFromBdByFind(objFindParams){
         }
 
     } catch (error) {
-        console.error('Error en getSongTextFromBdByFind(): error.message: ', error.message);
+        console.error('Error en getDataSongsFromBdByFind(): error.message: ', error.message);
     }
 }
 
 
-async function getListaTextFromBdByFind(objFindListaParams){
-    console.log('=== function getListaTextFromBdByFind(objFindListaParams) ===');
+async function getDataListasFromBdByFind(objFindListaParams){
+    console.log('=== function getDataListasFromBdByFind(objFindListaParams) ===');
 
     let {words_input, modo, buscar_en} = objFindListaParams;
 
@@ -1358,9 +1403,13 @@ async function getListaTextFromBdByFind(objFindListaParams){
             throw new Error('Error al obtener datos');
         }
 
-        const data = await response.json();
-        //const data = await response.text();//test
-        console.log(data);  
+        let data;
+        if(debug){
+            data = await response.text();//test
+        }else{
+            data = await response.json();
+        }
+        console.log('data: ', data);
         
         if(data.success){
             console.log('success is true');
@@ -1377,9 +1426,11 @@ async function getListaTextFromBdByFind(objFindListaParams){
         }
 
     } catch (error) {
-        console.error('Error en getListaTextFromBdByFind(): error.message: ', error.message);
+        console.error('Error en getDataListasFromBdByFind(): error.message: ', error.message);
     }
 }
+
+
 
 
 async function insertarSongDatos(objSong) {

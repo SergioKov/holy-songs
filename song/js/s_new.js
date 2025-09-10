@@ -3,7 +3,7 @@
 //============================================================//
 
 
-function pintSongActive(arr_words){//click en tr de la tabla de canciones
+function pintSongActive(){//click en tr de la tabla de canciones
     console.log('=== function pintSongActive(e) === ');
 
     console.log('asignado global --- id_song: ', id_song);
@@ -35,147 +35,31 @@ function pintSongActive(arr_words){//click en tr de la tabla de canciones
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
     `;
 
-    //dejo '==' en vez de '===' porque id_song viene como string "925"
-    // objSong = arr.find(s => s.id_song == id_song);
+    //dejo '==' en vez de '===' porque id_song viene como string: "925"
     objSong = objDataSongs.arr_data.find(s => s.id_song == id_song);
     console.log('objSong: ', objSong);
 
-    pintSongActiveSoloDatos(objSong);
+    pintSongActiveSoloDatos();
 
     resetBlockEsquemaSoloHTML();
     resetBlockCancion();
     resetLineasXinBlock(eid_block_cancion);
 }
 
-
-function pintListaActive(arr_words){
-    console.log('=== function pintListaActive(e) === ');
-        
-    console.log('asignado global --- id_lista: ', id_lista);
-
-    resetTrSelected(tbody_lista);
-    tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
-
-    lista_wr_vista_song.style.gap = '5px';
-    lista_wr_vista_song.innerHTML = `
-        <div class="vista_lista_content">...</div>
-    `;//reset. ya que debe existir el 'div.vista_song_content' lo meto de nuevo.
-
-    const vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
-    vista_lista_content.innerHTML = '';//reset
-
-    const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
-    `;
-
-    //dejo '==' en vez de '===' porque id_song viene como string "925"
-    // const objLista = arr.find(s => s.id_lista == id_lista);
-    objLista = objDataListas.arr_data.find(s => s.id_lista == id_lista);
-    console.log('objLista: ', objLista);                
-
-    // Normalizamos palabras
-    const arr_normalized = arr_words.map(normalize);
-    console.log('arr_normalized: ', arr_normalized);
-
-    //const regex = new RegExp(`(${arr_words.join('|')})`, 'gi');//antes - busco las palabras del input
-    // console.log('regex: ', regex);
-
-    // Creamos regex sin acentos
-    const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
-    console.log('regex: ', regex);
-
-    //Titulo lista
-    if(objLista.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objLista.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-
-        const d_titulo = document.createElement('div');
-        d_titulo.className = 'parte_lista';
-        d_titulo.innerHTML = `
-            <p class="p_titulo">Título Lista:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-        vista_lista_content.append(d_titulo);
-    }
-
-    //Fecha
-    if(objLista.fecha && objLista.fecha != '0000-00-00'){
-        //Marco en rojo las palabras encontradas en title 
-        //En BD busco '2025-08-03' 
-        //pero como el formato para mostrar es '03/08/2025'
-        //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
-        let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
-        const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
-        console.log('regex_fecha: ', regex_fecha);
-
-        // let fecha_text_red = convertirFecha(objLista.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
-        let fecha_text_red = objLista.fecha_ver;// en bd es '2025-08-03'
-        fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        console.log('fecha_text_red: ', fecha_text_red);
-
-        const d_fecha = document.createElement('div');
-        d_fecha.className = 'parte_lista';
-        d_fecha.innerHTML = `
-            <p class="p_titulo">Fecha:</p>
-            <p class="texto_norm t_big">${fecha_text_red}</p>
-        `;
-        vista_lista_content.append(d_fecha);
-    }
-
-    // resetBlockLista();
-    // resetLineasXinBlock(eid_block_lista);
-
-    //Canciones
-    const d_canciones_lista = document.createElement('div');
-    d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_lista_content.append(d_canciones_lista);
-
-    
-    console.log('antes --- objLista.arr_lista: ', objLista.arr_lista);
-    
-    //objLista = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objLista));
-    console.log('ahora --- objLista: ', objLista);
-    
-    arr_lista = objLista.arr_lista;//importante. reasigno desde bd
-
-    let arr_lista_bd = objLista.arr_lista;
-    console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
-
-    buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
-
-    if(objLista.notes){
-        //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objLista.notes.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        const d_notas = document.createElement('div');
-        d_notas.className = 'parte_lista';
-        d_notas.innerHTML = `
-            <p class="p_titulo">Notas:</p>
-            <p class="texto_norm">${notas_text_red}</p>
-        `;
-        vista_lista_content.append(d_notas);
-    }
-
-}
-
-
-function pintSongActiveSoloDatos(objSong){
+function pintSongActiveSoloDatos(){
     console.log('=== function pintSongActiveSoloDatos() === ');
+
+    if(!objSong){
+        alert('no hay objSong');
+        return;
+    }
 
     //comprobar si existe tr_lista de lalista activa
     const tr_song = tbody.querySelector(`.tr_song[data-id="${objSong.id_song}"]`);
     console.log('tr_song: ', tr_song);
     
     if(!tr_song){
+        alert('no hay tr_song');
         return;
     }
 
@@ -189,20 +73,9 @@ function pintSongActiveSoloDatos(objSong){
     tr_song.querySelector('.td_songbook').textContent = objSong.songbook_title || '';
     tr_song.querySelector('.td_idioma').textContent = obj_lang_names[objSong.lang] || '';
     tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
+   
 
-
-
-    let words_input = eid_inpt_find.value.trim();
-    let arr_words = [];
-    if(words_input.includes(' ')){
-        arr_words = words_input.split(' ');
-    }else{
-        arr_words = [words_input];
-    }
-
-    
-
-   // Normalizamos palabras
+   // Normalizamos palabras de 'arr_words' (global)
     //const arr_normalized = arr_words.map(normalize);//modo corto de escribir la func abajo
     const arr_normalized = arr_words.map( palabra => {
         return normalize(palabra);
@@ -322,44 +195,51 @@ function pintSongActiveSoloDatos(objSong){
 
     buscar_vista_song_content.innerHTML = vista_html;
 
-    //construllo titulos de esquema después de añadir vista_html al DOM
+    //Construllo titulos de esquema después de añadir vista_html al DOM
     buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
-
 }
 
 
-function pintListaActiveSoloDatos(objLista){
+
+function pintListaActive(){
+    console.log('=== function pintListaActive(e) === ');
+        
+    console.log('asignado global --- id_lista: ', id_lista);
+
+    resetTrSelected(tbody_lista);
+    tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
+
+    //Dejo '==' en vez de '===' porque id_lista viene como string: "925"
+    objLista = objDataListas.arr_data.find(s => s.id_lista == id_lista);
+    console.log('objLista: ', objLista);  
+    
+    pintListaActiveSoloDatos();//new
+}
+
+function pintListaActiveSoloDatos(){
     console.log('=== function pintListaActiveSoloDatos() === ');
+    
+    if(!objLista){
+        alert('no hay objLista');
+        return;
+    }
 
     //comprobar si existe tr_lista de lalista activa
     const tr_lista = tbody_lista.querySelector(`.tr_lista[data-id="${objLista.id_lista}"]`);
     console.log('tr_lista: ', tr_lista);
     
-    if(!tr_lista){
-        return;
+    if(tr_lista){
+        //alert('no hay tr_lista');
+        //return;
+        
+        //Actualizo datos de tr_lista
+        tr_lista.querySelector('.td_titulo').textContent = objLista.title || '';
+        tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
+        tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
+        tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? 'Sí' :  '';
     }
 
-    //actualizo datos de tr_lista
-    tr_lista.querySelector('.td_titulo').textContent = objLista.title || 'kuku';
-    tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
-    tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
-    tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? 'Sí' :  '';
-
-    const objListaBD = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objListaBD));
-    console.log('objListaBD: ', objListaBD);
-
-    let words_input = eid_inpt_find_lista.value.trim();
-    let arr_words = [];
-    if(words_input.includes(' ')){
-        arr_words = words_input.split(' ');
-    }else{
-        arr_words = [words_input];
-    }
-
-    
-
-    //resetTrSelected(tbody_lista);
-
+    //Actualizo parte derecha
     lista_wr_vista_song.style.gap = '5px';
     lista_wr_vista_song.innerHTML = `
         <div class="vista_lista_content">...</div>
@@ -370,28 +250,28 @@ function pintListaActiveSoloDatos(objLista){
 
     const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
     wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar lista</button>
+        <button class="btn btn_big" onclick="openModal('full','Ver lista (SM)',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
+        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
     `;
 
 
     // Normalizamos palabras
-    //const arr_normalized = arr_words.map(normalize);//modo corto de escribir la func abajo
-    const arr_normalized = arr_words.map( palabra => {
+    //const arr_normalized = arr_words_lista.map(normalize);//modo corto de escribir la func abajo
+    const arr_normalized = arr_words_lista.map( palabra => {
         return normalize(palabra);
     });
     console.log('arr_normalized: ', arr_normalized);
-
 
     // Creamos regex sin acentos
     const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
     console.log('regex: ', regex);
 
     //Titulo lista
-    if(objListaBD.title){
+    if(objLista.title){
         //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objListaBD.title.replace(regex, (x) => {
+        let titulo_text_red = objLista.title.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
 
@@ -405,7 +285,7 @@ function pintListaActiveSoloDatos(objLista){
     }
 
     //Fecha
-    if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
+    if(objLista.fecha && objLista.fecha != '0000-00-00'){
         //Marco en rojo las palabras encontradas en title 
         //En BD busco '2025-08-03' 
         //pero como el formato para mostrar es '03/08/2025'
@@ -414,8 +294,8 @@ function pintListaActiveSoloDatos(objLista){
         const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
         console.log('regex_fecha: ', regex_fecha);
 
-        // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
-        let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
+        // let fecha_text_red = convertirFecha(objLista.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
+        let fecha_text_red = objLista.fecha_ver;// en bd es '2025-08-03'
         fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
@@ -430,21 +310,22 @@ function pintListaActiveSoloDatos(objLista){
         vista_lista_content.append(d_fecha);
     }
 
-    // resetBlockLista();
-
     //Canciones
     const d_canciones_lista = document.createElement('div');
     d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_lista_content.append(d_canciones_lista);
+    vista_lista_content.append(d_canciones_lista);    
+    
+    arr_lista = objLista.arr_lista;//importante. reasigno desde bd
+    console.log('arr_lista: ', arr_lista);
 
     let arr_lista_bd = objLista.arr_lista;
     console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
 
     buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
 
-    if(objListaBD.notes){
+    if(objLista.notes){
         //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objListaBD.notes.replace(regex, (x) => {
+        let notas_text_red = objLista.notes.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
         const d_notas = document.createElement('div');
@@ -455,6 +336,87 @@ function pintListaActiveSoloDatos(objLista){
         `;
         vista_lista_content.append(d_notas);
     }
+
+
+    // const objListaBD = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objListaBD));
+    // console.log('objListaBD: ', objListaBD);
+
+    // // Normalizamos palabras
+    // //const arr_normalized = arr_words_lista.map(normalize);//modo corto de escribir la func abajo
+    // const arr_normalized = arr_words_lista.map( palabra => {
+    //     return normalize(palabra);
+    // });
+    // console.log('arr_normalized: ', arr_normalized);
+
+    // // Creamos regex sin acentos
+    // const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
+    // console.log('regex: ', regex);
+
+    // //Titulo lista
+    // if(objListaBD.title){
+    //     //Marco en rojo las palabras encontradas en title 
+    //     let titulo_text_red = objListaBD.title.replace(regex, (x) => {
+    //         return `<b class="c_red">${x}</b>`;
+    //     });
+
+    //     const d_titulo = document.createElement('div');
+    //     d_titulo.className = 'parte_lista';
+    //     d_titulo.innerHTML = `
+    //         <p class="p_titulo">Título Lista:</p>
+    //         <p class="texto_norm t_big">${titulo_text_red}</p>
+    //     `;
+    //     vista_lista_content.append(d_titulo);
+    // }
+
+    // //Fecha
+    // if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
+    //     //Marco en rojo las palabras encontradas en title 
+    //     //En BD busco '2025-08-03' 
+    //     //pero como el formato para mostrar es '03/08/2025'
+    //     //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
+    //     let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
+    //     const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
+    //     console.log('regex_fecha: ', regex_fecha);
+
+    //     // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
+    //     let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
+    //     fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
+    //         return `<b class="c_red">${x}</b>`;
+    //     });
+    //     console.log('fecha_text_red: ', fecha_text_red);
+
+    //     const d_fecha = document.createElement('div');
+    //     d_fecha.className = 'parte_lista';
+    //     d_fecha.innerHTML = `
+    //         <p class="p_titulo">Fecha:</p>
+    //         <p class="texto_norm t_big">${fecha_text_red}</p>
+    //     `;
+    //     vista_lista_content.append(d_fecha);
+    // }
+
+    // //Canciones
+    // const d_canciones_lista = document.createElement('div');
+    // d_canciones_lista.className = 'd_canciones_lista parte_lista';
+    // vista_lista_content.append(d_canciones_lista);
+
+    // let arr_lista_bd = objLista.arr_lista;
+    // console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
+
+    // buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
+
+    // if(objListaBD.notes){
+    //     //Marco en rojo las palabras encontradas en notes 
+    //     let notas_text_red = objListaBD.notes.replace(regex, (x) => {
+    //         return `<b class="c_red">${x}</b>`;
+    //     });
+    //     const d_notas = document.createElement('div');
+    //     d_notas.className = 'parte_lista';
+    //     d_notas.innerHTML = `
+    //         <p class="p_titulo">Notas:</p>
+    //         <p class="texto_norm">${notas_text_red}</p>
+    //     `;
+    //     vista_lista_content.append(d_notas);
+    // }
 
 }
 
@@ -744,19 +706,7 @@ function update_vkladActive(){
 }
 
 
-function old_hayElementosModalesAbiertos() {
-    return [...document.querySelectorAll('.elementos_modales')]
-        .some(modal => {
-            if (!modal.offsetParent) return false; // no visible en DOM
-            const rect = modal.getBoundingClientRect();
-            return rect.width > 0 &&
-                   rect.height > 0 &&
-                   rect.bottom > 0 &&
-                   rect.right > 0 &&
-                   rect.top < window.innerHeight &&
-                   rect.left < window.innerWidth;
-        });
-}
+
 
 function hayElementosModalesAbiertos(opciones = { parcial: true }) {
     const modales = document.querySelectorAll('.elementos_modales');

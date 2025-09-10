@@ -132,6 +132,7 @@ $sql_init = "SELECT
                 title,
                 notes,
                 arr_lista,
+                arr_lista_ids,
                 fecha,
                 created_at,
                 updated_at 
@@ -187,12 +188,58 @@ if($result->num_rows > 0){
 
         $id_lista_bd = $row['id_lista'];
         $title_bd = $row['title'];
+
+        $arr_lista_from_table_songs = [];//por defecto. si hay, se rellena
+
+        if($row['arr_lista_ids'] != ''){
+            //echo_json_x($row, 'row');
+            //echo_json_x($row['arr_lista_ids'], 'arr_lista_ids');        
+            
+            //hago consulta para sacar las canciones desde arr_lista_ids
+            //1. Reemplazar las comillas simples por dobles para un JSON válido
+            $valid_arr_lista_ids_string = str_replace(["'", '"'], '', $row['arr_lista_ids']);//quito (") y (')
+
+            //2. Decodificar la cadena JSON en un array de PHP
+            $string_array = json_decode($valid_arr_lista_ids_string);//['1', '2', '3']       
+            //debug_x($string_array, 'string_array');
+
+            $int_array = array_map('intval', $string_array);//[1, 2, 3]
+            $string_ids = implode(',', $int_array);//'1, 2, 3'
+            
+            //consulta:
+            $sql_s = "SELECT
+                    id_song, 
+                    song_number, 
+                    title, 
+                    tune
+                FROM songs
+                WHERE id_song IN ($string_ids)
+            ";
+            $result_s = $conn->query($sql_s);
+            //echo_json_x($sql_s, 'sql_s');
+            //debug_x($sql_s, 'sql_s');
+
+            if($result_s->num_rows > 0){
+                while ($row_s = $result_s->fetch_assoc()) {
+                    $data_s = [
+                        'id_song' => $row_s['id_song'],
+                        'song_number' => $row_s['song_number'],
+                        'title' => $row_s['title'],
+                        'tune' => $row_s['tune']
+                    ];
+                    $arr_lista_from_table_songs[] = $data_s;
+                }            
+            }
+        }
+
         $data = [
             'success' => true,
             'id_lista' => $row['id_lista'],
             'title' => $row['title'],
             'notes' => $row['notes'],
-            'arr_lista' => $row['arr_lista'],
+            //'arr_lista' => $row['arr_lista'],
+            'arr_lista_ids' => $row['arr_lista_ids'],
+            'arr_lista' => $arr_lista_from_table_songs,
             'fecha' => $row['fecha'],
             'fecha_ver' => convertirFecha($row['fecha'], '/'),
             'created_at' => $row['created_at'],

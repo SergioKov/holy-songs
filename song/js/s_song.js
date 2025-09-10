@@ -686,78 +686,6 @@ async function pintLineasAcordes() {
     }
 }
 
-let songText = localStorage.getItem('songText') || 'no hay songText...';
-
-
-async function make_songText() {
-    console.log('=== function make_songText() ===');
-
-    if(!hay_id_song('make_songText()')){
-        return; // <- se detiene aquí si no hay id_song
-    }
-
-    songText = await getSongTextFromFile();
-    console.log('songText:', songText);
-
-    localStorage.setItem('songText', songText);
-}
-
-
-function editTipoLinea(){
-    console.log('=== function make_songText() ===');
-
-    const editContainer = document.querySelector('.edit_body');
-    editContainer.innerHTML = '';//reset
-
-    const arr_lineas = songText.split(/\r\n|\r|\n/);
-    console.log('arr_lineas:', arr_lineas);
-
-    const tabla = document.createElement('table');
-    editContainer.append(tabla);
-
-    arr_lineas.forEach((linea, i) => {
-        console.log('linea:', linea);
-
-        const fila = document.createElement('tr');
-
-        const p = document.createElement('p');
-        p.className = 'p_edit';
-
-        const match_titulo = linea.match(/^\[(.*?)\]\s*([\s\S]*)$/);//busco: [pripev]
-        console.log('match_titulo: ', match_titulo);
-
-        if (match_titulo || linea == ''){//es titlulo o linea vacia
-            //let titulo = match_titulo[1].trim();
-            //console.log('titulo: ', titulo);
-
-            fila.innerHTML = `
-                <td>línea ${i}</td>
-                <td></td>
-                <td>${linea}</td>
-            `;
-
-        }else{//es acorde o texto
-
-            fila.innerHTML = `
-                <td>línea ${i}</td>
-                <td><button class="btn_es_acorde btn">es Acorde</button></td>
-                <td>${linea}</td>
-            `;
-            fila.onclick = (e) =>{
-                if(e.target.classList.contains('btn_es_acorde')){
-                    fila.querySelector('.btn_es_acorde').classList.add('btn_active');
-                }
-
-                if(e.target.classList.contains('btn_es_texto')){
-                    fila.querySelector('.btn_es_acorde').classList.remove('btn_active');
-                }
-            }
-            
-        }        
-
-        tabla.append(fila);
-    });
-}
 
 
 async function getSongBlocks(){
@@ -767,7 +695,7 @@ async function getSongBlocks(){
         return; // <- se detiene aquí si no hay id_song
     }
        
-    objSongBd = await getSongTextFromBd();
+    objSongBd = await getDataSongFromBd();
     arr_esquema_bd = objSongBd.arr_esquema;
     
     let texto = objSongBd['song_text'];
@@ -1912,8 +1840,9 @@ function resetBlockCancion(){
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
 
+    cancion_song_bloques.innerHTML = '...';//muestro '...'
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    // cancion_ul_action.innerHTML = '...';//reset  
+    cancion_ul_action.innerHTML = '...';//reset  
     
     //cancion_song_bloques.querySelector('.puntos_def').style.display = 'block';//muestro '...'
     //cancion_form_container.style.display = 'none';//oculto formulario de canción
@@ -2060,14 +1989,14 @@ async function guardarSong(event, id_contenedor, cancion_action){
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
                 id_song = data.id_song;//guardo el id de la canción recién creada
-                objSong = objSongToSend;//reasigno el objeto song con los datos del formulario
-                objSong.id_song = id_song;//añado el id_song al objeto song
 
-                let objForUpdate = objDataSongs.arr_data.find(v => v.id_song == objSong.id_song);
+                //Cojo datos de la song de la lista desde BD
+                objSong = await getDataSongFromBd();//IMPORTANTE para cojer todos los datos necesarios
+                console.log('objSong: ', objSong);
 
-                const item = objDataSongs.arr_data.find(v => v.id_song == objSong.id_song);
-                if (item) {
-                    Object.assign(item, objSong);
+                const itemSongUpdate = objDataSongs.arr_data?.find(item => item.id_song == id_song);
+                if (itemSongUpdate) {
+                    Object.assign(itemSongUpdate, objSong);
                     // el objeto dentro de arr_data ya está actualizado
                 } else {
                     console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
@@ -2089,8 +2018,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
                     <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
                 `;
 
-                //Actualizo tr_song, 
-                pintSongActiveSoloDatos(objSong);//en la ventana a la derecha de la tabla de lista
+                //Actualizo tr_song 
+                pintSongActiveSoloDatos();//en la ventana a la derecha de la tabla de lista
 
             }
            
@@ -2101,12 +2030,12 @@ async function guardarSong(event, id_contenedor, cancion_action){
             console.error(data.error);
             console.error(data.dic_code);
 
-            let error_text = 'Error al guardar la canción.';
+            let text_show = 'Error al guardar la canción.';
     
-            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${error_text}</span>`;
+            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('error', error_text, 5000);
+            showToast('error', text_show, 5000);
         }
     
     } catch (error) {
@@ -2116,7 +2045,7 @@ async function guardarSong(event, id_contenedor, cancion_action){
 
 }
 
-async function deleteSong(event, id_contenedor, cancion_action){
+async function deleteSong(event, id_contenedor){
     console.log('=== function deleteSong() ===');
     event.preventDefault();
 
@@ -2173,6 +2102,7 @@ async function deleteSong(event, id_contenedor, cancion_action){
                 resetBlockEsquema();
 
                 pintLineasXinBlock(eid_block_cancion);
+                form.querySelector('.wr_btns_eliminar').remove();//elimino botones de 'eliminar'
 
                 cancion_ul_action.innerHTML = `
                     <p class="prim bg_red">Canción eliminada</p>
@@ -2259,11 +2189,16 @@ async function guardarLista(event){
             return;
         }
 
+        //Creo array de solo ids de canciones. si arr_lista es vacío, retorna arr_lista_ids vacío
+        arr_lista_ids = arr_lista.map(item => item.id_song);
+
         let arr_lista_str;//debe ser string ya se mete en la bd como string
+        let arr_lista_ids_str;//debe ser string ya se mete en la bd como string
 
         if(id_lista == null){
             console.log('es lista NUEVA');
             arr_lista_str = JSON.stringify(arr_lista);
+            arr_lista_ids_str = JSON.stringify(arr_lista_ids);
 
             if(arr_lista.length == 0){
                 console.log('es lista NUEVA y el array está vacío');
@@ -2275,8 +2210,10 @@ async function guardarLista(event){
             console.log('es lista EDITADA');
             if(esString(objLista.arr_lista)){
                 arr_lista_str = objLista.arr_lista;
+                arr_lista_ids_str = JSON.stringify(JSON.parse(objLista.arr_lista).map(item => parseInt(item.id_song)));
             }else{
                 arr_lista_str = JSON.stringify(objLista.arr_lista);
+                arr_lista_ids_str = JSON.stringify(objLista.arr_lista.map(item => parseInt(item.id_song)));
             }
 
             if(objLista.arr_lista.length == 0){
@@ -2287,11 +2224,13 @@ async function guardarLista(event){
         }
 
         console.log('arr_lista_str: ', arr_lista_str);
+        console.log('arr_lista_ids_str: ', arr_lista_ids_str);
 
         const objListaToSend = {
             id_lista: id_lista || null, //ya que se añade una nueva lista, no hay id_lista
             title: title,
             arr_lista: arr_lista_str, //como STRING siempre aki
+            arr_lista_ids: arr_lista_ids_str, //como STRING siempre aki
             fecha: fecha,
             fecha_ver: convertirFecha(fecha, 'ver','/'),
             notes: notes,
@@ -2300,26 +2239,25 @@ async function guardarLista(event){
     
         const data = await insertarListaDatos(objListaToSend);
         console.log('data: ',data);
-
     
         if(data.success){                
             
             let text_show;
 
             switch (data.action_tipo) {
-                case 'is_update_arr_esquema_ok':
+                case 'is_update_arr_lista_ok':
                     text_show = 'Datos de la Lista y sus canciones han sido actualizados con éxito.';
                     break;
             
-                case 'is_update_arr_esquema_vacio':
+                case 'is_update_arr_lista_vacio':
                     text_show = 'Datos de la Lista (SIN CANCIONES) han sido actualizados con éxito.';
                     break;
             
-                case 'is_insert_arr_esquema_ok':
+                case 'is_insert_arr_lista_ok':
                     text_show = 'Datos de la Lista y sus canciones han sido añadidos con éxito.';
                     break;
             
-                case 'is_insert_arr_esquema_vacio':
+                case 'is_insert_arr_lista_vacio':
                     text_show = 'Datos de la Lista (SIN CANCIONES) han sido añadidos con éxito.';
                     break;
                     
@@ -2330,7 +2268,10 @@ async function guardarLista(event){
             console.log(text_show);
     
             form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-            form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            
+            showToast('ok', text_show, 5000);
+
             setTimeout(()=>{
                 form_mensaje_lista.innerHTML = `
                     <span class="sp_id">
@@ -2347,13 +2288,25 @@ async function guardarLista(event){
                 console.log('id_lista: ', data.id_lista);
                 id_lista = data.id_lista;//guardo el id de la canción recién creada
 
-                objLista = objListaToSend;//reasigno el objeto lista con los datos del formulario                
-                objLista.id_lista = id_lista;//añado el id_lista al objeto lista
-                objLista.arr_lista = arr_lista;//formato array correcto
+                // objLista = objListaToSend;//reasigno el objeto lista con los datos del formulario                
+                // objLista.id_lista = id_lista;//añado el id_lista al objeto lista
+                //objLista.arr_lista = arr_lista;//formato array correcto
+                //console.log('objLista: ', objLista);
+
+                //Cojo datos de la lista desde BD
+                objLista = await getDataListaFromBd();//IMPORTANTE para cojer todos los datos necesarios
                 console.log('objLista: ', objLista);
 
-                //pinto la lista activa en el contenedor de listas sin marcar en rojo el texto
-                pintListaActiveSoloDatos(objLista);
+                const itemListaUpdate = objDataListas.arr_data?.find(item => item.id_lista == id_lista);
+                if (itemListaUpdate) {
+                    Object.assign(itemListaUpdate, objLista);
+                    // el objeto dentro de arr_data ya está actualizado
+                } else {
+                    console.warn('No encontrado objlista.id_lista en objDatalistas.arr_data');
+                }
+
+                //Actualizo tr_lista 
+                pintListaActiveSoloDatos();
 
                 form_lista.querySelector('#btn_ResetForm').removeAttribute('type');
                 form_lista.querySelector('#btn_ResetForm').onclick = (e) => {
@@ -2370,13 +2323,14 @@ async function guardarLista(event){
             console.log(`Error al añadir la lista.`);
             
             //"Error al añadir la lista.";
-            console.error(data.error);
-            //console.error(data.dic_code);
+            console.error('data.error: ', data.error);
 
-            let error_text = 'Error al añadir la lista.';
+            let text_show = 'Error al añadir la lista.';
     
-            form_mensaje_lista.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-            form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            form_mensaje_lista.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
+            //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('error', text_show, 5000);
         }
     
     } catch (error) {
@@ -2389,71 +2343,91 @@ async function guardarLista(event){
 async function deleteLista(){
     console.log('=== function deleteLista() ===');
 
-    id_lista = objLista.id_lista;
-    console.log('id_lista: ', id_lista);
+    try {
 
-    if(!hay_id_lista('deleteLista()')){
-        return; // <- se detiene aquí si no hay id_song
-    } 
+        id_lista = objLista.id_lista;
+        console.log('id_lista: ', id_lista);
 
-
-    if(!id_lista){
-        alert('id_lista no está indicado... hago return.');
-        return;
-    }
-
-    const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la lista con los siguientes datos? \nID: ${id_lista} \ntítulo: '${objLista.title}' \n\nEsta acción no se podrá deshacer.`);
-    if(respuesta){
-        console.log('sigo adelante para eliminar la lista...'); //clic en "Aceptar"
-    } else {
-        //console.log("7755. Cancelar..."); //clic en "Cancelar"
-        return;
-    }
-
-    const data = await deleteListaFromBd();
-    console.log('data: ',data);
-
-    const contenedor_lista_sm = document.getElementById('contenedor_lista_sm');
-    const p_mensaje = document.createElement('p');
-    p_mensaje.className = 'mensaje';
-
-    if(data.success){
-        
-        let text_show;
-        text_show = 'Lista eliminada con éxito.';
-        console.log(text_show);
-
-        p_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-        contenedor_lista_sm.prepend(p_mensaje);
-        contenedor_lista_sm.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        if(!hay_id_lista('deleteLista()')){
+            return; // <- se detiene aquí si no hay id_song
+        } 
 
 
-        if(data.id_lista){
-            console.log('id_lista: ', data.id_lista);
-
-            //Elimino elemento tr de la tabla tbody con la cancion eliminada
-            tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).remove();
-
-            resetBlockLista();
-            contenedor_lista_sm.querySelector('.wr_btns_eliminar').remove();
-            contenedor_lista_sm.querySelector('.d_canciones_lista').remove();
-
-            id_lista = null;
-            objLista = {};//reseteo objeto lista
-            arr_lista = [];//reseteo array lista
+        if(!id_lista){
+            alert('id_lista no está indicado... hago return.');
+            return;
         }
-        
-    }else{
-        console.log(`Error al eliminar la lista.`);
-        
-        //"Error al eliminar la lista";
-        console.error(data.error);
 
-        let error_text = 'Error al eliminar la lista.';
+        const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la lista con los siguientes datos? \nID: ${id_lista} \ntítulo: '${objLista.title}' \n\nEsta acción no se podrá deshacer.`);
+        if(respuesta){
+            console.log('sigo adelante para eliminar la lista...'); //clic en "Aceptar"
+        } else {
+            //console.log("7755. Cancelar..."); //clic en "Cancelar"
+            return;
+        }
 
-        p_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-        contenedor_lista_sm.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        const data = await deleteListaFromBd();
+        console.log('data: ',data);
+
+        const contenedor_lista_sm = document.getElementById('contenedor_lista_sm');
+        const p_mensaje = document.createElement('p');
+        p_mensaje.className = 'mensaje';
+
+        if(data.success){
+            
+            let text_show;
+            text_show = 'Lista eliminada con éxito.';
+            console.log(text_show);
+
+            p_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+            contenedor_lista_sm.prepend(p_mensaje);
+            contenedor_lista_sm.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+
+            if(data.id_lista){
+                console.log('id_lista: ', data.id_lista);
+
+                //Elimino elemento tr de la tabla tbody con la cancion eliminada
+                tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).remove();
+
+                resetBlockLista();
+                contenedor_lista_sm.querySelector('.wr_btns_eliminar').remove();
+                contenedor_lista_sm.querySelector('.d_canciones_lista').remove();
+
+                id_lista = null;
+                objLista = {};//reseteo objeto lista
+                arr_lista = [];//reseteo array lista
+
+                setTimeout(()=>{
+                    const aviso_outer = document.createElement('div');
+                    aviso_outer.className = 'aviso_outer';
+                    aviso_outer.innerHTML = `
+                    <p class="p_aviso">${text_show}</p>
+                    <p class="p_aviso">Busca una lista según tus criterios en la pestaña <b>Lista</b>.</p>
+                    <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('lista');">Buscar Lista</button>
+                    `;
+                    openModal('center','Aviso Eliminar Lista',aviso_outer,'showAviso2');
+                }, 1000);
+            }
+            
+        }else{
+            console.log(`Error al eliminar la lista.`);
+            
+            //"Error al eliminar la lista";
+            console.error('data.error: ', data.error);
+
+            let text_show = 'Error al eliminar la lista.';
+
+            p_mensaje.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
+            contenedor_lista_sm.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
+            showToast('ok', text_show, 5000);
+        }
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('deleteSong. error: ',error);        
     }
+
 }
 
 
@@ -2638,13 +2612,18 @@ function mySizeEdit(){
 
 
 async function findWordsSong(){
-    //console.log('=== async function findWordsSong(frase) ===');
-    //console.log('--- frase: ', frase);
+    //console.log('=== async function findWordsSong() ===');
     console.time('time_findWordsNew');
 
-    let frase = eid_inpt_find.value;
+    let words_input = eid_inpt_find.value.trim();
     let modo = eid_modo.value;
     let buscar_en = eid_buscar_en.value;
+    //console.log('--- words_input: ', words_input);
+
+    if(words_input == ''){
+        console.log('1. no has introducido nada....');
+        return;
+    }
 
     // 1) Coger todos los checkbox marcados
     const checkboxes = eid_wr_sb_checkboxes.querySelectorAll('input[name="songbooks"]:checked');
@@ -2653,15 +2632,8 @@ async function findWordsSong(){
     // 2) Meter los valores en un array
     let arr_songbooks_search = Array.from(checkboxes).map(cb => cb.value);
     console.log('Valores seleccionados. arr_songbooks_search:', arr_songbooks_search);
-
-
-    let words_input = frase.trim();
-    if(words_input == ''){
-        console.log('1. no has introducido nada....');
-        return;
-    }
-
-    let arr_words;    
+    
+    //reasigno arr_words global
     if(words_input.includes(' ')){
         arr_words = words_input.split(' ');
     }else{
@@ -2678,7 +2650,7 @@ async function findWordsSong(){
     objFindParams.buscar_en = buscar_en;
     objFindParams.arr_songbooks_search = arr_songbooks_search;
 
-    objDataSongsBd = await getSongTextFromBdByFind(objFindParams);
+    objDataSongsBd = await getDataSongsFromBdByFind(objFindParams);
     console.log('objDataSongsBd: ', objDataSongsBd);
 
     if(esObjeto(objDataSongsBd) && objDataSongsBd.arr_data.length > 0){
@@ -2689,14 +2661,11 @@ async function findWordsSong(){
         console.log('objDataSongs: ', objDataSongs);
 
         tbody.innerHTML = '';//reset
-
         
         eid_titulo_tabla_song.querySelector('b').style.display = 'inline';
-        eid_titulo_tabla_song.querySelector('b').textContent = objDataSongs.arr_data.length;
-        
+        eid_titulo_tabla_song.querySelector('b').textContent = objDataSongs.arr_data.length;        
         
         eid_sp_icon_filtro.classList.remove('d-none');//muestro el boton de filtro
-        //eid_d_filter_results.style.display = 'block';//muestro el contenedor de filtro
 
         //Parametros para filtrar resultados de buscar
         const contenedor_filtro = eid_d_filter_results;
@@ -2719,9 +2688,9 @@ async function findWordsSong(){
         objDataSongs.arr_data.forEach((el, i, arr) => {
             //console.log('el: ', el);
 
-            const tr = document.createElement('tr');
-            tr.className = 'tr_song';
-            tr.dataset.id = el.id_song;
+            const tr_song = document.createElement('tr');
+            tr_song.className = 'tr_song';
+            tr_song.dataset.id = el.id_song;
 
             let hay_esquema_texto;
 
@@ -2735,8 +2704,7 @@ async function findWordsSong(){
             }
             console.log('(parseado) --- el.arr_esquema: ', el.arr_esquema);
 
-
-            tr.innerHTML = `
+            tr_song.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_song" data-id_song="${el.id_song}" title="${el.id_song}">${el.id_song}</td>
                 <td class="td_numero">${el.song_number || ''}</td>
@@ -2748,57 +2716,57 @@ async function findWordsSong(){
                 <td class="td_tonalidad">${el.tune}</td>
             `;
 
-            tr.onclick = (e)=>{
+            tr_song.onclick = (e)=>{
                 console.log('e.currentTarget: ', e.currentTarget);
 
                 id_song = e.currentTarget.dataset.id;
                 console.log('asigno global --- id_song: ', id_song);               
                 
-                pintSongActive(arr_words);//en la ventana a la derecha de la tabla de lista
-            }//end - tr.onclick
+                pintSongActive();//en la ventana a la derecha de la tabla de lista
+            }
 
-            tbody.append(tr);
+            tbody.append(tr_song);
         });
     }else{
         console.log('no hay coincidencias...');
         
         eid_sp_icon_filtro.classList.remove('d-none');//oculto el boton de filtro ya que no hay nada para filtrar
-        //eid_d_filter_results.style.display = 'none';//oculto el contenedor de filtro
         
         tbody.innerHTML = `
             <tr>
                 <td colspan="9" class="td_no_data">
-                    <p class="prim">No se encontraron canciones con la frase: "<b>${frase}</b>"</p>
+                    <p class="prim">No se encontraron canciones con la frase: "<b>${words_input}</b>"</p>
                 </td>
             </tr>
         `;
     }
+
+    console.timeEnd('time_findWordsNew');
 }
 
 
 async function findWordsLista(){
     console.log('=== async function findWordsLista() ===');
-    //console.log('--- frase: ', frase);
-    //console.time('time_findWordsNew');
-
-    let frase = eid_inpt_find_lista.value;
+    console.time('time_findWordsLista');
+    
+    let words_input = eid_inpt_find_lista.value.trim();
     let modo = eid_modo_lista.value;
     let buscar_en = eid_buscar_en_lista.value;
+    console.log('--- words_input: ', words_input);
 
-    let words_input = frase.trim();
     if(words_input == ''){
         console.log('21. no has introducido nada....');
         return;
     }
-
-    let arr_words = [];    
+        
+    //reasigno arr_words_lista global
     if(words_input.includes(' ')){
-        arr_words = words_input.split(' ');
+        arr_words_lista = words_input.split(' ');
     }else{
-        arr_words = [words_input];
+        arr_words_lista = [words_input];
     }
 
-    if(arr_words.length === 0){
+    if(arr_words_lista.length === 0){
         console.log('2. no has introducido nada....');
         return;
     }
@@ -2807,8 +2775,7 @@ async function findWordsLista(){
     objFindListaParams.modo = modo;
     objFindListaParams.buscar_en = buscar_en;
 
-
-    objDataListasBd = await getListaTextFromBdByFind(objFindListaParams);
+    objDataListasBd = await getDataListasFromBdByFind(objFindListaParams);
     console.log('objDataListasBd: ', objDataListasBd);
 
 
@@ -2828,9 +2795,9 @@ async function findWordsLista(){
         objDataListas.arr_data.forEach((el, i, arr) => {
             console.log('el: ', el);
 
-            const tr = document.createElement('tr');
-            tr.className = 'tr_lista';
-            tr.dataset.id = el.id_lista;
+            const tr_lista = document.createElement('tr');
+            tr_lista.className = 'tr_lista';
+            tr_lista.dataset.id = el.id_lista;
 
             let hay_lista_texto;
 
@@ -2838,7 +2805,11 @@ async function findWordsLista(){
             if(esString(el.arr_lista) && el.arr_lista != ''){
                 el.arr_lista = JSON.parse(el.arr_lista);
                 hay_lista_texto = 'Sí';
-            }else{
+            }
+            else if(esArray(el.arr_lista) && el.arr_lista.length > 0){
+                hay_lista_texto = 'Sí';
+            }
+            else{
                 el.arr_lista = [];
                 hay_lista_texto = '';
             }
@@ -2853,7 +2824,7 @@ async function findWordsLista(){
                 fecha_val = convertirFecha(fecha_str, 'ver', '/');
             }
 
-            tr.innerHTML = `
+            tr_lista.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_lista" data-id_lista="${el.id_lista}" title="${el.id_lista}">${el.id_lista}</td>
                 <td class="td_titulo">${el.title}</td>
@@ -2862,27 +2833,29 @@ async function findWordsLista(){
                 <td class="td_lista">${hay_lista_texto}</td>
             `;
 
-            tr.onclick = (e) => {                
+            tr_lista.onclick = (e) => {                
                 console.log('e.currentTarget: ', e.currentTarget);
     
                 id_lista = e.currentTarget.dataset.id;
                 console.log('asigno global --- id_lista: ', id_lista);                
                 
-                pintListaActive(/*e, arr, */arr_words);//en la ventana a la derecha de la tabla de lista
-            }//end - tr.onclick
+                pintListaActive();//en la ventana a la derecha de la tabla de lista
+            }
 
-            tbody_lista.append(tr);
+            tbody_lista.append(tr_lista);
         });
     }else{
         console.log('no hay coincidencias...');
         tbody_lista.innerHTML = `
             <tr>
                 <td colspan="6" class="td_no_data">
-                    <p class="prim">No se encontraron listas con la frase: "<b>${frase}</b>"</p>
+                    <p class="prim">No se encontraron listas con la frase: "<b>${words_input}</b>"</p>
                 </td>
             </tr>
         `;
     }
+
+    console.timeEnd('time_findWordsLista');
 }
 
 
@@ -2931,46 +2904,6 @@ function pintSongbooksOptions(selectElement){
 
 
 
-async function old_nueva_song(){
-    console.log('=== function nueva_song() ===');
-
-    id_song = null;//reset id_song -> ya que es nueva canción
-
-    //reseteo datos de la song anterior para evitar confusión
-    resetBlockBuscar();
-    resetBlockEsquema();
-    resetLineasXinBlock(eid_block_cancion);
-
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset 
-    
-    pintSongbooksOptions(cancion_form_container.querySelector('#songbook'));
-
-    cancion_song_bloques.classList.add('solo_ver');
-
-    //Partes left-right
-    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
-    //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la nueva canción:';
-    form_mensaje.textContent = 'Rellena los campos del formulario con los datos de la nueva canción.';
-
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active');
-
-    cancion_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
-    cancion_form_container.style.display = 'block';//mostrar formulario de canción
-
-    makeInputsDisabled(cancion_form_container, false);
-    cancion_form_container.querySelector('form').reset();//reseteo formulario 
-
-    cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
-    cancion_form_container.querySelector('.wr_id_song').style.display = 'none';//oculto el wr_id_song
-
-    cancion_wr_btns_action.innerHTML = `
-        <button class="btn" onclick="showBlockName('buscar');">Buscar</button>
-    `;
-    
-    console.log('fin');
-}
 
 
 async function nueva_song(){
@@ -3004,99 +2937,6 @@ async function nueva_song(){
 }
 
 
-function old_editar_song(modo){
-    console.log('=== function editar_song() ===');
-
-    if(!hay_id_song('editar_song()')){
-        return; // <- se detiene aquí si no hay id_song
-    }
-
-    resetLineasXinBlock(eid_block_cancion);
-
-    if(modo == 'ver'){
-        makeInputsDisabled(cancion_form_container, true);
-        //Partes left-right
-        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
-        //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción seleccionada:';
-        //form_mensaje.textContent = 'Mira los campos del formulario de la canción.';
-
-        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-        eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');
-    }
-    else if(modo == 'editar'){
-        makeInputsDisabled(cancion_form_container, false);
-        //Partes left-right
-        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
-        //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la canción editada:';
-        //form_mensaje.textContent = 'Edita los campos del formulario de la canción.';
-
-        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-        eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
-    }
-
-
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset 
-
-    pintSongbooksOptions(cancion_form_container.querySelector('#songbook'));   
-
-    cancion_song_bloques.classList.add('solo_ver');
-    
-    cancion_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
-    cancion_form_container.style.display = 'block';//mostrar formulario de canción
-
-    cancion_form_container.querySelector('form').reset();//reseteo formulario    
-    
-    cancion_form_container.querySelector('#title').value = objSong.title || '';
-    cancion_form_container.querySelector('#category').value = objSong.category || '';
-    cancion_form_container.querySelector('#songbook').value = objSong.songbook || '';
-    cancion_form_container.querySelector('#id_song').value = objSong.id_song;
-    cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song
-    cancion_form_container.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
-    cancion_form_container.querySelector('#song_number').value = objSong.song_number || '';
-    cancion_form_container.querySelector('#tune').value = objSong.tune || '';
-    cancion_form_container.querySelector('#lang').value = objSong.lang;
-    cancion_form_container.querySelector('#song_text').value = objSong.song_text || '';
-    cancion_form_container.querySelector('#notes').value = objSong.notes || '';
-
-    handleFormInput(cancion_form_container.querySelector('#song_text'), eid_block_cancion);
-
-    buildEsquemaSoloTitulos(cancion_form_container.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
-
-    let vista_html = '';
-
-    if(objSong.arr_esquema.length > 0){
-        vista_html += `
-            <p class="p_titulo">Esquema:</p>
-        `;
-        objSong.arr_esquema.forEach( (item, i)=>{
-            if(i != 0){
-                vista_html += `
-                    <p class="texto_norm linea">
-                        <span class="titulo">(${item.nombre})</span> 
-                        ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
-                    </p>
-                `;
-            }
-        });
-    }else{
-        vista_html += `
-            <p class="p_titulo">Esquema:</p>
-            <p class="texto_norm">No</p>
-        `;
-    }
-    console.log('vista_html: ' ,vista_html);
-
-    cancion_wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-        <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-        <button class="btn btn_big" onclick="crearSlides();">Crear slides</button>
-        <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-    `;
-
-    
-    console.log('fin');    
-}
 
 
 function editar_song(modo){
@@ -3142,54 +2982,6 @@ function editar_song(modo){
 }
 
 
-function old_eliminar_song(){
-    console.log('=== function eliminar_song() ===');
-
-    if(!hay_id_song('eliminar_song()')){
-        return; // <- se detiene aquí si no hay id_song
-    }
-
-    resetLineasXinBlock(eid_block_cancion);
-
-    makeInputsDisabled(cancion_form_container, true);
-    //Partes left-right
-    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Eliminar canción:';
-    //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa:';
-    form_mensaje.textContent = 'Revisa los campos del formulario de la canción que se va a eliminar.';
-
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_eliminar').classList.add('btn_active');
-
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset    
-
-    cancion_song_bloques.classList.add('solo_ver');
-    
-    cancion_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
-    cancion_form_container.style.display = 'block';//mostrar formulario de canción
-
-    cancion_form_container.querySelector('form').reset();//reseteo formulario    
-    
-    cancion_form_container.querySelector('#title').value = objSong.title || '';
-    cancion_form_container.querySelector('#category').value = objSong.category || '';
-    cancion_form_container.querySelector('#id_song').value = objSong.id_song;
-    cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song
-    cancion_form_container.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
-    cancion_form_container.querySelector('#song_number').value = objSong.song_number || '';
-    cancion_form_container.querySelector('#tune').value = objSong.tune || '';
-    cancion_form_container.querySelector('#lang').value = objSong.lang;
-    cancion_form_container.querySelector('#song_text').value = objSong.song_text || '';
-    cancion_form_container.querySelector('#notes').value = objSong.notes || '';
-
-    handleFormInput(cancion_form_container.querySelector('#song_text'), eid_block_cancion);
-
-    cancion_wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>                
-        <button class="btn btn_big btn_eliminar" onclick="deleteSong();">Eliminar Canción DEFINITIVAMENTE</button>                
-    `;
-    
-    console.log('fin');    
-}
 
 
 function eliminar_song(){
@@ -3438,7 +3230,7 @@ async function crearSlidesForSongOfLista(e, lista_id_song) {
     console.log('lista_id_song: ', lista_id_song);
 
     //cojo datos de la song de la lista desde BD
-    objSong = await getSongTextFromBd();
+    objSong = await getDataSongFromBd();
 
     crearSlides();
     closeAll();
@@ -3460,7 +3252,7 @@ async function editSongOfLista(e, lista_id_song) {
     console.log('lista_id_song: ', lista_id_song);
 
     //cojo datos de la song de la lista desde BD
-    objSong = await getSongTextFromBd();
+    objSong = await getDataSongFromBd();
 
     showEdit('cancion');
     editar_song('editar');
