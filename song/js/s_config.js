@@ -156,9 +156,11 @@ const form = eid_block_cancion.querySelector('form');
 //========================================================//
 const ejemplo_song_bloques = eid_block_ejemplo.querySelector('.song_bloques');
 const ejemplo_wr_vista_blocks = eid_block_ejemplo.querySelector('.wr_vista_blocks');
-const ejemplo_form_container = eid_block_ejemplo.querySelector('.form_container');
-const form_ejemplo = eid_block_ejemplo.querySelector('form');
-const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
+const ejemplo_ul_action = eid_block_ejemplo.querySelector('.ul_action');
+
+//const ejemplo_form_container = eid_block_ejemplo.querySelector('.form_container');
+//const form_ejemplo = eid_block_ejemplo.querySelector('form');
+//const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
 
 //========================================================//
 //end - block_ejemplo

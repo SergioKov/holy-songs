@@ -138,7 +138,6 @@ async function old_nueva_song(){
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
-    //eid_block_cancion.querySelector('.bl_parte_r h4').textContent = 'Vista previa de la nueva canción:';
     form_mensaje.textContent = 'Rellena los campos del formulario con los datos de la nueva canción.';
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor

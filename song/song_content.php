@@ -897,54 +897,76 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_ejemplo" class="edit_blocks">
 
                                 <div id="block_ejemplo_head" class="edit_blocks_head">
-                                    <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Приклад (Укр.)</button>
-                                    <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Пример (Рус.)</button>
-                                    <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Ejemplo (Esp.)</button>
-                                    <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Example (Eng.)</button>
+                                    <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
+                                    <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Рус.</button>
+                                    <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Esp.</button>
+                                    <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
                                 </div><!--/#block_ejemplo_head-->
 
 
                                 <div id="block_ejemplo_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
-                                        <H4>Ejemplo de canción</H4>
 
-                                        <h5>Consulta la manera de escribir los bloques de la canción:</h5>
-                                        <div class="bloques_outer">
-                                            <div class="bloques song_bloques">
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">                                        
+                                            <H4>Ejemplo de canción:</H4>
+                                        </div><!--/.parte_fija-->                                        
+                                        
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+                                            <div class="bloques_outer">
+                                                <div class="bloques song_bloques">
 
-                                                <div class="puntos_def" style="display: block;">...</div>
+                                                    <p class="prim">Aquí se colocará el ejemplo...</p>
 
-                                                <div class="form_container" style="display: none;">
-                                                    <form>
-
-                                                        <p class="mensaje" data-dic="">
-                                                            Ejemplo de cómo rellenar el campo de texto de la canción.
-                                                        </p>
-
-                                                        <div class="form_group">
-                                                            <textarea id="song_text_ejemplo" name="song_text" rows="25" required="" placeholder=" "></textarea>
-                                                            <label class="lab_textarea" for="song_text_ejemplo">Texto de la canción</label>
-                                                        </div>
-
-                                                    </form>
                                                 </div>
-
                                             </div>
-                                        </div>
+                                        </div><!--/.parte_variable-->
 
                                     </div>
 
-                                    <div class="partes bl_parte_r">
-                                        <h4>Vista previa del ejemplo</h4>
 
-                                        <h5>Estructura (bloques) de la canción:</h5>
-                                        <div class="bloques_outer">
-                                            <div class="bloques wr_vista_blocks">
-                                                <!-- aki vista previa -->
-                                                ...
+                                    <div class="partes bl_parte_r">
+                                        
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
+                                            <h4 class="h4_vista_previa">
+                                                <span>Vista previa:</span>
+                                                <button id="btn_actions_ejemplo" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ejemplo');" title="Acciones">
+                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                </button>
+                                            </h4>
+                                        </div><!--/.parte_fija-->
+                                        
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+                                            <div class="bloques_outer">
+
+                                                <div id="bl_actions_ejemplo" class="bl_set bl_actions" style="display:none;">
+                                                    <div class="bl_set_inner bl_closed">
+                                                        <div class="inner_content">
+
+                                                            <div class="wr_title_btn_close">
+                                                                <span>Escoge acción con la canción:</span>
+                                                                <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_ejemplo'))">✕</span>
+                                                            </div>                                                    
+
+                                                            <ul class="ul_action">
+                                                                <!-- <li class="li_action">aki los li's</li>-->
+                                                                <p class="prim">Los botones de acciones se verán al selecionar el ejemplo...</p>
+                                                            </ul>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="bloques wr_vista_blocks">
+                                                    <!-- aki vista previa -->
+                                                    ...
+                                                </div>
                                             </div>
-                                        </div>
+                                        </div><!--/.parte_variable-->
 
                                     </div>
 

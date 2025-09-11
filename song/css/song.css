@@ -2507,7 +2507,9 @@ p.p_sm b {
     min-width: 60px !important;
 }
 
-.form_cancion{
+.form_cancion,
+.form_ejemplo
+{
     width: 100%;
 }
 

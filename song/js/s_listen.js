@@ -211,6 +211,9 @@ eid_edit_contenido.addEventListener('click', (e) => {
         closeDiv(document.querySelector('#bl_actions_crear_esquema'));
         //closeDiv(document.querySelector('#bl_actions_select_slide_l'));//parte left -> pantalla o ventana
         closeDiv(document.querySelector('#bl_actions_select_slide'));
+        closeDiv(document.querySelector('#bl_actions_cancion'));
+        closeDiv(document.querySelector('#bl_actions_ejemplo'));
+        // closeDiv(document.querySelector('#bl_actions_lista'));
     }
 
     if (!eid_edit_contenido_inner.contains(e.target)) {
@@ -247,9 +250,10 @@ eid_puntosMenu.addEventListener('click', (e) => {
 
 
 
-eid_song_text_ejemplo.addEventListener('input', (e) => {
-    handleFormInput(e, eid_block_ejemplo);
-});
+// eid_song_text_ejemplo.addEventListener('input', (e) => {
+//     console.log('input en eid_song_text_ejemplo...');
+//     handleFormInput(e, eid_block_ejemplo);
+// });
 
 
 

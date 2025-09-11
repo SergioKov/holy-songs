@@ -205,6 +205,20 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
 
                     buildFormCancion(contenedor, cancion_action);
                     break;
+
+                case 'buildFormEjemplo':
+                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    console.log('aki llamar buildFormCancion()');
+                    // alert('hasta aki...');
+                    let contenedor_ejemplo = eid_bl_modalFullInner;//solo aki
+                    let lang_ejemplo = args;
+                    console.log('contenedor_ejemplo:', contenedor_ejemplo);
+                    console.log('lang_ejemplo:', lang_ejemplo);
+
+                    buildFormEjemplo(contenedor_ejemplo, lang_ejemplo);
+                    break;
             
                 default:
                     //console.log('indica action en openModal()');
@@ -631,6 +645,75 @@ function buildFormCancion(contenedor, cancion_action = null){
     contenedor.append(form_cancion);
 
     console.log('fin func --- buildFormCancion');
+}
+
+
+
+
+function buildFormEjemplo(contenedor, lang){
+    console.log('=== function buildFormEjemplo() ===');
+
+    //console.log('cancion_action: ', cancion_action);
+    //console.log('objSong: ', objSong);
+
+    if(!contenedor){
+        alert('no hay contenedor, hago return...');
+        return;
+    }
+
+    if(!lang){
+        alert('no hay lang, hago return...');
+        return;
+    }
+
+    let id_vstavka = '';
+    if(contenedor.id == 'bl_modalFullInner'){
+        id_vstavka = 'mod_ej_';
+    }
+
+
+    //eid_bl_modalFullInner.innerHTML = '';//reset
+    contenedor.innerHTML = '';//reset
+
+    let mensaje_html = '';
+
+    //FORMULARIO
+    const form_ejemplo = document.createElement('div');
+    //form_ejemplo.id = 'form_ejemplo';
+    form_ejemplo.className = 'form_ejemplo';
+    form_ejemplo.innerHTML = `
+        <div class="form_container">
+            <form>
+                
+                <p class="mensaje">Ejemplo de cómo rellenar el campo de texto de la canción.</p>
+
+                <div class="form_group">
+                    <textarea id="${id_vstavka}song_text_ejemplo" name="song_text_ejemplo" rows="140" required="" placeholder=" "></textarea>
+                    <label for="${id_vstavka}song_text_ejemplo" class="lab_textarea">Texto de la canción</label>
+                </div>
+
+            </form>
+        </div>     
+    `;
+
+
+    const form = form_ejemplo.querySelector('form');
+    form.reset();//reseteo formulario
+    form.elements['song_text_ejemplo'].value = obj_ejemplos_song[lang];    
+
+    //1. importante para que pinte bloques al añadir form (si hace oninput)
+    handleFormInput(form.elements['song_text_ejemplo'], eid_block_ejemplo);
+
+    //2. escucho al cambiar el texto...
+    form.elements['song_text_ejemplo'].oninput = (e) => {
+        console.log('654 - song_text_ejemplo.oninput()... ');
+        handleFormInput(e, eid_block_ejemplo);
+    }
+
+    //añado al DOM
+    contenedor.append(form_ejemplo);
+
+    console.log('fin func --- buildFormEjemplo');
 }
 
 

@@ -1849,6 +1849,16 @@ function resetBlockCancion(){
     //cancion_form_container.querySelector('form').reset();//reseteo formulario
 }
 
+function resetBlockEjemplo(){
+    console.log('=== function resetBlockEjemplo() ===');
+
+    resetBtnActive(eid_block_ejemplo_head);//reseteo btn_active de botones en el contenedor
+
+    ejemplo_song_bloques.innerHTML = '...';//muestro '...'
+    ejemplo_wr_vista_blocks.innerHTML = '...';//reset
+    ejemplo_ul_action.innerHTML = '...';//reset  
+}
+
 function resetBlockLista(){
     console.log('=== function resetBlockLista() ===');
 
@@ -2541,6 +2551,7 @@ function showBlockName(blockName){
     const bl_titulo = ecl_edit_head.querySelector('.bl_titulo');
 
     switch (blockName) {
+        default:
         case 'buscar':
             bl_titulo.textContent = 'Buscar canción';
             showOnlyBlock(blockName);
@@ -2562,16 +2573,13 @@ function showBlockName(blockName){
         case 'ejemplo':
             bl_titulo.textContent = 'Ejemplo de canción';
             showOnlyBlock(blockName);
+            mySizeEjemplo();
             break;
 
         case 'lista':
             bl_titulo.textContent = 'Buscar lista';
             showOnlyBlock(blockName);
-            break;
-        
-        default:
-            bl_titulo.textContent = 'Buscar canción';
-            showOnlyBlock('buscar');
+            //mySizeLista();
             break;
     }
 }
@@ -2597,6 +2605,8 @@ function mySizeEdit(){
     mySizeBuscar();
     mySizeEsquema();
     mySizeCancion();
+    mySizeEjemplo();
+    // mySizeLista();
 }
 
 
@@ -3034,16 +3044,14 @@ function showEjemplo(lang){
         
         resetBtnActive(eid_block_ejemplo_head);//reseteo btn_active de botones en el contenedor
         eid_block_ejemplo_head.querySelector(`#btn_ejemplo_${lang}`).classList.add('btn_active');
-        
-        ejemplo_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
-        ejemplo_form_container.style.display = 'block';//mostrar formulario de canción
-    
-        makeInputsDisabled(ejemplo_form_container, true);//deshabilito los inputs
-        ejemplo_form_container.querySelector('form').reset();//reseteo formulario 
-        ejemplo_form_container.querySelector('#song_text_ejemplo').disabled = false;//solo habilito song_text
 
-        ejemplo_form_container.querySelector('#song_text_ejemplo').value = obj_ejemplos_song[lang];
-        handleFormInput(ejemplo_form_container.querySelector('#song_text_ejemplo'), eid_block_ejemplo);
+        ejemplo_ul_action.innerHTML = `
+            <li class="li_action" onclick="openModal('full','Ejemplo',null,'buildFormEjemplo',true, '${lang}')">Ejemplo (${obj_lang_names[lang]})</li>
+        `;
+        
+        const contenedor = ejemplo_song_bloques; 
+
+        buildFormEjemplo(contenedor, lang);
     }
 }
 
