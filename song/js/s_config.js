@@ -53,16 +53,8 @@ const eid_block_cancion = document.getElementById('block_cancion');
 const eid_block_ejemplo = document.getElementById('block_ejemplo');
 const eid_block_lista = document.getElementById('block_lista');
 
-const eid_block_editar = document.getElementById('block_editar');
-const eid_block_eliminar = document.getElementById('block_eliminar');
 
-const tbody = eid_block_buscar.querySelector('.wr_tabla table tbody');
-const tbody_lista = eid_block_lista.querySelector('.wr_tabla table tbody');
 
-const eid_block_esquema_head = document.getElementById('block_esquema_head');
-const eid_block_cancion_head = document.getElementById('block_cancion_head');
-const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
-const eid_block_lista_head = document.getElementById('block_lista_head');
 
 //========================================================//
 //start - block_buscar
@@ -75,26 +67,32 @@ const eid_inpt_find = document.getElementById('inpt_find');
 const eid_modo = document.getElementById('modo');
 const eid_buscar_en = document.getElementById('buscar_en');
 
+const eid_d_sel_songbooks = document.getElementById('d_sel_songbooks');
+const eid_bl_songbook_search = document.getElementById('bl_songbook_search');
+const eid_wr_sb_checkboxes = document.getElementById('wr_sb_checkboxes');
+const btn_sel_sb = document.getElementById('btn_sel_sb');
+
 const eid_sp_icon_filtro = document.getElementById('sp_icon_filtro');
 const eid_d_filter_results = document.getElementById('d_filter_results');
 const eid_inpt_filter = document.getElementById('inpt_filter');
 
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
+const tbody = eid_block_buscar.querySelector('.wr_tabla table tbody');
 
 //bl_parte_r
 const buscar_ul_action = eid_block_buscar.querySelector('.ul_action');
 const buscar_vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
-
 //========================================================//
 //end - block_buscar
 //========================================================//
 
 
-
-
 //========================================================//
 //start - block_esquema
 //========================================================//
+const eid_block_esquema_head = document.getElementById('block_esquema_head');
+const eid_block_esquema_body = document.getElementById('block_esquema_body');
+
 //bl_parte_l
 const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
 //bl_parte_c
@@ -138,6 +136,9 @@ const eid_titulo_shown = document.getElementById('titulo_shown');
 //========================================================//
 //start - block_cancion
 //========================================================//
+const eid_block_cancion_head = document.getElementById('block_cancion_head');
+const eid_block_cancion_body = document.getElementById('block_cancion_body');
+
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
 const cancion_wr_btns_action = eid_block_cancion.querySelector('.wr_btns_action');
@@ -154,74 +155,42 @@ const form = eid_block_cancion.querySelector('form');
 //========================================================//
 //start - block_ejemplo
 //========================================================//
+const eid_block_ejemplo_head = document.getElementById('block_ejemplo_head');
+const eid_block_ejemplo_body = document.getElementById('block_ejemplo_body');
+
 const ejemplo_song_bloques = eid_block_ejemplo.querySelector('.song_bloques');
 const ejemplo_wr_vista_blocks = eid_block_ejemplo.querySelector('.wr_vista_blocks');
 const ejemplo_ul_action = eid_block_ejemplo.querySelector('.ul_action');
-
-//const ejemplo_form_container = eid_block_ejemplo.querySelector('.form_container');
-//const form_ejemplo = eid_block_ejemplo.querySelector('form');
-//const eid_song_text_ejemplo = document.getElementById('song_text_ejemplo');
-
 //========================================================//
 //end - block_ejemplo
 //========================================================//
 
 
 
+
 //========================================================//
 //start - block_lista
 //========================================================//
+const eid_block_lista_head = document.getElementById('block_lista_head');
+const eid_block_lista_body = document.getElementById('block_lista_body');
+
 const eid_inpt_find_lista = document.getElementById('inpt_find_lista');
 const eid_modo_lista = document.getElementById('modo_lista');
 const eid_buscar_en_lista = document.getElementById('buscar_en_lista');
 
-const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
+const eid_sp_icon_filtro_lista = document.getElementById('sp_icon_filtro_lista');
+const eid_d_filter_results_lista = document.getElementById('d_filter_results_lista');
+const eid_inpt_filter_lista = document.getElementById('inpt_filter_lista');
 
-const lista_wr_vista_song = eid_block_lista.querySelector('.wr_vista_song');
-const lista_wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
+const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
+const tbody_lista = eid_block_lista.querySelector('.wr_tabla table tbody');
+
+//bl_parte_r
+const lista_ul_action = eid_block_lista.querySelector('.ul_action');
+const lista_vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
 //========================================================//
 //end - block_lista
 //========================================================//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const eid_d_sel_songbooks = document.getElementById('d_sel_songbooks');
-const eid_bl_songbook_search = document.getElementById('bl_songbook_search');
-const eid_wr_sb_checkboxes = document.getElementById('wr_sb_checkboxes');
-const btn_sel_sb = document.getElementById('btn_sel_sb');
 
 
 

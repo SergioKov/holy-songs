@@ -2287,7 +2287,7 @@ async function guardarLista(event){
                 `;
             }, 2000);
             setTimeout(()=>{
-                form_mensaje_lista.querySelector('.guardado').remove();
+                form_mensaje_lista.querySelector('.guardado')?.remove();
             }, 4000);
 
             if(data.id_lista){
@@ -2579,7 +2579,7 @@ function showBlockName(blockName){
         case 'lista':
             bl_titulo.textContent = 'Buscar lista';
             showOnlyBlock(blockName);
-            //mySizeLista();
+            mySizeLista();
             break;
     }
 }
@@ -2606,7 +2606,7 @@ function mySizeEdit(){
     mySizeEsquema();
     mySizeCancion();
     mySizeEjemplo();
-    // mySizeLista();
+    mySizeLista();
 }
 
 
@@ -2805,10 +2805,10 @@ async function findWordsLista(){
             //convierto arr_esquema (string) en array correcto
             if(esString(el.arr_lista) && el.arr_lista != ''){
                 el.arr_lista = JSON.parse(el.arr_lista);
-                hay_lista_texto = 'Sí';
+                hay_lista_texto = `Sí (${el.arr_lista.length})`;
             }
             else if(esArray(el.arr_lista) && el.arr_lista.length > 0){
-                hay_lista_texto = 'Sí';
+                hay_lista_texto = `Sí (${el.arr_lista.length})`;
             }
             else{
                 el.arr_lista = [];
@@ -3446,7 +3446,6 @@ function makeItemsDraggable(id_contenedor, class_element){
 
             buildListaSoloSongs(eid_block_lista.querySelector('.vista_lista_content .d_canciones_lista'), arr_lista);           
 
-            // const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #contenedor_lista_drag');//no funciona
             const contenedor_pintar_numeros = document.querySelector('.d_canciones_lista #d_canciones_body_drag');
             pintSoloNumerosDeOrden(contenedor_pintar_numeros);
         }

@@ -204,10 +204,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
                                                 </button>
 
-                                                <!-- <button id="" class="btn btn_search">
-                                                    <img class="btn_img" src="./images/icon_filter_white_22x22.svg">
-                                                </button> -->
-
                                                 <button id="btn_find_settings" class="btn btn_set btn_search" onclick="hideShowDiv('bl_find_settings');" title="Ajustes">
                                                     <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
                                                 </button>
@@ -312,10 +308,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <h5 class="titulo_tabla">Canciones encontradas: <b>...</b></h5>
                                                     <span id="sp_icon_filtro" class="sp_filtro d-none" onclick="hideShowDesktopFilter(eid_d_filter_results, this);">
                                                         <img class="btn_img" src="./images/icon_filter_white_22x22.svg">
-                                                    </span>                                        
+                                                    </span>
                                                 </div>
 
-                                                <div id="d_filter_results" class="contenedor_filter">                                        
+                                                <div id="d_filter_results" class="contenedor_filter">
                                                     <div class="wr_nav">
                                                         <div class="wr_inpt_x">
                                                             <input
@@ -374,7 +370,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     </div>
                                                 </div>
 
-                                            </div><!--/.d_filter_results-->
+                                            </div><!--/.d_titulo_y_tabla-->
                                         </div><!--/.parte_variable-->
 
                                     </div><!--/.bl_parte_l-->
@@ -424,9 +420,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 </div>
                                             </div>
 
-                                            <div class="wr_btns_action" style="display: none;">
-                                                <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
-                                            </div>
                                         </div><!--/.parte_variable-->
 
                                     </div><!--/.bl_parte_r-->
@@ -786,22 +779,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             <!--#block_cancion-->
                             <div id="block_cancion" class="edit_blocks">
 
@@ -974,6 +951,13 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                             </div><!--/#block_ejemplo-->
 
+
+
+
+
+
+
+
                             <!--#block_lista-->
                             <div id="block_lista" class="edit_blocks d-block">
 
@@ -986,111 +970,209 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
                                 </div><!--/#block_lista_head-->
 
+
+
+
                                 <div id="block_lista_body" class="bl_partes">
 
                                     <div class="partes bl_parte_l">
 
-                                        <H4>Selecciona lista</H4>
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
+                                        
+                                            <H4>Buscar lista:</H4>
+                                            <div class="wr_nav">
+                                                <div class="wr_inpt_x">
+                                                    <input
+                                                        id="inpt_find_lista"
+                                                        class="inpt_vvod"
+                                                        type="text"
+                                                        placeholder="Введите слово или фразу для поиска..."
+                                                        data-dic=""
+                                                        value="2025">
+                                                    <div class="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
+                                                </div>
 
-                                        <h5>Buscar en la base de datos:</h5>
-                                        <div class="wr_nav">
-                                            <div class="wr_inpt_x">
-                                                <input
-                                                    id="inpt_find_lista"
-                                                    class="inpt_vvod"
-                                                    type="text"
-                                                    placeholder="Введите слово или фразу для поиска..."
-                                                    data-dic=""
-                                                    value="2025">
-                                                <div class="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
-                                            </div>
+                                                <button id="btn_ok_find_lista" class="btn btn_search" title="Buscar" onclick="findWordsLista()">
+                                                    <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
+                                                </button>
 
-                                            <button id="btn_ok_find_lista" class="btn" title="Buscar" onclick="findWordsLista()">
-                                                <img class="btn_img" src="./images/search_zoom_icon_white.svg"><!--Find-->
-                                            </button>
+                                                <button id="btn_find_lista_settings" class="btn btn_set btn_search" onclick="hideShowDiv('bl_find_lista_settings');" title="Ajustes">
+                                                    <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
+                                                </button>                                                
 
-                                        </div><!--/.wr_nav-->
+                                            </div><!--/.wr_nav-->
 
+                                            <div id="bl_find_lista_settings" class="bl_set" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
+                                                    <div class="inner_content">
 
-                                        <h5>Selecciona modo de búsqueda:</h5>
-                                        <div class="wr_sel_song m_0">
-                                            <select id="modo_lista" class="sel_song">
-                                                <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
-                                                <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                <option value="3">3) Coincidir al menos una palabra</option>
-                                                <option value="4">4) Palabras en el orden establecido</option>
-                                                <option value="5">5) Frase exacta</option>
-                                                <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                            </select>
-                                        </div>
+                                                        <div class="wr_title_btn_close">
+                                                            <span>Marca parametros de búsqueda:</span>
+                                                            <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_lista_settings'))">✕</span>
+                                                        </div>                                                                                                               
 
-                                        <h5>Campos de búsqueda:</h5>
-                                        <div class="wr_sel_song">
-                                            <select id="buscar_en_lista" class="sel_song">
-                                                <option value="1">1) Todos los campos por defecto disponibles - (rápido)</option>
-                                                <option value="2">2) Todos los campos disponibles, los títulos de canciones incluidos - (lento)</option>
-                                                <option value="3">3) Todos los campos de texto disponibles</option>
-                                                <option value="4">4) Sólo el título de lista</option>
-                                                <option value="5">5) Sólo las notas de lista</option>
-                                                <option value="6">6) Sólo el identificador de lista</option>
-                                                <option value="7">7) Sólo la fecha de lista (introducir en formatos: aaaa-mm-dd, aaaa-mm, aaaa, mm, dd)</option>
-                                            </select>
-                                        </div>
+                                                        <h5>Modo de búsqueda:</h5>
+                                                        <div class="wr_sel_song m_0">
+                                                            <select id="modo_lista" class="sel_song">
+                                                                <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                <option value="3">3) Coincidir al menos una palabra</option>
+                                                                <option value="4">4) Palabras en el orden establecido</option>
+                                                                <option value="5">5) Frase exacta</option>
+                                                                <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                            </select>
+                                                        </div>
 
-
-                                        <h5 id="titulo_tabla_lista" class="titulo_tabla">Listas encontradas: <b></b></h5>
-                                        <div class="wr_tabla">
-                                            <div class="wr_tabla_inner">
-
-                                                <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="td_n">Nº</th>
-                                                            <th class="td_id_lista">id_lista</th>
-                                                            <th class="td_titulo">Título</th>
-                                                            <th class="td_dia_sem">Día/Sem.</th>
-                                                            <th class="td_fecha">Fecha</th>
-                                                            <th class="td_lista">Lista</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="td_n">...</td>
-                                                            <td class="td_id_lista">...</td>
-                                                            <td class="td_titulo">...</td>
-                                                            <td class="td_dia_sem">...</td>
-                                                            <td class="td_fecha">...</td>
-                                                            <td class="td_lista">...</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="partes bl_parte_r">
-                                        <h4>Vista previa</h4>
-
-                                        <h5>Datos de la lista seleccionada:</h5>
-                                        <div class="bloques_outer">
-                                            <div class="bloques wr_vista_song">
-                                                <div class="vista_lista_content">
-                                                    <div class="d_info">
-                                                        <p class="prim">Busca una lista de canciones introduciendo el texto en el campo '<b>Buscar</b>'...</p>
-                                                        <p class="prim">(Aquí se mostrarán el título de la lista y sus canciones...)</p>
+                                                        <h5>Campos de búsqueda:</h5>
+                                                        <div class="wr_sel_song">
+                                                            <select id="buscar_en_lista" class="sel_song">
+                                                                <option value="1">1) Todos los campos por defecto disponibles - (rápido)</option>
+                                                                <option value="2">2) Todos los campos disponibles, los títulos de canciones incluidos - (lento)</option>
+                                                                <option value="3">3) Todos los campos de texto disponibles</option>
+                                                                <option value="4">4) Sólo el título de lista</option>
+                                                                <option value="5">5) Sólo las notas de lista</option>
+                                                                <option value="6">6) Sólo el identificador de lista</option>
+                                                                <option value="7">7) Sólo la fecha de lista (introducir en formatos: aaaa-mm-dd, aaaa-mm, aaaa, mm, dd)</option>
+                                                            </select>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="wr_btns_action">
-                                            <p class="prim">Los botones de acciones se verán al selecionar la lista...</p>
-                                        </div>
+                                        </div><!--/.parte_fija-->
 
 
-                                    </div>
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+                                            <div class="d_titulo_y_tabla">
+
+                                                <div id="titulo_tabla_lista" class="wr_titulo_tabla">
+                                                    <h5 class="titulo_tabla">Listas encontradas: <b>...</b></h5>
+                                                    <span id="sp_icon_filtro_lista" class="sp_filtro d-none" onclick="hideShowDesktopFilter(eid_d_filter_results_lista, this);">
+                                                        <img class="btn_img" src="./images/icon_filter_white_22x22.svg">
+                                                    </span>
+                                                </div>
+
+                                                <div id="d_filter_results_lista" class="contenedor_filter">
+                                                    <div class="wr_nav">
+                                                        <div class="wr_inpt_x">
+                                                            <input
+                                                                id="inpt_filter_lista"
+                                                                class="inpt_vvod"
+                                                                type="text"
+                                                                placeholder="Введите слово или фразу для фильтра..."
+                                                                data-dic=""
+                                                                value="">
+                                                            <div class="clear_inpt" onclick="clear_inpt('filter_lista')">&times;</div>
+                                                        </div>
+                                                    </div><!--/.wr_nav-->
+                                                        
+                                                    <div class="filter_result" style="display: none;">
+                                                        <div class="filter_result_inner">
+                                                            <span>Filtrado:</span> 
+                                                            <span class="f_num">...</span>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div><!--/#d_filter_results_lista-->
+
+
+                                                
+                                                <div class="wr_tabla">
+                                                    <div class="wr_tabla_inner">
+
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="td_n">Nº</th>
+                                                                    <th class="td_id_lista">id_lista</th>
+                                                                    <th class="td_titulo">Título</th>
+                                                                    <th class="td_dia_sem">Día/Sem.</th>
+                                                                    <th class="td_fecha">Fecha</th>
+                                                                    <th class="td_lista">Lista</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="td_n">...</td>
+                                                                    <td class="td_id_lista">...</td>
+                                                                    <td class="td_titulo">...</td>
+                                                                    <td class="td_dia_sem">...</td>
+                                                                    <td class="td_fecha">...</td>
+                                                                    <td class="td_lista">...</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+
+                                            </div><!--/.d_titulo_y_tabla-->
+                                        </div><!--/.parte_variable-->
+
+
+                                    </div><!--/.bl_parte_l-->
+
+
+
+
+
+                                    <div class="partes bl_parte_r">
+
+                                        <!--/parte_fija-->
+                                        <div class="parte_fija">
+                                            <h4 class="h4_vista_previa">
+                                                <span>Vista previa:</span>
+                                                <button id="btn_actions_lista" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');" title="Acciones">
+                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                </button>
+                                            </h4>
+                                        </div><!--/.parte_fija-->
+
+
+
+                                        <!--/parte_variable-->
+                                        <div class="parte_variable">
+
+                                                <div class="bloques_outer">
+
+                                                    <div id="bl_actions_lista" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_lista'))">✕</span>
+                                                                </div>                                                    
+
+                                                                <ul class="ul_action">
+                                                                    <!-- <li class="li_action">aki los li's</li>-->
+                                                                    <p class="prim">Los botones de acciones se verán al selecionar la lista...</p>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="bloques wr_vista_lista">
+                                                        <div class="vista_lista_content">
+                                                            <div class="d_info">
+                                                                <p class="prim">Busca una lista de canciones introduciendo el texto en el campo '<b>Buscar</b>'...</p>
+                                                                <p class="prim">(Aquí se mostrarán el título de la lista y sus canciones...)</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                        
+                                        </div><!--/.parte_variable-->
+
+                                    </div><!--/.bl_parte_r-->
+
+
+
 
                                 </div><!--/#block_lista_body-->
 

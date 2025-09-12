@@ -213,7 +213,9 @@ eid_edit_contenido.addEventListener('click', (e) => {
         closeDiv(document.querySelector('#bl_actions_select_slide'));
         closeDiv(document.querySelector('#bl_actions_cancion'));
         closeDiv(document.querySelector('#bl_actions_ejemplo'));
-        // closeDiv(document.querySelector('#bl_actions_lista'));
+        
+        closeDiv(document.querySelector('#bl_find_lista_settings'));
+        closeDiv(document.querySelector('#bl_actions_lista'));
     }
 
     if (!eid_edit_contenido_inner.contains(e.target)) {

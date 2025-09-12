@@ -236,24 +236,17 @@ function pintListaActiveSoloDatos(){
         tr_lista.querySelector('.td_titulo').textContent = objLista.title || '';
         tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
         tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
-        tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? 'Sí' :  '';
+        tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? `Sí (${objLista.arr_lista.length})` :  '';
     }
 
-    //Actualizo parte derecha
-    lista_wr_vista_song.style.gap = '5px';
-    lista_wr_vista_song.innerHTML = `
-        <div class="vista_lista_content">...</div>
-    `;//reset. ya que debe existir el 'div.vista_lista_content' lo meto de nuevo.
+    // //Actualizo parte derecha
+    lista_vista_lista_content.innerHTML = '';//reset
 
-    const vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
-    vista_lista_content.innerHTML = '';//reset
-
-    const wr_btns_action = eid_block_lista.querySelector('.wr_btns_action');
-    wr_btns_action.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Ver lista (SM)',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-        <button class="btn btn_big" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-        <button class="btn btn_big" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+    lista_ul_action.innerHTML = `
+        <li class="li_action" onclick="openModal('full','Ver lista (SM)',null,'buildLista',true, 'ver_sm');">Ver (SM)</li>
+        <li class="li_action" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</li>
+        <li class="li_action" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</li>
+        <li class="li_action" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</li>
     `;
 
 
@@ -281,7 +274,7 @@ function pintListaActiveSoloDatos(){
             <p class="p_titulo">Título Lista:</p>
             <p class="texto_norm t_big">${titulo_text_red}</p>
         `;
-        vista_lista_content.append(d_titulo);
+        lista_vista_lista_content.append(d_titulo);
     }
 
     //Fecha
@@ -307,13 +300,13 @@ function pintListaActiveSoloDatos(){
             <p class="p_titulo">Fecha:</p>
             <p class="texto_norm t_big">${fecha_text_red}</p>
         `;
-        vista_lista_content.append(d_fecha);
+        lista_vista_lista_content.append(d_fecha);
     }
 
     //Canciones
     const d_canciones_lista = document.createElement('div');
     d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    vista_lista_content.append(d_canciones_lista);    
+    lista_vista_lista_content.append(d_canciones_lista);    
     
     arr_lista = objLista.arr_lista;//importante. reasigno desde bd
     console.log('arr_lista: ', arr_lista);
@@ -334,90 +327,8 @@ function pintListaActiveSoloDatos(){
             <p class="p_titulo">Notas:</p>
             <p class="texto_norm">${notas_text_red}</p>
         `;
-        vista_lista_content.append(d_notas);
+        lista_vista_lista_content.append(d_notas);
     }
-
-
-    // const objListaBD = structuredClone(objLista);//equivale a JSON.parse(JSON.stringify(objListaBD));
-    // console.log('objListaBD: ', objListaBD);
-
-    // // Normalizamos palabras
-    // //const arr_normalized = arr_words_lista.map(normalize);//modo corto de escribir la func abajo
-    // const arr_normalized = arr_words_lista.map( palabra => {
-    //     return normalize(palabra);
-    // });
-    // console.log('arr_normalized: ', arr_normalized);
-
-    // // Creamos regex sin acentos
-    // const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
-    // console.log('regex: ', regex);
-
-    // //Titulo lista
-    // if(objListaBD.title){
-    //     //Marco en rojo las palabras encontradas en title 
-    //     let titulo_text_red = objListaBD.title.replace(regex, (x) => {
-    //         return `<b class="c_red">${x}</b>`;
-    //     });
-
-    //     const d_titulo = document.createElement('div');
-    //     d_titulo.className = 'parte_lista';
-    //     d_titulo.innerHTML = `
-    //         <p class="p_titulo">Título Lista:</p>
-    //         <p class="texto_norm t_big">${titulo_text_red}</p>
-    //     `;
-    //     vista_lista_content.append(d_titulo);
-    // }
-
-    // //Fecha
-    // if(objListaBD.fecha && objListaBD.fecha != '0000-00-00'){
-    //     //Marco en rojo las palabras encontradas en title 
-    //     //En BD busco '2025-08-03' 
-    //     //pero como el formato para mostrar es '03/08/2025'
-    //     //convierto '2025-08-03' a '03/08/2025' para luego pintar en rojo la coincidencia
-    //     let validar_partes_fecha = false;//para pintar permito no validar la fecha. puede ser '2025-08', '2025-' 
-    //     const regex_fecha = new RegExp(`(${convertirFecha(arr_normalized.join('|'), 'ver', '/', validar_partes_fecha)})`, 'gi');
-    //     console.log('regex_fecha: ', regex_fecha);
-
-    //     // let fecha_text_red = convertirFecha(objListaBD.fecha_ver, 'ver','/');// de '2025-08-03' => '03/08/2025'
-    //     let fecha_text_red = objListaBD.fecha_ver;// en bd es '2025-08-03'
-    //     fecha_text_red = fecha_text_red.replace(regex_fecha, (x) => {
-    //         return `<b class="c_red">${x}</b>`;
-    //     });
-    //     console.log('fecha_text_red: ', fecha_text_red);
-
-    //     const d_fecha = document.createElement('div');
-    //     d_fecha.className = 'parte_lista';
-    //     d_fecha.innerHTML = `
-    //         <p class="p_titulo">Fecha:</p>
-    //         <p class="texto_norm t_big">${fecha_text_red}</p>
-    //     `;
-    //     vista_lista_content.append(d_fecha);
-    // }
-
-    // //Canciones
-    // const d_canciones_lista = document.createElement('div');
-    // d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    // vista_lista_content.append(d_canciones_lista);
-
-    // let arr_lista_bd = objLista.arr_lista;
-    // console.log('despues --- objLista.arr_lista === arr_lista_bd: ', arr_lista_bd);
-
-    // buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
-
-    // if(objListaBD.notes){
-    //     //Marco en rojo las palabras encontradas en notes 
-    //     let notas_text_red = objListaBD.notes.replace(regex, (x) => {
-    //         return `<b class="c_red">${x}</b>`;
-    //     });
-    //     const d_notas = document.createElement('div');
-    //     d_notas.className = 'parte_lista';
-    //     d_notas.innerHTML = `
-    //         <p class="p_titulo">Notas:</p>
-    //         <p class="texto_norm">${notas_text_red}</p>
-    //     `;
-    //     vista_lista_content.append(d_notas);
-    // }
-
 }
 
 
@@ -1176,11 +1087,6 @@ function mySizeEsquemaByClassVklad(cl_vklad, bl_body_h, block_esquema_head_h, in
 }
 
 
-
-
-
-
-
 function mySizeCancion(){
     console.log('=== function mySizeCancion() ===');
 
@@ -1268,24 +1174,6 @@ function mySizeCancion(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function mySizeEjemplo(){
     console.log('=== function mySizeEjemplo() ===');
 
@@ -1356,4 +1244,91 @@ function mySizeEjemplo(){
     console.log('=== end func ===');
 }
 
+
+
+function mySizeLista(){
+    console.log('=== function mySizeLista() ===');
+
+    let window_w = window.innerWidth;
+    let window_h = window.innerHeight;
+    console.log('window_w: ', window_w);    
+    console.log('window_h: ', window_h);
+    
+    let inner_margins = parseInt(inner_computedStyle.marginTop) + parseInt(inner_computedStyle.marginBottom);//10 * 2;    
+    
+    let edit_head_h = ecl_edit_head.offsetHeight;
+    console.log('edit_head_h: ', edit_head_h);    
+    //console.log('ecl_edit_body.offsetHeight: ', ecl_edit_body.offsetHeight);
+    
+    let bl_head_h = ecl_bl_head.offsetHeight;
+    console.log('bl_head_h: ', bl_head_h);    
+
+    let edit_body_h = 
+      window_h 
+    - ecl_edit_head.offsetHeight 
+    ;
+    // console.log('edit_body_h: ', edit_body_h);    
+    // ecl_edit_body.style.height = edit_body_h + 'px';//comento para no duplicar
+
+    let bl_body_h = 
+      edit_body_h 
+    - ecl_bl_head.offsetHeight
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor 
+    ;
+    console.log('bl_body_h: ', bl_body_h);    
+    ecl_bl_body.style.height = bl_body_h + 'px';//comento para no duplicat
+
+    let block_lista_head_h = eid_block_lista.querySelector('#block_lista_head').offsetHeight;
+    console.log('block_lista_head_h: ', block_lista_head_h);  
+    
+
+    //=========================================================================================//
+    //bl_parte_l
+    //=========================================================================================//    
+    let parte_fija_l_h = eid_block_lista.querySelector('.bl_parte_l .parte_fija').offsetHeight;
+    console.log('parte_fija_l_h: ', parte_fija_l_h);
+
+    let parte_variable_l_h = 
+      bl_body_h //858
+    - block_lista_head_h //43
+    - parte_fija_l_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_l_h: ', parte_variable_l_h);    
+    eid_block_lista.querySelector('.bl_parte_l .parte_variable').style.height = parte_variable_l_h + 'px';//comento para no duplicat
+
+
+    let titulo_tabla_lista_h = eid_block_lista.querySelector('#titulo_tabla_lista').offsetHeight;
+    let d_filter_results_h = eid_block_lista.querySelector('#d_filter_results_lista').offsetHeight;
+    let wr_tabla_paddings = parseInt(wr_tabla_computedStyle.paddingTop) + parseInt(wr_tabla_computedStyle.paddingBottom);//10 * 2;
+
+    let wr_tabla_inner_h = 
+      parte_variable_l_h //645
+    - titulo_tabla_lista_h //38
+    - d_filter_results_h //0
+    - wr_tabla_paddings //20
+    ;
+    console.log('wr_tabla_inner_h: ', wr_tabla_inner_h); 
+
+    //pongo max-height para que scroll esté arriba si hay pocos registros 
+    eid_block_lista.querySelector('.bl_parte_l .wr_tabla_inner').style.maxHeight = wr_tabla_inner_h + 'px';//'max-height', no 'height'
+
+    
+    //=========================================================================================//
+    //bl_parte_r
+    //=========================================================================================//
+    let parte_fija_r_h = eid_block_lista.querySelector('.bl_parte_r .parte_fija').offsetHeight;
+    console.log('parte_fija_r_h: ', parte_fija_r_h);
+
+    let parte_variable_r_h = 
+      bl_body_h //858
+    - block_lista_head_h //43
+    - parte_fija_r_h //150
+    - inner_margins //margin-top y margin-bottom de '.inner' contenedor
+    ;
+    console.log('parte_variable_r_h: ', parte_variable_r_h);    
+    eid_block_lista.querySelector('.bl_parte_r .parte_variable').style.height = parte_variable_r_h + 'px';//comento para no duplicat
+
+    console.log('=== end func ===');
+}
 
