@@ -141,7 +141,7 @@ const eid_block_cancion_body = document.getElementById('block_cancion_body');
 
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
-const cancion_wr_btns_action = eid_block_cancion.querySelector('.wr_btns_action');
+//const cancion_wr_btns_action = eid_block_cancion.querySelector('.wr_btns_action');
 const cancion_ul_action = eid_block_cancion.querySelector('.ul_action');
 const cancion_form_container = eid_block_cancion.querySelector('.form_container');
 

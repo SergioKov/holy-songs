@@ -2022,7 +2022,7 @@ async function guardarSong(event, id_contenedor, cancion_action){
                 // }
                 editar_song('editar');
 
-                cancion_wr_btns_action.innerHTML = `
+                cancion_ul_action.innerHTML = `
                     <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
                     <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
                     <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
@@ -2030,15 +2030,11 @@ async function guardarSong(event, id_contenedor, cancion_action){
 
                 //Actualizo tr_song 
                 pintSongActiveSoloDatos();//en la ventana a la derecha de la tabla de lista
-
             }
            
         }else{
-            console.log(`Error al guardar canción.`);
-            
-            //"Error al registrar el usuario";
-            console.error(data.error);
-            console.error(data.dic_code);
+            console.log(`Error al guardar canción.`);            
+            console.error('data.error: ',data.error);
 
             let text_show = 'Error al guardar la canción.';
     
@@ -2698,7 +2694,7 @@ async function findWordsSong(){
             //convierto arr_esquema (string) en array correcto
             if(esString(el.arr_esquema) && el.arr_esquema != ''){
                 el.arr_esquema = JSON.parse(el.arr_esquema);
-                hay_esquema_texto = 'Sí';
+                hay_esquema_texto = `Sí (${el.arr_esquema.length})`;
             }else{
                 el.arr_esquema = [];
                 hay_esquema_texto = '';
@@ -2779,7 +2775,6 @@ async function findWordsLista(){
     objDataListasBd = await getDataListasFromBdByFind(objFindListaParams);
     console.log('objDataListasBd: ', objDataListasBd);
 
-
     if(esObjeto(objDataListasBd) && objDataListasBd.arr_data.length > 0){
         console.log('hay coincidencias...');
 
@@ -2791,6 +2786,26 @@ async function findWordsLista(){
 
         eid_titulo_tabla_lista.querySelector('b').style.display = 'inline';
         eid_titulo_tabla_lista.querySelector('b').textContent = objDataListas.arr_data.length;
+
+
+        eid_sp_icon_filtro_lista.classList.remove('d-none');//muestro el boton de filtro
+
+        //Parametros para filtrar resultados de buscar
+        const contenedor_filtro = eid_d_filter_results_lista;
+        const sp_icon_filtro = eid_sp_icon_filtro_lista;
+        const el_input = eid_inpt_filter_lista;
+        const selector_items = '.tr_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        const arr_spans = [
+            '.td_id_lista',    
+            '.td_titulo',    
+            '.td_dia_semana',    
+            '.td_fecha',    
+            '.td_lista'
+        ];//se buscará texto en cada elemento de estos span's
+        addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
+
+
+
 
         //Recorrer listas encontradas...
         objDataListas.arr_data.forEach((el, i, arr) => {
@@ -2847,6 +2862,9 @@ async function findWordsLista(){
         });
     }else{
         console.log('no hay coincidencias...');
+
+        eid_sp_icon_filtro_lista.classList.remove('d-none');//oculto el boton de filtro ya que no hay nada para filtrar
+
         tbody_lista.innerHTML = `
             <tr>
                 <td colspan="6" class="td_no_data">
@@ -2918,11 +2936,10 @@ async function nueva_song(){
     resetLineasXinBlock(eid_block_cancion);
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset 
+    cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
-
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
@@ -2967,7 +2984,7 @@ function editar_song(modo){
     }
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
-    cancion_wr_btns_action.innerHTML = '...';//reset 
+    cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
     buildFormCancion(cancion_song_bloques, cancion_action = modo);//'ver', 'editar'

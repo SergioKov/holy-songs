@@ -362,6 +362,28 @@ function convertirFecha($fecha, $separador = '/') {
 }
 
 
+function ordenarResultByArray($result, $arr_lista_ids){
+    // Paso 1: Crear un índice rápido id_song → datos
+    $map = [];
+    foreach ($result as $row) {
+        $map[$row['id_song']] = $row;
+    }
+
+    // Paso 2: Construir nuevo array en el orden de $arr_lista_ids
+    $ordered = [];
+    foreach ($arr_lista_ids as $id) {
+        if (isset($map[$id])) {
+            $ordered[] = $map[$id];
+        }
+    }
+
+    return $ordered;
+
+    // Resultado ordenado
+    //print_r($ordered);
+}
+
+
 //=====================================================================================//
 // FUNCTIONS - END
 //=====================================================================================//

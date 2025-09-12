@@ -1700,6 +1700,10 @@ p.p_lista:hover {
     min-width: 50px;
     font-style: italic;
     font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5px;
 }
 .l_title {
     color: orange;
@@ -2517,4 +2521,29 @@ p.p_sm b {
 
 .razdel {
     padding-top: 10px;
+}
+
+.wn_2_flex{
+    /* background: purple; */
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0 10px;
+    align-items: center;
+    flex-direction: column;
+}
+.sp_flex_btns {
+    /* background: #4d4848; */
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
+}
+.sp_flex_n_title {
+    /* background: green; */
+    display: flex;
+    width: 100%;
+    gap: 5px;
 }

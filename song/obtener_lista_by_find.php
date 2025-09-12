@@ -189,6 +189,7 @@ if($result->num_rows > 0){
         $title_bd = $row['title'];
 
         $arr_lista_from_table_songs = [];//por defecto. si hay, se rellena
+        $arr_lista_from_table_songs_ordenado = [];//por defecto. si hay, se rellena
 
         if($row['arr_lista_ids'] != ''){
             //echo_json_x($row, 'row');
@@ -202,8 +203,8 @@ if($result->num_rows > 0){
             $string_array = json_decode($valid_arr_lista_ids_string);//['1', '2', '3']       
             //debug_x($string_array, 'string_array');
 
-            $int_array = array_map('intval', $string_array);//[1, 2, 3]
-            $string_ids = implode(',', $int_array);//'1, 2, 3'
+            $arr_lista_ids_array = array_map('intval', $string_array);//[1, 2, 3]
+            $string_ids = implode(',', $arr_lista_ids_array);//'1, 2, 3'
             
             //consulta:
             $sql_s = "SELECT
@@ -213,6 +214,7 @@ if($result->num_rows > 0){
                     tune
                 FROM songs
                 WHERE id_song IN ($string_ids)
+
             ";
             $result_s = $conn->query($sql_s);
             //echo_json_x($sql_s, 'sql_s');
@@ -229,6 +231,8 @@ if($result->num_rows > 0){
                     $arr_lista_from_table_songs[] = $data_s;
                 }            
             }
+
+            $arr_lista_from_table_songs_ordenado = ordenarResultByArray($arr_lista_from_table_songs, $arr_lista_ids_array);
         }
 
         $data = [
@@ -236,7 +240,7 @@ if($result->num_rows > 0){
             'id_lista' => $row['id_lista'],
             'title' => $row['title'],
             'notes' => $row['notes'],
-            'arr_lista' => $arr_lista_from_table_songs,
+            'arr_lista' => $arr_lista_from_table_songs_ordenado,
             'arr_lista_ids' => $row['arr_lista_ids'],
             'fecha' => $row['fecha'],
             'fecha_ver' => convertirFecha($row['fecha'], '/'),
