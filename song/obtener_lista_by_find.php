@@ -200,10 +200,10 @@ if($result->num_rows > 0){
             $valid_arr_lista_ids_string = str_replace(["'", '"'], '', $row['arr_lista_ids']);//quito (") y (')
 
             //2. Decodificar la cadena JSON en un array de PHP
-            $string_array = json_decode($valid_arr_lista_ids_string);//['1', '2', '3']       
+            $from_string_to_array = json_decode($valid_arr_lista_ids_string);//['1', '2', '3']       
             //debug_x($string_array, 'string_array');
 
-            $arr_lista_ids_array = array_map('intval', $string_array);//[1, 2, 3]
+            $arr_lista_ids_array = array_map('intval', $from_string_to_array);//[1, 2, 3]
             $string_ids = implode(',', $arr_lista_ids_array);//'1, 2, 3'
             
             //consulta:
