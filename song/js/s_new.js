@@ -68,9 +68,9 @@ function pintSongActiveSoloDatos(){
     tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
     tr_song.querySelector('.td_esquema').textContent = (objSong.arr_esquema.length > 0) ? 'Sí' :  '';
     tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
-    tr_song.querySelector('.td_category').textContent = objSong.category_name || '';
+    tr_song.querySelector('.td_category').textContent = objSong.category + '. ' + objSong.category_name || '';
     tr_song.querySelector('.td_songbook').dataset.songbook = objSong.songbook || '';
-    tr_song.querySelector('.td_songbook').textContent = objSong.songbook_title || '';
+    tr_song.querySelector('.td_songbook').textContent = objSong.songbook + '. ' + objSong.songbook_title || '';
     tr_song.querySelector('.td_idioma').textContent = obj_lang_names[objSong.lang] || '';
     tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
    
@@ -129,7 +129,7 @@ function pintSongActiveSoloDatos(){
         });
         vista_html += `
             <p class="p_titulo">Categoría:</p>
-            <p class="texto_norm t_big">${category_name_text_red}</p>
+            <p class="texto_norm t_big">${objSong.category + '. ' + category_name_text_red}</p>
         `;
     }
 
@@ -140,7 +140,7 @@ function pintSongActiveSoloDatos(){
         });
         vista_html += `
             <p class="p_titulo">Songbook:</p>
-            <p class="texto_norm t_big">${songbook_title_text_red}</p>
+            <p class="texto_norm t_big">${objSong.songbook + '. ' + songbook_title_text_red}</p>
         `;
     }
 
@@ -944,6 +944,14 @@ function mySizeBuscar(){
     - parte_fija_l_h //150
     - inner_margins //margin-top y margin-bottom de '.inner' contenedor
     ;
+
+    // if(window.innerWidth < pantallaTabletMinPx){//mobile
+    //     alert('1. es mobil. calculo height...');
+    //     parte_variable_l_h = parte_variable_l_h / 2;
+    // }else{//desktop
+    //     alert('1. es desktop. calculo width...');
+    // }
+
     console.log('parte_variable_l_h: ', parte_variable_l_h);    
     eid_block_buscar.querySelector('.bl_parte_l .parte_variable').style.height = parte_variable_l_h + 'px';//comento para no duplicat
 
@@ -959,6 +967,14 @@ function mySizeBuscar(){
     - wr_tabla_paddings //20
     ;
     console.log('wr_tabla_inner_h: ', wr_tabla_inner_h); 
+    
+    
+    // if(window.innerWidth < pantallaTabletMinPx){//mobile
+    //     alert('2. es mobil. calculo height...');
+    //     wr_tabla_inner_h = wr_tabla_inner_h / 2;
+    // }else{//desktop
+    //     alert('2. es desktop. calculo width...');
+    // }
 
     //pongo max-height para que scroll esté arriba si hay pocos registros 
     eid_block_buscar.querySelector('.bl_parte_l .wr_tabla_inner').style.maxHeight = wr_tabla_inner_h + 'px';//'max-height', no 'height'
@@ -976,6 +992,14 @@ function mySizeBuscar(){
     - parte_fija_r_h //150
     - inner_margins //margin-top y margin-bottom de '.inner' contenedor
     ;
+
+    // if(window.innerWidth < pantallaTabletMinPx){//mobile
+    //     alert('3. es mobil. calculo height...');
+    //     parte_variable_r_h = parte_variable_r_h / 2;
+    // }else{//desktop
+    //     alert('3. es desktop. calculo width...');
+    // }
+
     console.log('parte_variable_r_h: ', parte_variable_r_h);    
     eid_block_buscar.querySelector('.bl_parte_r .parte_variable').style.height = parte_variable_r_h + 'px';//comento para no duplicat
 

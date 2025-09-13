@@ -230,6 +230,42 @@ const eid_toast_container = document.getElementById("toast_container");
 
 
 
+//====================================================//
+//Medidas de pantallas para Media Queries - START
+//====================================================//
+
+//MOBILE (0px - 767px)
+//const pantallaMobileMinPx = 0;//por ahora no lo uso...
+//const pantallaMobileMaxPx = 575;//por ahora no lo uso...
+const pantallaMobileMaxPx = 767;//por ahora no lo uso...
+
+//TABLET (768px - )
+let pantallaTabletMinPx = 768;//valor de tablet y mas (se usa muchisimo!)
+//let pantallaTabletMaxPx = 991;//no uso
+
+
+//let pantallaDesktopSmallMinPx = 992;//no uso
+let pantallaTabletMaxPx = 1023;//uso 1 vez!
+
+let pantallaDesktopSmallMinPx = 1024;//uso 1 vez
+//let pantallaDesktopSmallMaxPx = 1199;// no uso
+
+//let pantallaDesktopBigMinPx = 1200;//no uso
+
+//Para ver en tablet verticalmente como en móvil
+let modoMobile = false;//[true,false]//para ver como si fuera el móvil en tablet 
+
+if(modoMobile){
+    pantallaTabletMinPx = 1201;//pongo 1201 y no 1200 ya qye Samsung tab A9+ verticalmente es de 1200
+    pantallaTabletMaxPx = 1439;//uso 1 vez
+    pantallaDesktopSmallMinPx = 1439;//uso 1 vez
+}
+//====================================================//
+//Medidas de pantallas para Media Queries - END
+//====================================================//
+
+
+
 // Get the computed style, including margins
 const inner_computedStyle = window.getComputedStyle(document.querySelector('.inner'));//margin: 10px;
 const wr_tabla_computedStyle = window.getComputedStyle(document.querySelector('.wr_tabla'));//padding: 10px;

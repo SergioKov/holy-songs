@@ -2707,8 +2707,8 @@ async function findWordsSong(){
                 <td class="td_numero">${el.song_number || ''}</td>
                 <td class="td_titulo">${el.title}</td>
                 <td class="td_esquema">${hay_esquema_texto}</td>            
-                <td class="td_category" data-category="${el.category}">${el.category_name || ''}</td>            
-                <td class="td_songbook" data-songbook="${el.songbook}">${el.songbook_title || ''}</td>            
+                <td class="td_category" data-category="${el.category}">${el.category + '. ' + el.category_name || ''}</td>            
+                <td class="td_songbook" data-songbook="${el.songbook}">${el.songbook + '. ' + el.songbook_title || ''}</td>            
                 <td class="td_idioma" data-lang_name="${el.lang_name}">${obj_lang_names[el.lang] || el.lang}</td>
                 <td class="td_tonalidad">${el.tune}</td>
             `;

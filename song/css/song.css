@@ -1736,8 +1736,8 @@ p.p_lista:hover {
     background: white;
 }
 .l_edit {
-    position: relative;
-    top: 2px;
+    /* position: relative; */
+    /* top: 2px; */
 }
 .l_edit img {
     /* background: red; */
@@ -2530,7 +2530,7 @@ p.p_sm b {
     justify-content: space-between;
     gap: 0 10px;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row-reverse;
 }
 .sp_flex_btns {
     /* background: #4d4848; */
@@ -2546,4 +2546,5 @@ p.p_sm b {
     display: flex;
     width: 100%;
     gap: 5px;
+    align-items: center;
 }
