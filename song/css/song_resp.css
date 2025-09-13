@@ -32,9 +32,6 @@
         flex-direction: column;
     }
 
-    .wn_2_flex {
-        flex-direction: column;
-    }
 
 
 }
@@ -64,8 +61,13 @@
         height: 3px;
     }
 
-
-
+    .wn_2_flex {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .sp_flex_btns{
+        max-width: 100%;
+    }
 
 }
 

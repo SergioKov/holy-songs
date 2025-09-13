@@ -2540,6 +2540,7 @@ p.p_sm b {
     justify-content: flex-end;
     align-content: center;
     align-items: center;
+    max-width: 120px;
 }
 .sp_flex_n_title {
     /* background: green; */
