@@ -411,6 +411,13 @@ function slideGo(dir){
         btn_simple.click();
     }
 
+    if(window.innerWidth < pantallaTabletMinPx){//mobile
+        //alert('10. es mobil. hago btn_simple.click()...');
+        btn_simple.click();
+    }else{//desktop
+       // alert('1. es desktop. calculo width...');
+    }
+
 }
 
 function showMenu(){
