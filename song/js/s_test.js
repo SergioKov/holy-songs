@@ -39,3 +39,130 @@ async function getLista(id_lista_pram){
     console.log('(getLista) --- obj: ', obj);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//click sobre Book, Chapter, Verse en vklad_nav de sidebar
+function clickLCR(e, param, id_contenedor, cols_number = 2){
+    console.log('=== function clickLCR() ===');
+
+    const contenedor = document.getElementById(id_contenedor);//'block_buscar', 'block_esquema'
+    let contenedorBtns ;//'#block_buscar_head .wr_lcr'
+    let contenedorBlocks;
+    
+    if(id_contenedor == 'block_esquema'){
+        switch (vkladActive) {
+            default:
+            case 'ver_esquema':
+                contenedorBtns = contenedor.querySelector(`#${id_contenedor}_head .vklad_ver_esquema .wr_lcr`);
+                contenedorBlocks = contenedor.querySelector(`#${id_contenedor}_body .vklad_ver_esquema`);
+                break;
+                
+            case 'crear_esquema':
+                contenedorBtns = contenedor.querySelector(`#${id_contenedor}_head .vklad_crear_esquema .wr_lcr`);
+                contenedorBlocks = contenedor.querySelector(`#${id_contenedor}_body .vklad_crear_esquema`);
+                break;
+                
+            case 'select_slide':
+                contenedorBtns = contenedor.querySelector(`#${id_contenedor}_head .vklad_select_slide .wr_lcr`);
+                contenedorBlocks = contenedor.querySelector(`#${id_contenedor}_body .vklad_select_slide`);
+                break;        
+        }
+    }else{
+        contenedorBtns = contenedor.querySelector(`#${id_contenedor}_head  .wr_lcr`);//'#block_buscar_head .wr_lcr'
+        contenedorBlocks = contenedor.querySelector(`#${id_contenedor}_body`);//'#block_buscar_body'
+    }
+    
+    resetLcrActiveEn(contenedorBtns);
+    e.classList.add('lcr_active');
+
+    resetLineActiveEn(contenedorBtns);
+    resetBlActiveEn(contenedorBlocks);
+        
+    const ecl_lcr_line = contenedorBtns.querySelector('.lcr_line');
+
+    switch (param) {
+        default:
+        case 'l': //Select Block Left
+            ecl_lcr_line.classList.add( (cols_number == 2) ? 'line_2l' : 'line_3l');
+            contenedorBlocks.querySelector('.bl_parte_l').classList.add('bl_active');
+            break;
+    
+        case 'c': //Select Block Central
+            ecl_lcr_line.classList.add( (cols_number == 2) ? 'line_2c' : 'line_3c');
+            contenedorBlocks.querySelector('.bl_parte_c').classList.add('bl_active');
+            break;
+    
+        case 'r': //Select Block Right
+            ecl_lcr_line.classList.add( (cols_number == 2) ? 'line_2r' : 'line_3r');
+            contenedorBlocks.querySelector('.bl_parte_r').classList.add('bl_active');
+            break;
+    }
+
+    switch (id_contenedor) {
+        default:
+        case 'block_buscar':
+            mySizeBuscar();
+            break;
+
+        case 'block_esquema':
+            mySizeEsquema();
+            break;
+
+        case 'block_cancion':
+            mySizeCancion();
+            break;
+
+        case 'block_ejemplo':
+            mySizeEjemplo();
+            break;
+
+        case 'block_lista':
+            mySizeLista();
+            break;
+    }
+
+}
+
+
+function resetBlActiveEn(contenedor){
+    contenedor.querySelectorAll('.partes').forEach(bl=>{
+        bl.classList.remove('bl_active');
+    })
+}
+
+function resetLcrActiveEn(contenedor){
+    //Botones grandes arriba de seleccionar: 'bl_parte_l', 'bl_parte_c', 'bl_parte_r'
+    contenedor.querySelectorAll('.v_lcr').forEach(v_lcr => {
+        v_lcr.classList.remove('lcr_active');
+    });
+}
+
+function resetLineActiveEn(contenedor){
+    const lcr_line = contenedor.querySelector('.lcr_line');
+    const arr_line_clases = ['line_2l','line_2r', 'line_3l','line_3c','line_3r'];
+    arr_line_clases.forEach(cl => {
+        if(lcr_line.classList.contains(cl)){
+            lcr_line.classList.remove(cl);
+        }                
+    })
+}

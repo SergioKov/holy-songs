@@ -174,14 +174,47 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_buscar" class="edit_blocks">
                                 
                                 <div id="block_buscar_head" class="edit_blocks_head">
-                                    <button class="btn">btn 1</button>
-                                    <button class="btn">btn 2</button>
+                                    
+                                    <div class="wr_block_option">
+                                        <button class="btn">aaaaaa aaaaa btn 1</button>
+                                        <button class="btn">bbbb bbbbbbb bbbbb btn 2</button>
+                                        <button class="btn">btn 3</button>
+                                        <button class="btn">btn 2</button>
+                                        <button class="btn">btn 42</button>
+                                        <button class="btn">btn 52</button>
+                                        <button class="btn">btn 26</button>
+                                        <button class="btn">btn 27</button>
+                                        <button class="btn">btn 28</button>
+                                        <button class="btn">btn 29</button>
+                                        <button class="btn">btn 112</button>
+                                        <button class="btn">btn 112</button>
+                                        <button class="btn">btn 22</button>
+                                        <button class="btn">btn 2</button>
+                                        <button class="btn">btn 32</button>
+                                        <button class="btn">btn 42</button>
+                                        <button class="btn">btn 42</button>
+                                    </div><!--/.wr_block_option-->
+
+                                    <div class="wr_lcr">
+                                        <div class="wr_lcr_inner">
+                                            <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_buscar')">
+                                                <div>Datos</div>
+                                            </div>
+                                            <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_buscar')">
+                                                <div>Vista</div>
+                                            </div>
+                                        </div>
+                                        <div class="wr_lcr_line">
+                                            <div class="lcr_line lines2 line_2l"></div>
+                                        </div>
+                                    </div><!--/.wr_lcr-->
+
                                 </div><!--/#block_buscar_head-->
     
                             
                                 <div id="block_buscar_body" class="bl_partes">
 
-                                    <div class="partes bl_parte_l">
+                                    <div class="partes bl_parte_l bl_active">
                                         
                                         <!--/parte_fija-->
                                         <div class="parte_fija">
@@ -297,8 +330,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                             </div><!--/#d_sel_songbooks-->
                                         
                                         </div><!--/.parte_fija-->
-                                        
-
 
                                         <!--/parte_variable-->
                                         <div class="parte_variable">
@@ -342,7 +373,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <thead>
                                                                 <tr>
                                                                     <th class="td_n">Nº</th>
-                                                                    <th class="td_id_song">id_song</th>
+                                                                    <th class="td_id_song">Id</th>
                                                                     <th class="td_numero">Número</th>
                                                                     <th class="td_titulo">Título</th>
                                                                     <th class="td_esquema">Esquema</th>
@@ -435,9 +466,74 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_esquema" class="edit_blocks">
 
                                 <div id="block_esquema_head" class="edit_blocks_head">
-                                    <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
-                                    <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
-                                    <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                    
+                                    <div class="wr_block_option">
+                                        <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
+                                        <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
+                                        <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                    </div><!--/.wr_block_option-->
+                                    
+                                    
+                                    <div class="vklad_ver_esquema vklads" style="display: block;">
+                                        <div class="wr_lcr">
+                                            <div class="wr_lcr_inner">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                    <div>Datos</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                    <div>Esquema</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                    <div>Vista</div>
+                                                </div>
+                                            </div>
+                                            <div class="wr_lcr_line">
+                                                <div class="lcr_line lines3 line_3l"></div>
+                                            </div>
+                                        </div><!--/.wr_lcr-->                                        
+                                    </div><!--/#vklad_ver_esquema-->
+
+
+                                    <div class="vklad_crear_esquema vklads" style="display: none;">
+                                        <div class="wr_lcr">
+                                            <div class="wr_lcr_inner">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                    <div>Datos</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                    <div>Esquema</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                    <div>Vista</div>
+                                                </div>
+                                            </div>
+                                            <div class="wr_lcr_line">
+                                                <div class="lcr_line lines3 line_3l"></div>
+                                            </div>
+                                        </div><!--/.wr_lcr-->
+                                    </div><!--/#vklad_crear_esquema-->
+
+
+                                    <div class="vklad_select_slide vklads" style="display: none;">
+                                        <div class="wr_lcr">
+                                            <div class="wr_lcr_inner">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                    <div>Datos</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                    <div>Esquema</div>
+                                                </div>
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                    <div>Vista</div>
+                                                </div>
+                                            </div>
+                                            <div class="wr_lcr_line">
+                                                <div class="lcr_line lines3 line_3l"></div>
+                                            </div>
+                                        </div><!--/.wr_lcr-->
+                                    </div><!--/#vklad_select_slide-->
+                                    
+
                                 </div><!--/#block_esquema_head-->
 
 
@@ -446,7 +542,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
                                         <div class="vklads_inner bl_partes">
                                             
-                                            <div class="partes bl_parte_l">
+                                            <div class="partes bl_parte_l bl_active">
                                                 
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
@@ -464,8 +560,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     </div>
                                                 </div><!--/.parte_variable-->
 
-                                            </div><!--/.bl_parte_l-->
-                                            
+                                            </div><!--/.bl_parte_l-->                                            
+
 
 
                                             <div class="partes bl_parte_c">
@@ -542,7 +638,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="vklad_crear_esquema vklads" style="display: none;">
                                         <div class="vklads_inner bl_partes">
 
-                                            <div class="partes bl_parte_l">
+                                            <div class="partes bl_parte_l bl_active">
                                                 
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
@@ -639,7 +735,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <div class="vklads_inner bl_partes">
 
 
-                                            <div class="partes bl_parte_l">
+                                            <div class="partes bl_parte_l bl_active">
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
@@ -783,17 +879,35 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_cancion" class="edit_blocks">
 
                                 <div id="block_cancion_head" class="edit_blocks_head">
-                                    <button id="btn_song_ver" class="btn" onclick="editar_song('ver')">Ver</button>
-                                    <button id="btn_song_editar" class="btn" onclick="editar_song('editar')">Editar</button>
-                                    <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
-                                    <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
-                                    <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                    
+                                    <div class="wr_block_option">
+                                        <button id="btn_song_ver" class="btn" onclick="editar_song('ver')">Ver</button>
+                                        <button id="btn_song_editar" class="btn" onclick="editar_song('editar')">Editar</button>
+                                        <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
+                                        <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
+                                        <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                    </div><!--/.wr_block_option-->
+
+                                    <div class="wr_lcr">
+                                        <div class="wr_lcr_inner">
+                                            <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_cancion')">
+                                                <div>Datos</div>
+                                            </div>
+                                            <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_cancion')">
+                                                <div>Vista</div>
+                                            </div>
+                                        </div>
+                                        <div class="wr_lcr_line">
+                                            <div class="lcr_line lines2 line_2l"></div>
+                                        </div>
+                                    </div><!--/.wr_lcr-->
+
                                 </div><!--/#block_cancion_head-->
 
 
                                 <div id="block_cancion_body" class="bl_partes">
 
-                                    <div class="partes bl_parte_l">
+                                    <div class="partes bl_parte_l bl_active">
                                         
                                         <!--/parte_fija-->
                                         <div class="parte_fija">
@@ -814,6 +928,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.parte_variable-->
 
                                     </div>
+
 
                                     <div class="partes bl_parte_r">
 
@@ -874,16 +989,34 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_ejemplo" class="edit_blocks">
 
                                 <div id="block_ejemplo_head" class="edit_blocks_head">
-                                    <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
-                                    <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Рус.</button>
-                                    <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Esp.</button>
-                                    <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
+
+                                    <div class="wr_block_option">
+                                        <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
+                                        <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Рус.</button>
+                                        <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Esp.</button>
+                                        <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
+                                    </div><!--/.wr_block_option-->
+
+                                    <div class="wr_lcr">
+                                        <div class="wr_lcr_inner">
+                                            <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_ejemplo')">
+                                                <div>Datos</div>
+                                            </div>
+                                            <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_ejemplo')">
+                                                <div>Vista</div>
+                                            </div>
+                                        </div>
+                                        <div class="wr_lcr_line">
+                                            <div class="lcr_line lines2 line_2l"></div>
+                                        </div>
+                                    </div><!--/.wr_lcr-->
+
                                 </div><!--/#block_ejemplo_head-->
 
 
                                 <div id="block_ejemplo_body" class="bl_partes">
 
-                                    <div class="partes bl_parte_l">
+                                    <div class="partes bl_parte_l bl_active">
 
                                         <!--/parte_fija-->
                                         <div class="parte_fija">                                        
@@ -962,20 +1095,37 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             <div id="block_lista" class="edit_blocks d-block">
 
                                 <div id="block_lista_head" class="edit_blocks_head">
-                                    <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-                                    <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
-                                    <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-                                    <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-                                    <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
-                                    <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
-                                </div><!--/#block_lista_head-->
 
+                                    <div class="wr_block_option">
+                                        <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+                                        <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
+                                        <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+                                        <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
+                                        <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
+                                        <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+                                    </div><!--/.wr_block_option-->
+
+                                    <div class="wr_lcr">
+                                        <div class="wr_lcr_inner">
+                                            <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_lista')">
+                                                <div>Datos</div>
+                                            </div>
+                                            <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_lista')">
+                                                <div>Vista</div>
+                                            </div>
+                                        </div>
+                                        <div class="wr_lcr_line">
+                                            <div class="lcr_line lines2 line_2l"></div>
+                                        </div>
+                                    </div><!--/.wr_lcr-->
+
+                                </div><!--/#block_lista_head-->
 
 
 
                                 <div id="block_lista_body" class="bl_partes">
 
-                                    <div class="partes bl_parte_l">
+                                    <div class="partes bl_parte_l bl_active">
 
                                         <!--/parte_fija-->
                                         <div class="parte_fija">
@@ -1087,7 +1237,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <thead>
                                                                 <tr>
                                                                     <th class="td_n">Nº</th>
-                                                                    <th class="td_id_lista">id_lista</th>
+                                                                    <th class="td_id_lista">Id</th>
                                                                     <th class="td_titulo">Título</th>
                                                                     <th class="td_dia_sem">Día/Sem.</th>
                                                                     <th class="td_fecha">Fecha</th>
@@ -1114,9 +1264,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                     </div><!--/.bl_parte_l-->
-
-
-
 
 
                                     <div class="partes bl_parte_r">
@@ -1170,9 +1317,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.parte_variable-->
 
                                     </div><!--/.bl_parte_r-->
-
-
-
 
                                 </div><!--/#block_lista_body-->
 

@@ -6,6 +6,10 @@
         max-width: 218px;
     }
 
+    .wr_lcr{
+        display: none;
+    }
+
 
 
     
@@ -15,6 +19,9 @@
 
 /* Tablet */
 @media screen and (min-width: 768px) and (max-width: 1023px){
+    .wr_lcr{
+        display: none;
+    }
 
 
 }
@@ -31,8 +38,16 @@
         width: 100% !important;
         flex-direction: column;
     }
+    .wr_lcr{
+        display: block;
+    }
 
-
+    .partes {
+        display: none !important;
+    }
+    .partes.bl_active {
+        display: block !important;
+    }
 
 }
 

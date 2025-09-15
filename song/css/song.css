@@ -796,6 +796,9 @@ legend span {
     overflow: hidden;
 }
 
+.vklads {
+    width: 100%;
+}
 
 .bl_partes, .vklads_inner {
     background: #505050;
@@ -809,6 +812,7 @@ legend span {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
 }
 
 .bl_parte_l {
@@ -2156,6 +2160,7 @@ p.p_sm b {
     border: 1px solid black;
     width: 100%;
     border-radius: 3px;
+    white-space: normal;
 }
 
 .wr_checkboxes input[type="checkbox"] {
@@ -2548,3 +2553,115 @@ p.p_sm b {
     gap: 5px;
     align-items: center;
 }
+
+
+
+
+
+.wr_block_option {
+    /* background: green; */
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    /* padding: 5px; */
+}
+.wr_block_option .btn {
+    /* background: black; */
+    white-space: pre;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+    overflow: visible;
+    justify-content: center;
+    align-content: center;
+    min-width: auto !important;
+}
+
+
+
+
+
+
+
+.wr_lcr {
+    background: #858585;
+    padding: 0px;
+    position: relative;
+    width: 100%;
+}
+.wr_lcr_inner {
+    background: #3d3d3d;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    flex-wrap: wrap;
+    /* gap: 1px; */
+}
+
+.wr_lcr .v_lcr {
+    background: #333;
+    text-align: center;
+    color: white;
+    font-size: 0.8rem;
+    padding-bottom: 7px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-top: 5px;
+}
+
+.wr_lcr .v_lcr:hover {
+    background: #5a5a5a;
+}
+
+
+.wr_lcr_line {
+    /* background: #2196f3; */
+    height: 0;
+}
+.lcr_line {
+    height: 5px;
+    position: relative;
+    background: white;
+    transition: 0.3s;
+    top: -5px;
+}
+
+.lines2 {
+    width: 50%;
+}
+.lines3 {
+    width: 33.33%;
+}
+
+
+.line_2l{
+    left: 0%;
+}
+.line_2r{
+    left: 50%;
+}
+
+.line_3l{
+    left: 0%;
+}
+.line_3c{
+    left: 33.33%;
+}
+.line_3r{
+    left: 66.66%;
+}
+
+
+.lcr_active {
+    background: #ad0000 !important;
+    color: white!important;
+}
+
+
