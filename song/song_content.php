@@ -195,7 +195,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <button class="btn">btn 42</button>
                                     </div><!--/.wr_block_option-->
 
-                                    <div class="wr_lcr">
+                                    <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_buscar')">
                                                 <div>Datos</div>
@@ -475,15 +475,15 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     
                                     
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
-                                        <div class="wr_lcr">
+                                        <div class="wr_lcr btns3" data-info="ver_esquema">
                                             <div class="wr_lcr_inner">
-                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3, 'ver_esquema')">
                                                     <div>Datos</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3, 'ver_esquema')">
                                                     <div>Esquema</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3, 'ver_esquema')">
                                                     <div>Vista</div>
                                                 </div>
                                             </div>
@@ -495,15 +495,15 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                     <div class="vklad_crear_esquema vklads" style="display: none;">
-                                        <div class="wr_lcr">
+                                        <div class="wr_lcr btns3" data-info="crear_esquema">
                                             <div class="wr_lcr_inner">
-                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3, 'crear_esquema')">
                                                     <div>Datos</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3, 'crear_esquema')">
                                                     <div>Esquema</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3, 'crear_esquema')">
                                                     <div>Vista</div>
                                                 </div>
                                             </div>
@@ -515,15 +515,15 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                     <div class="vklad_select_slide vklads" style="display: none;">
-                                        <div class="wr_lcr">
+                                        <div class="wr_lcr btns3" data-info="select_slide">
                                             <div class="wr_lcr_inner">
-                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_esquema', 3, 'select_slide')">
                                                     <div>Datos</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_c" onclick="clickLCR(this,'c','block_esquema', 3, 'select_slide')">
                                                     <div>Esquema</div>
                                                 </div>
-                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3)">
+                                                <div class="v_lcr v_lcr_r" onclick="clickLCR(this,'r','block_esquema', 3, 'select_slide')">
                                                     <div>Vista</div>
                                                 </div>
                                             </div>
@@ -531,6 +531,27 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 <div class="lcr_line lines3 line_3l"></div>
                                             </div>
                                         </div><!--/.wr_lcr-->
+
+
+
+                                        <div id="contenedor_nav_pantalla" class="w_100">
+                                            <div id="wr_btns_pantalla">
+                                                <div id="vklad_btn_slideGoPrev" class="dbtn" title="Previous slide" onclick="slideGo('prev')">
+                                                    <img src="images/arrow_left_r_icon_white.svg">
+                                                </div>
+
+                                                <div id="vklad_btn_pantallaShow" class="dbtn btn_active" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
+                                                    <img src="images/monitor_1_white.png">
+                                                    <span id="titulo_shown">1 куплет: x2</span>
+                                                </div>
+
+                                                <div id="vklad_btn_slideGoNext" class="dbtn" data-dic="" title="Next slidew" onclick="slideGo('next')">
+                                                    <img src="images/arrow_right_r_icon_white.svg">
+                                                </div>
+                                            </div>
+                                        </div>
+                                                    
+                                                    
                                     </div><!--/#vklad_select_slide-->
                                     
 
@@ -543,14 +564,47 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <div class="vklads_inner bl_partes">
                                             
                                             <div class="partes bl_parte_l bl_active">
-                                                
+
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
-                                                    <H4>1. Bloques actuales:</H4>
-                                                </div><!--/.parte_fija-->
+                                                    <h4 class="h4_vista_previa">
+                                                        <span>1. Bloques actuales:</span>
+                                                        
+                                                        <button id="btn_actions_ver_esquema_l" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ver_esquema_l');" title="Acciones">
+                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                        </button>
+                                                    </h4>
+                                                </div><!--/.parte_fija-->                                                
                                                 
                                                 <!--/parte_variable-->
                                                 <div class="parte_variable">
+
+                                                    <div id="bl_actions_ver_esquema_l" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>3. Escoge la acción:</span>
+                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_ver_esquema'))">✕</span>
+                                                                </div>
+                                                                
+                                                                <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                    <span>3. Parte central de esquema en desktop:</span>    
+                                                                    <div class="wr_sel_pantalla">
+                                                                        <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                        <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                    </div>
+                                                                </div> 
+
+                                                                <ul class="ul_action">
+                                                                    <!-- <li class="li_action">aki los li's</li>-->
+                                                                    <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="bloques_outer">
                                                         <div class="bloques song_bloques solo_ver">
                                                             <!-- aki bloques de la cancion -->
@@ -642,11 +696,44 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
-                                                    <H4>2. Crear esquema nueva</H4>
-                                                </div><!--/.parte_fija-->
+                                                    <h4 class="h4_vista_previa">
+                                                        <span>2. Crear esquema nueva</span>
+                                                        
+                                                        <button id="btn_actions_crear_esquema_l" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_crear_esquema_l');" title="Acciones">
+                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                        </button>
+                                                    </h4>
+                                                </div><!--/.parte_fija-->                                                
                                                 
                                                 <!--/parte_variable-->
                                                 <div class="parte_variable">
+
+                                                    <div id="bl_actions_crear_esquema_l" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>3. Escoge la acción:</span>
+                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_crear_esquema'))">✕</span>
+                                                                </div>
+                                                                
+                                                                <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                    <span>3. Parte central de esquema en desktop:</span>    
+                                                                    <div class="wr_sel_pantalla">
+                                                                        <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                        <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                    </div>
+                                                                </div> 
+
+                                                                <ul class="ul_action">
+                                                                    <!-- <li class="li_action">aki los li's</li>-->
+                                                                    <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="bloques_outer">
                                                         <div class="bloques song_bloques">
                                                             <!-- aki bloques de la cancion -->
@@ -740,12 +827,43 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositivas:</span>
-                                                    </h4>                                                
+                                                        
+                                                        <button id="btn_actions_select_slide_l" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide_l');" title="Acciones">
+                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                        </button>
+                                                    </h4>
                                                 </div><!--/.parte_fija-->
 
 
                                                 <!--/parte_variable-->
                                                 <div class="parte_variable">                                                    
+                                                    
+                                                    <div id="bl_actions_select_slide_l" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>3. Escoge la acción:</span>
+                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_select_slide'))">✕</span>
+                                                                </div>
+                                                                
+                                                                <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                    <span>3. Parte central de esquema en desktop:</span>    
+                                                                    <div class="wr_sel_pantalla">
+                                                                        <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                        <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                    </div>
+                                                                </div> 
+
+                                                                <ul class="ul_action">
+                                                                    <!-- <li class="li_action">aki los li's</li>-->
+                                                                    <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                     <div class="bloques_outer">
                                                         <div class="bloques song_bloques">
                                                             <!-- aki bloques de la cancion -->
@@ -787,24 +905,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                                         </button>
                                                     </h4>
-
-                                                    <div id="contenedor_nav_pantalla">
-                                                        <div id="wr_btns_pantalla">
-                                                            <div id="vklad_btn_slideGoPrev" class="dbtn" title="Previous slide" onclick="slideGo('prev')">
-                                                                <img src="images/arrow_left_r_icon_white.svg">
-                                                            </div>
-
-                                                            <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
-                                                                <img src="images/monitor_1_white.png">
-                                                                <span id="titulo_shown">...</span>
-                                                            </div>
-
-                                                            <div id="vklad_btn_slideGoNext" class="dbtn" data-dic="" title="Next slidew" onclick="slideGo('next')">
-                                                                <img src="images/arrow_right_r_icon_white.svg">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                 </div><!--/.parte_fija-->                                                
 
                                                 <!--/parte_variable-->
@@ -818,21 +918,18 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                 <div class="inner_content">
 
                                                                     <div class="wr_title_btn_close">
-                                                                        <span>3. Escoge dónde mostrar la diapositiva:</span>
+                                                                        <span>3. Escoge la acción:</span>
                                                                         <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_select_slide'))">✕</span>
                                                                     </div>
                                                                     
-                                                                    <div id="contenedor_sel_pantalla">
-                                                                        <div id="wr_sel_pantalla">
+                                                                    <div class="contenedor_sel_pantalla">
+                                                                        <span>3. Mostrar la diapositiva en:</span>
+                                                                        <div class="wr_sel_pantalla">
                                                                             <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
                                                                             <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
                                                                         </div>
                                                                     </div> 
                                                                     
-                                                                    <div class="wr_title_btn_close">
-                                                                        <span>3. Escoge la acción:</span>
-                                                                    </div>
-
                                                                     <ul class="ul_action">
                                                                         <!-- <li class="li_action">aki los li's</li>-->
                                                                         <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
@@ -888,7 +985,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
                                     </div><!--/.wr_block_option-->
 
-                                    <div class="wr_lcr">
+                                    <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_cancion')">
                                                 <div>Datos</div>
@@ -997,7 +1094,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
                                     </div><!--/.wr_block_option-->
 
-                                    <div class="wr_lcr">
+                                    <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_ejemplo')">
                                                 <div>Datos</div>
@@ -1105,7 +1202,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
                                     </div><!--/.wr_block_option-->
 
-                                    <div class="wr_lcr">
+                                    <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_lista')">
                                                 <div>Datos</div>

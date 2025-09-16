@@ -62,15 +62,15 @@ async function getLista(id_lista_pram){
 
 
 //click sobre Book, Chapter, Verse en vklad_nav de sidebar
-function clickLCR(e, param, id_contenedor, cols_number = 2){
+function clickLCR(e, param, id_contenedor, cols_number = 2, esquema_vklad = null){
     console.log('=== function clickLCR() ===');
 
     const contenedor = document.getElementById(id_contenedor);//'block_buscar', 'block_esquema'
     let contenedorBtns ;//'#block_buscar_head .wr_lcr'
     let contenedorBlocks;
     
-    if(id_contenedor == 'block_esquema'){
-        switch (vkladActive) {
+    if(id_contenedor == 'block_esquema' && esquema_vklad){
+        switch (esquema_vklad) {
             default:
             case 'ver_esquema':
                 contenedorBtns = contenedor.querySelector(`#${id_contenedor}_head .vklad_ver_esquema .wr_lcr`);
@@ -145,22 +145,32 @@ function clickLCR(e, param, id_contenedor, cols_number = 2){
 
 
 function resetBlActiveEn(contenedor){
-    contenedor.querySelectorAll('.partes').forEach(bl=>{
+    console.log('contenedor:' , contenedor);
+    contenedor.querySelectorAll('.partes').forEach(bl => {
+        console.log('bl:' , bl);
+        
         bl.classList.remove('bl_active');
     })
 }
 
 function resetLcrActiveEn(contenedor){
+    console.log('contenedor:' , contenedor);
+    
     //Botones grandes arriba de seleccionar: 'bl_parte_l', 'bl_parte_c', 'bl_parte_r'
     contenedor.querySelectorAll('.v_lcr').forEach(v_lcr => {
+        console.log('v_lcr:' , v_lcr);
         v_lcr.classList.remove('lcr_active');
     });
 }
 
 function resetLineActiveEn(contenedor){
     const lcr_line = contenedor.querySelector('.lcr_line');
+    console.log('contenedor:' , contenedor);
+    console.log('lcr_line:' , lcr_line);
+
     const arr_line_clases = ['line_2l','line_2r', 'line_3l','line_3c','line_3r'];
     arr_line_clases.forEach(cl => {
+        console.log('cl:' , cl);
         if(lcr_line.classList.contains(cl)){
             lcr_line.classList.remove(cl);
         }                

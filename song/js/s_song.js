@@ -2708,15 +2708,30 @@ async function findWordsSong(){
             }
             console.log('(parseado) --- el.arr_esquema: ', el.arr_esquema);
 
+            let category_name_text = '';
+            if(el.category != 0 && el.category_name != null){
+                category_name_text = `<span class="sp_number">${el.category}.</span> <span>${el.category_name}</span>`;
+            }
+
+            let songbook_title_text = '';
+            if(el.songbook != 0 && el.songbook_title != null){
+                songbook_title_text = `<span class="sp_number">${el.songbook}.</span> <span>${el.songbook_title}</span>`;
+            }
+
+            let lang_name_text = el.lang;
+            if(el.lang_name){
+                lang_name_text = obj_lang_names[el.lang];
+            }
+
             tr_song.innerHTML = `
                 <td class="td_n">${i + 1}</td>
                 <td class="td_id_song" data-id_song="${el.id_song}" title="${el.id_song}">${el.id_song}</td>
                 <td class="td_numero">${el.song_number || ''}</td>
                 <td class="td_titulo">${el.title}</td>
                 <td class="td_esquema">${hay_esquema_texto}</td>            
-                <td class="td_category" data-category="${el.category}">${el.category + '. ' + el.category_name || ''}</td>            
-                <td class="td_songbook" data-songbook="${el.songbook}">${el.songbook + '. ' + el.songbook_title || ''}</td>            
-                <td class="td_idioma" data-lang_name="${el.lang_name}">${obj_lang_names[el.lang] || el.lang}</td>
+                <td class="td_category" data-category="${el.category || ''}">${category_name_text || ''}</td>            
+                <td class="td_songbook" data-songbook="${el.songbook || ''}">${songbook_title_text}</td>            
+                <td class="td_idioma" data-lang_name="${el.lang_name}">${lang_name_text}</td>
                 <td class="td_tonalidad">${el.tune}</td>
             `;
 

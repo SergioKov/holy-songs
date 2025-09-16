@@ -378,7 +378,6 @@ function buildFormCancion(contenedor, cancion_action = null){
     const wr_btns_eliminar = document.createElement('div');
     wr_btns_eliminar.className = 'wr_btns_eliminar';
     wr_btns_eliminar.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Editar Canción',null,'buildFormCancion',true, 'editar');">Editar</button>
         <button class="btn btn_big btn_eliminar" onclick="deleteSong(event, '${contenedor.id}');">Eliminar Canción DEFINITIVAMENTE</button>
     `;
 
@@ -825,7 +824,6 @@ function buildLista(lista_action = null){
     const wr_btns_eliminar = document.createElement('div');
     wr_btns_eliminar.className = 'wr_btns_eliminar';
     wr_btns_eliminar.innerHTML = `
-        <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
         <button class="btn btn_big btn_eliminar" onclick="deleteLista();">Eliminar Lista DEFINITIVAMENTE</button>
     `;
 

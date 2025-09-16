@@ -87,6 +87,17 @@ function pintSongActiveSoloDatos(){
 
     let vista_html = '';
 
+    if(objSong.title){
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_text_red = objSong.title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Título Canción:</p>
+            <p class="texto_norm t_big">${titulo_text_red}</p>
+        `;
+    }
+
     if(objSong.id_song){
         //Marco en rojo las palabras encontradas en title 
         let id_song_text_red = objSong.id_song.toString().replace(regex, (x) => {
@@ -108,17 +119,6 @@ function pintSongActiveSoloDatos(){
         vista_html += `
             <p class="p_titulo">Número:</p>
             <p class="texto_norm t_big">${song_number_text_red}</p>
-        `;
-    }
-
-    if(objSong.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objSong.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Título Canción:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
         `;
     }
 
@@ -277,6 +277,21 @@ function pintListaActiveSoloDatos(){
         lista_vista_lista_content.append(d_titulo);
     }
 
+    if(objLista.id_lista){
+        //Marco en rojo las palabras encontradas en id 
+        let id_lista_text_red = objLista.id_lista.toString().replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+
+        const d_id_lista = document.createElement('div');
+        d_id_lista.className = 'parte_lista';
+        d_id_lista.innerHTML = `
+            <p class="p_titulo">Id:</p>
+            <p class="texto_norm t_big">${id_lista_text_red}</p>
+        `;
+        lista_vista_lista_content.append(d_id_lista);
+    }    
+
     //Fecha
     if(objLista.fecha && objLista.fecha != '0000-00-00'){
         //Marco en rojo las palabras encontradas en title 
@@ -361,6 +376,11 @@ function showOneSlideFrom(elementClicked){
     if(elementClicked === elementBtnSimple){
         console.log('es button -> btn_clicked ');
         elementFieldset.scrollIntoView({behavior: 'smooth', block: "center"});//btn clicked -> muevo fildset
+        
+        if(window.innerWidth < pantallaTabletMinPx){//mobile
+            //alert('102. es mobil. muevo btn_simple...');
+            elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
+        }
     }else{
         console.log('es fieldset clicked');
         elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
@@ -740,6 +760,24 @@ function openDiv(divElement){
     },300);//300 es 0.3s de transition css
 }
 
+
+function parteCentral(param){
+    const parteCentralAll = eid_block_esquema.querySelectorAll('.bl_parte_c');
+    parteCentralAll.forEach(parteCentral => {       
+        switch (param) {
+            default:
+            case 'show':
+                console.log('lo hago visible...');
+                parteCentral.classList.remove('oculto');
+                break;
+                    
+            case 'hide':
+                console.log('lo hago oculto...');
+                parteCentral.classList.add('oculto');
+                break;
+        }
+    });
+}
 
 
 
