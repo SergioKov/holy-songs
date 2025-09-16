@@ -2489,15 +2489,15 @@ p.p_sm b {
 }
 .btn_actions {
     padding: 0;
-    width: 30px;
+    width: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
     min-width: auto;
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    height: 26px;
+    /* position: absolute; */
+    /* right: 10px; */
+    /* top: 5px; */
+    height: 23px;
 }
 .bl_actions ul {
     /* border: 1px solid green; */
@@ -2526,7 +2526,7 @@ p.p_sm b {
 }
 
 
-.edit_blocks_head .btn {
+.edit_blocks_head .wr_block_option .btn {
     min-width: 60px !important;
 }
 
@@ -2579,7 +2579,7 @@ p.p_sm b {
     gap: 5px;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     /* padding: 5px; */
 }
 .wr_block_option .btn {
@@ -2588,7 +2588,7 @@ p.p_sm b {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
     overflow: visible;
     justify-content: center;
     align-content: center;
@@ -2756,5 +2756,20 @@ span.sp_number {
     color: white;
     padding: 10px;
     margin: 0 0 10px;
+}
+
+
+
+
+
+.head_block_l {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: auto;
+    gap: 10px;
+    width: 100%;
 }
 

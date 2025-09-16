@@ -90,6 +90,10 @@
         display: none;
     }
 
+    .wr_block_option .btn {
+        width: 100%;
+    }
+
 }
 
 
@@ -124,6 +128,7 @@
     .sp_flex_btns{
         max-width: 100%;
     }
+
 
 }
 

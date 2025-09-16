@@ -467,11 +467,19 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                 <div id="block_esquema_head" class="edit_blocks_head">
                                     
-                                    <div class="wr_block_option">
-                                        <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
-                                        <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
-                                        <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
-                                    </div><!--/.wr_block_option-->
+                                    <div class="head_block_l">
+                                        <div class="wr_block_option">
+                                            <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
+                                            <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
+                                            <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                        </div><!--/.wr_block_option-->
+                                        
+                                        <button id="btn_actions_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_esquema');" title="Acciones">
+                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                        </button>
+                                    </div>
+
+
                                     
                                     
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
@@ -559,6 +567,33 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                 <div id="block_esquema_body" class="bl_p---artes">
+
+                                                    <div id="bl_actions_esquema" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>3. Escoge la acción:</span>
+                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_esquema'))">✕</span>
+                                                                </div>
+                                                                
+                                                                <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                    <span>3. Parte central de esquema en desktop:</span>    
+                                                                    <div class="wr_sel_pantalla">
+                                                                        <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                        <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                    </div>
+                                                                </div> 
+
+                                                                <ul class="ul_action">
+                                                                    <!-- <li class="li_action">aki los li's</li>-->
+                                                                    <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
 
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
                                         <div class="vklads_inner bl_partes">
