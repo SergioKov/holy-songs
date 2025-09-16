@@ -2196,6 +2196,9 @@ p.p_sm b {
     font-size: 16px;
     transition: height 0.3s ease, padding 0.3s ease;
     overflow: hidden;
+    max-width: 768px;
+    top: 0;
+    right: 0;
 }
 .bl_closed {
     height: 0;
@@ -2594,6 +2597,12 @@ p.p_sm b {
     align-content: center;
     min-width: auto !important;
 }
+.wr_head_action{
+    /* background: red; */
+    padding: 0px;
+    display: flex;
+    gap: 5px;
+}
 
 
 
@@ -2762,7 +2771,7 @@ span.sp_number {
 
 
 
-.head_block_l {
+.block_option_y_action {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

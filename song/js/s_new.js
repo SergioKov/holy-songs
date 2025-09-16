@@ -63,15 +63,40 @@ function pintSongActiveSoloDatos(){
         return;
     }
 
+
+
+
+
+    let category_name_text = '';
+    if(objSong.category != 0 && objSong.category_name != null){
+        //inportante en una linea
+        category_name_text = `<span class="sp_number">${objSong.category}.</span> <span class="sp_name">${objSong.category_name}</span>`;
+    }
+
+    let songbook_title_text = '';
+    if(objSong.songbook != 0 && objSong.songbook_title != null){
+        //inportante en una linea
+        songbook_title_text = `<span class="sp_number">${objSong.songbook}.</span> <span class="sp_name">${objSong.songbook_title}</span>`;
+    }
+
+    let lang_name_text = '';
+    if(objSong.lang){
+        lang_name_text = obj_lang_names[objSong.lang];
+    }
+
+
     //actualizo datos de tr_song
     tr_song.querySelector('.td_numero').textContent = objSong.song_number || '';
     tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
     tr_song.querySelector('.td_esquema').textContent = (objSong.arr_esquema.length > 0) ? 'Sí' :  '';
+    
     tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
-    tr_song.querySelector('.td_category').textContent = objSong.category + '. ' + objSong.category_name || '';
+    tr_song.querySelector('.td_category').innerHTML = category_name_text;
+
     tr_song.querySelector('.td_songbook').dataset.songbook = objSong.songbook || '';
-    tr_song.querySelector('.td_songbook').textContent = objSong.songbook + '. ' + objSong.songbook_title || '';
-    tr_song.querySelector('.td_idioma').textContent = obj_lang_names[objSong.lang] || '';
+    tr_song.querySelector('.td_songbook').innerHTML = songbook_title_text;
+
+    tr_song.querySelector('.td_idioma').textContent = lang_name_text;
     tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
    
 

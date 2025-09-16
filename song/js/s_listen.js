@@ -207,12 +207,11 @@ eid_edit_contenido.addEventListener('click', (e) => {
         closeDiv(document.querySelector('#bl_songbook_search'));
 
         closeDiv(document.querySelector('#bl_actions_buscar'));
-        closeDiv(document.querySelector('#bl_actions_ver_esquema_l'));
+
         closeDiv(document.querySelector('#bl_actions_ver_esquema'));
-        closeDiv(document.querySelector('#bl_actions_crear_esquema_l'));
         closeDiv(document.querySelector('#bl_actions_crear_esquema'));
-        closeDiv(document.querySelector('#bl_actions_select_slide_l'));//parte left -> pantalla o ventana
         closeDiv(document.querySelector('#bl_actions_select_slide'));
+
         closeDiv(document.querySelector('#bl_actions_cancion'));
         closeDiv(document.querySelector('#bl_actions_ejemplo'));
         
@@ -223,7 +222,12 @@ eid_edit_contenido.addEventListener('click', (e) => {
     if (!eid_edit_contenido_inner.contains(e.target)) {
         // Click fue dentro de eid_edit_contenido pero fuera de eid_edit_contenido_inner
         console.log('click fuera de edit_contenido_inner');
-        if(e.target.className != 'sp_close' && e.target.id != 'li_resetEsquema'){
+        if( 
+            e.target.className != 'sp_close' && 
+            e.target.className != 'sp_number' && 
+            e.target.className != 'sp_name' && 
+            e.target.id != 'li_resetEsquema'
+        ){
             hideEdit(); // o cualquier lógica de cierre
         }else{
             //no hago nada
