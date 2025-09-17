@@ -179,30 +179,54 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="block_option_y_action">
 
                                         <div class="wr_block_option">
-                                            <button class="btn" o-nclick="">Ver algo...</button>
-                                            <button class="btn">aaaaaa aaaaa btn 1</button>
-                                            <button class="btn">bbbb bbbbbbb bbbbb btn 2</button>
-                                            <button class="btn">btn 3</button>
-                                            <button class="btn">btn 2</button>
-                                            <button class="btn">btn 42</button>
-                                            <button class="btn">btn 52</button>
-                                            <button class="btn">btn 26</button>
-                                            <button class="btn">btn 27</button>
-                                            <button class="btn">btn 28</button>
-                                            <button class="btn">btn 29</button>
-                                            <button class="btn">btn 112</button>
-                                            <button class="btn">btn 112</button>
-                                            <button class="btn">btn 22</button>
-                                            <button class="btn">btn 2</button>
-                                            <button class="btn">btn 32</button>
-                                            <button class="btn">btn 42</button>
-                                            <button class="btn">btn 42</button>
+                                            <div class="wr_block_option_inner">
+                                                <button class="btn" o-nclick="">Ver algo...</button>
+                                                <button class="btn">aaaaaa aaaaa btn 1</button>
+                                                <button class="btn">bbbb bbbbbbb bbbbb btn 2</button>
+                                                <button class="btn">btn 3</button>
+                                                <button class="btn">btn 2</button>
+                                                <button class="btn">btn 42</button>
+                                                <button class="btn">btn 52</button>
+                                                <button class="btn">btn 26</button>
+                                                <button class="btn">btn 27</button>
+                                                <button class="btn">btn 28</button>
+                                                <button class="btn">btn 29</button>
+                                                <button class="btn">btn 112</button>
+                                                <button class="btn">btn 112</button>
+                                                <button class="btn">btn 22</button>
+                                                <button class="btn">btn 2</button>
+                                                <button class="btn">btn 32</button>
+                                                <button class="btn">btn 42</button>
+                                                <button class="btn">btn 42</button>
+                                            </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
                                             <button id="btn_actions_buscar" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_buscar');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                             </button>
+                                            <div id="bl_actions_buscar" class="bl_set bl_actions" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
+                                                    <div class="inner_content">
+
+                                                        <div class="inner_content_head_body">
+                                                            <div class="inner_content_head">
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span class="sp_close">✕</span>
+                                                                </div>
+                                                            </div><!--/.inner_content_head-->
+
+                                                            <div class="inner_content_body">
+                                                                <ul class="ul_action">
+                                                                    <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                            </div><!--/.inner_content_body-->
+                                                        </div><!--/.inner_content_head_body-->
+                                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div><!--/.block_option_y_action-->
@@ -227,22 +251,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                             
                                 <div id="block_buscar_body">
                                     
-                                    <div id="bl_actions_buscar" class="bl_set bl_actions" style="display:none;">
-                                        <div class="bl_set_inner bl_closed">
-                                            <div class="inner_content">
 
-                                                <div class="wr_title_btn_close">
-                                                    <span>Escoge acción con la canción:</span>
-                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_buscar'))">✕</span>
-                                                </div>                                                    
-
-                                                <ul class="ul_action">
-                                                    <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
-                                                </ul>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <div class="bl_partes">
 
@@ -272,92 +281,103 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <button id="btn_find_settings" class="btn btn_set btn_search" onclick="hideShowDiv('bl_find_settings');" title="Ajustes">
                                                         <img class="btn_img posi-tion_row" src="./images/settings7_white.svg">
                                                     </button>
+                                                    <div id="bl_find_settings" class="bl_set" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>Marca parametros de búsqueda:</span>
+                                                                            <span class="sp_close">✕</span>
+                                                                        </div>
+                                                                    </div><!--/.inner_content_head-->
+
+                                                                    <div class="inner_content_body">
+                                                                        <h5>Modo de búsqueda:</h5>
+                                                                        <div class="wr_sel_song m_0">
+                                                                            <select id="modo" class="sel_song">
+                                                                                <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                                <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                                <option value="3">3) Coincidir al menos una palabra</option>
+                                                                                <option value="4">4) Palabras en el orden establecido</option>
+                                                                                <option value="5">5) Frase exacta</option>
+                                                                                <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <h5>Campos de búsqueda:</h5>
+                                                                        <div class="wr_sel_song">
+                                                                            <select id="buscar_en" class="sel_song">
+                                                                                <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
+                                                                                <option value="2">2) Todos los campos disponibles (lento)</option>
+                                                                                <option value="3">3) Todos los campos de texto disponibles</option>
+                                                                                <option value="4">4) Sólo el título de canción</option>
+                                                                                <option value="5">5) Sólo el texto de canción</option>
+                                                                                <option value="6">6) Sólo las notas de canción</option>
+                                                                                <option value="7">7) Identificador y número de canción</option>
+                                                                                <option value="8">8) Sólo el identificador de canción</option>
+                                                                                <option value="9">9) Sólo el número de canción</option>
+                                                                                <option value="10">10) Sólo el identificador de categoría</option>
+                                                                                <option value="10">10) Sólo el nombre de categoría</option>
+                                                                                <option value="11">11) Sólo el idioma</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div><!--/.inner_content_body-->
+                                                                </div><!--/.inner_content_head_body--> 
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div><!--/.wr_nav-->
 
-                                                <div id="bl_find_settings" class="bl_set" style="display:none;">
-                                                    <div class="bl_set_inner bl_closed">
-                                                        <div class="inner_content">
-
-                                                            <div class="wr_title_btn_close">
-                                                                <span>Marca parametros de búsqueda:</span>
-                                                                <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_settings'))">✕</span>
-                                                            </div>                                                    
-
-                                                            <h5>Modo de búsqueda:</h5>
-                                                            <div class="wr_sel_song m_0">
-                                                                <select id="modo" class="sel_song">
-                                                                    <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                    <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                    <option value="3">3) Coincidir al menos una palabra</option>
-                                                                    <option value="4">4) Palabras en el orden establecido</option>
-                                                                    <option value="5">5) Frase exacta</option>
-                                                                    <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <h5>Campos de búsqueda:</h5>
-                                                            <div class="wr_sel_song">
-                                                                <select id="buscar_en" class="sel_song">
-                                                                    <option value="1">1) Todos los campos por defecto disponibles (rápido)</option>
-                                                                    <option value="2">2) Todos los campos disponibles (lento)</option>
-
-                                                                    <option value="3">3) Todos los campos de texto disponibles</option>
-                                                                    <option value="4">4) Sólo el título de canción</option>
-                                                                    <option value="5">5) Sólo el texto de canción</option>
-                                                                    <option value="6">6) Sólo las notas de canción</option>
-                                                                    <option value="7">7) Identificador y número de canción</option>
-                                                                    <option value="8">8) Sólo el identificador de canción</option>
-                                                                    <option value="9">9) Sólo el número de canción</option>
-                                                                    <option value="10">10) Sólo el identificador de categoría</option>
-                                                                    <option value="10">10) Sólo el nombre de categoría</option>
-                                                                    <option value="11">11) Sólo el idioma</option>
-                                                                </select>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                                 <div id="d_sel_songbooks" class="wr_sb m_0">
                                                     <h5>Songbooks donde buscar (separados por coma):</h5>
-                                                    <button id="btn_sel_sb" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">Seleccionar songbooks:</button>
-
+                                                    <button id="btn_songbook_search" class="btn btn_big btn_set" onclick="hideShowDiv('bl_songbook_search');">
+                                                        Seleccionar songbooks:
+                                                    </button>
                                                     <div id="bl_songbook_search" class="bl_set" style="display: none;">
-                                                        <div class="bl_set_inner bl_closed" style="overflow: auto;">
+                                                        <div class="bl_set_inner bl_closed">
                                                             <div class="inner_content">
-
-                                                                <div class="wr_title_btn_close">
-                                                                    <span>Marca parametros de búsqueda:</span>
-                                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_songbook_search'))">✕</span>
-                                                                </div>
                                                                 
-                                                                <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>Marca parametros de búsqueda:</span>
+                                                                            <span class="sp_close">✕</span>
+                                                                        </div>
+                                                                    </div><!--/.inner_content_head-->
 
-                                                                <div id="wr_sb_checkboxes" class="wr_checkboxes">
-                                                                    <label>
-                                                                        <p>
-                                                                            <input type="checkbox" name="songbooks" value="1">
-                                                                            <span>Songbook 1</span>
-                                                                        </p>
-                                                                    </label>
-                                                                    <label>
-                                                                        <p>
-                                                                            <input type="checkbox" name="songbooks" value="1">
-                                                                            <span>Songbook 1</span>
-                                                                        </p>
-                                                                    </label>
-                                                                    <label>
-                                                                        <p>
-                                                                            <input type="checkbox" name="songbooks" value="1">
-                                                                            <span>Songbook 1</span>
-                                                                        </p>
-                                                                    </label>
-                                                                </div>
+                                                                    <div class="inner_content_body">
+                                                                        <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+        
+                                                                        <div id="wr_sb_checkboxes" class="wr_checkboxes">
+                                                                            <label>
+                                                                                <p>
+                                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                                    <span>Songbook 1</span>
+                                                                                </p>
+                                                                            </label>
+                                                                            <label>
+                                                                                <p>
+                                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                                    <span>Songbook 1</span>
+                                                                                </p>
+                                                                            </label>
+                                                                            <label>
+                                                                                <p>
+                                                                                    <input type="checkbox" name="songbooks" value="1">
+                                                                                    <span>Songbook 1</span>
+                                                                                </p>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div><!--/.inner_content_body-->
+                                                                </div><!--/.inner_content_head_body-->
 
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                            </div><!--/.inner_content-->
+                                                        </div><!--/.bl_set_inner-->
+                                                    </div><!--/.bl_set-->
 
                                                 </div><!--/#d_sel_songbooks-->
                                             
@@ -482,9 +502,11 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="block_option_y_action">
 
                                         <div class="wr_block_option">
-                                            <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
-                                            <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
-                                            <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                            <div class="wr_block_option_inner">
+                                                <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
+                                                <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
+                                                <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                            </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
@@ -492,16 +514,116 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 <button id="btn_actions_ver_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ver_esquema');" title="Acciones">
                                                     <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                                 </button>
+                                                <div id="bl_actions_ver_esquema" class="bl_set bl_actions" style="display:none;">
+                                                    <div class="bl_set_inner bl_closed">
+                                                        <div class="inner_content">
+
+                                                            <div class="inner_content_head_body">
+                                                                <div class="inner_content_head">
+                                                                    <div class="wr_title_btn_close">
+                                                                        <span>Escoge acción con la canción:</span>
+                                                                        <span class="sp_close">✕</span>
+                                                                    </div>
+                                                                </div><!--/.inner_content_head-->
+
+                                                                <div class="inner_content_body">
+                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                        <span>1. Parte central de esquema en desktop:</span>    
+                                                                        <div class="wr_sel_pantalla">
+                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <ul class="ul_action">
+                                                                        <p class="prim">1.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                    </ul>
+                                                                </div><!--/.inner_content_body-->
+                                                            </div><!--/.inner_content_head_body-->                                                    
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div><!--/.vklad_ver_esquema-->
+
                                             <div class="vklad_crear_esquema vklads" style="display: none;">
                                                 <button id="btn_actions_crear_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_crear_esquema');" title="Acciones">
                                                     <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                                </button>
+                                                </button>                                        
+                                                <div id="bl_actions_crear_esquema" class="bl_set bl_actions" style="display:none;">
+                                                    <div class="bl_set_inner bl_closed">
+                                                        <div class="inner_content">
+
+                                                            <div class="inner_content_head_body">
+                                                                <div class="inner_content_head">
+                                                                    <div class="wr_title_btn_close">
+                                                                        <span>2. Escoge acción con la canción:</span>
+                                                                        <span class="sp_close">✕</span>
+                                                                    </div>
+                                                                </div><!--/.inner_content_head-->
+
+                                                                <div class="inner_content_body">
+                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                        <span>2. Parte central de esquema en desktop:</span>    
+                                                                        <div class="wr_sel_pantalla">
+                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <ul class="ul_action">
+                                                                        <p class="prim">2.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                    </ul>
+                                                                </div><!--/.inner_content_body-->
+                                                            </div><!--/.inner_content_head_body-->                                                    
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div><!--/.vklad_crear_esquema-->
+
                                             <div class="vklad_select_slide vklads" style="display: none;">
                                                 <button id="btn_actions_select_slide" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide');" title="Acciones">
                                                     <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                                 </button>
+                                                <div id="bl_actions_select_slide" class="bl_set bl_actions" style="display:none;">
+                                                    <div class="bl_set_inner bl_closed">
+                                                        <div class="inner_content">
+
+                                                            <div class="inner_content_head_body">
+                                                                <div class="inner_content_head">
+                                                                    <div class="wr_title_btn_close">
+                                                                        <span>3. Escoge la acción:</span>
+                                                                        <span class="sp_close">✕</span>
+                                                                    </div>
+                                                                </div><!--/.inner_content_head-->
+
+                                                                <div class="inner_content_body">
+                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                        <span>3. Parte central de esquema en desktop:</span>    
+                                                                        <div class="wr_sel_pantalla">
+                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="contenedor_sel_pantalla">
+                                                                        <span>3. Mostrar la diapositiva en:</span>
+                                                                        <div class="wr_sel_pantalla">
+                                                                            <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
+                                                                            <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+                                                                        </div>
+                                                                    </div> 
+                                                                    
+                                                                    <ul class="ul_action">
+                                                                        <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                    </ul>
+                                                                </div><!--/.inner_content_body-->
+                                                            </div><!--/.inner_content_head_body-->
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div><!--/.vklad_select_slide-->
                                         </div>
 
@@ -593,32 +715,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_esquema_body">
 
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
-                                        
-                                        <div id="bl_actions_ver_esquema" class="bl_set bl_actions" style="display:none;">
-                                            <div class="bl_set_inner bl_closed">
-                                                <div class="inner_content">
-
-                                                    <div class="wr_title_btn_close">
-                                                        <span>Escoge acción con la canción:</span>
-                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_ver_esquema'))">✕</span>
-                                                    </div>
-
-                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                        <span>1. Parte central de esquema en desktop:</span>    
-                                                        <div class="wr_sel_pantalla">
-                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <ul class="ul_action">
-                                                        <p class="prim">1.Los botones de acciones se verán al selecionar la canción...</p>
-                                                    </ul>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>                                    
-                                        
                                         <div class="vklads_inner bl_partes">
                                             
                                             <div class="partes bl_parte_l bl_active">
@@ -700,33 +796,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     </div><!--/.vklad_ver_esquema-->
 
 
-                                    <div class="vklad_crear_esquema vklads" style="display: none;">
-                                        
-                                        <div id="bl_actions_crear_esquema" class="bl_set bl_actions" style="display:none;">
-                                            <div class="bl_set_inner bl_closed">
-                                                <div class="inner_content">
-
-                                                    <div class="wr_title_btn_close">
-                                                        <span>2. Escoge acción con la canción:</span>
-                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_crear_esquema'))">✕</span>
-                                                    </div>
-
-                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                        <span>2. Parte central de esquema en desktop:</span>    
-                                                        <div class="wr_sel_pantalla">
-                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <ul class="ul_action">
-                                                        <p class="prim">zzz2.Los botones de acciones se verán al selecionar la canción...</p>
-                                                    </ul>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>                                    
-                                    
+                                    <div class="vklad_crear_esquema vklads" style="display: none;">                                    
                                         <div class="vklads_inner bl_partes">
 
                                             <div class="partes bl_parte_l bl_active">                                                
@@ -812,40 +882,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                     <div class="vklad_select_slide vklads" style="display: none;">
-                                        
-                                        <div id="bl_actions_select_slide" class="bl_set bl_actions" style="display:none;">
-                                            <div class="bl_set_inner bl_closed">
-                                                <div class="inner_content">
-
-                                                    <div class="wr_title_btn_close">
-                                                        <span>3. Escoge la acción:</span>
-                                                        <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_select_slide'))">✕</span>
-                                                    </div>
-                                                    
-                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                        <span>3. Parte central de esquema en desktop:</span>    
-                                                        <div class="wr_sel_pantalla">
-                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="contenedor_sel_pantalla">
-                                                        <span>3. Mostrar la diapositiva en:</span>
-                                                        <div class="wr_sel_pantalla">
-                                                            <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
-                                                            <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
-                                                        </div>
-                                                    </div> 
-                                                    
-                                                    <ul class="ul_action">
-                                                        <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
-                                                    </ul>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>                                        
-                                        
                                         <div class="vklads_inner bl_partes">
 
                                             <div class="partes bl_parte_l bl_active">
@@ -948,17 +984,41 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="block_option_y_action">
 
                                         <div class="wr_block_option">
-                                            <button id="btn_song_ver" class="btn" onclick="editar_song('ver')">Ver</button>
-                                            <button id="btn_song_editar" class="btn" onclick="editar_song('editar')">Editar</button>
-                                            <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
-                                            <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
-                                            <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                            <div class="wr_block_option_inner">
+                                                <button id="btn_song_ver" class="btn" onclick="ver_song()">Ver</button>
+                                                <button id="btn_song_editar" class="btn" onclick="editar_song()">Editar</button>
+                                                <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
+                                                <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
+                                                <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                            </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
                                             <button id="btn_actions_cancion" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_cancion');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                            </button>
+                                            </button>                                    
+                                            <div id="bl_actions_cancion" class="bl_set bl_actions" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
+                                                    <div class="inner_content">
+
+                                                        <div class="inner_content_head_body">
+                                                            <div class="inner_content_head">
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span class="sp_close">✕</span>
+                                                                </div>
+                                                            </div><!--/.inner_content_head-->
+
+                                                            <div class="inner_content_body">
+                                                                <ul class="ul_action">
+                                                                    <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
+                                                                </ul>
+                                                            </div><!--/.inner_content_body-->
+                                                        </div><!--/.inner_content_head_body-->
+                                                                                                            
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div><!--/.block_option_y_action-->
@@ -982,24 +1042,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                 <div id="block_cancion_body">
-                                    
-                                    <div id="bl_actions_cancion" class="bl_set bl_actions" style="display:none;">
-                                        <div class="bl_set_inner bl_closed">
-                                            <div class="inner_content">
-
-                                                <div class="wr_title_btn_close">
-                                                    <span>Escoge acción con la canción:</span>
-                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_cancion'))">✕</span>
-                                                </div>                                                    
-
-                                                <ul class="ul_action">
-                                                    <p class="prim">Los botones de acciones se verán al selecionar la canción...</p>
-                                                </ul>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>                                                
-
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">
@@ -1061,16 +1103,40 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="block_option_y_action">
 
                                         <div class="wr_block_option">
-                                            <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
-                                            <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Рус.</button>
-                                            <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Esp.</button>
-                                            <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
+                                            <div class="wr_block_option_inner">
+                                                <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
+                                                <button id="btn_ejemplo_ru" class="btn" onclick="showEjemplo('ru')">Рус.</button>
+                                                <button id="btn_ejemplo_es" class="btn" onclick="showEjemplo('es')">Esp.</button>
+                                                <button id="btn_ejemplo_en" class="btn" onclick="showEjemplo('en')">Eng.</button>
+                                            </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
                                             <button id="btn_actions_ejemplo" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ejemplo');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                            </button>
+                                            </button>                                    
+                                            <div id="bl_actions_ejemplo" class="bl_set bl_actions" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
+                                                    <div class="inner_content">
+
+                                                        <div class="inner_content_head_body">
+                                                            <div class="inner_content_head">
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span class="sp_close">✕</span>
+                                                                </div>
+                                                            </div><!--/.inner_content_head-->
+
+                                                            <div class="inner_content_body">
+                                                                <ul class="ul_action">
+                                                                    <p class="prim">Los botones de acciones se verán al selecionar el ejemplo...</p>
+                                                                </ul>
+                                                            </div><!--/.inner_content_body-->
+                                                        </div><!--/.inner_content_head_body-->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div><!--/.block_option_y_action-->
@@ -1093,24 +1159,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                 <div id="block_ejemplo_body">
-                                    
-                                    <div id="bl_actions_ejemplo" class="bl_set bl_actions" style="display:none;">
-                                        <div class="bl_set_inner bl_closed">
-                                            <div class="inner_content">
-
-                                                <div class="wr_title_btn_close">
-                                                    <span>Escoge acción con la canción:</span>
-                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_ejemplo'))">✕</span>
-                                                </div>                                                    
-
-                                                <ul class="ul_action">
-                                                    <p class="prim">Los botones de acciones se verán al selecionar el ejemplo...</p>
-                                                </ul>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">
@@ -1171,18 +1219,42 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                     <div class="block_option_y_action">
 
                                         <div class="wr_block_option">
-                                            <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-                                            <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
-                                            <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-                                            <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-                                            <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
-                                            <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+                                            <div class="wr_block_option_inner">
+                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
+                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+                                                <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
+                                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
+                                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+                                            </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
                                             <button id="btn_actions_lista" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                            </button>
+                                            </button>                                    
+                                            <div id="bl_actions_lista" class="bl_set bl_actions" style="display:none;">
+                                                <div class="bl_set_inner bl_closed">
+                                                    <div class="inner_content">
+
+                                                        <div class="inner_content_head_body">
+                                                            <div class="inner_content_head">
+                                                                <div class="wr_title_btn_close">
+                                                                    <span>Escoge acción con la lista:</span>
+                                                                    <span class="sp_close">✕</span>
+                                                                </div>
+                                                            </div><!--/.inner_content_head-->
+
+                                                            <div class="inner_content_body">
+                                                                <ul class="ul_action">
+                                                                    <p class="prim">Los botones de acciones se verán al selecionar la lista...</p>
+                                                                </ul>
+                                                            </div><!--/.inner_content_body-->
+                                                        </div><!--/.inner_content_head_body-->
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div><!--/.block_option_y_action-->
@@ -1204,24 +1276,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div><!--/#block_lista_head-->
 
                                 <div id="block_lista_body">
-                                    
-                                    <div id="bl_actions_lista" class="bl_set bl_actions" style="display:none;">
-                                        <div class="bl_set_inner bl_closed">
-                                            <div class="inner_content">
-
-                                                <div class="wr_title_btn_close">
-                                                    <span>Escoge acción con la canción:</span>
-                                                    <span class="sp_close" onclick="closeDiv(this.closest('#bl_actions_lista'))">✕</span>
-                                                </div>                                                    
-
-                                                <ul class="ul_action">
-                                                    <p class="prim">Los botones de acciones se verán al selecionar la lista...</p>
-                                                </ul>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                    
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">
@@ -1256,35 +1310,41 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <div class="bl_set_inner bl_closed">
                                                         <div class="inner_content">
 
-                                                            <div class="wr_title_btn_close">
-                                                                <span>Marca parametros de búsqueda:</span>
-                                                                <span class="sp_close" onclick="closeDiv(this.closest('#bl_find_lista_settings'))">✕</span>
-                                                            </div>                                                                                                               
+                                                            <div class="inner_content_head_body">
+                                                                <div class="inner_content_head">
+                                                                    <div class="wr_title_btn_close">
+                                                                        <span>Marca parametros de búsqueda:</span>
+                                                                        <span class="sp_close">✕</span>
+                                                                    </div>
+                                                                </div><!--/.inner_content_head-->
 
-                                                            <h5>Modo de búsqueda:</h5>
-                                                            <div class="wr_sel_song m_0">
-                                                                <select id="modo_lista" class="sel_song">
-                                                                    <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                    <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                    <option value="3">3) Coincidir al menos una palabra</option>
-                                                                    <option value="4">4) Palabras en el orden establecido</option>
-                                                                    <option value="5">5) Frase exacta</option>
-                                                                    <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
-                                                                </select>
-                                                            </div>
+                                                                <div class="inner_content_body">
+                                                                    <h5>Modo de búsqueda:</h5>
+                                                                    <div class="wr_sel_song m_0">
+                                                                        <select id="modo_lista" class="sel_song">
+                                                                            <option value="1">1) Todas las palabras (pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                            <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                            <option value="3">3) Coincidir al menos una palabra</option>
+                                                                            <option value="4">4) Palabras en el orden establecido</option>
+                                                                            <option value="5">5) Frase exacta</option>
+                                                                            <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
+                                                                        </select>
+                                                                    </div>
 
-                                                            <h5>Campos de búsqueda:</h5>
-                                                            <div class="wr_sel_song">
-                                                                <select id="buscar_en_lista" class="sel_song">
-                                                                    <option value="1">1) Todos los campos por defecto disponibles - (rápido)</option>
-                                                                    <option value="2">2) Todos los campos disponibles, los títulos de canciones incluidos - (lento)</option>
-                                                                    <option value="3">3) Todos los campos de texto disponibles</option>
-                                                                    <option value="4">4) Sólo el título de lista</option>
-                                                                    <option value="5">5) Sólo las notas de lista</option>
-                                                                    <option value="6">6) Sólo el identificador de lista</option>
-                                                                    <option value="7">7) Sólo la fecha de lista (introducir en formatos: aaaa-mm-dd, aaaa-mm, aaaa, mm, dd)</option>
-                                                                </select>
-                                                            </div>
+                                                                    <h5>Campos de búsqueda:</h5>
+                                                                    <div class="wr_sel_song">
+                                                                        <select id="buscar_en_lista" class="sel_song">
+                                                                            <option value="1">1) Todos los campos por defecto disponibles - (rápido)</option>
+                                                                            <option value="2">2) Todos los campos disponibles, los títulos de canciones incluidos - (lento)</option>
+                                                                            <option value="3">3) Todos los campos de texto disponibles</option>
+                                                                            <option value="4">4) Sólo el título de lista</option>
+                                                                            <option value="5">5) Sólo las notas de lista</option>
+                                                                            <option value="6">6) Sólo el identificador de lista</option>
+                                                                            <option value="7">7) Sólo la fecha de lista (introducir en formatos: aaaa-mm-dd, aaaa-mm, aaaa, mm, dd)</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div><!--/.inner_content_body-->
+                                                            </div><!--/.inner_content_head_body-->
                                                             
                                                         </div>
                                                     </div>

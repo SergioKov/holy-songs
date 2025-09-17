@@ -70,7 +70,7 @@ const eid_buscar_en = document.getElementById('buscar_en');
 const eid_d_sel_songbooks = document.getElementById('d_sel_songbooks');
 const eid_bl_songbook_search = document.getElementById('bl_songbook_search');
 const eid_wr_sb_checkboxes = document.getElementById('wr_sb_checkboxes');
-const btn_sel_sb = document.getElementById('btn_sel_sb');
+const btn_songbook_search = document.getElementById('btn_songbook_search');
 
 const eid_sp_icon_filtro = document.getElementById('sp_icon_filtro');
 const eid_d_filter_results = document.getElementById('d_filter_results');

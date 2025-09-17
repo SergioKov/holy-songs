@@ -84,7 +84,7 @@ function check_arr_songbooks(){
     console.log('=== function check_arr_songbooks() ===');
     console.log('arr_songbooks: ', arr_songbooks);
 
-    btn_sel_sb.innerHTML = '';//reset
+    btn_songbook_search.innerHTML = '';//reset
     
     arr_songbooks = arr_songbooks.sort((a, b) => a - b); // Orden ascendente 1,2,3
     console.log('(sorted) --- arr_songbooks: ', arr_songbooks);
@@ -94,11 +94,11 @@ function check_arr_songbooks(){
 
 
     if(arr_songbooks.length > 0){
-        btn_sel_sb.innerHTML = `
+        btn_songbook_search.innerHTML = `
             Songbooks seleccionados (sólo ids): ${arr_songbooks_str}
         `;
     }else{
-        btn_sel_sb.innerHTML = `
+        btn_songbook_search.innerHTML = `
             Selecciona songbook:
         `;
     }
@@ -1036,7 +1036,7 @@ function buildSong(){
         showToast('error', aviso_text);
         
         showEdit('cancion');
-        editar_song('editar');
+        editar_song();
         document.querySelector('#song_text').focus();
         return;
     }
@@ -1230,6 +1230,7 @@ async function ver_esquema(){
     ver_esquema_song_bloques.innerHTML = '';//reset
     ver_esquema_wr_vista_btns.innerHTML = '';//reset
     ver_esquema_ul_action.innerHTML = '';//reset
+    ver_esquema_ul_action.innerHTML = '<span class="sp_prim">Para ver la esquema hay que seleccionar antes la canción...</span>';
        
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
@@ -1347,6 +1348,7 @@ async function crear_esquema(){
     crear_esquema_wr_vista_btns.innerHTML = '';//reset
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
     crear_esquema_ul_action.innerHTML = '';//reset
+    crear_esquema_ul_action.innerHTML = '<span class="sp_prim">Las opciones de acción se verán al añadir al menos un bloque de la canción al esquema nuevo...</span>';
 
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
@@ -1770,36 +1772,19 @@ function resetEsquema(){
     crear_esquema_wr_vista_btns.innerHTML = '';//reset
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
     crear_esquema_ul_action.innerHTML = '';//reset
-
-    // const sp_prim = document.createElement('span');
-    // sp_prim.className = 'sp_prim';
-    // sp_prim.innerHTML = `
-    //     (reset) Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...
-    // `;
-
-    // crear_esquema_wr_vista_btns.append(sp_prim);
-    // crear_esquema_wr_vista_blocks.append(sp_prim.cloneNode(true));
-
+    
     arr_esquema_obj = [];
+    
+    crear_esquema_ul_action.innerHTML = `
+        <span class="sp_prim">Esquema reseteada.</span>
+        <span class="sp_prim">Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...</span>
+    `;
 }
 
 
 function resetBlockBuscar(){
     console.log('=== function resetBlockBuscar() ===');
 
-    // tbody.innerHTML = `
-    //             <td class="td_n">...</td>
-    //             <td class="td_id_song">...</td>
-    //             <td class="td_numero">...</td>
-    //             <td class="td_titulo">...</td>
-    //             <td class="td_esquema">...</td>
-    //             <td class="td_category">...</td>
-    //             <td class="td_songbook">...</td>
-    //             <td class="td_idioma">...</td>
-    //             <td class="td_tonalidad">...</td>
-    // `;
-
-    //eid_block_buscar.querySelector('.wr_btns_action').innerHTML = '...';//reset
     eid_block_buscar.querySelector('.vista_song_content').innerHTML = '(Aquí se mostrará el texto de la canción...)';//reset
 
     id_song = null;
@@ -1809,7 +1794,7 @@ function resetBlockBuscar(){
 function resetBlockEsquema(){
     console.log('=== function resetBlockEsquema() ===');
 
-    resetBlockEsquemaSoloHTML()
+    resetBlockEsquemaSoloHTML();
 
     arr_esquema_obj = [];
     id_song = null;
@@ -1850,10 +1835,6 @@ function resetBlockCancion(){
     cancion_song_bloques.innerHTML = '...';//muestro '...'
     cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset  
-    
-    //cancion_song_bloques.querySelector('.puntos_def').style.display = 'block';//muestro '...'
-    //cancion_form_container.style.display = 'none';//oculto formulario de canción
-    //cancion_form_container.querySelector('form').reset();//reseteo formulario
 }
 
 function resetBlockEjemplo(){
@@ -2027,7 +2008,7 @@ async function guardarSong(event, id_contenedor, cancion_action){
                 //     alert('voy a actualizar con buildFormCancion()...');
                 //     buildFormCancion(cancion_song_bloques, 'editar');//siempre 'editar'!!!
                 // }
-                editar_song('editar');
+                editar_song();
 
                 cancion_ul_action.innerHTML = `
                     <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
@@ -2981,7 +2962,40 @@ async function nueva_song(){
 
 
 
-function editar_song(modo){
+function ver_song(){
+    console.log('=== function ver_song() ===');
+
+    if(!hay_id_song('ver_song()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    resetLineasXinBlock(eid_block_cancion);
+
+    //Partes left-right
+    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
+
+    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+    eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');    
+
+
+    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_ul_action.innerHTML = '...';//reset 
+    cancion_song_bloques.classList.add('solo_ver');
+
+    buildFormCancion(cancion_song_bloques, cancion_action = 'ver');//'ver', 'editar'
+
+    cancion_ul_action.innerHTML = `
+        <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="crearSlides();">Crear slides</li>
+        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+    `;
+    
+    console.log('fin');    
+}
+
+
+function editar_song(){
     console.log('=== function editar_song() ===');
 
     if(!hay_id_song('editar_song()')){
@@ -2990,28 +3004,18 @@ function editar_song(modo){
 
     resetLineasXinBlock(eid_block_cancion);
 
-    if(modo == 'ver'){
-        //makeInputsDisabled(cancion_form_container, true);
-        //Partes left-right
-        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
+    //Partes left-right
+    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
 
-        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-        eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');
-    }
-    else if(modo == 'editar'){
-        //makeInputsDisabled(cancion_form_container, false);
-        //Partes left-right
-        eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
+    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
+    eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
 
-        resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-        eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
-    }
 
     cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
-    buildFormCancion(cancion_song_bloques, cancion_action = modo);//'ver', 'editar'
+    buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
@@ -3295,7 +3299,7 @@ async function editSongOfLista(e, lista_id_song) {
     objSong = await getDataSongFromBd();
 
     showEdit('cancion');
-    editar_song('editar');
+    editar_song();
 
     closeModal(null,true);
 }

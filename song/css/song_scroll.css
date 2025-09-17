@@ -3,19 +3,28 @@
 /* =================================================== */
 
 /* height - altura de la barra de scroll */
-.barra_estado::-webkit-scrollbar
+.barra_estado::-webkit-scrollbar,
+.bl_head::-webkit-scrollbar,
+.wr_block_option::-webkit-scrollbar
 {
-    height: 10px;/* altura de barra de scroll horizontal en headerContainer */
+    /*altura de barra de scroll horizontal en headerContainer */
+    /* height: 10px;*/
+    height: 5px;
 }
+
   
 /* Track - recorrido donde se desplaza la barra de scroll */
-.barra_estado::-webkit-scrollbar-track
+.barra_estado::-webkit-scrollbar-track,
+.bl_head::-webkit-scrollbar-track,
+.wr_block_option::-webkit-scrollbar-track
 {
     background: #a8a8a8;
 }
    
 /* Handle - es la misma barra la cual hay que mover con el ratón */
-.barra_estado::-webkit-scrollbar-thumb
+.barra_estado::-webkit-scrollbar-thumb,
+.bl_head::-webkit-scrollbar-thumb,
+.wr_block_option::-webkit-scrollbar-thumb
 {
     background: #666;
     cursor: pointer;
@@ -23,7 +32,9 @@
 }
   
 /* Handle on hover - color del fondo al poner el ratón encima */
-barra_estado::-webkit-scrollbar-thumb:hover 
+.barra_estado::-webkit-scrollbar-thumb:hover, 
+.bl_head::-webkit-scrollbar-thumb:hover, 
+.wr_block_option::-webkit-scrollbar-thumb:hover 
 {
     background: #444; 
 }

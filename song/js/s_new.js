@@ -20,8 +20,8 @@ function pintSongActive(){//click en tr de la tabla de canciones
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
         
         <div class="razdel">Canción:</div>
-        <li class="li_action" onclick="showBlockName('cancion'); editar_song('ver');">Ver canción</li>
-        <li class="li_action" onclick="showBlockName('cancion'); editar_song('editar');">Editar canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); ver_song();">Ver canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Editar canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
         <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
         
@@ -741,48 +741,64 @@ function hideShowDiv(id_div){
     const block_css = window.getComputedStyle(divElement);
     const block_display = block_css.display;
    
-    if(block_display == 'block'){//oculto
-        closeDiv(divElement);
+    if(block_display == 'block'){//si es visible
+        closeDiv(divElement);//oculto
     }else{//muestro
-        openDiv(divElement);
+        openDiv(divElement);//muestro
     }    
 }
 
 function closeDiv(divElement){
-    //console.log('=== function closeDiv() ===');
+    console.log('=== function closeDiv() ===');
     if(!divElement) return;
     
-    const innerElement = divElement.querySelector('.bl_set_inner');    
+    const bl_set_inner = divElement.querySelector('.bl_set_inner');    
     
-    innerElement.classList.remove('bl_opened');
-    innerElement.classList.add('bl_closed');
+    bl_set_inner.classList.remove('bl_opened');
+    bl_set_inner.classList.add('bl_closed');
     setTimeout(()=>{
         divElement.style.display = 'none';
     },300);
 }
 
 function openDiv(divElement){
-    //console.log('=== function openDiv() ===');
+    console.log('=== function openDiv() ===');
 
-    const innerElement = divElement.querySelector('.bl_set_inner');
-    const innerElementContent = divElement.querySelector('.inner_content');
+    const bl_set_inner = divElement.querySelector('.bl_set_inner');
+    const inner_content_head = divElement.querySelector('.inner_content_head');
+    const inner_content_body = divElement.querySelector('.inner_content_body');
+
+    bl_set_inner.onclick = (e)=>{
+        console.log('e.target: ', e.target);
+        e.stopPropagation();
+
+        // click fuera de 'inner_content_head_body' pero dentro de 'bl_set_inner' y 'inner_content'
+        // si no es cliqueado 'inner_content_head_body' entonces fue clickeado fuera de 'inner_content_head_body'
+        // es decir, 'bl_set_inner' o 'inner_content' => hacer closeDiv()
+        if(!e.target.closest('.inner_content_head_body') || e.target.className == 'sp_close'){//click en 'X' cerrar
+            closeDiv(e.target.closest('.bl_set'));
+        }
+    }
 
     divElement.style.display = 'block';
     setTimeout(()=>{//importante para que se ejecute la animación
-        innerElement.classList.remove('bl_closed');
-        innerElement.classList.add('bl_opened');
+        bl_set_inner.classList.remove('bl_closed');
+        bl_set_inner.classList.add('bl_opened');        
     },3);
 
     //Para que se abra mas bonito , pongo el sig. código. 
     //No pongo en css 'overflow:auto;' ya que al desplegar el block muestra scroll y luego lo quita, lo que no es bonito
     //con js lo soluciono
     setTimeout(()=>{
-        if(innerElementContent.offsetHeight > innerElement.offsetHeight){
-            innerElement.style.overflow = 'auto';//no hago comprobacion si ya esta esto, para no añadir un código mas. lo reescribo y ya está.
-        }else{
-            innerElement.removeAttribute('style');
-        }
-    },300);//300 es 0.3s de transition css
+        
+        let body_max_h = 
+          bl_set_inner.offsetHeight 
+        - inner_content_head.offsetHeight
+        ;
+        console.log('body_max_h: ', body_max_h);        
+        inner_content_body.style.maxHeight = body_max_h + 'px';
+
+    },4);//300 es 0.3s de transition css
 }
 
 
