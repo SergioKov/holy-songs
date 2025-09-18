@@ -64,9 +64,15 @@ function pintSongActiveSoloDatos(){
         return;
     }
 
+    let hay_esquema_texto;
 
-
-
+    //convierto arr_esquema (string) en array correcto
+    if(esArray(objSong.arr_esquema) && objSong.arr_esquema.length > 0){
+        hay_esquema_texto = `Sí (${objSong.arr_esquema.length})`;
+    }else{
+        hay_esquema_texto = '';
+    }
+    console.log('(bd) --- objSong.arr_esquema: ', objSong.arr_esquema);
 
     let category_name_text = '';
     if(objSong.category != 0 && objSong.category_name != null){
@@ -89,7 +95,7 @@ function pintSongActiveSoloDatos(){
     //actualizo datos de tr_song
     tr_song.querySelector('.td_numero').textContent = objSong.song_number || '';
     tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
-    tr_song.querySelector('.td_esquema').textContent = (objSong.arr_esquema.length > 0) ? 'Sí' :  '';
+    tr_song.querySelector('.td_esquema').textContent = hay_esquema_texto;
     
     tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
     tr_song.querySelector('.td_category').innerHTML = category_name_text;

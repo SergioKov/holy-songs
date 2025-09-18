@@ -690,7 +690,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                                 <div id="vklad_btn_pantallaShow" class="dbtn btn_active" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
                                                     <img src="images/monitor_1_white.png">
-                                                    <span id="titulo_shown">1 куплет: x2</span>
+                                                    <span id="titulo_shown">...</span>
                                                 </div>
 
                                                 <div id="vklad_btn_slideGoNext" class="dbtn" data-dic="" title="Next slidew" onclick="slideGo('next')">

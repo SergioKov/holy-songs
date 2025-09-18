@@ -360,6 +360,25 @@ const arr_titulos_coro = [ //las palabras clave de Pripev o Coro para separar el
     'Припев',
 ];
 
+const arr_titulos_coda = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Outro',
+    'Ending',
+    'Coda',
+
+    'Outro',
+    'Final',
+    'Finalización',
+    'Coda',
+    
+    'Кінцівка',
+    'Кода',
+    'Закінчення:',
+    
+    'Концовка',
+    'Кода',
+    'Окончание',
+];
+
 //obtener datos de los ficheros json o de la base de datos
 //let modo_get_song = 'from_json';
 let modo_get_song = 'from_bd';
@@ -452,3 +471,4 @@ let debug = false;//hacer test
 let arr_words = [];//para buscar cancion en pestaña 'buscar'
 let arr_words_lista = [];//para buscar lista en pestaña 'lista'
 
+let pageActiveBuscar = '';

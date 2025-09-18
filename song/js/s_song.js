@@ -975,78 +975,7 @@ function crear_arr_esquema_bucle(obj_bloques){
 
 
 
-
-
-
-    const palabrasTitulosCoro = arr_titulos_coro.join('|');//arr_titulos en config
-
-    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
-    // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTituloCoro = new RegExp(
-        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
-        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
-            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
-            '|' +                                                   // o bien
-            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoro + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
-        ')',                                                        // fin de grupo sin captura. luego va coma ','
-        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
-    );
-
-
-    let arr_titulos_tmp = [];
-    let arr_coro = [];
-    let coro_i = 0;
-
-    if(true){
-        arr_esquema_titlulos.forEach( (item, i, arr ) => {
-            console.log('item: ', item);
-            console.log('i: ', i);           
-
-            // Obtenemos todas las coincidencias de títulos
-            const matchesCoro = Array.from(item.matchAll(regexTituloCoro));
-            console.log('matchesCoro: ', matchesCoro);
-
-            if(matchesCoro.length > 0){//hay separador de texto como: pripev, kuplet, etc..
-                console.log(`item: ${item} coontiene coincidencia con coro. item: `, item);
-
-                arr_coro.push(item);
-                coro_i++;
-
-                arr_titulos_tmp.push(item);
-                
-            }else{//no es titulo de pripev o coro
-                console.log('--- no contiene coro. item: ', item);
-                
-                arr_titulos_tmp.push(item);
-
-                let item_next = arr[i + 1];
-
-                const matchesCoro_next = Array.from(item_next?.matchAll(regexTituloCoro));
-                
-                let item_next_es_kuplet = true;
-                if(matchesCoro_next.length > 1){
-                    item_next_es_kuplet = false;
-                }
-
-                if(arr_coro.length > 0 && item_next_es_kuplet){
-                    arr_titulos_tmp.push(arr_coro[arr_coro.length-1]);
-                }
-
-            }
-
-        });
-
-        console.log('arr_titulos_tmp: ', arr_titulos_tmp);
-
-    }
-
-
-
-
-
-
-
-
+    arr_esquema_titlulos = addCoroAfterVerse();//test
 
 
 
@@ -1066,6 +995,94 @@ function crear_arr_esquema_bucle(obj_bloques){
 
     return arr_esquema_bucle;
 }
+
+
+function addCoroAfterVerse(){
+    console.log('=== function addCoroAfterVerse() ===');    
+
+    const palabrasTitulosCoro = arr_titulos_coro.join('|');//arr_titulos en config
+
+    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
+    // o en grupo (2) palabra del arr_titulos al inicio de línea
+    const regexTituloCoro = new RegExp(
+        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
+        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
+            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
+            '|' +                                                   // o bien
+            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoro + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
+        ')',                                                        // fin de grupo sin captura. luego va coma ','
+        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
+    );
+
+
+    const palabrasTitulosCoda = arr_titulos_coda.join('|');//arr_titulos en config
+
+    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
+    // o en grupo (2) palabra del arr_titulos al inicio de línea
+    const regexTituloCoda = new RegExp(
+        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
+        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
+            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
+            '|' +                                                   // o bien
+            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoda + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
+        ')',                                                        // fin de grupo sin captura. luego va coma ','
+        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
+    );
+
+    let arr_titulos_tmp = [];
+    let arr_coro = [];
+    let coro_i = 0;
+
+    arr_esquema_titlulos.forEach( (item, i, arr ) => {
+        console.log('item: ', item);
+        console.log('i: ', i);           
+
+        // Obtenemos todas las coincidencias de títulos
+        const matchesCoro = Array.from(item.matchAll(regexTituloCoro));
+        console.log('matchesCoro: ', matchesCoro);
+
+        if(matchesCoro.length > 0){//es titulo de pripev o coro
+            console.log(`item: ${item} coontiene coincidencia con coro. item: `, item);
+
+            arr_coro.push(item);
+            coro_i++;
+
+            arr_titulos_tmp.push(item);
+            console.log('añado al --- arr_titulos_tmp: ', arr_titulos_tmp);
+            
+        }else{//no es titulo de pripev o coro
+            console.log('--- no contiene coro. item: ', item);
+            
+            arr_titulos_tmp.push(item);
+            console.log('añado al --- arr_titulos_tmp: ', arr_titulos_tmp);
+
+            let item_next = arr[i + 1];
+            let item_next_es_kuplet = true;//o es kuplet o es final de cancion...
+
+            if(item_next){
+                const matchesCoro_next = Array.from(item_next.matchAll(regexTituloCoro));
+                const matchesCoda_next = Array.from(item_next.matchAll(regexTituloCoda));
+                
+                if(matchesCoro_next.length > 0 || matchesCoda_next.length > 0){
+                    item_next_es_kuplet = false;
+                    console.log(' ahora item_next_es_kuplet es FALSE. no añado coro. ');
+                }else{
+                    console.log('item_next_es_kuplet es TRUE. no hago nada. ');
+                }
+            }
+
+            if(arr_coro.length > 0 && item_next_es_kuplet){
+                arr_titulos_tmp.push(arr_coro[arr_coro.length-1]);
+                console.log('2. añado al --- arr_titulos_tmp: ', arr_titulos_tmp);
+            }
+        }
+    });
+
+    console.log('arr_titulos_tmp: ', arr_titulos_tmp);
+
+    return arr_titulos_tmp;
+}
+
 
 
 async function crearSlides(goToSlide = null){
@@ -1293,6 +1310,7 @@ async function ver_esquema(){
     console.log('=== function ver_esquema() ===');
 
     if(!hay_id_song('ver_esquema()')){
+        mySizeEsquema();
         return; // <- se detiene aquí si no hay id_song
     }
 
@@ -1411,6 +1429,7 @@ async function crear_esquema(){
     console.log('=== function crear_esquema() ===');
 
     if(!hay_id_song('crear_esquema()')){
+        mySizeEsquema();
         return; // <- se detiene aquí si no hay id_song
     }
 
@@ -1428,7 +1447,15 @@ async function crear_esquema(){
     crear_esquema_wr_vista_btns.innerHTML = '';//reset
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
     crear_esquema_ul_action.innerHTML = '';//reset
-    crear_esquema_ul_action.innerHTML = '<span class="sp_prim">Las opciones de acción se verán al añadir al menos un bloque de la canción al esquema nuevo...</span>';
+
+    crear_esquema_ul_action.innerHTML = `
+        <span class="sp_prim">Las opciones de acción se verán al añadir al menos un bloque de la canción al esquema nuevo...</span>    
+        <li id="li_resetEsquema___" class="li_action" onclick="resetEsquema()">Reset</li>
+        <li class="li_action" onclick="guardarEsquema()">Guardar</li>
+        <li class="li_action" onclick="crearSlides(); closeAll()">Ver slides</li>
+        <li class="li_action" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</li>
+    `;
+    crear_esquema_ul_action.onclick = e => close_ul_action(e);
 
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
@@ -1538,7 +1565,7 @@ async function crear_esquema(){
     
                         if(arr_esquema_obj.length === 0){
                             //si no hay bloques, oculto los botones de acción
-                            crear_esquema_ul_action.innerHTML = '';
+                            crear_esquema_ul_action.innerHTML = '...';
                         }
                     }
                 }
@@ -1595,6 +1622,7 @@ async function select_slide(){
     console.log('=== function select_slide() ===');
 
     if(!hay_id_song('select_slide()')){
+        mySizeEsquema();
         return; // <- se detiene aquí si no hay id_song
     }
 
@@ -1783,68 +1811,63 @@ async function guardarEsquema(){
 
     if(data.success){
         
-        // let text_show;
+        let text_show;
 
-        // switch (data.action_tipo) {
-        //     case 'is_update_arr_esquema_ok':
-        //         text_show = 'Datos de la Canción y su Esquema han sido actualizados con éxito.';
-        //         break;
+        switch (data.action_tipo) {
+            case 'is_update_arr_esquema_ok':
+                text_show = 'El esquema ha sido actualizado con éxito.';
+                break;
         
-        //     case 'is_update_arr_esquema_vacio':
-        //         text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido actualizados con éxito.';
-        //         break;
+            case 'is_update_arr_esquema_vacio':
+                text_show = 'El esquema VACÍO ha sido actualizado con éxito.';
+                break;
         
-        //     case 'is_insert_arr_esquema_ok':
-        //         text_show = 'Datos de la Canción y su Esquema han sido añadidos con éxito.';
-        //         break;
+            case 'is_insert_arr_esquema_ok':
+                text_show = 'El esquema ha sido añadido con éxito.';
+                break;
         
-        //     case 'is_insert_arr_esquema_vacio':
-        //         text_show = 'Datos de la Canción (SIN SU ESQUEMA) han sido añadidos con éxito.';
-        //         break;
+            case 'is_insert_arr_esquema_vacio':
+                text_show = 'El esquema VACÍO ha sido añadido con éxito.';
+                break;
                 
-        //     default:
-        //         text_show = '1. Aquí texto de resultado de guardar...';
-        //         break;
-        // }
-        // console.log(text_show);
+            default:
+                text_show = '1. Aquí texto de resultado de guardar...';
+                break;
+        }
+        console.log(text_show);
 
-        // form_mensaje.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-        // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        showToast('ok', text_show, 5000);
 
-        // if(data.id_song){
-        //     console.log('id_song: ', data.id_song);
-        //     id_song = data.id_song;//guardo el id de la canción recién creada
-        //     objSong = objSongToSend;//reasigno el objeto song con los datos del formulario
-        //     objSong.id_song = id_song;//añado el id_song al objeto song
+        if(data.id_song){
+            console.log('id_song: ', data.id_song);
+            id_song = data.id_song;//guardo el id de la canción recién creada
 
-        //     cancion_form_container.querySelector('#id_song').disabled = true;//deshabilito input id_song   
-        //     cancion_form_container.querySelector('#id_song').value = id_song;
+            //Cojo datos de la song de la lista desde BD
+            objSong = await getDataSongFromBd();//IMPORTANTE para cojer todos los datos necesarios
+            console.log('objSong: ', objSong);
 
-        //     cancion_wr_btns_action.innerHTML = `
-        //         <button class="btn btn_big" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</button>
-        //         <button class="btn btn_big" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</button>
-        //         <button class="btn btn_big" onclick="crearSlides(); closeAll()">Crear slides + Ver</button>
-        //     `;
-        // }
+            const itemSongUpdate = objDataSongs.arr_data?.find(item => item.id_song == id_song);
+            if (itemSongUpdate) {
+                Object.assign(itemSongUpdate, objSong);
+                // el objeto dentro de arr_data ya está actualizado
+            } else {
+                console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
+            }
+
+            //editar_song();
+
+            //Actualizo tr_song 
+            pintSongActiveSoloDatos();//en la ventana a la derecha de la tabla de lista
+        }
         
     }else{
-        console.log(`Error al guardar canción.`);
-        
-        // //"Error al registrar el usuario";
-        // console.error(data.error);
-        // console.error(data.dic_code);
+        console.log(`Error al guardar canción.`);            
+        console.error('data.error: ',data.error);
 
-        // let error_text = 'Error al guardar la canción.';
+        let text_show = 'Error al guardar la esquema.';
 
-        // form_mensaje.innerHTML = `<span class="add_result add_error">${error_text}</span>`;
-        // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+        showToast('error', text_show, 5000);
     }
-
-
-
-
-
-
 
     crearSlides();
     crear_esquema_btns_actual();//actualizo los botones de esquema actual
@@ -1856,12 +1879,25 @@ function resetEsquema(){
     crear_esquema_ul_action.innerHTML = '';//reset
     
     arr_esquema_obj = [];
+    if(objSong.arr_esquema.length > 0){
+        objSong.arr_esquema = [];
+    }
     
-    crear_esquema_ul_action.innerHTML = `
-        <span class="sp_prim">Esquema reseteada.</span>
-        <span class="sp_prim">Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...</span>
-    `;
+    // crear_esquema_ul_action.innerHTML = `
+    //     <span class="sp_prim">Esquema reseteada.</span>
+    //     <span class="sp_prim">Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...</span>
+    // `;
+
+
     crear_esquema_ul_action.onclick = e => close_ul_action(e);
+
+    const aviso_outer = document.createElement('div');
+    aviso_outer.className = 'aviso_outer';
+    aviso_outer.innerHTML = `
+        <p class="p_aviso">Esquema reseteada.</p>
+        <p class="p_aviso">Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...</p>
+    `;
+    openModal('center','Aviso Reset Esquema',aviso_outer,'showAviso2');
 }
 
 
@@ -2636,12 +2672,20 @@ function showBlockName(blockName){
         case 'esquema':
             bl_titulo.textContent = 'Esquema de la canción';
             showOnlyBlock(blockName);
+            if(id_song && vkladActive){
+                // if(vkladActive == 'ver_esquema') ver_esquema();
+                // if(vkladActive == 'crear_esquema') crear_esquema();
+                // if(vkladActive == 'select_slide') select_slide();
+            }
             mySizeEsquema();
             break;
     
         case 'cancion':
             bl_titulo.textContent = 'Crear / Editar canción';
             showOnlyBlock(blockName);
+            if(id_song){
+                ver_song();
+            }
             mySizeCancion();
             break;
 
