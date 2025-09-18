@@ -351,24 +351,17 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                                                     <div class="inner_content_body">
                                                                         <span class="sp_prim">Si no se indica songbook, se buscará en todos los disponibles.</span>
+
+                                                                        <div class="d_options_cboxes">
+                                                                            <button class="btn" onclick="checkAllCboxes('wr_sb_checkboxes')">Selecionar todos</button>
+                                                                            <button class="btn" onclick="uncheckAllCboxes('wr_sb_checkboxes')">Deseleccionar todos</button>
+                                                                        </div>
         
                                                                         <div id="wr_sb_checkboxes" class="wr_checkboxes">
                                                                             <label>
                                                                                 <p>
                                                                                     <input type="checkbox" name="songbooks" value="1">
-                                                                                    <span>Songbook 1</span>
-                                                                                </p>
-                                                                            </label>
-                                                                            <label>
-                                                                                <p>
-                                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                                    <span>Songbook 1</span>
-                                                                                </p>
-                                                                            </label>
-                                                                            <label>
-                                                                                <p>
-                                                                                    <input type="checkbox" name="songbooks" value="1">
-                                                                                    <span>Songbook 1</span>
+                                                                                    <span>Ejemplo de Songbook...</span>
                                                                                 </p>
                                                                             </label>
                                                                         </div>

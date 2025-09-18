@@ -974,15 +974,6 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
             }
 
             p.dataset.id_song = item.id_song;
-            // p.innerHTML = `
-            //     <span class="l_n">${i + 1}.</span>
-            //     <span class="l_title">${item.title}</span>
-            //     <span class="l_tune">${item.tune || ''}</span>
-            //     <span class="l_id">${item.id_song}</span>
-            //     <span class="l_edit"><img src="images/icon_edit_white.svg"></span>
-            //     <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>
-            // `;
-
             p.innerHTML = `
                 <span class="wn_2_flex">
                     

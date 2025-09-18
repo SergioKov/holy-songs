@@ -2148,9 +2148,9 @@ p.p_sm b {
 }
 
 .wr_checkboxes label {
+    /* background: darkslategrey; */
     display: flex;
     gap: 10px;
-    background: darkslategrey;
     padding: 0;
     color: white;
     width: 100%;
@@ -2158,19 +2158,24 @@ p.p_sm b {
     transform: none;
     pointer-events: all;
     cursor: pointer;
+    background: transparent;
 }
 
 .wr_checkboxes p {
     display: flex;
     gap: 10px;
-    background: brown;
+    background: #434343;
     padding: 10px;
     color: #ffffff;
     width: 100px;
-    border: 1px solid black;
+    border: 1px solid #2c2c2c;
     width: 100%;
     border-radius: 3px;
     white-space: normal;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    flex-direction: row;
 }
 
 .wr_checkboxes input[type="checkbox"] {
@@ -2834,3 +2839,14 @@ span.sp_number {
     width: 100%;
 }
 
+
+.d_options_cboxes {
+    /* background: purple; */
+    margin: 10px 0 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.d_options_cboxes .btn {
+    width: 50%;
+}

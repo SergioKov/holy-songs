@@ -56,24 +56,27 @@ function pintSongbooksCheckboxEnBuscar(divElement){
         el_label.innerHTML = `
             <p>
                 <input type="checkbox" name="songbooks" value="${songbook.id_songbook}">
-                <span>${songbook.id_songbook}. ${songbook.title}</span>
+                <span class="sp_number">${songbook.id_songbook}. </span>
+                <span>${songbook.title}</span>
             </p>
         `;
         el_label.onclick = (e) => {
             const cbox = e.currentTarget.querySelector('input[type="checkbox"]');
-            const int_val = Number(e.currentTarget.dataset.id);
+            handleCheckbox(cbox);
 
-            if(cbox.checked){
-                if(!arr_songbooks.includes(int_val)){
-                    arr_songbooks.push(int_val);
-                }
-            }else{
-                const index = arr_songbooks.indexOf(int_val);
-                if (index !== -1) {
-                    arr_songbooks.splice(index, 1); // Elimina 1 elemento en esa posición
-                }
-            }
-            check_arr_songbooks();
+            // const int_val = Number(e.currentTarget.dataset.id);
+
+            // if(cbox.checked){
+            //     if(!arr_songbooks.includes(int_val)){
+            //         arr_songbooks.push(int_val);
+            //     }
+            // }else{
+            //     const index = arr_songbooks.indexOf(int_val);
+            //     if (index !== -1) {
+            //         arr_songbooks.splice(index, 1); // Elimina 1 elemento en esa posición
+            //     }
+            // }
+            // check_arr_songbooks();
         }
         divElement.append(el_label);
     });
@@ -971,6 +974,82 @@ function crear_arr_esquema_bucle(obj_bloques){
     console.log('arr_esquema_titlulos: ', arr_esquema_titlulos);
 
 
+
+
+
+
+    const palabrasTitulosCoro = arr_titulos_coro.join('|');//arr_titulos en config
+
+    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
+    // o en grupo (2) palabra del arr_titulos al inicio de línea
+    const regexTituloCoro = new RegExp(
+        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
+        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
+            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
+            '|' +                                                   // o bien
+            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoro + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
+        ')',                                                        // fin de grupo sin captura. luego va coma ','
+        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
+    );
+
+
+    let arr_titulos_tmp = [];
+    let arr_coro = [];
+    let coro_i = 0;
+
+    if(true){
+        arr_esquema_titlulos.forEach( (item, i, arr ) => {
+            console.log('item: ', item);
+            console.log('i: ', i);           
+
+            // Obtenemos todas las coincidencias de títulos
+            const matchesCoro = Array.from(item.matchAll(regexTituloCoro));
+            console.log('matchesCoro: ', matchesCoro);
+
+            if(matchesCoro.length > 0){//hay separador de texto como: pripev, kuplet, etc..
+                console.log(`item: ${item} coontiene coincidencia con coro. item: `, item);
+
+                arr_coro.push(item);
+                coro_i++;
+
+                arr_titulos_tmp.push(item);
+                
+            }else{//no es titulo de pripev o coro
+                console.log('--- no contiene coro. item: ', item);
+                
+                arr_titulos_tmp.push(item);
+
+                let item_next = arr[i + 1];
+
+                const matchesCoro_next = Array.from(item_next?.matchAll(regexTituloCoro));
+                
+                let item_next_es_kuplet = true;
+                if(matchesCoro_next.length > 1){
+                    item_next_es_kuplet = false;
+                }
+
+                if(arr_coro.length > 0 && item_next_es_kuplet){
+                    arr_titulos_tmp.push(arr_coro[arr_coro.length-1]);
+                }
+
+            }
+
+        });
+
+        console.log('arr_titulos_tmp: ', arr_titulos_tmp);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     if(arr_esquema_titlulos.length > 0){
         arr_esquema_bucle = arr_esquema_titlulos;
     }else{
@@ -1320,7 +1399,8 @@ async function ver_esquema(){
     ver_esquema_ul_action.innerHTML = `
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll();">Crear slides + Ver</li>
-    `;    
+    `;
+    ver_esquema_ul_action.onclick = e => close_ul_action(e);
 
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
     mySizeEsquema();
@@ -1494,6 +1574,7 @@ async function crear_esquema(){
                     <li class="li_action" onclick="crearSlides(); closeAll()">Ver slides</li>
                     <li class="li_action" onclick="guardarEsquema(); crearSlides(); closeAll()">Guardar + Ver slides</li>
                 `;
+                crear_esquema_ul_action.onclick = e => close_ul_action(e);
     
                 crear_esquema_wr_vista_btns.append(btn_close);
             }
@@ -1603,6 +1684,7 @@ async function select_slide(){
         <li class="li_action" onclick="crearSlides();">Crear slides (Inicio)</li>
         <li class="li_action" onclick="crearSlides(); closeAll();">Crear + Ver slides (inicio)</li>
     `;
+    select_slide_ul_action.onclick = e => close_ul_action(e);
     
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
     mySizeEsquema();
@@ -1779,6 +1861,7 @@ function resetEsquema(){
         <span class="sp_prim">Esquema reseteada.</span>
         <span class="sp_prim">Haz clic en un bloque de la primera columna para añadirlo al esquema de la canción...</span>
     `;
+    crear_esquema_ul_action.onclick = e => close_ul_action(e);
 }
 
 
@@ -1852,8 +1935,14 @@ function resetBlockLista(){
 
     resetBtnActive(eid_block_lista_head);//reseteo btn_active de botones en el contenedor
 
-    lista_wr_vista_song.innerHTML = '...';//reset
-    lista_wr_btns_action.innerHTML = '...';//reset  
+    lista_ul_action.innerHTML = '...';//reset  
+    lista_vista_lista_content.innerHTML = '...';//reset  
+    
+    //se resetean en deleteLista()
+    //id_lista = null;
+    //arr_lista = [];//reset
+
+    resetTrSelected(tbody_lista);//reseteo tr_selected de tbody_lista
 
     console.log('end func');
 }
@@ -2015,6 +2104,7 @@ async function guardarSong(event, id_contenedor, cancion_action){
                     <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
                     <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
                 `;
+                cancion_ul_action.onclick = e => close_ul_action(e);
 
                 //Actualizo tr_song 
                 pintSongActiveSoloDatos();//en la ventana a la derecha de la tabla de lista
@@ -2102,6 +2192,7 @@ async function deleteSong(event, id_contenedor){
                     <p class="prim bg_red">Canción eliminada</p>
                     <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
                 `;
+                cancion_ul_action.onclick = e => close_ul_action(e);
 
                 id_song = null;
                 objSong = {};//reseteo objeto song
@@ -2955,6 +3046,7 @@ async function nueva_song(){
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
     `;
+    cancion_ul_action.onclick = e => close_ul_action(e);
     
     console.log('fin');
 }
@@ -2990,7 +3082,8 @@ function ver_song(){
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
     `;
-    
+    cancion_ul_action.onclick = e => close_ul_action(e);
+
     console.log('fin');    
 }
 
@@ -3023,7 +3116,8 @@ function editar_song(){
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
     `;
-    
+    cancion_ul_action.onclick = e => close_ul_action(e);
+
     console.log('fin');    
 }
 
@@ -3055,7 +3149,8 @@ function eliminar_song(){
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>                
         <li class="li_action btn_eliminar" onclick="deleteSong(event);">Eliminar Canción DEFINITIVAMENTE</li>                
     `;
-    
+    cancion_ul_action.onclick = e => close_ul_action(e);
+
     console.log('fin');    
 }
 
@@ -3093,6 +3188,7 @@ function showEjemplo(lang){
         ejemplo_ul_action.innerHTML = `
             <li class="li_action" onclick="openModal('full','Ejemplo',null,'buildFormEjemplo',true, '${lang}')">Ejemplo (${obj_lang_names[lang]})</li>
         `;
+        ejemplo_ul_action.onclick = e => close_ul_action(e);
         
         const contenedor = ejemplo_song_bloques; 
 
@@ -3311,32 +3407,53 @@ async function editSongOfLista(e, lista_id_song) {
 function eliminarSongDeLista(id_song){
     console.log('=== function eliminarSongDeLista() ===');
     console.log('id_song: ', id_song);
-    
-    if(!id_lista){
-        alert('No hay id_lista. No se puede eliminar canción de la lista.');
-        return;
-    }
+
     if(!id_song){
         alert('No hay id_song. No se puede eliminar canción de la lista.');
         return;
     }
 
-    //Eliminar del arr_lista
-    arr_lista = arr_lista.filter(item => item.id_song != id_song);
-    console.log('arr_lista actualizado: ', arr_lista);
-
-    //Eliminar del objLista.arr_lista
-    objLista.arr_lista = objLista.arr_lista.filter(item => item.id_song != id_song);
-    console.log('objLista.arr_lista actualizado: ', objLista.arr_lista);
+    //hay 2 modos
+    //1. cuando se crea nueva lista y arr_lista tiene datos
+    //2. cuando se ve/edita/elimina la lista existente y se modifica arr_lista y objLista.arr_lista
     
-    let d_canciones_listaAll = document.querySelectorAll(`.d_canciones_lista`);
-    console.log('d_canciones_listaAll: ', d_canciones_listaAll);
+    if(id_lista == null){//se crea nueva lista
+        console.log('se crea nueva lista');
+        
+        //Eliminar del arr_lista
+        arr_lista = arr_lista.filter(item => item.id_song != id_song);
+        console.log('arr_lista actualizado: ', arr_lista);
 
-    //Actualizar el DOM
-    d_canciones_listaAll.forEach(contenedor => {
-        console.log('contenedor: ', contenedor);
-        buildListaSoloSongs(contenedor, objLista.arr_lista);
-    });
+        let d_canciones_listaAll = document.querySelectorAll(`.d_canciones_lista`);
+        console.log('d_canciones_listaAll: ', d_canciones_listaAll);
+
+        //Actualizar el DOM
+        d_canciones_listaAll.forEach(contenedor => {
+            console.log('contenedor: ', contenedor);
+            buildListaSoloSongs(contenedor, arr_lista);//arr_lista global
+        });
+
+        
+    }else{//se edita lista existente
+        console.log('se edita lista existente');
+
+        //Eliminar del arr_lista
+        arr_lista = arr_lista.filter(item => item.id_song != id_song);
+        console.log('arr_lista actualizado: ', arr_lista);
+
+        //Eliminar del objLista.arr_lista
+        objLista.arr_lista = objLista.arr_lista.filter(item => item.id_song != id_song);
+        console.log('objLista.arr_lista actualizado: ', objLista.arr_lista);
+
+        let d_canciones_listaAll = document.querySelectorAll(`.d_canciones_lista`);
+        console.log('d_canciones_listaAll: ', d_canciones_listaAll);
+
+        //Actualizar el DOM
+        d_canciones_listaAll.forEach(contenedor => {
+            console.log('contenedor: ', contenedor);
+            buildListaSoloSongs(contenedor, objLista.arr_lista);//objLista.arr_lista de BD
+        });
+    }
 
     //Actualizar en BD
     //guardarLista(null, true);//true -> solo actualizar lista en bd

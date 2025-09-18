@@ -34,6 +34,7 @@ function pintSongActive(){//click en tr de la tabla de canciones
         <li class="li_action" onclick="crearSlides()">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
     `;
+    buscar_ul_action.onclick = e => close_ul_action(e);
 
     //dejo '==' en vez de '===' porque id_song viene como string: "925"
     objSong = objDataSongs.arr_data.find(s => s.id_song == id_song);
@@ -273,6 +274,7 @@ function pintListaActiveSoloDatos(){
         <li class="li_action" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</li>
         <li class="li_action" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</li>
     `;
+    lista_ul_action.onclick = e => close_ul_action(e);
 
 
     // Normalizamos palabras
@@ -1435,3 +1437,45 @@ function mySizeLista(){
     console.log('=== end func ===');
 }
 
+function checkAllCboxes(id_contenedor){
+    console.log('=== function checkAllCboxes() ===');
+    const contenedor = document.getElementById(id_contenedor);
+    if(!contenedor) return;
+
+    cboxesAll = contenedor.querySelectorAll('input[type="checkbox"]');
+    cboxesAll.forEach(cbox => {
+        cbox.checked = true;
+        handleCheckbox(cbox);
+    });
+}
+
+function uncheckAllCboxes(id_contenedor){
+    console.log('=== function uncheckAllCboxes() ===');
+    const contenedor = document.getElementById(id_contenedor);
+    if(!contenedor) return;
+
+    cboxesAll = contenedor.querySelectorAll('input[type="checkbox"]');
+    cboxesAll.forEach(cbox => {
+        cbox.checked = false;
+        handleCheckbox(cbox);
+    });
+}
+
+function handleCheckbox(cbox){//cbox es element
+    if(!cbox) return;
+
+    //const cbox = e.currentTarget.querySelector('input[type="checkbox"]');
+    const int_val = Number(cbox.value);
+
+    if(cbox.checked){
+        if(!arr_songbooks.includes(int_val)){
+            arr_songbooks.push(int_val);
+        }
+    }else{
+        const index = arr_songbooks.indexOf(int_val);
+        if (index !== -1) {
+            arr_songbooks.splice(index, 1); // Elimina 1 elemento en esa posición
+        }
+    }
+    check_arr_songbooks();
+}

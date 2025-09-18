@@ -339,6 +339,27 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
 
 ];
 
+const arr_titulos_coro = [ //las palabras clave de Pripev o Coro para separar el texto por bloques en buildSong()
+    'Pre-Chorus',
+    'Pre Chorus',
+    'Chorus',
+    'Refrain',
+
+    'Coro',
+    'Pre-Estribillo',
+    'Pre Estribillo',
+    'Preestribillo',
+    'Estribillo',
+    
+    'Перед Приспів',
+    'Передприспів',
+    'Приспів',
+    
+    'Пред Припев',
+    'Предприпев',
+    'Припев',
+];
+
 //obtener datos de los ficheros json o de la base de datos
 //let modo_get_song = 'from_json';
 let modo_get_song = 'from_bd';

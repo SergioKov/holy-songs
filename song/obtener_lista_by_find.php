@@ -137,7 +137,7 @@ $sql_init = "SELECT
                 updated_at 
             FROM listas
             WHERE $where
-            ORDER BY fecha DESC, id_lista ASC, title ASC
+            ORDER BY fecha DESC, id_lista DESC, title ASC
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):

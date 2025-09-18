@@ -652,3 +652,8 @@ function doMySizeByContenedor(contenedor_filtro){
     }
 }
 
+function close_ul_action(e){
+    if(e.target.className == 'li_action'){
+        closeDiv(e.target.closest('.bl_set'));
+    }
+}
