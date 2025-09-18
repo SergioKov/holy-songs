@@ -688,7 +688,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     <img src="images/arrow_left_r_icon_white.svg">
                                                 </div>
 
-                                                <div id="vklad_btn_pantallaShow" class="dbtn btn_active" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
+                                                <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
                                                     <img src="images/monitor_1_white.png">
                                                     <span id="titulo_shown">...</span>
                                                 </div>
@@ -883,10 +883,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositivas:</span>
-                                                        
-                                                        <button id="btn_actions_select_slide_l" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide_l');" title="Acciones">
-                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                                        </button>
                                                     </h4>
                                                 </div><!--/.parte_fija-->
 
