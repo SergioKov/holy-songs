@@ -2606,7 +2606,7 @@ p.p_sm b {
 
 
 .edit_blocks_head .wr_block_option .btn {
-    min-width: 60px !important;
+    /* min-width: 60px !important; */
 }
 
 .form_cancion,
