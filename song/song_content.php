@@ -177,27 +177,19 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_buscar_head" class="edit_blocks_head">
 
                                     <div class="block_option_y_action">
-
+                                        
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <button class="btn" o-nclick="">Ver algo...</button>
-                                                <button class="btn">aaaaaa aaaaa btn 1</button>
-                                                <button class="btn">bbbb bbbbbbb bbbbb btn 2</button>
-                                                <button class="btn">btn 3</button>
-                                                <button class="btn">btn 2</button>
-                                                <button class="btn">btn 42</button>
-                                                <button class="btn">btn 52</button>
-                                                <button class="btn">btn 26</button>
-                                                <button class="btn">btn 27</button>
-                                                <button class="btn">btn 28</button>
-                                                <button class="btn">btn 29</button>
-                                                <button class="btn">btn 112</button>
-                                                <button class="btn">btn 112</button>
-                                                <button class="btn">btn 22</button>
-                                                <button class="btn">btn 2</button>
-                                                <button class="btn">btn 32</button>
-                                                <button class="btn">btn 42</button>
-                                                <button class="btn">btn 42</button>
+                                                <p class="prim opt_prim">
+                                                    Para ver los datos de la canción, búscala y selecciónala antes en esta pestaña o crea una nueva pulsando en <b>'Nueva Canción'</b>.
+                                                </p>
+
+                                                <button class="btn opt_edit">1.Ver algo...</button>
+                                                <button class="btn opt_edit">2.Ver algo...</button>
+                                                <button class="btn opt_edit">3.Ver algo...</button>
+
+                                                <div class="separador opt_edit"></div>
+                                                <button class="btn opt_nueva" onclick="showBlockName('cancion'); nueva_song();">Nueva Canción</button>
                                             </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
@@ -212,7 +204,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <div class="inner_content_head_body">
                                                             <div class="inner_content_head">
                                                                 <div class="wr_title_btn_close">
-                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span>Acciones con la canción:</span>
                                                                     <span class="sp_close">✕</span>
                                                                 </div>
                                                             </div><!--/.inner_content_head-->
@@ -250,8 +242,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     
                             
                                 <div id="block_buscar_body">
-                                    
-
 
                                     <div class="bl_partes">
 
@@ -496,9 +486,13 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <button id="btn_ver_esquema" class="btn" onclick="showVklad(this,'ver_esquema')" on-click="ver_esquema()">Ver</button>
-                                                <button id="btn_crear_esquema" class="btn" onclick="showVklad(this,'crear_esquema')" on-click="crear_esquema()">Crear</button>
-                                                <button id="btn_select_slide" class="btn" onclick="showVklad(this,'select_slide')" on-click="select_slide()">Slide</button>
+                                                <p class="prim opt_prim">
+                                                    Para ver el esquema de la canción, búscala y selecciónala antes en la pestaña <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button>.
+                                                </p>
+
+                                                <button id="btn_ver_esquema" class="btn opt_edit" onclick="showVklad(this,'ver_esquema')">Ver</button>
+                                                <button id="btn_crear_esquema" class="btn opt_edit" onclick="showVklad(this,'crear_esquema')">Crear</button>
+                                                <button id="btn_select_slide" class="btn opt_edit" onclick="showVklad(this,'select_slide')">Slide</button>
                                             </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
@@ -514,7 +508,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <div class="inner_content_head_body">
                                                                 <div class="inner_content_head">
                                                                     <div class="wr_title_btn_close">
-                                                                        <span>Escoge acción con la canción:</span>
+                                                                        <span>Acciones con la canción:</span>
                                                                         <span class="sp_close">✕</span>
                                                                     </div>
                                                                 </div><!--/.inner_content_head-->
@@ -550,7 +544,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                             <div class="inner_content_head_body">
                                                                 <div class="inner_content_head">
                                                                     <div class="wr_title_btn_close">
-                                                                        <span>2. Escoge acción con la canción:</span>
+                                                                        <span>Acciones con la canción:</span>
                                                                         <span class="sp_close">✕</span>
                                                                     </div>
                                                                 </div><!--/.inner_content_head-->
@@ -729,7 +723,16 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <div class="bloques song_bloques solo_ver">
                                                             <!-- aki bloques de la cancion -->
                                                             <p class="prim">Bloques únicos con las que se construye la canción</p>
-                                                            <p class="prim">No has seleccionado la canción para ver su esquema. Selecciona una en la pestaña <b>'Buscar'</b> y luego haz click en el botón <b>'Ver esquema'</b> en la vista previa de la canción...</p>
+                                                            <p class="prim">No has seleccionado la canción para ver su esquema. Selecciona una en la pestaña 
+                                                                <button class="btn inline" onclick="showBlockName('buscar')">
+                                                                    Buscar
+                                                                </button> 
+                                                                y luego haz click en el botón de acciones 
+                                                                <button class="btn tres_puntos" onclick="hideShowDiv('bl_actions_buscar');">
+                                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                                </button> 
+                                                                y luego en la acción <b>'Ver esquema'</b>.
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div><!--/.parte_variable-->
@@ -971,14 +974,20 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_cancion_head" class="edit_blocks_head">                                
                                 
                                     <div class="block_option_y_action">
-
+                                        
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <button id="btn_song_ver" class="btn" onclick="ver_song()">Ver</button>
-                                                <button id="btn_song_editar" class="btn" onclick="editar_song()">Editar</button>
-                                                <button id="btn_song_nueva" class="btn" onclick="nueva_song();">Nueva</button>
-                                                <button id="btn_song_eliminar" class="btn" onclick="eliminar_song();">Eliminar</button>
-                                                <button id="btn_" class="btn" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                                <p class="prim opt_prim">
+                                                    Para ver los datos de la canción, búscala y selecciónala antes en la pestaña <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button> o crea una nueva pulsando en <b>'Nueva'</b>.
+                                                </p>
+
+                                                <button id="btn_song_ver" class="btn opt_edit" onclick="ver_song()">Ver</button>
+                                                <button id="btn_song_editar" class="btn opt_edit" onclick="editar_song()">Editar</button>
+                                                <button id="btn_song_eliminar" class="btn opt_edit" onclick="eliminar_song();">Eliminar</button>
+                                                <button id="" class="btn opt_edit" onclick="alert('en desarrollo...')">Copiar texto...</button>
+                                                
+                                                <div class="separador opt_edit"></div>
+                                                <button id="btn_song_nueva" class="btn opt_nueva" onclick="nueva_song();">Nueva Canción</button>
                                             </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 
@@ -993,7 +1002,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <div class="inner_content_head_body">
                                                             <div class="inner_content_head">
                                                                 <div class="wr_title_btn_close">
-                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span>Acciones con la canción:</span>
                                                                     <span class="sp_close">✕</span>
                                                                 </div>
                                                             </div><!--/.inner_content_head-->
@@ -1090,7 +1099,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 <div id="block_ejemplo_head" class="edit_blocks_head">
 
                                     <div class="block_option_y_action">
-
+                                        
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
                                                 <button id="btn_ejemplo_ua" class="btn" onclick="showEjemplo('ua')">Укр.</button>
@@ -1111,7 +1120,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                         <div class="inner_content_head_body">
                                                             <div class="inner_content_head">
                                                                 <div class="wr_title_btn_close">
-                                                                    <span>Escoge acción con la canción:</span>
+                                                                    <span>Acciones con la canción:</span>
                                                                     <span class="sp_close">✕</span>
                                                                 </div>
                                                             </div><!--/.inner_content_head-->
@@ -1209,12 +1218,18 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
-                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
-                                                <button id="btn_lista_ver" class="btn" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
-                                                <button id="btn_lista_editar" class="btn" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
-                                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Nueva lista',null,'buildLista',true, 'nueva');">Nueva lista</button>
-                                                <button id="btn_lista_nueva" class="btn" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+                                                <p class="prim opt_prim">
+                                                    Para ver los datos de la lista, búscala y selecciónala antes en esta pestaña o crea una nueva pulsando en <b>'Nueva'</b>.
+                                                </p>
+
+                                                <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+                                                <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
+                                                <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+                                                <button id="btn_lista_editar" class="btn opt_edit" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
+                                                <button id="btn_lista_eliminar" class="btn opt_edit" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
+
+                                                <div class="separador opt_edit"></div>
+                                                <button id="btn_lista_nueva" class="btn opt_nueva" onclick="openModal('full','Nueva Lista',null,'buildLista',true, 'nueva');">Nueva Lista</button>
                                             </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
 

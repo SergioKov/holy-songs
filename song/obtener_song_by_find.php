@@ -236,7 +236,7 @@ $sql_init = "SELECT
             LEFT JOIN songbooks sb 
                 ON sb.id_songbook = s.songbook
             WHERE $where
-            ORDER BY s.title, s.song_number, s.id_song, s.songbook
+            ORDER BY s.title, s.song_number, s.id_song DESC, s.songbook
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):

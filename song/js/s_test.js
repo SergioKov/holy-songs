@@ -178,5 +178,37 @@ function resetLineActiveEn(contenedor){
 }
 
 
+function mostrarElemento(elemento){
+    if(!elemento) return;
+    elemento.classList.remove('d-none');
+    elemento.classList.add('d-block');
+}
+function ocultarElemento(elemento){
+    if(!elemento) return;
+    elemento.classList.remove('d-block');
+    elemento.classList.add('d-none');
+}
+
+
+function mostrarElementosPrimEn(elemento){
+    if(!elemento) return;
+    elemento.classList.add('prim_shown');
+    elemento.classList.remove('prim_shown');
+}
+function ocultarElementosPrimEn(elemento){
+    if(!elemento) return;
+    elemento.classList.remove('prim_shown');
+}
+
+
+function mostrarElementosEditablesEn(elemento){
+    if(!elemento) return;
+    elemento.classList.remove('prim_shown');
+    elemento.classList.add('edit_shown');
+}
+function ocultarElementosEditablesEn(elemento){
+    if(!elemento) return;
+    elemento.classList.remove('edit_shown');
+}
 
 

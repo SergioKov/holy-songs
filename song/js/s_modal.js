@@ -366,9 +366,9 @@ function buildFormCancion(contenedor, cancion_action = null){
             aviso_outer.innerHTML = `
                 <p class="p_aviso">No has seleccionado ninguna canción.</p>
                 <p class="p_aviso">Busca una canción introduciendo el texto en la pestaña <b>Buscar</b>.</p>
-                <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('Buscar');">Buscar</button>
+                <button class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('Buscar');">Buscar</button>
             `;
-            openModal('center','Aviso Lista',aviso_outer,'showAviso2');
+            openModal('center','Aviso Canción',aviso_outer,'showAviso2');
             return; // <- se detiene aquí si no hay id_lista
         }
     }
@@ -483,7 +483,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                     </div>
 
                     <div class="form_group wr_song_number">
-                        <input id="${id_vstavka}song_number" name="song_number" type="text" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                        <input id="${id_vstavka}song_number" name="song_number" type="number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
                         <label for="${id_vstavka}song_number">Número</label>
                     </div>
 
@@ -779,6 +779,7 @@ function buildLista(lista_action = null){
             arr_lista_bucle = arr_lista;
             console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);
             id_lista = null;
+            resetBlockLista();
             break;
 
         case 'ver_sm'://Ver lista - SM => SMALL - vista

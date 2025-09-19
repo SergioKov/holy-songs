@@ -1379,10 +1379,30 @@ tr.selected td.td_n {
 }
 p.prim b {
     color: #FF9800;
+    white-space: nowrap;
 }
 
 
+p.prim button.inline {
+    display: inline-block;
+}
 
+p.prim .btn.tres_puntos {
+    height: 20px;
+    width: 20px;
+    overflow: hidden;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    top: 4px;
+    padding: 0;
+    min-width: 26px;
+}
+p.prim .btn.tres_puntos .btn_img {
+    width: 18px;
+    height: 18px;
+}
 
 
 
@@ -2252,6 +2272,9 @@ p.p_sm b {
     /* font-size: 20px; */
     font-size: 32px;
     right: -2px;
+    width: 26px;
+    height: 26px;
+    /* top: 1px; */
 }
 
 .bl_set_inner .inner_content {
@@ -2623,6 +2646,9 @@ p.p_sm b {
     align-items: center;
 }
 
+.wr_head_avisos {
+    width: 100%;
+}
 
 .wr_block_option {
     /* background: green; */
@@ -2632,15 +2658,28 @@ p.p_sm b {
 }
 
 .wr_block_option_inner {
-    /* width: 500px; */
-    /* padding: 5px; */
     /* background: red; */
     display: flex;
     gap: 5px;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
+    width: 100%;
 }
+
+
+.wr_block_option_inner .opt_edit,
+.wr_block_option_inner.edit_shown .opt_prim
+{
+    display: none !important;
+}
+
+
+.wr_block_option_inner.edit_shown .opt_edit
+{
+    display: block !important;
+}
+
 
 .wr_block_option .btn {
     /* background: black; */
@@ -2659,6 +2698,13 @@ p.p_sm b {
     padding: 0px;
     display: flex;
     gap: 5px;
+}
+
+.wr_block_option_inner .separador {
+    background: #525252;
+    height: 100%;
+    width: 1px;
+    margin: 0 5px;
 }
 
 

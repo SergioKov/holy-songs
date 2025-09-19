@@ -1327,10 +1327,12 @@ async function ver_esquema(){
     ver_esquema_song_bloques.innerHTML = '';//reset
     ver_esquema_wr_vista_btns.innerHTML = '';//reset
     ver_esquema_ul_action.innerHTML = '';//reset
+
     ver_esquema_ul_action.innerHTML = '<span class="sp_prim">Para ver la esquema hay que seleccionar antes la canción...</span>';
        
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
+    pageActiveEsquema = 'ver_esquema';
 
     //Recorrer el bucle - partes de song (SIN REPETIRSE)...
     arr_esquema.forEach( (titulo, i, arr) => {
@@ -1459,6 +1461,7 @@ async function crear_esquema(){
 
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
+    pageActiveEsquema = 'crear_esquema';
 
     const sp_prim = document.createElement('span');
     sp_prim.className = 'sp_prim';
@@ -1644,8 +1647,9 @@ async function select_slide(){
 
     check_pantallaShow();//reviso si marco en rojo o no
     
-    //resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    //eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
+    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+    pageActiveEsquema = 'select_slide';
 
 
     // Recorrer el bucle - btns y vista...
@@ -2666,16 +2670,28 @@ function showBlockName(blockName){
         case 'buscar':
             bl_titulo.textContent = 'Buscar canción';
             showOnlyBlock(blockName);
+            if(!id_song){
+                //mostrarElementosPrimEn(buscar_option_inner);
+                ocultarElementosEditablesEn(buscar_option_inner);
+            }else{
+                //ocultarElementosPrimEn(buscar_option_inner);
+                mostrarElementosEditablesEn(buscar_option_inner);
+            }
             mySizeBuscar();
             break;
         
         case 'esquema':
             bl_titulo.textContent = 'Esquema de la canción';
             showOnlyBlock(blockName);
-            if(id_song && vkladActive){
-                // if(vkladActive == 'ver_esquema') ver_esquema();
-                // if(vkladActive == 'crear_esquema') crear_esquema();
-                // if(vkladActive == 'select_slide') select_slide();
+            if(!id_song){
+                //mostrarElementosPrimEn(esquema_option_inner);
+                ocultarElementosEditablesEn(esquema_option_inner);
+            }else{
+                //ocultarElementosPrimEn(esquema_option_inner);
+                mostrarElementosEditablesEn(esquema_option_inner);
+            }
+            if(id_song && !pageActiveEsquema){
+                ver_esquema();
             }
             mySizeEsquema();
             break;
@@ -2683,7 +2699,14 @@ function showBlockName(blockName){
         case 'cancion':
             bl_titulo.textContent = 'Crear / Editar canción';
             showOnlyBlock(blockName);
-            if(id_song){
+            if(!id_song){
+                //mostrarElementosPrimEn(cancion_option_inner);
+                ocultarElementosEditablesEn(cancion_option_inner);
+            }else{
+                //ocultarElementosPrimEn(cancion_option_inner);
+                mostrarElementosEditablesEn(cancion_option_inner);
+            }
+            if(id_song && !pageActiveCancion){
                 ver_song();
             }
             mySizeCancion();
@@ -2692,12 +2715,24 @@ function showBlockName(blockName){
         case 'ejemplo':
             bl_titulo.textContent = 'Ejemplo de canción';
             showOnlyBlock(blockName);
+            //por defecto todo visible
+            if(!pageActiveEjemplo){
+                showEjemplo('ua');//por defecto -> ucraniano
+            }
             mySizeEjemplo();
             break;
 
         case 'lista':
             bl_titulo.textContent = 'Buscar lista';
             showOnlyBlock(blockName);
+            if(!id_lista){
+                //mostrarElementosPrimEn(lista_option_inner);
+                ocultarElementosEditablesEn(lista_option_inner);
+            }else{
+                //ocultarElementosPrimEn(lista_option_inner);
+                mostrarElementosEditablesEn(lista_option_inner);
+            }
+            //por defecto todo visible
             mySizeLista();
             break;
     }
@@ -3082,10 +3117,10 @@ async function nueva_song(){
     buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
 
     //Partes left-right
-    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva canción:';
+    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva Canción:';
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active')
+    eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active');
 
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
@@ -3228,6 +3263,7 @@ function showEjemplo(lang){
         
         resetBtnActive(eid_block_ejemplo_head);//reseteo btn_active de botones en el contenedor
         eid_block_ejemplo_head.querySelector(`#btn_ejemplo_${lang}`).classList.add('btn_active');
+        pageActiveEjemplo = lang;
 
         ejemplo_ul_action.innerHTML = `
             <li class="li_action" onclick="openModal('full','Ejemplo',null,'buildFormEjemplo',true, '${lang}')">Ejemplo (${obj_lang_names[lang]})</li>
@@ -3303,9 +3339,9 @@ function addToLista(){
             openModal('full','Guardar lista editada',null,'buildLista',true, 'editar');
         }
     }else{
-        btn_guardar.textContent = 'Guardar nueva lista';
+        btn_guardar.textContent = 'Guardar Nueva Lista';
         btn_guardar.onclick = () => {
-            openModal('full','Guardar nueva lista',null,'buildLista',true, 'nueva');
+            openModal('full','Guardar Nueva Lista',null,'buildLista',true, 'nueva');
         }
     }
 
