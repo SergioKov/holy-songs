@@ -495,3 +495,5 @@ let pageActiveEsquema = null;
 let pageActiveCancion = null;
 let pageActiveEjemplo = null;
 //let pageActiveLista = null;
+
+let mostrarPrim = true;

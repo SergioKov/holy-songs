@@ -2670,11 +2670,15 @@ function showBlockName(blockName){
         case 'buscar':
             bl_titulo.textContent = 'Buscar canción';
             showOnlyBlock(blockName);
-            if(!id_song){
-                //mostrarElementosPrimEn(buscar_option_inner);
+            if(!id_song){//nueva o no hay selecionada id_song
+                if(mostrarPrim){
+                    mostrarElementosPrimEn(buscar_option_inner);
+                }else{
+                    ocultarElementosPrimEn(buscar_option_inner);
+                }
                 ocultarElementosEditablesEn(buscar_option_inner);
             }else{
-                //ocultarElementosPrimEn(buscar_option_inner);
+                ocultarElementosPrimEn(buscar_option_inner);
                 mostrarElementosEditablesEn(buscar_option_inner);
             }
             mySizeBuscar();
@@ -2683,11 +2687,11 @@ function showBlockName(blockName){
         case 'esquema':
             bl_titulo.textContent = 'Esquema de la canción';
             showOnlyBlock(blockName);
-            if(!id_song){
-                //mostrarElementosPrimEn(esquema_option_inner);
+            if(!id_song){//nueva o no hay selecionada id_song
+                mostrarElementosPrimEn(esquema_option_inner);
                 ocultarElementosEditablesEn(esquema_option_inner);
             }else{
-                //ocultarElementosPrimEn(esquema_option_inner);
+                ocultarElementosPrimEn(esquema_option_inner);
                 mostrarElementosEditablesEn(esquema_option_inner);
             }
             if(id_song && !pageActiveEsquema){
@@ -2699,11 +2703,15 @@ function showBlockName(blockName){
         case 'cancion':
             bl_titulo.textContent = 'Crear / Editar canción';
             showOnlyBlock(blockName);
-            if(!id_song){
-                //mostrarElementosPrimEn(cancion_option_inner);
+            if(!id_song){//nueva o no hay selecionada id_song
+                if(mostrarPrim){
+                    mostrarElementosPrimEn(cancion_option_inner);
+                }else{
+                    ocultarElementosPrimEn(cancion_option_inner);
+                }
                 ocultarElementosEditablesEn(cancion_option_inner);
             }else{
-                //ocultarElementosPrimEn(cancion_option_inner);
+                ocultarElementosPrimEn(cancion_option_inner);
                 mostrarElementosEditablesEn(cancion_option_inner);
             }
             if(id_song && !pageActiveCancion){
@@ -2725,11 +2733,15 @@ function showBlockName(blockName){
         case 'lista':
             bl_titulo.textContent = 'Buscar lista';
             showOnlyBlock(blockName);
-            if(!id_lista){
-                //mostrarElementosPrimEn(lista_option_inner);
+            if(!id_lista){//nueva o no hay selecionada id_song
+                if(mostrarPrim){
+                    mostrarElementosPrimEn(lista_option_inner);
+                }else{
+                    ocultarElementosPrimEn(lista_option_inner);
+                }
                 ocultarElementosEditablesEn(lista_option_inner);
             }else{
-                //ocultarElementosPrimEn(lista_option_inner);
+                ocultarElementosPrimEn(lista_option_inner);
                 mostrarElementosEditablesEn(lista_option_inner);
             }
             //por defecto todo visible
@@ -3110,6 +3122,11 @@ async function nueva_song(){
     resetBlockEsquema();
     resetLineasXinBlock(eid_block_cancion);
 
+    mostrarPrim = false;    
+    ocultarElementosPrimEn(cancion_option_inner);
+    ocultarElementosEditablesEn(cancion_option_inner);
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
+
     cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
@@ -3141,6 +3158,10 @@ function ver_song(){
     }
 
     resetLineasXinBlock(eid_block_cancion);
+    
+    mostrarPrim = false;
+    mostrarElementosEditablesEn(cancion_option_inner);
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
@@ -3175,6 +3196,10 @@ function editar_song(){
     }
 
     resetLineasXinBlock(eid_block_cancion);
+
+    mostrarPrim = false;
+    mostrarElementosEditablesEn(cancion_option_inner);
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
@@ -3211,6 +3236,10 @@ function eliminar_song(){
     }
 
     resetLineasXinBlock(eid_block_cancion);
+
+    mostrarPrim = false;
+    mostrarElementosEditablesEn(cancion_option_inner);
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Eliminar canción:';
@@ -3286,8 +3315,6 @@ function addToLista(){
 
     //compruebo si ya está id_song enla lista
     let hay_en_la_lista = arr_lista.some(s => s.id_song == objSong.id_song);
-
-
 
     let aviso_text;
     let text_song_datos = `

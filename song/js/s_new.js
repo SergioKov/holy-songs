@@ -11,6 +11,7 @@ function pintSongActive(){//click en tr de la tabla de canciones
     resetTrSelected(tbody);
     tbody.querySelector(`.tr_song[data-id="${id_song}"]`).classList.add('selected');
 
+    mostrarPrim = false;
     ocultarElementosPrimEn(buscar_option_inner);
     mostrarElementosEditablesEn(buscar_option_inner);
     mySizeBuscar();//importante después de quitar opt_prim y mostrar opt_edit 
@@ -245,9 +246,11 @@ function pintListaActive(){
     resetTrSelected(tbody_lista);
     tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
     
+    mostrarPrim = false;
     ocultarElementosPrimEn(lista_option_inner);
     mostrarElementosEditablesEn(lista_option_inner);
     mySizeLista();//importante después de quitar opt_prim y mostrar opt_edit 
+
 
     //Dejo '==' en vez de '===' porque id_lista viene como string: "925"
     objLista = objDataListas.arr_data.find(s => s.id_lista == id_lista);

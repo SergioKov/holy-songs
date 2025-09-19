@@ -192,12 +192,13 @@ function ocultarElemento(elemento){
 
 function mostrarElementosPrimEn(elemento){
     if(!elemento) return;
-    elemento.classList.add('prim_shown');
-    elemento.classList.remove('prim_shown');
+    elemento.querySelector('.opt_prim').classList.remove('d-none');
+    elemento.querySelector('.opt_prim').classList.add('d-block');
 }
 function ocultarElementosPrimEn(elemento){
     if(!elemento) return;
-    elemento.classList.remove('prim_shown');
+    elemento.querySelector('.opt_prim').classList.remove('d-block');
+    elemento.querySelector('.opt_prim').classList.add('d-none');
 }
 
 

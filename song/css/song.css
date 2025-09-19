@@ -1051,8 +1051,8 @@ thead th {
     top: -1px;
     background: #606060;
     z-index: 2;
-    /* padding-bottom: 1px; */
     padding: 2px 5px 1px;
+    color: white;
 }
 
 table tbody {

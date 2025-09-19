@@ -750,7 +750,7 @@ function buildLista(lista_action = null){
     let texto_ordenar = '';
     let contenedor;//general. se asigna luego
 
-    if(lista_action !== 'nueva'){
+    if(lista_action !== 'nueva'){//si es: ver_sm ver, editar, eliminar
         if(!hay_id_lista('buildLista()')){
             const aviso_outer = document.createElement('div');
             aviso_outer.className = 'aviso_outer';
@@ -769,6 +769,13 @@ function buildLista(lista_action = null){
         fecha_val = objLista.fecha_ver;//formato ya desde bd '03/08/2025'
         notes_val = objLista.notes;
         arr_lista_bucle = objLista.arr_lista;
+
+    }else{//si es nueva
+        
+        mostrarPrim = false;    
+        ocultarElementosPrimEn(lista_option_inner);
+        ocultarElementosEditablesEn(lista_option_inner);
+        mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
     }
 
     switch (lista_action) {
@@ -777,9 +784,9 @@ function buildLista(lista_action = null){
                 <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
             `;
             arr_lista_bucle = arr_lista;
-            console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);
+            console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);            
             id_lista = null;
-            resetBlockLista();
+            resetBlockLista();        
             break;
 
         case 'ver_sm'://Ver lista - SM => SMALL - vista
