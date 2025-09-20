@@ -2139,12 +2139,13 @@ async function guardarSong(event, id_contenedor, cancion_action){
                 // }
                 editar_song();
 
-                cancion_ul_action.innerHTML = `
-                    <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
-                    <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
-                    <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
-                `;
-                cancion_ul_action.onclick = e => close_ul_action(e);
+                // cancion_ul_action.innerHTML = `
+                //     <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>    
+                //     <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
+                //     <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+                //     <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+                // `;
+                // cancion_ul_action.onclick = e => close_ul_action(e);
 
                 //Actualizo tr_song 
                 pintSongActiveSoloDatos();//en la ventana a la derecha de la tabla de lista
@@ -3177,6 +3178,7 @@ function ver_song(){
     buildFormCancion(cancion_song_bloques, cancion_action = 'ver');//'ver', 'editar'
 
     cancion_ul_action.innerHTML = `
+        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
         <li class="li_action" onclick="crearSlides();">Crear slides</li>

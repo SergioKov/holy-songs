@@ -1962,6 +1962,11 @@ p.p_sm b {
     color: white;
 }
 
+
+.contenedor_aviso {
+    width: 100%;
+}
+
 #contenedor_lista_sm {
     position: relative;
 }
