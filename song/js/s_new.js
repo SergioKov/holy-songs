@@ -65,7 +65,8 @@ function pintSongActiveSoloDatos(){
     console.log('tr_song: ', tr_song);
     
     if(!tr_song){
-        alert('no hay tr_song');
+        //alert('no hay tr_song');
+        console.log('no hay tr_song. no actualizo tr_song...');
         return;
     }
 
