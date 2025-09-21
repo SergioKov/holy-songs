@@ -631,7 +631,7 @@ span.barra {
 
 fieldset {
     /* background: green; */
-    border-radius: 10px;
+    /* border-radius: 10px; */
     /* border-color: transparent; */
     margin-inline: 8px;
     padding: 10px;
@@ -639,7 +639,7 @@ fieldset {
 }
 fieldset.preview_next {
     border-bottom: none !important;
-    border-radius: 10px 10px 0 0;
+    /* border-radius: 10px 10px 0 0; */
 }
 
 legend {
@@ -662,7 +662,11 @@ legend, span.barra, p.b {
     color: #909090;
 }
 
-fieldset.kuplet,
+fieldset.kuplet{
+    border: none;
+    border-top: 3px solid #909090;
+}
+
 legend {
     border: 3px solid #909090;
 }

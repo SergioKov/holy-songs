@@ -3170,9 +3170,15 @@ function ver_song(){
     buildFormCancion(cancion_song_bloques, cancion_action = 'ver');//'ver', 'editar'
 
     cancion_ul_action.innerHTML = `
+        <div class="razdel">Lista:</div>
         <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+
+        <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); select_slide();">Select slide</li>
+        
+        <div class="razdel">Diapositivas:</div>
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
     `;
@@ -3209,11 +3215,17 @@ function editar_song(){
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
     cancion_ul_action.innerHTML = `
+        <div class="razdel">Lista:</div>
         <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+
+        <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); select_slide();">Select slide</li>
+        
+        <div class="razdel">Diapositivas:</div>
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
-        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>        
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 

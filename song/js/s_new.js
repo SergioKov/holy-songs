@@ -20,15 +20,18 @@ function pintSongActive(){//click en tr de la tabla de canciones
     buscar_vista_song_content.innerHTML = '';//reset
 
     buscar_ul_action.innerHTML = `
+        <div class="razdel">Lista:</div>
+        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+
         <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
         <li class="li_action" onclick="showBlockName('esquema'); crear_esquema();">Crear esquema</li>
+        <li class="li_action" onclick="showBlockName('esquema'); select_slide();">Select slide</li>
         
         <div class="razdel">Canción:</div>
         <li class="li_action" onclick="showBlockName('cancion'); ver_song();">Ver canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Editar canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
-        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
         
         <div class="razdel">Modal:</div>
         <li class="li_action" onclick="openModal('full','Ver Canción',null,'buildFormCancion',true, 'ver')">Ver canción</li>
