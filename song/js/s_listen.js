@@ -297,21 +297,9 @@ function handleFormInput(e, container_block){
     console.log('song_titulo: ', song_titulo);
 
     const palabrasTitulos = arr_titulos.join('|');//arr_titulos en config
-
-    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
-    // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTitulo = new RegExp(
-        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
-        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
-            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
-            '|' +                                                   // o bien
-            '((?:\\d+\\s*)?(?:' + palabrasTitulos + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
-        ')',                                                        // fin de grupo sin captura. luego va coma ','
-        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
-    );
+    const regexTitulo = make_regex_titulos(palabrasTitulos);
 
     obj_bloques = {};//reset - elementos html de slides: kuplet, pripev bridge sin repetirse
-
 
     // Obtenemos todas las coincidencias de títulos
     const matches = Array.from(texto.matchAll(regexTitulo));
@@ -507,6 +495,8 @@ function handleFormInput(e, container_block){
                 
         vista_blocks.append(slide_clone.querySelector('fieldset'));
     });
+
+    pintParrafosAcordes();
 }
 
 

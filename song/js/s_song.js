@@ -258,14 +258,12 @@ function pintBarras() {//no se usa...
 
         if(linea.classList.contains('c')){
             console.log('es linea para acordes', linea);
-
         }
 
         // 2. Reemplazar barras "|" por span
-        linea_new = linea_str.replace(/([|/])/g, '<span class="barra">$1</span>');
+        linea_str = linea_str.replace(/([|\/\-\(\)])/g, '<span class="barra">$1</span>');
 
         linea.innerHTML = linea_new;
-
     });
 }
 
@@ -279,10 +277,12 @@ function pintParrafosAcordes() {
     document.querySelectorAll('p.c').forEach(p => {
         let textOriginal = p.textContent;
 
-        const partes = textOriginal.match(/([|\/])|(\s+)|([^\s|\/]+)/g);
+        //const partes = textOriginal.match(/([|\/])|(\s+)|([^\s|\/]+)/g);
+        const partes = textOriginal.match(/([|\/\-\(\)])|(\s+)|([^\s|\/\-\(\)]+)/g);
+
 
         let resultado = partes.map(parte => {
-            if (parte === '|' || parte === '/') {
+            if ( parte === '|' || parte === '/' || parte === '-' || parte === '(' || parte === ')' ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
                 return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
@@ -735,24 +735,11 @@ async function getSongBlocks(){
             </div>
         </div>
     `;
-
     
     const palabrasTitulos = arr_titulos.join('|');//arr_titulos en config
-
-    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
-    // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTitulo = new RegExp(
-        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
-        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
-            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
-            '|' +                                                   // o bien
-            '((?:\\d+\\s*)?(?:' + palabrasTitulos + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
-        ')',                                                        // fin de grupo sin captura. luego va coma ','
-        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
-    );
+    const regexTitulo = make_regex_titulos(palabrasTitulos);
 
     obj_bloques = {};//reset - elementos html de slides: kuplet, pripev bridge sin repetirse
-
 
     // Obtenemos todas las coincidencias de títulos
     const matches = Array.from(texto.matchAll(regexTitulo));
@@ -996,38 +983,31 @@ function crear_arr_esquema_bucle(obj_bloques){
     return arr_esquema_bucle;
 }
 
+function make_regex_titulos(palabras){
+    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
+    // o en grupo (2) palabra del arr_titulos al inicio de línea
+    const regexTitulo = new RegExp(
+        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
+        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
+            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
+            '|' +                                                   // o bien
+            '((?:\\d+\\s*)?(?:' + palabras + ')[^\\n]*)' +          // opción 2: opcional número + palabra del array hasta el fin de la línea
+        ')',                                                        // fin de grupo sin captura. luego va coma ','
+        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
+    );
+    console.log('regexTitulo: ', regexTitulo);
+
+    return regexTitulo;
+}
 
 function addCoroAfterVerse(){
     console.log('=== function addCoroAfterVerse() ===');    
 
     const palabrasTitulosCoro = arr_titulos_coro.join('|');//arr_titulos en config
-
-    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
-    // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTituloCoro = new RegExp(
-        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
-        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
-            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
-            '|' +                                                   // o bien
-            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoro + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
-        ')',                                                        // fin de grupo sin captura. luego va coma ','
-        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
-    );
-
-
+    const regexTituloCoro = make_regex_titulos(palabrasTitulosCoro);    
+    
     const palabrasTitulosCoda = arr_titulos_coda.join('|');//arr_titulos en config
-
-    // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
-    // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTituloCoda = new RegExp(
-        '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
-        '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
-            '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
-            '|' +                                                   // o bien
-            '((?:\\d+\\s*)?(?:' + palabrasTitulosCoda + ')[^\\n]*)' +   // opción 2: opcional número + palabra del array hasta el fin de la línea
-        ')',                                                        // fin de grupo sin captura. luego va coma ','
-        'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
-    );
+    const regexTituloCoda = make_regex_titulos(palabrasTitulosCoda);
 
     let arr_titulos_tmp = [];
     let arr_coro = [];
@@ -1061,13 +1041,21 @@ function addCoroAfterVerse(){
 
             if(item_next){
                 const matchesCoro_next = Array.from(item_next.matchAll(regexTituloCoro));
-                const matchesCoda_next = Array.from(item_next.matchAll(regexTituloCoda));
+                //const matchesCoda_next = Array.from(item_next.matchAll(regexTituloCoda));
                 
-                if(matchesCoro_next.length > 0 || matchesCoda_next.length > 0){
+                if(matchesCoro_next.length > 0 /*|| matchesCoda_next.length > 0*/){
                     item_next_es_kuplet = false;
                     console.log(' ahora item_next_es_kuplet es FALSE. no añado coro. ');
                 }else{
                     console.log('item_next_es_kuplet es TRUE. no hago nada. ');
+                }
+            }else{
+                console.log('no hay item_next. reviso si item current es CODA.');
+
+                const matchesCoda_ultimo = Array.from(item.matchAll(regexTituloCoda));
+                if(matchesCoda_ultimo.length > 0){
+                    item_next_es_kuplet = false;
+                    console.log(' ahora item_next_es_kuplet es FALSE. no añado coro ya que es CODA. ');
                 }
             }
 
@@ -2587,14 +2575,16 @@ function resetPListaActive() {
 }
 
 function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
-    const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
-    //'|D      |F#m |G  |G  |'  => true;
-    //'| Вступ |Dm  |G  |C  |' =>  false (palabra 'Вступ' no es acorde) 
+    //const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
+    const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
+;
+    //'|D      |F#m |G  |G - (Cm7) |' => true;
+    //'| Вступ |Dm  |G  |C         |' =>  false (palabra 'Вступ' no es acorde) 
     return regexAcorde.test(str.trim());
 }
 
 function contieneAcordes(str) {// busca CUALQUIER acorde , barra y texto
-    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
+    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
     //'|D      |F#m |G  |G  |'  => true;
     //'| Вступ |Dm  |G  |C  |' =>  true (aunque hay palabra 'Вступ' que no es acorde en el texto hay al menos un acorde) 
     return regexAcorde.test(str);

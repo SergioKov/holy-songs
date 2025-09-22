@@ -529,6 +529,7 @@ legend span {
     align-items: center;
     /* border: 1px solid yellow; */
     padding: 10px;
+    padding: 30px;
     flex-direction: column;
     gap: 1rem;
 }
@@ -576,7 +577,7 @@ p.b /* bolas o puntitos */
 p.c {
     color: #00e2ff;
     /* color: red; */
-    line-height: 0.7em;
+    line-height: 0.8em;
 }
 
 
@@ -803,6 +804,11 @@ legend span {
 
 .vklads {
     width: 100%;
+}
+.vklads_head_inner {
+    display: flex;
+    gap: 5px;
+    padding: 0;
 }
 
 .bl_partes, .vklads_inner {
@@ -1228,7 +1234,6 @@ tr.selected td.td_n {
 }
 .song_bloques fieldset:hover {
     background: #080808;
-    border-radius: 10px;
 }
 .song_bloques fieldset:hover legend {
     background: #26d8ff;
@@ -2904,4 +2909,44 @@ span.sp_number {
 }
 .d_options_cboxes .btn {
     width: 50%;
+}
+
+
+
+.wr_dbtns_panels {
+    /* background: black; */
+    display: flex;
+    gap: 9px;
+    padding: 2px;
+}
+.dbtn_panel {
+    background: black;
+    width: 30px;
+    display: flex;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, outline 0.3s ease;
+}
+
+.dbtn_panel.active {
+    outline: 2px solid white;
+}
+.dbtn_panel.inactive {
+    outline: 2px solid #464646;
+}
+
+.dbtn_panel.active .pan_side {
+    background: white;
+}
+.dbtn_panel.inactive .pan_side {
+    background: #464646;
+}
+
+.pan2 {
+    height: 100%;
+    width: 50%;
+}
+.pan3 {
+    height: 100%;
+    width: 33.33%;
 }

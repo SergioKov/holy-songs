@@ -194,6 +194,21 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
+
+                                            <div class="wr_dbtns_panels">
+
+                                                <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_buscar','l')">
+                                                    <div class="pan2 p_l pan_side"></div>
+                                                    <div class="pan2 p_r"></div>
+                                                </div>
+
+                                                <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_buscar','r')">
+                                                    <div class="pan2 p_l"></div>
+                                                    <div class="pan2 p_r pan_side"></div>
+                                                </div>
+                                                                                        
+                                            </div><!--/.wr_panels-->
+
                                             <button id="btn_actions_buscar" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_buscar');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                             </button>
@@ -241,7 +256,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div><!--/#block_buscar_head-->
     
                             
-                                <div id="block_buscar_body">
+                                <div id="block_buscar_body" class="edit_blocks_body">
 
                                     <div class="bl_partes">
 
@@ -497,120 +512,198 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
+
                                             <div class="vklad_ver_esquema vklads" style="display: block;">
-                                                <button id="btn_actions_ver_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ver_esquema');" title="Acciones">
-                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                                </button>
-                                                <div id="bl_actions_ver_esquema" class="bl_set bl_actions" style="display:none;">
-                                                    <div class="bl_set_inner bl_closed">
-                                                        <div class="inner_content">
+                                                <div class="vklads_head_inner">
+                                                
+                                                    <div class="wr_dbtns_panels">
 
-                                                            <div class="inner_content_head_body">
-                                                                <div class="inner_content_head">
-                                                                    <div class="wr_title_btn_close">
-                                                                        <span>Acciones con la canción:</span>
-                                                                        <span class="sp_close">✕</span>
-                                                                    </div>
-                                                                </div><!--/.inner_content_head-->
+                                                        <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_esquema','l','ver_esquema')">
+                                                            <div class="pan3 p_l pan_side"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
 
-                                                                <div class="inner_content_body">
-                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                        <span>1. Parte central de esquema en desktop:</span>    
-                                                                        <div class="wr_sel_pantalla">
-                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                        <div class="dbtn_panel dbtn_panel_c active" onclick="hideShowPanel('block_esquema','c','ver_esquema')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c pan_side"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
+
+                                                        <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_esquema','r','ver_esquema')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r pan_side"></div>
+                                                        </div>
+                                                                                                
+                                                    </div><!--/.wr_panels-->                                                
+                                                
+                                                    <button id="btn_actions_ver_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ver_esquema');" title="Acciones">
+                                                        <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                    </button>
+                                                    <div id="bl_actions_ver_esquema" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>Acciones con la canción:</span>
+                                                                            <span class="sp_close">✕</span>
                                                                         </div>
-                                                                    </div>
+                                                                    </div><!--/.inner_content_head-->
 
-                                                                    <ul class="ul_action">
-                                                                        <p class="prim">1.Los botones de acciones se verán al selecionar la canción...</p>
-                                                                    </ul>
-                                                                </div><!--/.inner_content_body-->
-                                                            </div><!--/.inner_content_head_body-->                                                    
-                                                            
+                                                                    <div class="inner_content_body">
+                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                            <span>1. Parte central de esquema en desktop:</span>    
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <ul class="ul_action">
+                                                                            <p class="prim">1.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                        </ul>
+                                                                    </div><!--/.inner_content_body-->
+                                                                </div><!--/.inner_content_head_body-->                                                    
+                                                                
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div><!--/.vklads_head_inner-->
                                             </div><!--/.vklad_ver_esquema-->
 
+
                                             <div class="vklad_crear_esquema vklads" style="display: none;">
-                                                <button id="btn_actions_crear_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_crear_esquema');" title="Acciones">
-                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                                </button>                                        
-                                                <div id="bl_actions_crear_esquema" class="bl_set bl_actions" style="display:none;">
-                                                    <div class="bl_set_inner bl_closed">
-                                                        <div class="inner_content">
+                                                <div class="vklads_head_inner">
+                                                    
+                                                    <div class="wr_dbtns_panels">
 
-                                                            <div class="inner_content_head_body">
-                                                                <div class="inner_content_head">
-                                                                    <div class="wr_title_btn_close">
-                                                                        <span>Acciones con la canción:</span>
-                                                                        <span class="sp_close">✕</span>
-                                                                    </div>
-                                                                </div><!--/.inner_content_head-->
+                                                        <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_esquema','l','crear_esquema')">
+                                                            <div class="pan3 p_l pan_side"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
 
-                                                                <div class="inner_content_body">
-                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                        <span>2. Parte central de esquema en desktop:</span>    
-                                                                        <div class="wr_sel_pantalla">
-                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                        <div class="dbtn_panel dbtn_panel_c active" onclick="hideShowPanel('block_esquema','c','crear_esquema')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c pan_side"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
+
+                                                        <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_esquema','r','crear_esquema')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r pan_side"></div>
+                                                        </div>
+                                                                                                
+                                                    </div><!--/.wr_panels-->                                                
+                                                
+                                                    <button id="btn_actions_crear_esquema" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_crear_esquema');" title="Acciones">
+                                                        <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                    </button>                                        
+                                                    <div id="bl_actions_crear_esquema" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>Acciones con la canción:</span>
+                                                                            <span class="sp_close">✕</span>
                                                                         </div>
-                                                                    </div>
+                                                                    </div><!--/.inner_content_head-->
 
-                                                                    <ul class="ul_action">
-                                                                        <p class="prim">2.Los botones de acciones se verán al selecionar la canción...</p>
-                                                                    </ul>
-                                                                </div><!--/.inner_content_body-->
-                                                            </div><!--/.inner_content_head_body-->                                                    
-                                                            
+                                                                    <div class="inner_content_body">
+                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                            <span>2. Parte central de esquema en desktop:</span>    
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <ul class="ul_action">
+                                                                            <p class="prim">2.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                        </ul>
+                                                                    </div><!--/.inner_content_body-->
+                                                                </div><!--/.inner_content_head_body-->                                                    
+                                                                
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div><!--/.vklads_head_inner-->
                                             </div><!--/.vklad_crear_esquema-->
 
+
                                             <div class="vklad_select_slide vklads" style="display: none;">
-                                                <button id="btn_actions_select_slide" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide');" title="Acciones">
-                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
-                                                </button>
-                                                <div id="bl_actions_select_slide" class="bl_set bl_actions" style="display:none;">
-                                                    <div class="bl_set_inner bl_closed">
-                                                        <div class="inner_content">
+                                                <div class="vklads_head_inner">                                                    
+                                                
+                                                    <div class="wr_dbtns_panels">
 
-                                                            <div class="inner_content_head_body">
-                                                                <div class="inner_content_head">
-                                                                    <div class="wr_title_btn_close">
-                                                                        <span>3. Escoge la acción:</span>
-                                                                        <span class="sp_close">✕</span>
-                                                                    </div>
-                                                                </div><!--/.inner_content_head-->
+                                                        <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_esquema','l','select_slide')">
+                                                            <div class="pan3 p_l pan_side"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
 
-                                                                <div class="inner_content_body">
-                                                                    <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                        <span>3. Parte central de esquema en desktop:</span>    
-                                                                        <div class="wr_sel_pantalla">
-                                                                            <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                            <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                        <div class="dbtn_panel dbtn_panel_c active" onclick="hideShowPanel('block_esquema','c','select_slide')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c pan_side"></div>
+                                                            <div class="pan3 p_r"></div>
+                                                        </div>
+
+                                                        <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_esquema','r','select_slide')">
+                                                            <div class="pan3 p_l"></div>
+                                                            <div class="pan3 p_c"></div>
+                                                            <div class="pan3 p_r pan_side"></div>
+                                                        </div>
+                                                                                                
+                                                    </div><!--/.wr_panels-->                                                
+                                                
+                                                    <button id="btn_actions_select_slide" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide');" title="Acciones">
+                                                        <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                    </button>
+                                                    <div id="bl_actions_select_slide" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>3. Escoge la acción:</span>
+                                                                            <span class="sp_close">✕</span>
                                                                         </div>
-                                                                    </div>
-                                                                    
-                                                                    <div class="contenedor_sel_pantalla">
-                                                                        <span>3. Mostrar la diapositiva en:</span>
-                                                                        <div class="wr_sel_pantalla">
-                                                                            <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
-                                                                            <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+                                                                    </div><!--/.inner_content_head-->
+
+                                                                    <div class="inner_content_body">
+                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
+                                                                            <span>3. Parte central de esquema en desktop:</span>    
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
+                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
+                                                                            </div>
                                                                         </div>
-                                                                    </div> 
-                                                                    
-                                                                    <ul class="ul_action">
-                                                                        <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
-                                                                    </ul>
-                                                                </div><!--/.inner_content_body-->
-                                                            </div><!--/.inner_content_head_body-->
-                                                            
+                                                                        
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <span>3. Mostrar la diapositiva en:</span>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
+                                                                                <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
+                                                                            </div>
+                                                                        </div> 
+                                                                        
+                                                                        <ul class="ul_action">
+                                                                            <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
+                                                                        </ul>
+                                                                    </div><!--/.inner_content_body-->
+                                                                </div><!--/.inner_content_head_body-->
+                                                                
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div><!--/.vklad_head_inner-->
                                             </div><!--/.vklad_select_slide-->
                                         </div>
 
@@ -699,7 +792,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                 </div><!--/#block_esquema_head-->
 
-                                <div id="block_esquema_body">
+                                <div id="block_esquema_body" class="edit_blocks_body">
 
                                     <div class="vklad_ver_esquema vklads" style="display: block;">
                                         <div class="vklads_inner bl_partes">
@@ -992,6 +1085,21 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
+                                            
+                                            <div class="wr_dbtns_panels">
+
+                                                <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_cancion','l')">
+                                                    <div class="pan2 p_l pan_side"></div>
+                                                    <div class="pan2 p_r"></div>
+                                                </div>
+
+                                                <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_cancion','r')">
+                                                    <div class="pan2 p_l"></div>
+                                                    <div class="pan2 p_r pan_side"></div>
+                                                </div>
+                                                                                        
+                                            </div><!--/.wr_panels-->
+                                            
                                             <button id="btn_actions_cancion" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_cancion');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                             </button>                                    
@@ -1039,7 +1147,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div><!--/#block_cancion_head-->
 
 
-                                <div id="block_cancion_body">
+                                <div id="block_cancion_body" class="edit_blocks_body">
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">
@@ -1110,6 +1218,21 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
+
+                                            <div class="wr_dbtns_panels">
+
+                                                <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_ejemplo','l')">
+                                                    <div class="pan2 p_l pan_side"></div>
+                                                    <div class="pan2 p_r"></div>
+                                                </div>
+
+                                                <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_ejemplo','r')">
+                                                    <div class="pan2 p_l"></div>
+                                                    <div class="pan2 p_r pan_side"></div>
+                                                </div>
+                                                                                        
+                                            </div><!--/.wr_panels-->
+
                                             <button id="btn_actions_ejemplo" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_ejemplo');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                             </button>                                    
@@ -1156,7 +1279,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                 </div><!--/#block_ejemplo_head-->
 
 
-                                <div id="block_ejemplo_body">
+                                <div id="block_ejemplo_body" class="edit_blocks_body">
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">
@@ -1234,6 +1357,21 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                         </div><!--/.wr_block_option-->
 
                                         <div class="wr_head_action">
+
+                                            <div class="wr_dbtns_panels">
+
+                                                <div class="dbtn_panel dbtn_panel_l active" onclick="hideShowPanel('block_lista','l')">
+                                                    <div class="pan2 p_l pan_side"></div>
+                                                    <div class="pan2 p_r"></div>
+                                                </div>
+
+                                                <div class="dbtn_panel dbtn_panel_r active" onclick="hideShowPanel('block_lista','r')">
+                                                    <div class="pan2 p_l"></div>
+                                                    <div class="pan2 p_r pan_side"></div>
+                                                </div>
+                                                                                        
+                                            </div><!--/.wr_panels-->
+
                                             <button id="btn_actions_lista" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');" title="Acciones">
                                                 <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                             </button>                                    
@@ -1279,7 +1417,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                 </div><!--/#block_lista_head-->
 
-                                <div id="block_lista_body">
+                                <div id="block_lista_body" class="edit_blocks_body">
                                     <div class="bl_partes">
 
                                         <div class="partes bl_parte_l bl_active">

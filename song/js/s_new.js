@@ -1500,3 +1500,111 @@ function handleCheckbox(cbox){//cbox es element
     }
     check_arr_songbooks();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function check_sidebarShow(){//solo pinto el botón
+    //console.log('=== function check_sidebarShow() ===');
+    //console.log('sidebarShow: ', sidebarShow);
+
+    if(sidebarShow){
+        //console.log('sidebarShow == true. marco como activo');
+        mostrar_sidebar();
+    }else{
+        //console.log('sidebarShow == false. marco como INactivo');        
+        ocultar_sidebar();
+    }
+}
+
+
+
+function hideShowPanel(id_contenedor, panelSideParam, esquema_vklad = null){ 
+    console.log('=== function hideShowPanel()===');
+
+    const contenedor = document.getElementById(id_contenedor);//'block_buscar', 'block_esquema'
+    if(!contenedor) return;
+
+    let btnSideElement;//'.dbtn_panel_l' o '.dbtn_panel_r'
+    let panelSideElement;//'.bl_parte_l' o '.bl_parte_r'
+    
+    if(id_contenedor == 'block_esquema' && esquema_vklad){
+        switch (esquema_vklad) {
+            default:
+            case 'ver_esquema':
+                btnSideElement = contenedor.querySelector(`#${id_contenedor}_head .vklad_ver_esquema .dbtn_panel_${panelSideParam}`);
+                panelSideElement = contenedor.querySelector(`#${id_contenedor}_body .vklad_ver_esquema .bl_parte_${panelSideParam}`);
+                break;
+                
+            case 'crear_esquema':
+                btnSideElement = contenedor.querySelector(`#${id_contenedor}_head .vklad_crear_esquema .dbtn_panel_${panelSideParam}`);
+                panelSideElement = contenedor.querySelector(`#${id_contenedor}_body .vklad_crear_esquema .bl_parte_${panelSideParam}`);
+                break;
+                
+            case 'select_slide':
+                btnSideElement = contenedor.querySelector(`#${id_contenedor}_head .vklad_select_slide .dbtn_panel_${panelSideParam}`);
+                panelSideElement = contenedor.querySelector(`#${id_contenedor}_body .vklad_select_slide .bl_parte_${panelSideParam}`);
+                break;        
+        }
+    }else{
+        btnSideElement = contenedor.querySelector(`#${id_contenedor}_head .dbtn_panel_${panelSideParam}`);//'#block_buscar_head .dbtn_panel_l'
+        panelSideElement = contenedor.querySelector(`#${id_contenedor}_body .bl_parte_${panelSideParam}`);//'#block_buscar_body .bl_parte_l'
+    }
+    
+    if(!btnSideElement || !panelSideElement){
+        alert('no existe btnSideElement o panelSideElement');
+        return;
+    } 
+
+
+    let disp = panelSideElement.style.display;
+    if(disp != 'none' || panelSideElement.offsetWidth > 0){//si se ve
+        ocultar_panel(btnSideElement, panelSideElement);
+    }else{// si no se ve
+        mostrar_panel(btnSideElement, panelSideElement);
+    }
+}
+
+function mostrar_panel(btnSideElement, panelSideElement){
+    console.log('=== function mostrar_panel() ===');
+
+    //estado -> ocultado
+    panelSideElement.style.display = 'block';
+    btnSideElement.classList.remove('inactive');
+    btnSideElement.classList.add('active');
+
+    //sidebarShow = true;
+    //mySizeWindow();
+
+    // localStorage.setItem('sidebarShow', sidebarShow);
+    // obj_ajustes.sidebarShow = sidebarShow;
+    // update_obj_ajustes();
+}
+
+function ocultar_panel(btnSideElement, panelSideElement){
+    console.log('=== function ocultar_panel() ===');
+    
+    //estado -> ocultado
+    panelSideElement.style.display = 'none';
+    btnSideElement.classList.remove('active');
+    btnSideElement.classList.add('inactive');
+
+    //sidebarShow = false;
+    //mySizeWindow();
+
+    //localStorage.setItem('sidebarShow', sidebarShow);
+    //obj_ajustes.sidebarShow = sidebarShow;
+    //update_obj_ajustes();
+}

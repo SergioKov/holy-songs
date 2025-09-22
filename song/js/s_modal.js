@@ -550,7 +550,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                 <div class="d_esquema_titulos parte_lista"></div>
 
                 <div class="form_group">
-                    <textarea id="${id_vstavka}notes" name="notes" rows="3" required="" placeholder=" "></textarea>
+                    <textarea id="${id_vstavka}notes" name="notes" rows="7" required="" placeholder=" "></textarea>
                     <label for="${id_vstavka}notes" class="lab_textarea">Notas (apuntes personales)</label>
                 </div>
 
@@ -891,7 +891,7 @@ function buildLista(lista_action = null){
                 <div class="d_canciones_lista parte_lista"></div>
 
                 <div class="form_group">
-                    <textarea id="notes" name="notes" rows="3" required="" placeholder=" ">${notes_val}</textarea>
+                    <textarea id="notes" name="notes" rows="7" required="" placeholder=" ">${notes_val}</textarea>
                     <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
                 </div>
 
