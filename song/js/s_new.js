@@ -1568,10 +1568,31 @@ function hideShowPanel(id_contenedor, panelSideParam, esquema_vklad = null){
         return;
     } 
 
+    let partesAll = contenedor.querySelectorAll('.partes');
+    let count_partes_visibles = 0;
+    partesAll.forEach(parte => {
+        if(esElementoVisible(parte)){
+            count_partes_visibles++;
+        }
+    });
+
 
     let disp = panelSideElement.style.display;
-    if(disp != 'none' || panelSideElement.offsetWidth > 0){//si se ve
-        ocultar_panel(btnSideElement, panelSideElement);
+    if(disp != 'none' || panelSideElement.offsetWidth > 0 ){//si se ve y hay mas de 1 parte visible
+        if(count_partes_visibles > 1){
+            //alert('se ve y hay mas de 1 parte visible. lo oculto');
+            ocultar_panel(btnSideElement, panelSideElement);
+        }else{
+            //alert('se ve PERO hay SOLO 1 parte visible. no hago nada...');
+
+            const aviso_outer = document.createElement('div');
+            aviso_outer.className = 'aviso_outer';
+            aviso_outer.innerHTML = `
+                <p class="p_aviso">No se puede ocultar la uníca parte visible. Debe ser vista al menos una.</p>
+            `;
+            openModal('center','Aviso Ocultar Partes',aviso_outer,'showAviso2');
+            return; // <- se detiene aquí si no hay id_lista
+        }
     }else{// si no se ve
         mostrar_panel(btnSideElement, panelSideElement);
     }
