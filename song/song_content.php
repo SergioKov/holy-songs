@@ -184,7 +184,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                     Para ver los datos de la canción, búscala y selecciónala antes en esta pestaña o crea una nueva pulsando en <b>'Nueva Canción'</b>.
                                                 </p>
 
-                                                <button class="btn opt_edit">1.Ver algo...</button>
+                                                <button class="btn opt_edit" onclick="crearPages(); closeAll();">crearPages()</button>
                                                 <button class="btn opt_edit">2.Ver algo...</button>
                                                 <button class="btn opt_edit">3.Ver algo...</button>
 

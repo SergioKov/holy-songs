@@ -1516,18 +1516,18 @@ function handleCheckbox(cbox){//cbox es element
 
 
 
-function check_sidebarShow(){//solo pinto el botón
-    //console.log('=== function check_sidebarShow() ===');
-    //console.log('sidebarShow: ', sidebarShow);
+// function check_sidebarShow(){//solo pinto el botón
+//     //console.log('=== function check_sidebarShow() ===');
+//     //console.log('sidebarShow: ', sidebarShow);
 
-    if(sidebarShow){
-        //console.log('sidebarShow == true. marco como activo');
-        mostrar_sidebar();
-    }else{
-        //console.log('sidebarShow == false. marco como INactivo');        
-        ocultar_sidebar();
-    }
-}
+//     if(sidebarShow){
+//         //console.log('sidebarShow == true. marco como activo');
+//         mostrar_sidebar();
+//     }else{
+//         //console.log('sidebarShow == false. marco como INactivo');        
+//         ocultar_sidebar();
+//     }
+// }
 
 
 

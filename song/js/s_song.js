@@ -698,6 +698,332 @@ async function pintLineasAcordes() {
 
 
 
+async function getSongPages(){
+    console.log('=== function getSongPages() ===');
+
+    if(!hay_id_song('getSongPages()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+       
+    objSongBd = await getDataSongFromBd();
+    arr_esquema_bd = objSongBd.arr_esquema;
+    
+    let texto = objSongBd['song_text'];
+    //console.log('text:', texto);
+
+    let song_titulo = objSongBd['title'];
+    console.log('song_titulo: ', song_titulo);
+
+    const ejemplo_step = `
+        <div class="step" data-index="0">Інтро:</div>
+    `;
+    const ejemplo_step_linea = `
+        <div class="linea"><span></span></div>
+    `;
+
+    const ejemplo_slide = `
+        <div class="slide">
+            <div class="slide_inner">
+                <fieldset class="kuplet">
+                    <legend>Кінцівка:</legend>
+                    <p class="c">|D   |F#m |G    |G                  |</p>
+                    <p class="b"> ···· ···· ····  ····                </p>
+                    <p class="t">                 Слава Богу в вишніх!</p>
+                    <p class="c">|Hm  |F#m |G    |G                  |</p>
+                    <p class="b"> ···· ···· · ··· ·                   </p>
+                </fieldset>
+            </div>
+        </div>
+    `;
+    
+    const palabrasPages = arr_pages.join('|');//arr_pages en config
+    const regexTitulo = make_regex_titulos(palabrasPages);
+
+    obj_pages = {};//reset - elementos html de slides: kuplet, pripev bridge sin repetirse
+
+    // Obtenemos todas las coincidencias de títulos
+    const matches = Array.from(texto.matchAll(regexTitulo));
+    console.log('matches: ', matches);
+
+
+    //si hay coincidencia con palabras separadores: pripev, kuplet, etc...
+    if(matches.length > 0){//hay separador de texto como: pripev, kuplet, etc..
+        
+        //Recorrer las coincidencias...
+        matches.forEach((match, i, arr) => {
+            console.log('match: ', match);
+
+            const start = match.index;
+            const end = (i + 1 < matches.length) ? matches[i + 1].index : texto.length;
+
+            // match[1]: si era algo dentro de []
+            // match[2]: si era palabra del array sin []
+            let titulo = match[1] || match[2];
+            titulo = titulo ? titulo.trim() : ''; 
+            
+            // Contenido: desde el final de la línea de título hasta el siguiente título o final
+            const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
+
+            console.log(' ');
+            console.log('=== BLOQUE ===');
+            console.log('titulo:', titulo);
+            console.log('contenido:', contenido);
+
+            let arr_lineas = contenido.split(/\r\n|\r|\n/);
+            arr_lineas = arr_lineas.filter(el => el !== '');//elimino strings vacias
+
+            const step = document.createElement('div');
+            step.className = 'step';
+            step.dataset.index = i;
+            step.textContent = titulo;
+
+            const slide = document.createElement('div');
+            slide.className = 'slide page';
+            slide.innerHTML = `
+                <div class="slide_inner">
+                    <fieldset class="kuplet">
+                        <legend>${titulo}</legend>
+                        <!-- aki los p -->
+                    </fieldset>
+                </div>
+            `;            
+
+            if(arr_lineas.length > 0){
+                arr_lineas.forEach((linea, i) => {
+                    console.log('linea:', linea);
+                    const p = document.createElement('p');
+
+
+                    const palabrasTitulos = arr_titulos.join('|');//arr_titulos en config
+                    const regexTitulo = make_regex_titulos(palabrasTitulos);
+
+                    // Obtenemos todas las coincidencias de títulos
+                    const matchesTitulos = Array.from(linea.matchAll(regexTitulo));
+                    console.log('matchesTitulos: ', matchesTitulos);
+
+                    if(matchesTitulos.length > 0){
+                        //hay titulos en la linea
+                        console.log('hay titulo en la linea. linea:', linea);
+
+                        let linea_titulo = matchesTitulos[0][1] || matchesTitulos[0][2];
+                        linea_titulo = linea_titulo ? linea_titulo.trim() : '';
+                        console.log('linea_titulo:', linea_titulo);                        
+                        
+                    }else{
+                        //no hay titulos en la linea
+                        console.log('no hay titulo en la linea. linea:', linea);
+                    }
+
+
+
+                    //con switch es mas limpio...
+                    switch (true) {
+                        case (matchesTitulos.length > 0):
+                            p.className = 'l_titulo';// 'c' => 'legend'
+                            break;
+
+                        case contieneSoloAcordes(linea):
+                            p.className = 'c';// 'c' => 'chord'
+                            break;
+
+                        case contieneSoloPuntos(linea):
+                            p.className = 'b';// 'b' => 'bola' o punto medio '·' o punto normal '.'
+                            break;
+
+                        case contieneSoloNota(linea):
+                            p.className = 'n';// 'n' => 'nota' ej.: '     (modulación +2)    '
+                            break;
+
+                        default:
+                            p.className = 't';// 't' => 'text'
+                            break;
+                    }
+
+                    p.textContent = linea;
+                    slide.querySelector('fieldset').append(p);
+                });
+                
+                //añado titulo cancion como primer slide
+                if(i == 0){
+                    const d_titulo_cancion = document.createElement('div');
+                    d_titulo_cancion.className = 'song_titulo';
+                    d_titulo_cancion.innerHTML = `<span>${song_titulo}</span>`;
+
+                    const titulo_cancion = '_titulo_cancion_';
+
+                    const step = document.createElement('div');
+                    step.className = 'step';
+                    step.dataset.index = i;
+                    step.textContent = 'titulo cancion';
+
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    slide.innerHTML = `
+                        <div class="slide_inner">
+                            <fieldset class="kuplet fld_song_titulo">
+                                <legend>${titulo_cancion}</legend>
+                                <!-- aki los p -->
+                            </fieldset>
+                        </div>
+                    `;
+
+                    slide.querySelector('fieldset').append(d_titulo_cancion);
+
+                    obj_pages[titulo_cancion] = {
+                        step,
+                        slide
+                    };
+                }
+
+                //relleno objeto con html elementos
+                obj_pages[titulo] = {
+                    step,
+                    slide
+                };
+
+                console.log(`obj_pages[${titulo}].step.innerHTML: `, obj_pages[titulo].step.innerHTML);
+                console.log(`obj_pages[${titulo}].slide.innerHTML: `, obj_pages[titulo].slide.innerHTML);
+                console.log(`obj_pages[${titulo}]: `, obj_pages[titulo]);
+            }
+        });
+
+    }else{
+        
+        //no hay ningun separador de texto como: pripev, cuplet, etc..
+        //devuelvo el texto tal cual
+
+        const titulo = '---';
+        const contenido = objSongBd['song_text'];
+
+        const step = document.createElement('div');
+        step.className = 'step';
+        step.dataset.index = 0;
+        step.textContent = titulo;
+
+        const div_titulo_cancion = `
+            <div class="song_titulo">
+                <span>${song_titulo}</span>
+            </div>
+        `;
+
+        const slide = document.createElement('div');
+        slide.className = 'slide page';
+        slide.innerHTML = `
+            <div class="slide_inner">
+            ${div_titulo_cancion}
+                <fieldset class="kuplet">
+                    <legend>${titulo}</legend>
+                    <!-- aki los p -->
+                </fieldset>
+            </div>
+        `;
+
+        let arr_lineas = contenido.split(/\r\n|\r|\n/);
+        arr_lineas = arr_lineas.filter(el => el !== '');//elimino strings vacias
+
+        if(arr_lineas.length > 0){
+            arr_lineas.forEach((linea, i) => {
+                console.log('linea:', linea);
+                const p = document.createElement('p');
+
+                const palabrasTitulos = arr_titulos.join('|');//arr_titulos en config
+                const regexTitulo = make_regex_titulos(palabrasTitulos);
+
+                // Obtenemos todas las coincidencias de títulos
+                const matchesTitulos = Array.from(linea.matchAll(regexTitulo));
+                console.log('matchesTitulos: ', matchesTitulos);
+
+                if(matchesTitulos.length > 0){
+                    //hay titulos en la linea
+                    console.log('hay titulo en la linea. linea:', linea);
+
+                    let linea_titulo = matchesTitulos[0][1] || matchesTitulos[0][2];
+                    linea_titulo = linea_titulo ? linea_titulo.trim() : '';
+                    console.log('linea_titulo:', linea_titulo);                        
+                    
+                }else{
+                    //no hay titulos en la linea
+                    console.log('no hay titulo en la linea. linea:', linea);
+                }
+
+
+
+                //con switch es mas limpio...
+                switch (true) {
+                    case (matchesTitulos.length > 0):
+                        p.className = 'l_titulo';// 'c' => 'legend'
+                        break;
+
+                    case contieneSoloAcordes(linea):
+                        p.className = 'c';// 'c' => 'chord'
+                        break;
+
+                    case contieneSoloPuntos(linea):
+                        p.className = 'b';// 'b' => 'bola' o punto medio '·' o punto normal '.'
+                        break;
+
+                    case contieneSoloNota(linea):
+                        p.className = 'n';// 'n' => 'nota' ej.: '     (modulación +2)    '
+                        break;
+
+                    default:
+                        p.className = 't';// 't' => 'text'
+                        break;
+                }
+
+                p.textContent = linea;
+                slide.querySelector('fieldset').append(p);
+            });
+
+            if(true){
+                const d_titulo_cancion = document.createElement('div');
+                d_titulo_cancion.className = 'song_titulo';
+                d_titulo_cancion.innerHTML = `<span>${song_titulo}</span>`;
+
+                const titulo_cancion = '_titulo_cancion_';
+
+                const step = document.createElement('div');
+                step.className = 'step';
+                step.dataset.index = i;
+                step.textContent = 'titulo cancion';
+
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.innerHTML = `
+                    <div class="slide_inner">
+                        <fieldset class="kuplet fld_song_titulo">
+                            <legend>${titulo_cancion}</legend>
+                            <!-- aki los p -->
+                        </fieldset>
+                    </div>
+                `;
+
+                slide.querySelector('fieldset').append(d_titulo_cancion);
+
+                obj_pages[titulo_cancion] = {
+                    step,
+                    slide
+                };
+            }
+
+            //relleno objeto con html elementos
+            obj_pages[titulo] = {
+                step,
+                slide
+            };
+
+            console.log(`obj_pages[${titulo}].step.innerHTML: `, obj_pages[titulo].step.innerHTML);
+            console.log(`obj_pages[${titulo}].slide.innerHTML: `, obj_pages[titulo].slide.innerHTML);
+            console.log(`obj_pages[${titulo}]: `, obj_pages[titulo]);
+        }
+
+    }
+
+    console.log('al final. obj_pages: ', obj_pages);
+
+    return obj_pages;    
+}
+
 async function getSongBlocks(){
     console.log('=== function getSongBlocks() ===');
 
@@ -1094,6 +1420,101 @@ async function crearSlides(goToSlide = null){
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
 
     buildSong();
+}
+
+async function crearPages(goToSlide = null){
+    console.log('=== function crearSlides() ===');
+
+    if(!hay_id_song('crearPages()')){
+        return; // <- se detiene aquí si no hay id_song
+    }
+
+    if(goToSlide){
+        currentSlide = goToSlide;//mostrar desde slide seleccionado
+    }else{
+        currentSlide = 0;//reset al cargar nueva cancion, mostrar desde inicio
+    }
+
+
+    // obj_pages = await getSongBlocks();
+    obj_pages = await getSongPages();
+    console.log('obj_pages: ', obj_pages);
+
+    arr_esquema_bucle = Object.keys(obj_pages);//creo el array de esquema para bucle
+    console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
+
+    buildPage();
+}
+
+
+function buildPage(){
+    console.log('=== function buildPage() ===');
+
+    console.log('obj_pages: ', obj_pages);
+    console.log('arr_esquema_bucle: ', arr_esquema_bucle);
+
+    stepsContainer.innerHTML = '';//reset
+    slideContainer.innerHTML = '';//reset
+    slideContainer.dataset.id_song = objSongBd.id_song;
+
+    arr_fieldsets = [];//reset    
+    totalSlides = arr_esquema_bucle.length;//total de slides a pintar
+
+    if(Object.keys(obj_pages).length > 0){
+        console.log('obj_pages es correcto y no vacio');
+        
+    }else{//DORABOTAT!!!
+        console.log('obj_pages es vacio: ');
+        let aviso_text = `No sa ha podido dividir el texto de la canción en bloques para mostrarla. Edita el texto de la cancion para poder separarlo en bloques. Mira en la pestaña 'Ejemplo' como hacerlo.`;
+
+        showToast('error', aviso_text);
+        
+        showEdit('cancion');
+        editar_song();
+        document.querySelector('#song_text').focus();
+        return;
+    }
+
+    //recorrer el bucle...
+    arr_esquema_bucle.forEach( (titulo, i, arr) => {
+        console.log('titulo: ', titulo);
+
+        const slide_original = obj_pages[titulo]?.slide;//bd
+        console.log('slide_original: ', slide_original);
+        
+        const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
+        console.log('slide_clone: ', slide_clone);        
+
+        const step = document.createElement('div');
+        step.className = 'step';
+        step.dataset.index = i;
+
+        let titulo_text;
+        titulo_text = titulo;
+        step.innerHTML = titulo_text;
+        slide_clone.querySelector('legend').innerHTML = titulo_text;
+        
+        stepsContainer.append(step);
+
+        if(i < (arr.length - 1)){
+            const step_linea = document.createElement('div');
+            step_linea.className = 'step_linea';
+            step_linea.innerHTML = `<span></span>`;
+            stepsContainer.append(step_linea);
+        }
+        
+        arr_fieldsets.push(slide_clone.querySelector('fieldset'));
+        console.log('crearSlides() --- arr_fieldsets: ', arr_fieldsets);
+
+        slideContainer.append(slide_clone);
+    });
+
+
+    //init();
+    ajustarTexto();
+    pintParrafosAcordes();
+    pintTipoAcorde();
+    scrollToSlide(currentSlide);
 }
 
 

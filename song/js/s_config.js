@@ -398,6 +398,16 @@ const arr_titulos_coda = [ //las palabras clave para separar el texto por bloque
     'Окончание',
 ];
 
+const arr_pages = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Page',
+
+    'Pagina',
+    
+    'Сторінка',
+    
+    'Страница',
+];
+
 //obtener datos de los ficheros json o de la base de datos
 //let modo_get_song = 'from_json';
 let modo_get_song = 'from_bd';
@@ -411,6 +421,7 @@ let objDataListas = {};//objeto con datos de todas las listas encontradas en 'Li
 let objSongBd = {};//datos de bd de song
 
 let obj_bloques = {};//elementos html de slides: kuplet, pripev bridge (SIN REPETIRSE)
+let obj_pages = {};//elementos html de slides: kuplet, pripev bridge todo juntos para el texto maximo en una hoja
 
 let arr_esquema_obj = [];//array de objetos temporal para guardar el esquema creada en crear_esquema()
 let arr_esquema_bucle = [];//array de objetos con los bloques de esquema, sin repetirse
