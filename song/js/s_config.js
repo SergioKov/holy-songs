@@ -25,6 +25,8 @@ let prevIndexOfArrLista = -1;//index de la canción previa en la lista. por defe
 let id_song_next = null;//id_song de la canción siguiente en arr_lista
 let id_song_prev = null;//id_song de la canción previa en  arr_lista
 
+let go_to_last_slide_of_prev_song = true;//[true,false]//para pasar a la siguiente canción de la lista automáticamente al llegar al final de los slides
+
 let slideModo;//'smooth','instant','fast'//
 //slideModo = 'smooth';//suave
 //slideModo = 'instant';//inmediato

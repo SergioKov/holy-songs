@@ -417,20 +417,22 @@ async function slideGo(dir){
 
                 id_song_next = arr_lista[nextIndexOfArrLista].id_song;
                 lista_id_song = id_song_next;
+                id_song = id_song_next;
 
                 const p_lista_next = eid_block_lista.querySelector(`.p_lista[data-id_song="${id_song_next}"]`);
                 console.log('ir a la canción next de la lista. id_song_next: ', id_song_next);
 
-                //await crearSlidesForSongOfLista(p_lista_next, id_song_next, cerrar_modales = false);
-
-                id_song = id_song_next;
-                showEdit('esquema');//para abrir si no se ve
-                showBlockName('esquema');//para abrir si no se ve
+                if(hayElementosModalesAbiertos()){
+                    showEdit('esquema');//para abrir si no se ve
+                    showBlockName('esquema');//para abrir si no se ve
+                }
 
                 const btnElement = eid_block_esquema.querySelector('#btn_select_slide');
                 showVklad(btnElement, param = 'select_slide');//función select_slide() se llama dentro
 
-                await crearSlidesForSongOfLista(p_lista_next, id_song_next, cerrar_modales = false);
+                await crearSlidesForSongOfLista(p_lista_next, id_song_next, cerrar_modales = false, show_ultimo_slide = false);
+
+                scrollToSlide(currentSlide);
             }
         }        
     }
@@ -447,18 +449,29 @@ async function slideGo(dir){
 
                 id_song_prev = arr_lista[prevIndexOfArrLista].id_song;
                 lista_id_song = id_song_prev;
+                id_song = id_song_prev;
 
                 const p_lista_prev = eid_block_lista.querySelector(`.p_lista[data-id_song="${id_song_prev}"]`);
                 console.log('ir a la canción prev de la lista. id_song_prev: ', id_song_prev);
 
-                id_song = id_song_prev;
-                showEdit('esquema');//para abrir si no se ve
-                showBlockName('esquema');//para abrir si no se ve
+                if(hayElementosModalesAbiertos()){
+                    showEdit('esquema');//para abrir si no se ve
+                    showBlockName('esquema');//para abrir si no se ve
+                }
 
                 const btnElement = eid_block_esquema.querySelector('#btn_select_slide');
                 showVklad(btnElement, param = 'select_slide');//función select_slide() se llama dentro
+                
+                let show_ultimo_slide;
+                if(go_to_last_slide_of_prev_song){
+                    show_ultimo_slide = true;//ir al ultimo slide de la cancion previa en modo Musicos
+                }else{
+                    show_ultimo_slide = false;//ir al primer slide de la cancion previa en modo Musicos
+                }
 
-                await crearSlidesForSongOfLista(p_lista_prev, id_song_prev, cerrar_modales = false, show_ultimo_slide = true);
+                await crearSlidesForSongOfLista(p_lista_prev, id_song_prev, cerrar_modales = false, show_ultimo_slide);
+
+                scrollToSlide(currentSlide);//ir al seleccionado slide de la cancion previa en modo Musicos
             }
         }
     }

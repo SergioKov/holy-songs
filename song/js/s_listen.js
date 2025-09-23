@@ -67,7 +67,7 @@ header.addEventListener('click', (e) => {
 
 //clicks sobre steps y partes de pantalla
 //document.addEventListener('click', (e) => {
-carousel.addEventListener('click', (e) => {
+carousel.addEventListener('click', async (e) => {
     console.log('=== carousel click ===');
 
     // if (e.target.closest('.public')) {
@@ -101,16 +101,18 @@ carousel.addEventListener('click', (e) => {
 
     // 3. Clic general: avanzar o retroceder
     const half = window.innerWidth / 2;
-    if (e.clientX > half && currentSlide < totalSlides - 1) {
-        currentSlide++;
-        scrollToSlide(currentSlide);
+
+    if (e.clientX > half/* && currentSlide < totalSlides - 1*/) {
+        //currentSlide++;
+        //scrollToSlide(currentSlide);
         
-        //slideGo('next');//DORABOTAT!!!
-    } else if (e.clientX <= half && currentSlide > 0) {
-        currentSlide--;
-        scrollToSlide(currentSlide);
+        await slideGo('next');//DORABOTAT!!!
+
+    } else if (e.clientX <= half /*&& currentSlide > 0*/) {
+        //currentSlide--;
+        //scrollToSlide(currentSlide);
         
-        //slideGo('prev');//DORABOTAT!!!
+        await slideGo('prev');//DORABOTAT!!!
     }
     console.log(`Clic general, cambio a slide ${currentSlide}`);
 });
