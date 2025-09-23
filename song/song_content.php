@@ -668,6 +668,10 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                                 <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestaña');">Pestaña</button>
                                                                                 <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana</button>
                                                                             </div>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_pestania_bd" class="btn" onclick="window.open('pantalla_bd.php','miPestañaBd');">Pestaña BD</button>
+                                                                                <button id="btn_ventana_bd" class="btn" onclick="window.open('pantalla_bd.php','miVentanaBd', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana BD</button>
+                                                                            </div>
                                                                         </div> 
                                                                         
                                                                         <ul class="ul_action">
