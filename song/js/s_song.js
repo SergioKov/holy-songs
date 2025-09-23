@@ -133,7 +133,6 @@ function scrollToSlide(index) {
     localStorage.setItem('currentSlide', index);
     pintSlideActive(index);
 
-    make_arr_pantalla(currentSlide);
 }
 
 
@@ -1586,7 +1585,7 @@ function buildPage(){
 }
 
 
-function buildSong(){
+async function buildSong(){
     console.log('=== function buildSong() ===');
 
     console.log('obj_bloques: ', obj_bloques);
@@ -1684,6 +1683,9 @@ function buildSong(){
 
         slideContainer.append(slide_clone);
     });
+
+
+    //await guardarSongPantallaEnBd();
 
 
     //init();

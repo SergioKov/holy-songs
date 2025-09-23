@@ -384,6 +384,28 @@ function ordenarResultByArray($result, $arr_lista_ids){
 }
 
 
+function get_client_ip_short(): ?string {
+    $keys = ['HTTP_CF_CONNECTING_IP','HTTP_X_REAL_IP','HTTP_X_FORWARDED_FOR','HTTP_CLIENT_IP','REMOTE_ADDR'];
+    foreach ($keys as $k) {
+        if (empty($_SERVER[$k])) continue;
+        foreach (explode(',', $_SERVER[$k]) as $ip) {
+            $ip = trim(preg_replace('/^::ffff:/i', '', $ip));
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) return $ip;
+        }
+    }
+    foreach ($keys as $k) {
+        if (empty($_SERVER[$k])) continue;
+        foreach (explode(',', $_SERVER[$k]) as $ip) {
+            $ip = trim(preg_replace('/^::ffff:/i', '', $ip));
+            if (filter_var($ip, FILTER_VALIDATE_IP)) return $ip;
+        }
+    }
+    return null;
+}
+/* uso */
+//echo get_client_ip_short() ?? 'IP no encontrada';
+
+
 //=====================================================================================//
 // FUNCTIONS - END
 //=====================================================================================//

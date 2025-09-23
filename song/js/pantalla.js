@@ -48,19 +48,23 @@ function lanzarIntentos(){
     arr_pantalla = JSON.parse(arr_pantalla_str_old);
     //console.log('old --- arr_pantalla: ', arr_pantalla);
 
+
     //si el contenedor está vacío, lo construyo
     if(arr_pantalla && eid_contenedor && eid_contenedor.querySelector('.trad') == null ){
         //console.log('el contenedor está vacío, lo construyo...');
 
-        arr_pantalla.forEach((pant, i)=>{
-                    
+        arr_pantalla.forEach( (pant, i) => {
+            
+            let add_slide_html = make_add_slide_html(pant);
+
             const trad = document.createElement('div');
             trad.id = 'trad' + i;
             trad.className = 'trad';
             trad.innerHTML = `
                 <div class="trad_inner">
                     <div class="verse">
-                        ${arr_pantalla[i].song_text}
+                        ${arr_pantalla[i].slide_text}
+                        ${add_slide_html}
                     </div>
                 </div>
             `;
@@ -100,15 +104,18 @@ function lanzarIntentos(){
                 eid_contenedor.classList.remove('shown');
 
                 if(arr_pantalla.length > 0){                
-                    arr_pantalla.forEach((pant, i)=>{
+                    arr_pantalla.forEach( (pant, i) => {
                         
+                        let add_slide_html = make_add_slide_html(pant);
+
                         const trad = document.createElement('div');
                         trad.id = 'trad' + i;
                         trad.className = 'trad';
                         trad.innerHTML = `
                             <div class="trad_inner">
                                 <div class="verse">
-                                    ${arr_pantalla[i].song_text}
+                                    ${arr_pantalla[i].slide_text}
+                                    ${add_slide_html}
                                 </div>
                             </div>
                         `;
@@ -217,3 +224,33 @@ function mySizePantallaShow() {//new como ajustarTexto()
 
 }
 
+
+function make_add_slide_html(pant){
+    if(!pant) return;
+
+    let add_slide_html = '';
+
+    if(pant.add_d_puntos){
+        add_slide_html += `
+            <div class="wr_d_puntos">
+                <p>...</p>
+            </div>
+        `;
+    }
+
+    if(pant.add_d_music){
+        add_slide_html += `
+            <div class="wr_d_music">
+                <img src="images/notas_de_musica_grey.svg">
+            </div>
+        `;
+    }
+
+    if(pant.add_tres_estrellas){
+        add_slide_html += `
+            <span class="tres_estrellas">* * *</span>
+        `;
+    }    
+    return add_slide_html;
+
+}

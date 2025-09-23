@@ -213,3 +213,111 @@ function ocultarElementosEditablesEn(elemento){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+async function guardarSongPantallaEnBd(){
+    console.log('=== function guardarSongPantallaEnBd() ===');
+
+    try {
+    
+        id_song = objSong.id_song;
+        console.log('id_song: ', id_song);
+
+        if(!id_song){
+            alert('en guardarSongPantallaEnBd() --- id_song no está indicado... hago return.');
+        }
+
+        const data = await insertarSongPantalla();
+        console.log('data: ',data);
+
+        if(data.success){
+            
+            let text_show;
+            text_show = 'id_song insertado con éxito.';
+            console.log(text_show);
+
+            showToast('ok', text_show, 5000);
+
+            if(data.id_song){
+                console.log('id_song: ', data.id_song);
+            }
+            
+        }else{
+            
+            let text_show = 'Error al insertar id_song.';
+            console.error('text_show: ', text_show);
+
+            showToast('ok', text_show, 5000);
+        }
+
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('guardarSongPantallaEnBd(). error: ',error);        
+    }
+
+}
+
+
+async function guardarArrPantallaEnBd(){
+    console.log('=== function guardarArrPantallaEnBd() ===');
+
+    try {
+    
+        id_song = objSong.id_song;
+        console.log('id_song: ', id_song);
+
+        if(arr_pantalla.length == 0){
+            alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+        }
+
+        const data = await insertarArrPantalla();
+        console.log('data: ',data);
+
+        if(data.success){
+            
+            let text_show;
+            text_show = 'id_song insertado con éxito.';
+            console.log(text_show);
+
+            showToast('ok', text_show, 5000);
+
+            if(data.id_song){
+                console.log('id_song: ', data.id_song);
+            }
+            
+        }else{
+            
+            let text_show = 'Error al insertar id_song.';
+            console.error('text_show: ', text_show);
+
+            showToast('ok', text_show, 5000);
+        }
+
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('guardarArrPantallaEnBd(). error: ',error);        
+    }
+
+}
+
+
+
+// no funciona correctamente...
+// async function getPublicIP() {
+//   const res = await fetch('https://api.ipify.org?format=json');
+//   const data = await res.json();
+//   return data.ip; // e.g. "203.0.113.45"
+// }
+
+
+

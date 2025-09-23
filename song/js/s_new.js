@@ -519,7 +519,7 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
 
 
 
-function make_arr_pantalla(currentSlide){
+async function make_arr_pantalla(currentSlide){
     console.log('=== function make_arr_pantalla() ===');
     console.log('currentSlide: ',currentSlide);
     console.log('arr_fieldsets: ', arr_fieldsets);
@@ -536,62 +536,92 @@ function make_arr_pantalla(currentSlide){
     console.log('current_fieldset_cloned: ',current_fieldset_cloned);
 
     arr_pantalla = [];//reset   
-    let song_text = '';
+    objPantalla = {};//reset 
+
+    let slide_text = '';
     let arr_p_text = [];
+
+    let add_tres_estrellas = false;
+    let add_d_puntos = false;
+    let add_d_music = false;
+
 
     let p_textAll = current_fieldset_cloned.querySelectorAll('p.t');//solo texto
     console.log('p_textAll: ', p_textAll);
 
     p_textAll.forEach((p, i, arr) => {
         console.log('p: ', p);
-        song_text += p.innerHTML;
+        slide_text += p.innerHTML;
         if(i != arr.length - 1){
-            song_text += '<br>';
+            slide_text += '<br>';
         }
         //arr_p_text.push(p.textContent);
     });
 
+    
+    
     //si es ultimo slide
-    if(/*current_fieldset_cloned.dataset.idx*/ currentSlide == arr_esquema_bucle.length - 1){
-        song_text += `<span class="tres_estrellas">* * *</span>`;
+    if(currentSlide == arr_esquema_bucle.length - 1){
+        //slide_text += `<span class="tres_estrellas">* * *</span>`;
+        add_tres_estrellas = true;
     }
+
 
     if(p_textAll.length == 0){//si no se encuentra el verse, no hago nada
         //alert('no hay texto en la diapositiva seleccionada. pero sigo...');
         let hay_song_titulo = current_fieldset_cloned.querySelector('.song_titulo');
         if(hay_song_titulo){
-            song_text += `
-                <div class="wr_d_puntos">
-                    <p>...</p>
-                </div>
-            `;
+            // slide_text += `
+            //     <div class="wr_d_puntos">
+            //         <p>...</p>
+            //     </div>
+            // `;
+            add_d_puntos = true;
         }
 
         let p_acordeAll = current_fieldset_cloned.querySelectorAll('p.c');
         if(p_acordeAll.length > 0){
-            song_text += `
-                <div class="wr_d_music">
-                    <img src="images/notas_de_musica_grey.svg">
-                </div>
-            `;
+            // slide_text += `
+            //     <div class="wr_d_music">
+            //         <img src="images/notas_de_musica_grey.svg">
+            //     </div>
+            // `;
+            add_d_music = true;
         }
     }
 
 
-    let pantalla = {
-        //tipo_content: 'song_text',
+    objPantalla = {
+        //tipo_content: 'slide_text',
         //arr_p_text: arr_p_text,
         //fieldset_html: el_fieldset_cloned.outerHTML,
-        song_text: song_text
+        id_song: id_song,
+        slide_actual: currentSlide,
+        slide_text: slide_text,
+        add_tres_estrellas,
+        add_d_puntos,
+        add_d_music,
+        pantalla_show: pantallaShow,
     };
-    console.log('pantalla: ', pantalla);
+    console.log('objPantalla: ', objPantalla);
 
-    arr_pantalla.push(pantalla);
+    arr_pantalla.push(objPantalla);
     console.log('arr_pantalla: ', arr_pantalla);
 
     let arr_pantalla_string = JSON.stringify(arr_pantalla);
 
     localStorage.setItem('arr_pantalla',arr_pantalla_string);
+
+
+    // const result = await guardarSongPantallaEnBd();//objPantalla es global
+    // console.log('arr_pantalla: ', arr_pantalla);
+    // console.log('result: ', result);
+    
+    const result2 = await guardarArrPantallaEnBd();//objPantalla es global
+    console.log('arr_pantalla: ', arr_pantalla);
+    console.log('result2: ', result2);
+    
+    console.log('fin make_arr_pantalla...');
 
     //buildArrPantallaDesktop(arr_pantalla);
 }
@@ -624,8 +654,7 @@ function mostrar_pantallaShow(){
     eid_fondo_body.classList.add('fondo_black');
 
     localStorage.setItem('pantallaShow','true');
-
-    //make_arr_pantalla(act_show_verse);
+    make_arr_pantalla(currentSlide);//dentro hay pantallaShow
 }
 
 function ocultar_pantallaShow(){
@@ -635,6 +664,7 @@ function ocultar_pantallaShow(){
     eid_fondo_body.classList.remove('fondo_black');
     
     localStorage.setItem('pantallaShow','false');
+    make_arr_pantalla(currentSlide);//dentro hay pantallaShow
 }
 
 

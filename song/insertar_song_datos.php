@@ -257,14 +257,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 WHERE id_song = '$id_song'
             ";
         }
-        //$sql2_up_prep = "UPDATE $tabla SET 
-        //            $campo = $sign,
-        //            updated_at = '$fechaHoraActual' 
-        //            WHERE id_user = $sign 
-        //";
-        ////$arr paso tal cual ya que los datos pueden tener dentro '?' y romper sql
-        //$arr_params = [$arr, $id_user_logged];
-        //$sql2_up_preparada = prepararQuery($conn, $sql2_up_prep, $arr_params, $sign);
         $result2 = $conn->query($sql2_up_init);
         //debug_x($sql2_up_preparada, 'sql2_up_preparada');
         //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');	
@@ -286,13 +278,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     ('$song_number', '$title', '$category', '$songbook', '$song_text', '$tune', '$lang', '$notes', '$fechaHoraActual')
             ";
         }
-        // $sql2_in_prep = "INSERT INTO $tabla (id_user, $campo, created_at) 
-        //                 VALUES ($sign,              $sign, '$fechaHoraActual')
-        // ";
-        //$arr paso tal cual ya que los datos pueden tener dentro '?' y romper sql
-        //$arr_params = [$id_user_logged, $arr];
-        //$sql2_in_preparada = prepararQuery($conn, $sql2_in_prep, $arr_params, $sign);
-        //$result2 = $conn->query($sql2_in_preparada);
         $result2 = $conn->query($sql2_in_init);
         //debug_x($sql2_in_preparada, 'sql2_in_preparada');
         

@@ -496,7 +496,9 @@ let arr_lista_ids = [];//[8051,8052] - solo los id_song
 
 let made_draggable_once = false;
 
-let arr_pantalla;
+let arr_pantalla = [];//array de objetos con los datos de la canción actual para pantalla
+let arr_pantalla_string = '';//array de objetos con los datos de la canción actual para pantalla
+let objPantalla = {};//objeto con datos de la canción actual para pantalla
 
 let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');//por defecto pantalla no se ve
 //pantallaShow = true;//test
