@@ -973,16 +973,16 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
         arr_lista_bucle.forEach((item, i) => {
             console.log('item: ', item);
 
-            const p = document.createElement('p');            
+            const p_lista = document.createElement('p');            
 
             if(item.id_song == lista_id_song){
-                p.className = `p_lista active`;
+                p_lista.className = `p_lista active`;
             }else{
-                p.className = `p_lista`;
+                p_lista.className = `p_lista`;
             }
 
-            p.dataset.id_song = item.id_song;
-            p.innerHTML = `
+            p_lista.dataset.id_song = item.id_song;
+            p_lista.innerHTML = `
                 <span class="wn_2_flex">
                     
                     <span class="sp_flex_btns">
@@ -1000,7 +1000,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                 </span>
             `;
             
-            p.onclick = (e) => {
+            p_lista.onclick = (e) => {
                 lista_id_song = e.currentTarget.dataset.id_song;
                 console.log('lista_id_song: ', lista_id_song);
 
@@ -1011,32 +1011,58 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
 
                     eliminarSongDeLista(lista_id_song);
 
+                }else if(e.target.closest('.l_id')){
+                    //Editar canción de la lista
+                    console.log('ir a slide_select de canción de la lista. id_song: ', lista_id_song);
+                    e.stopPropagation();//evita que se dispare el onclick del padre
+                    
+                    id_song = lista_id_song;
+                    
+                    //llamo async ya que en crearSlidesForSongOfLista() hay awaits a la bd
+                    llamar_func(e);
+                    async function llamar_func(e){
+                        showEdit('esquema');//para abrir si no se ve
+                        showBlockName('esquema');//para abrir si no se ve
+
+                        const btnElement = eid_block_esquema.querySelector('#btn_select_slide');
+                        showVklad(btnElement, param = 'select_slide');//función select_slide() se llama dentro
+                        
+                        await crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = false);
+                        closeModal(null,true);
+                    }
+
                 }else if(e.target.closest('.l_edit')){
                     //Editar canción de la lista
                     console.log('Editar canción de la lista. id_song: ', lista_id_song);
                     e.stopPropagation();//evita que se dispare el onclick del padre
-
-                    editSongOfLista(e, lista_id_song);
+                    
+                    //llamo async autoejecutable ya que en editSongOfLista() hay awaits a la bd
+                    (async () => {
+                        await editSongOfLista(e, lista_id_song);
+                    })(e);
 
                 }else{
-                    crearSlidesForSongOfLista(e, lista_id_song);
+                    //ver los slides en slideContainer (con acordes) cerrando ventanas modales
+                    //llamo async autoejecutable ya que en crearSlidesForSongOfLista() hay awaits a la bd
+                    (async (e)=>{
+                        await crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = true);
+                    })(e);
                 }
             }
 
-            // wr_p_lista.append(p);
-            d_canciones_body.append(p);
+            d_canciones_body.append(p_lista);
         });
 
         contenedor.append(wr_p_lista);        
 
     }else{//lista vacía
             
-        const p = document.createElement('p');
-        p.className = 'prim';
-        p.innerHTML = `
+        const p_prim = document.createElement('p');
+        p_prim.className = 'prim';
+        p_prim.innerHTML = `
             No hay canciones 
         `;
-        wr_p_lista.append(p);
+        wr_p_lista.append(p_prim);
 
         const d_info = document.createElement('div');
         d_info.className = 'd_info';

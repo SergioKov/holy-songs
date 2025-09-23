@@ -396,15 +396,29 @@ function pintListaActiveSoloDatos(){
 
 
 
-function showOneSlideFrom(elementClicked){
+function showOneSlideFrom(elementClicked = null, index_esquema){
     console.log('=== function showOneSlideFrom() ===');
     console.log('elementClicked: ', elementClicked);
 
-    if(elementClicked.dataset.titulo === '_titulo_cancion_'){
-        //return;
-    }
+    e = elementClicked;
 
-    const index_esquema = elementClicked.dataset.idx;
+    if(e instanceof Event) {
+        console.log("Recibí un evento. e.type: ", e.type);
+    }
+    else if(e instanceof HTMLElement) {
+        console.log("Recibí un elemento HTML. e.tagName: ", e.tagName);
+    }
+    else{
+        console.log("Parámetro desconocido. e: ", e);
+        //alert('Parámetro desconocido de e. Return...');
+        //return;
+    }    
+
+    // if(elementClicked.dataset.titulo === '_titulo_cancion_'){
+    //     //return;
+    // }
+
+    //const index_esquema = elementClicked.dataset.idx;
     console.log('index_esquema: ', index_esquema);
 
     const elementBtnSimple = select_slide_wr_vista_btns.querySelector(`.btn_simple[data-idx="${index_esquema}"]`);
@@ -416,32 +430,37 @@ function showOneSlideFrom(elementClicked){
     eid_contenedor_prev_inner.innerHTML = '';//reset
 
     resetBtnActive(select_slide_wr_vista_btns);//reseteo btn_active de botones en el contenedor
-    elementBtnSimple.classList.add('btn_active');
+    elementBtnSimple?.classList.add('btn_active');
 
     resetFldActive(select_slide_song_bloques);//reseteo fieldset active de kuplet's a la izda
-    elementFieldset.classList.add('fld_active');
+    elementFieldset?.classList.add('fld_active');
 
-    if(elementClicked === elementBtnSimple){
-        console.log('es button -> btn_clicked ');
-        elementFieldset.scrollIntoView({behavior: 'smooth', block: "center"});//btn clicked -> muevo fildset
-        
-        if(window.innerWidth < pantallaTabletMinPx){//mobile
-            //alert('102. es mobil. muevo btn_simple...');
+    if(elementClicked){
+        if(elementClicked === elementBtnSimple){
+            console.log('es button -> btn_clicked ');
+            elementFieldset.scrollIntoView({behavior: 'smooth', block: "center"});//btn clicked -> muevo fildset
+            
+            if(window.innerWidth < pantallaTabletMinPx){//mobile
+                //alert('102. es mobil. muevo btn_simple...');
+                elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
+            }
+        }else{
+            console.log('es fieldset clicked');
             elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
         }
-    }else{
-        console.log('es fieldset clicked');
-        elementBtnSimple.scrollIntoView({behavior: 'smooth', block: "center"});//fieldset clicked -> muevo btn
-    }        
+    }else{//no fue clikeado elementClicked. me muevo a los 2
+        elementFieldset?.scrollIntoView({behavior: 'smooth', block: "center"});
+        elementBtnSimple?.scrollIntoView({behavior: 'smooth', block: "center"});
+    }
 
-    // const el_fieldset_cloned = select_slide_song_bloques.querySelectorAll('fieldset')[index_esquema].cloneNode(true); // true para clonar hijos
+
     //clono fieldset nuevo para vista en contenedor_prev ya que le cambiaré font-size
     const el_fieldset_cloned = arr_fieldsets[index_esquema].cloneNode(true); // true para clonar hijos
 
     eid_titulo_shown.textContent = el_fieldset_cloned.querySelector('legend').textContent;
 
     //Primer slide
-    if(elementClicked.dataset.titulo === '_titulo_cancion_' || index_esquema == 0){
+    if( (elementClicked && elementClicked.dataset.titulo === '_titulo_cancion_') || index_esquema == 0){
         el_fieldset_cloned.querySelector('.song_titulo').textContent = '...';//muestro ... en vez del título del slide 1
         eid_titulo_shown.textContent = 'Título canción';
     }
@@ -533,7 +552,7 @@ function make_arr_pantalla(currentSlide){
     });
 
     //si es ultimo slide
-    if(current_fieldset_cloned.dataset.idx == arr_esquema_bucle.length - 1){
+    if(/*current_fieldset_cloned.dataset.idx*/ currentSlide == arr_esquema_bucle.length - 1){
         song_text += `<span class="tres_estrellas">* * *</span>`;
     }
 

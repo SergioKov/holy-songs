@@ -394,25 +394,80 @@ function pintActTranspose(valor){
 }
 
 
-function slideGo(dir){
+async function slideGo(dir){
+    console.log('=== function slideGo() ===');
+
+    //si no es calculado index of arr_lista, lo calculo...
+    if(currentIndexOfArrLista === -1){       
+        currentIndexOfArrLista = arr_lista.findIndex(item => item.id_song == id_song);
+        console.log('currentIndexOfArrLista: ', currentIndexOfArrLista);
+    }
+
+
     if(dir == 'next'){
         if(currentSlide < (totalSlides - 1) || currentSlide < (arr_esquema_bucle.length - 1) ){
             currentSlide++;
             scrollToSlide(currentSlide);
-        }
+        }else{//es ultimo slide
+            //alert('es ultimo slide');
+
+            if(currentIndexOfArrLista < (arr_lista.length - 1) ){
+                nextIndexOfArrLista = currentIndexOfArrLista;
+                nextIndexOfArrLista++;
+
+                id_song_next = arr_lista[nextIndexOfArrLista].id_song;
+                lista_id_song = id_song_next;
+
+                const p_lista_next = eid_block_lista.querySelector(`.p_lista[data-id_song="${id_song_next}"]`);
+                console.log('ir a la canción next de la lista. id_song_next: ', id_song_next);
+
+                //await crearSlidesForSongOfLista(p_lista_next, id_song_next, cerrar_modales = false);
+
+                id_song = id_song_next;
+                showEdit('esquema');//para abrir si no se ve
+                showBlockName('esquema');//para abrir si no se ve
+
+                const btnElement = eid_block_esquema.querySelector('#btn_select_slide');
+                showVklad(btnElement, param = 'select_slide');//función select_slide() se llama dentro
+
+                await crearSlidesForSongOfLista(p_lista_next, id_song_next, cerrar_modales = false);
+            }
+        }        
     }
 
     if(dir == 'prev'){
         if(currentSlide > 0){
             currentSlide--;
             scrollToSlide(currentSlide);
+        }else{//es primer slide
+
+            if(currentIndexOfArrLista != 0 && currentIndexOfArrLista != -1){
+                prevIndexOfArrLista = currentIndexOfArrLista;
+                prevIndexOfArrLista--;
+
+                id_song_prev = arr_lista[prevIndexOfArrLista].id_song;
+                lista_id_song = id_song_prev;
+
+                const p_lista_prev = eid_block_lista.querySelector(`.p_lista[data-id_song="${id_song_prev}"]`);
+                console.log('ir a la canción prev de la lista. id_song_prev: ', id_song_prev);
+
+                id_song = id_song_prev;
+                showEdit('esquema');//para abrir si no se ve
+                showBlockName('esquema');//para abrir si no se ve
+
+                const btnElement = eid_block_esquema.querySelector('#btn_select_slide');
+                showVklad(btnElement, param = 'select_slide');//función select_slide() se llama dentro
+
+                await crearSlidesForSongOfLista(p_lista_prev, id_song_prev, cerrar_modales = false, show_ultimo_slide = true);
+            }
         }
     }
 
-    const btn_simple = select_slide_wr_vista_btns.querySelector(`.btn[data-idx="${currentSlide}"]`);
-    if(esElementoVisible(btn_simple)){
-        btn_simple.click();
-    }
+    // const btn_simple = select_slide_wr_vista_btns.querySelector(`.btn[data-idx="${currentSlide}"]`);
+    // if(esElementoVisible(btn_simple)){
+    //     btn_simple.click();
+    // }
+    showOneSlideFrom(null, index_esquema = currentSlide);
 
     if(window.innerWidth < pantallaTabletMinPx){//mobile
         //alert('10. es mobil. hago btn_simple.click()...');
@@ -2094,8 +2149,12 @@ async function select_slide(){
         el_fieldset_cloned.onclick = (e) => {
             console.log('e.currentTarget: ', e.currentTarget);
             console.log('e.target: ', e.target);
+
+            const index_esquema = e.currentTarget.dataset.idx;
+            console.log('index_esquema: ', index_esquema);
             
-            showOneSlideFrom(e.currentTarget);
+            // showOneSlideFrom(e.currentTarget);
+            showOneSlideFrom(e.currentTarget, index_esquema);
         }
 
         //Creo boton del bloque sin poder cerrarlo con 'X'
@@ -2109,8 +2168,12 @@ async function select_slide(){
         btn_simple.onclick = (e) => {
             console.log('e.currentTarget: ', e.currentTarget);
             console.log('e.target: ', e.target);
+
+            const index_esquema = e.currentTarget.dataset.idx;
+            console.log('index_esquema: ', index_esquema);
             
-            showOneSlideFrom(e.currentTarget);
+            // showOneSlideFrom(e.currentTarget);
+            showOneSlideFrom(e.currentTarget, index_esquema);
         }
 
         arr_fieldsets.push(el_fieldset_cloned);
@@ -2289,7 +2352,7 @@ async function guardarEsquema(){
 function resetEsquema(){
     crear_esquema_wr_vista_btns.innerHTML = '';//reset
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
-    crear_esquema_ul_action.innerHTML = '';//reset
+    crear_esquema_ul_action.innerHTML = 'gggggggggggg';//reset
     
     arr_esquema_obj = [];
     if(objSong.arr_esquema.length > 0){
@@ -3881,7 +3944,7 @@ function convertirFecha(fechaStr, formato, separador = '/', validar_partes_fecha
 }
 
 
-async function crearSlidesForSongOfLista(e, lista_id_song) {
+async function crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = true, show_ultimo_slide = false) {
     console.log('=== function crearSlidesForSongOfLista() ===');
 
     resetBlockBuscar();//quito song anterior si hay
@@ -3889,17 +3952,44 @@ async function crearSlidesForSongOfLista(e, lista_id_song) {
     resetBlockCancion();
 
     resetPListaActive();
-    e.currentTarget.classList.add('active');
+
+    if(e instanceof Event) {
+        console.log("Recibí un evento. e.type: ", e.type);
+        e.currentTarget.classList.add('active');
+    }
+    else if(e instanceof HTMLElement) {
+        console.log("Recibí un elemento HTML. e.tagName: ", e.tagName);
+        const p_lista_element = e;
+        p_lista_element.classList.add('active');
+    }
+    else{
+        console.log("Parámetro desconocido. e: ", e);
+        alert('Parámetro desconocido de e. Return...');
+        return;
+    }
 
     id_song = lista_id_song;
     console.log('lista_id_song: ', lista_id_song);
 
+    currentIndexOfArrLista = arr_lista.findIndex(item => item.id_song == id_song);
+    console.log('currentIndexOfArrLista: ', currentIndexOfArrLista);
+
     //cojo datos de la song de la lista desde BD
     objSong = await getDataSongFromBd();
 
-    crearSlides();
-    closeAll();
-    closeModal(null,true);
+    await crearSlides();//no pongo await para no esperar el resultado de ejecusion de crearSlide()
+
+    if(show_ultimo_slide){
+        const index_ultimo_item = arr_esquema_bucle.length - 1;
+        showOneSlideFrom(null, index_ultimo_item);//marco ultimo slide por defecto...
+    }else{//mostrar primer slide
+        showOneSlideFrom(null, 0);//marco primer slide por defecto...
+    }
+
+    if(cerrar_modales){
+        closeAll();
+        closeModal(null,true);
+    }
 }
 
 
@@ -3957,7 +4047,6 @@ function eliminarSongDeLista(id_song){
             console.log('contenedor: ', contenedor);
             buildListaSoloSongs(contenedor, arr_lista);//arr_lista global
         });
-
         
     }else{//se edita lista existente
         console.log('se edita lista existente');

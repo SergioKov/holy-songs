@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function lanzarIntentos(){
-    console.log('=== function lanzarIntentos() ===');
+    //console.log('=== function lanzarIntentos() ===');
 
     let pantallaShow = localStorage.getItem('pantallaShow');
     if(eid_contenedor){
@@ -149,7 +149,7 @@ window.addEventListener('resize',function(d){
 
 
 function mySizePantallaShow() {//new como ajustarTexto()
-    console.log('=== function mySizePantallaShow() ===');
+    //console.log('=== function mySizePantallaShow() ===');
         
     const tradAll = document.querySelectorAll('.trad');
     let count_trad = tradAll.length;//en caso de song es 1

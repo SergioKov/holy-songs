@@ -16,6 +16,15 @@ const calculando = document.getElementById('calculando');
 let totalSlides = slides.length;
 let currentSlide = parseInt(localStorage.getItem('currentSlide')) || 0;
 
+//'-1' significa que no se encuentra el index en arr_lita. 
+// esto es para luego buscar index de objSong por su id_song de la canción actual en la lista
+let currentIndexOfArrLista = -1;//index de la canción actual en la lista. por defecto (no hay en la lista)
+let nextIndexOfArrLista = -1;//index de la canción siguiente en la lista. por defecto (no hay en la lista)
+let prevIndexOfArrLista = -1;//index de la canción previa en la lista. por defecto (no hay en la lista)
+
+let id_song_next = null;//id_song de la canción siguiente en arr_lista
+let id_song_prev = null;//id_song de la canción previa en  arr_lista
+
 let slideModo;//'smooth','instant','fast'//
 //slideModo = 'smooth';//suave
 //slideModo = 'instant';//inmediato

@@ -554,14 +554,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     </div><!--/.inner_content_head-->
 
                                                                     <div class="inner_content_body">
-                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                            <span>1. Parte central de esquema en desktop:</span>    
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                                            </div>
-                                                                        </div>
-
                                                                         <ul class="ul_action">
                                                                             <p class="prim">1.Los botones de acciones se verán al selecionar la canción...</p>
                                                                         </ul>
@@ -616,14 +608,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     </div><!--/.inner_content_head-->
 
                                                                     <div class="inner_content_body">
-                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                            <span>2. Parte central de esquema en desktop:</span>    
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                                            </div>
-                                                                        </div>
-
                                                                         <ul class="ul_action">
                                                                             <p class="prim">2.Los botones de acciones se verán al selecionar la canción...</p>
                                                                         </ul>
@@ -678,14 +662,6 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     </div><!--/.inner_content_head-->
 
                                                                     <div class="inner_content_body">
-                                                                        <div class="contenedor_sel_pantalla soloEnDesktopYTablet">
-                                                                            <span>3. Parte central de esquema en desktop:</span>    
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="parteCentral('show');">Mostrar</button>
-                                                                                <button class="btn" onclick="parteCentral('hide');">Ocultar</button>
-                                                                            </div>
-                                                                        </div>
-                                                                        
                                                                         <div class="contenedor_sel_pantalla">
                                                                             <span>3. Mostrar la diapositiva en:</span>
                                                                             <div class="wr_sel_pantalla">
