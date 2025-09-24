@@ -272,9 +272,6 @@ async function guardarArrPantallaEnBd(){
     console.log('=== function guardarArrPantallaEnBd() ===');
 
     try {
-    
-        id_song = objSong.id_song;
-        console.log('id_song: ', id_song);
 
         if(arr_pantalla.length == 0){
             alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
@@ -320,4 +317,42 @@ async function guardarArrPantallaEnBd(){
 // }
 
 
+/**
+ * Limpia un HTML reemplazando comillas dobles (") en atributos por '__||__'
+ * para que sea seguro guardar en JSON en BD.
+ * @param {string} html - El HTML completo.
+ * @returns {string} HTML seguro para JSON/BD.
+ */
+function sanitizeHtmlForJson(html) {
+    return html.replace(/(\w+)="([^"]*)"/g, (match, attrName, attrValue) => {
+        return `${attrName}=__||__${attrValue}__||__`; // reemplaza " por '__||__'
+    });
+}
 
+
+/**
+ * Revertir HTML sanitizado reemplazando '__||__' por comillas dobles.
+ * @param {string} sanitizedHtml - HTML con '__||__' en los atributos.
+ * @returns {string} HTML original con comillas dobles.
+ */
+function restoreHtmlFromSanitized(sanitizedHtml) {
+    return sanitizedHtml.replace(/=__\|\|__(.*?)__\|\|__/g, '="$1"');
+}
+
+
+
+/**
+ * Quita saltos de línea y espacios **solo entre etiquetas**,
+ * manteniendo el contenido interno intacto.
+ * @param {string} html - HTML completo
+ * @returns {string} HTML compacto
+ */
+function compactHtml(html) {
+    return html
+        // 1. Quitar saltos de línea y tabulaciones
+        .replace(/[\n\r\t]/g, '')
+        // 2. Quitar espacios **solo entre cierre y apertura de tags**
+        //.replace(/>\s+(?=<)/g, '>') //dejo los espacios ya que en acordes son necesarios
+        // 3. Quitar espacios al inicio y final del HTML completo
+        .trim();
+}

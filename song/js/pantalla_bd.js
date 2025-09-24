@@ -1,6 +1,7 @@
 const eid_contenedor = document.getElementById('contenedor');
+//const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');
 let arr_pantalla = [];
-let delay_fn = 200;//200 por defecto
+let delay_fn = 1200;//200 por defecto
 let count_intentos = 0;
 
 let id_songslide = 1;//test
@@ -26,11 +27,20 @@ async function cargar_datos_pantalla(){
 
     objPantalla = await getDataPantallaFromBd();//IMPORTANTE para cojer todos los datos necesarios
     console.log('objPantalla: ', objPantalla);
+    console.log('de bd --- objPantalla.arr_pantalla: ', objPantalla.arr_pantalla);
+
+    objPantalla.arr_pantalla.forEach(item => {
+        console.log('item before: ', item);
+        if(item.fieldset_html){
+            item.fieldset_html = restoreHtmlFromSanitized(item.fieldset_html);
+        }
+        console.log('item after: ', item);
+    });
+
+    console.log('restoreHtmlFromSanitized(objPantalla.arr_pantalla): ', objPantalla.arr_pantalla);
 
     localStorage.setItem('arr_pantalla', JSON.stringify(objPantalla.arr_pantalla) );//IMPORTANTE!
 }
-
-
 
 
 async function getDataPantallaFromBd(){
@@ -69,7 +79,7 @@ async function getDataPantallaFromBd(){
             console.log('success is true');
 
             let slide_text = data.slide_text; 
-            console.log(`id_songslide: [${id_songslide}] --- id_song: [${data.id_song}] --- slide_text: [${slide_text}] --- data.pantalla_show: `, data.pantalla_show);
+            //console.log(`id_songslide: [${id_songslide}] --- id_song: [${data.id_song}] --- slide_text: [${slide_text}] --- data.pantalla_show: `, data.pantalla_show);
 
             data.arr_pantalla = (esString(data.arr_pantalla) && data.arr_pantalla != '' && data.arr_pantalla.length > 0) ? JSON.parse(data.arr_pantalla) : [] ;//IMPORTANTE!
             console.log(`parseado data.arr_pantalla: `, data.arr_pantalla);
@@ -87,19 +97,10 @@ async function getDataPantallaFromBd(){
 }
 
 
-
-
-
-
-
 async function lanzarIntentos(){
     console.log('=== function lanzarIntentos() ===');
 
-
     await cargar_datos_pantalla();
-
-
-
 
     let pantallaShow = (objPantalla.arr_pantalla[0].pantalla_show == true) ? 'true' : 'false';
     if(eid_contenedor){
@@ -137,34 +138,8 @@ async function lanzarIntentos(){
     //si el contenedor está vacío, lo construyo
     if(arr_pantalla && eid_contenedor && eid_contenedor.querySelector('.trad') == null ){
         //console.log('el contenedor está vacío, lo construyo...');
-
-        arr_pantalla.forEach( (pant, i) => {
-            
-            let add_slide_html = make_add_slide_html(pant);
-
-            const trad = document.createElement('div');
-            trad.id = 'trad' + i;
-            trad.className = 'trad';
-            trad.innerHTML = `
-                <div class="trad_inner">
-                    <div class="verse">
-                        ${arr_pantalla[i].slide_text}
-                        ${add_slide_html}
-                    </div>
-                </div>
-            `;
-            //test DORABOTAT!!!
-            // trad.innerHTML = `
-            //     <div class="trad_inner">
-            //             ${arr_pantalla[i].fieldset_html}
-            //     </div>
-            // `;
-
-            eid_contenedor.classList.remove('shown');
-            eid_contenedor.append(trad);
-        });
-        
-        mySizePantallaShow();
+        construirElementosYAppend(eid_contenedor, arr_pantalla);
+        //construirElementosYAppend(eid_contenedor_prev_inner, arr_pantalla);
     }
 
     //lanzo intenos cada 0.2 seg para comprobar si ha cambiado localStorage
@@ -172,8 +147,6 @@ async function lanzarIntentos(){
     setTimeout(async ()=>{//COMENTAR PARA TEST
         
         await cargar_datos_pantalla();
-
-
 
         let arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
         //console.log('arr_pantalla_str_new: ', arr_pantalla_str_new);
@@ -189,40 +162,11 @@ async function lanzarIntentos(){
             //console.log('arr_pantalla old y new SON DISTINTOS. hago cosas...');
 
             if(eid_contenedor){            
-                eid_contenedor.innerHTML = '';//reset
-                eid_contenedor.classList.remove('shown');
-
-                if(arr_pantalla.length > 0){                
-                    arr_pantalla.forEach( (pant, i) => {
-                        
-                        let add_slide_html = make_add_slide_html(pant);
-
-                        const trad = document.createElement('div');
-                        trad.id = 'trad' + i;
-                        trad.className = 'trad';
-                        trad.innerHTML = `
-                            <div class="trad_inner">
-                                <div class="verse">
-                                    ${arr_pantalla[i].slide_text}
-                                    ${add_slide_html}
-                                </div>
-                            </div>
-                        `;
-                        //DORABOTAT!!!
-                        // trad.innerHTML = `
-                        //     <div class="trad_inner">
-                        //             ${arr_pantalla[i].fieldset_html}
-                        //     </div>
-                        // `;
-                        eid_contenedor.classList.remove('shown');
-                        eid_contenedor.append(trad);
-                    });
-
-                    mySizePantallaShow();
-                }
+                construirElementosYAppend(eid_contenedor, arr_pantalla);
+                //construirElementosYAppend(eid_contenedor_prev_inner, arr_pantalla);
             }
         }else{
-            //console.log('arr_pantalla old y new so IGUALES. no hago nada...');
+            //console.log('arr_pantalla old y new son IGUALES. no hago nada...');
         }
 
         lanzarIntentos();//COMENTAR PARA TEST
@@ -231,17 +175,48 @@ async function lanzarIntentos(){
 }
 
 
+function construirElementosYAppend(contenedor, arr_pantalla){
 
-window.addEventListener('load',function(d){
-    //console.log('load - window.innerWidth: '+window.innerWidth);
-    mySizePantallaShow();
-});
+    //eid_contenedor.innerHTML = '';//reset
+    contenedor.innerHTML = '';//reset
+    eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
 
-window.addEventListener('resize',function(d){
-    //console.log('resize - window.innerWidth: '+window.innerWidth);
-    mySizePantallaShow();
-});
+    if(arr_pantalla.length > 0){                
+        arr_pantalla.forEach( (pant, i) => {
+            
+            let add_slide_html = make_add_slide_html(pant);
 
+            const trad = document.createElement('div');
+            trad.id = 'trad' + i;
+            trad.className = 'trad';
+            trad.innerHTML = `
+                <div class="trad_inner">
+                    <div class="verse">
+                        ${arr_pantalla[i].slide_text}
+                        ${add_slide_html}
+                    </div>
+                </div>
+            `;
+            //DORABOTAT!!!
+            // trad.innerHTML = `
+            //     <div class="trad_inner">
+            //             ${arr_pantalla[i].fieldset_html}
+            //     </div>
+            // `;
+            eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
+            // eid_contenedor.append(trad);
+            contenedor.append(trad);
+        });
+
+        mySizePantallaShow();
+    }else{
+        const p = document.createElement('p');
+        p.textContent = 'No hay datos que mostrar';
+        // eid_contenedor.append(p);
+        contenedor.append(p);
+    }
+
+}//end function construirElementosYAppend()
 
 
 function mySizePantallaShow() {//new como ajustarTexto()
@@ -253,12 +228,21 @@ function mySizePantallaShow() {//new como ajustarTexto()
     const maxW = window.innerWidth - 32;//32; // padding
     const maxH = window.innerHeight - 32;
 
+
     //recorrer...
     tradAll.forEach(trad => {
         //console.log('trad: ', trad);
 
         const trad_inner = trad.querySelector('.trad_inner');
         //console.log('trad_inner: ', trad_inner);
+
+        const trad_inner_computedStyle = window.getComputedStyle(trad_inner);
+        let trad_inner_paddings = parseInt(trad_inner_computedStyle.padding) * 2;
+
+
+        const fieldset_computedStyle = window.getComputedStyle(trad_inner.querySelector('fieldset'));
+        let fieldset_margins = parseInt(fieldset_computedStyle.marginInline) * 2;// 8 * 2 = 16
+
 
         trad_inner.removeAttribute('style');//reset
 
@@ -269,24 +253,50 @@ function mySizePantallaShow() {//new como ajustarTexto()
         clone.style.position = 'absolute';
         clone.style.visibility = 'hidden';
         clone.style.left = '-9999px';
+        //clone.style.top = '0px';
+        //clone.style.left = '0px';
         document.body.appendChild(clone);
+        //eid_contenedor.appendChild(clone);
 
-        while (fontSize < 500) {//while() es mas rapido que for()
+        while (fontSize < 150) {//while() es mas rapido que for()
             clone.style.fontSize = fontSize + 'px';
-            //console.log('clone.style.fontSize: ', fontSize);
+            console.log('clone.style.fontSize: ', fontSize);
+            
+            //trad.style.fontSize = fontSize + 'px';//para test en tiempo real ver el cambio
+            //console.log('trad.style.fontSize: ', fontSize);
             
             const { width, height } = clone.getBoundingClientRect();
-            //console.log('clone. rect. width: ', width);
-            //console.log('clone. rect. height: ', height);
+            console.log('clone de trad. --- rect. width: ', width);
+            console.log('clone. de trad --- rect. height: ', height);
 
-            if (width > maxW || height > maxH) {
-                //console.log('width o height sobresale. hago break: ', width, height);                
+            // const trad_rect = trad.getBoundingClientRect();
+            // console.log(' --- trad_rect.width: ', trad_rect.width);
+            // console.log(' --- trad_rect.height: ', trad_rect.height);
+
+            const { width: fieldset_width, height: fieldset_height } = trad_inner.querySelector('fieldset').getBoundingClientRect();
+            console.log(' --- fieldset_width: ', fieldset_width);
+            console.log(' --- fieldset_height: ', fieldset_height);
+
+            let condicion_sobresale = (
+                (fieldset_width + trad_inner_paddings + fieldset_margins + 10) > maxW || 
+                (fieldset_height +trad_inner_paddings + fieldset_margins + 10) > maxH
+            );
+
+            console.log(' --- condicion_sobresale: ', condicion_sobresale);
+            if(condicion_sobresale){
+                console.log(' sobresale');
+                //alert(' sobresale');
+            }
+
+            if (width > maxW || height > maxH || condicion_sobresale) {
+                console.log('width o height sobresale. hago break: ', width, height);                
                 break;
             }
             fontSize++;
         }
 
         trad.style.fontSize = (fontSize - 1) + 'px';
+        //trad.style.fontSize = (fontSize*0.1) + 'px';//le quito 10 %
 
         let trad_h = window.innerHeight / count_trad;
         //console.log('trad_h: ', trad_h);
@@ -298,6 +308,7 @@ function mySizePantallaShow() {//new como ajustarTexto()
         trad_inner.style.width = trad_w + 'px';
 
         document.body.removeChild(clone);
+        //eid_contenedor.removeChild(clone);
     });
 
     let pantallaShow = localStorage.getItem('pantallaShow');
@@ -313,6 +324,17 @@ function mySizePantallaShow() {//new como ajustarTexto()
 
 }
 
+
+
+window.addEventListener('load',function(d){
+    //console.log('load - window.innerWidth: '+window.innerWidth);
+    mySizePantallaShow();
+});
+
+window.addEventListener('resize',function(d){
+    //console.log('resize - window.innerWidth: '+window.innerWidth);
+    mySizePantallaShow();
+});
 
 
 function hay_id_songslide(func_name = ''){
@@ -358,7 +380,29 @@ function make_add_slide_html(pant){
             <span class="tres_estrellas">* * *</span>
         `;
     }    
+    
     return add_slide_html;
-
 }
 
+
+/**
+ * Limpia un HTML reemplazando comillas dobles (") en atributos por '__||__'
+ * para que sea seguro guardar en JSON en BD.
+ * @param {string} html - El HTML completo.
+ * @returns {string} HTML seguro para JSON/BD.
+ */
+function sanitizeHtmlForJson(html) {
+    return html.replace(/(\w+)="([^"]*)"/g, (match, attrName, attrValue) => {
+        return `${attrName}=__||__${attrValue}__||__`; // reemplaza " por '__||__'
+    });
+}
+
+
+/**
+ * Revertir HTML sanitizado reemplazando '__||__' por comillas dobles.
+ * @param {string} sanitizedHtml - HTML con '__||__' en los atributos.
+ * @returns {string} HTML original con comillas dobles.
+ */
+function restoreHtmlFromSanitized(sanitizedHtml) {
+    return sanitizedHtml.replace(/=__\|\|__(.*?)__\|\|__/g, '="$1"');
+}

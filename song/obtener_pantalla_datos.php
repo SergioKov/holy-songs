@@ -105,6 +105,10 @@ $result = $conn->query($sql_init);
 if($result->num_rows > 0){   
     $row = $result->fetch_assoc();
     //echo_json_x($row, 'row']);
+
+    //1. Reemplazar las comillas simples por dobles para un JSON válido
+    //$valid_arr_pantalla_string = str_replace(['""'], '"', $row['arr_pantalla']);//quito ("") pongo (")
+    //$valid_arr_pantalla_string = json_decode($row['arr_pantalla']);
     
     $id_songslide_bd = $row['id_songslide'];
     $id_song_bd = $row['id_song'];

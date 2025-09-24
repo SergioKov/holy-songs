@@ -540,11 +540,31 @@ async function make_arr_pantalla(currentSlide){
 
     let slide_text = '';
     let arr_p_text = [];
+    let arr_p = [];
 
     let add_tres_estrellas = false;
     let add_d_puntos = false;
     let add_d_music = false;
 
+
+    let p_All = current_fieldset_cloned.querySelectorAll('p');//todos los 'p' de acordes y de texto
+    console.log('p_All: ', p_All);
+
+    p_All.forEach((p, i, arr) => {
+        console.log('p: ', p);
+
+        slide_text += p.innerHTML;
+        if(i != arr.length - 1){
+            slide_text += '<br>';
+        }
+        const p_obj = {
+            class: p.className,
+            content: p.textContent,
+            content_html: p.innerHTML,
+        }
+        // arr_p.push(p_obj);
+        arr_p.push(p);
+    });    
 
     let p_textAll = current_fieldset_cloned.querySelectorAll('p.t');//solo texto
     console.log('p_textAll: ', p_textAll);
@@ -563,6 +583,11 @@ async function make_arr_pantalla(currentSlide){
     //si es ultimo slide
     if(currentSlide == arr_esquema_bucle.length - 1){
         //slide_text += `<span class="tres_estrellas">* * *</span>`;
+        const tres_estrellas = document.createElement('span');
+        tres_estrellas.className = 'tres_estrellas';
+        tres_estrellas.innerHTML = '* * *';
+        current_fieldset_cloned.append(tres_estrellas);
+
         add_tres_estrellas = true;
     }
 
@@ -576,6 +601,11 @@ async function make_arr_pantalla(currentSlide){
             //         <p>...</p>
             //     </div>
             // `;
+            const wr_d_puntos = document.createElement('div');
+            wr_d_puntos.className = 'wr_d_puntos';
+            wr_d_puntos.innerHTML = '<p>...</p>';
+            current_fieldset_cloned.append(wr_d_puntos);
+
             add_d_puntos = true;
         }
 
@@ -586,18 +616,28 @@ async function make_arr_pantalla(currentSlide){
             //         <img src="images/notas_de_musica_grey.svg">
             //     </div>
             // `;
+            const wr_d_music = document.createElement('div');
+            wr_d_music.className = 'wr_d_music';
+            wr_d_music.innerHTML = '<img src="images/notas_de_musica_grey.svg">';
+            current_fieldset_cloned.append(wr_d_music);
+
             add_d_music = true;
         }
     }
 
+    let fieldset_html_safe = sanitizeHtmlForJson(compactHtml(current_fieldset_cloned.outerHTML));
+    console.log('fieldset_html_safe: ', fieldset_html_safe);
+
 
     objPantalla = {
-        //tipo_content: 'slide_text',
+        tipo_content: 'slide_text',
         //arr_p_text: arr_p_text,
-        //fieldset_html: el_fieldset_cloned.outerHTML,
+        //arr_p: arr_p,
+        fieldset_html: fieldset_html_safe,//se pasa como string
         id_song: id_song,
         slide_actual: currentSlide,
         slide_text: slide_text,
+        //slide_text: 'de momento nada...',
         add_tres_estrellas,
         add_d_puntos,
         add_d_music,
@@ -608,9 +648,64 @@ async function make_arr_pantalla(currentSlide){
     arr_pantalla.push(objPantalla);
     console.log('arr_pantalla: ', arr_pantalla);
 
-    let arr_pantalla_string = JSON.stringify(arr_pantalla);
+    arr_pantalla_string = JSON.stringify(arr_pantalla);//es global
+    console.log('arr_pantalla_string: ', arr_pantalla_string);
 
     localStorage.setItem('arr_pantalla',arr_pantalla_string);
+
+
+
+
+
+    // //1.------------------------
+    // const objPantallaToSend = {
+    //     id_song: id_song,
+    //     slide_actual: currentSlide,
+    //     slide_text: 'bd. de momento nada...',
+    //     arr_pantalla: arr_pantalla,
+    // };
+    // console.log('objPantallaToSend: ',objPantallaToSend);
+
+    // const objPantallaToSend_str = JSON.stringify(objPantallaToSend);
+    // console.log('objPantallaToSend_str: ', objPantallaToSend_str);
+
+    // const response = await fetch('insertar_arr_pantalla.php', {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     body: objPantallaToSend_str
+    // });
+
+    // if (!response.ok) {
+    //     throw new Error('Error al obtener datos');
+    // }
+    
+    // let data;
+    // if(debug){
+    //     data = await response.text();//test
+    // }else{
+    //     data = await response.json();
+    // }
+    // console.log('data: ',data); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // const result = await guardarSongPantallaEnBd();//objPantalla es global

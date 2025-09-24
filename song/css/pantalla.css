@@ -36,6 +36,19 @@ body {
     opacity: 1 !important;
 }
 
+
+
+#contenedor_prev_inner {
+    /* background: #0e3138; */
+    border: 1px solid yellow;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
 S {
     display: none;
 }
@@ -105,34 +118,81 @@ S {
 }
 
 
+
+
+.song_titulo {
+    color: #313131;
+}
+
+
+.wr_d_puntos,
+.wr_d_music,
+legend,
+p.c, /* acordes*/
+p.b, /* bolas o puntitos */
+p.n  /* n = nota */
+{
+    display: none;
+}
+
+fieldset.kuplet {
+    border: none;
+    font-weight: bolder;
+}
+
+
+
+
 /* solo si hay que mostrar acordes para musicos */
-.show_music {
+.show_acordes {
+    
+    legend,
+    p.c, /* acordes*/
+    p.b, /* bolas o puntitos */
+    p.n  /* n = nota */
+    {
+        display: block;
+    }
+    .fld_song_titulo legend {
+        display: none;
+    }
+
+    legend, span.barra, p.b {
+        color: #909090;
+    }
+    span.barra {
+        font-weight: 100;
+    }
 
     fieldset {
         /* background: green; */
-        border-radius: 10px;
-        /* border-color: transparent; */
+        border-color: transparent;
         margin-inline: 8px;
-        padding: 2rem;
+        padding: 10px;
         transition: 0.3s ease;
         width: fit-content;
         max-width: 100%;
+    }
+
+    fieldset.kuplet {
+        border: none;
+        border-top: 3px solid #909090;
+    }
+    fieldset.kuplet.fld_song_titulo {
+        border: none;
     }
 
     legend {
         font-weight: bold;
         color: #909090;
         padding: 3px 10px;
-        /* background-color: #fff; */
         margin-left: 0px;
-        /* background: #673AB7; */
         border-radius: 10px;
         font-style: italic;
         background: #555353;
-        /* font-size: 0.5rem; */
         text-align: center;
-        /* width: 100%; */
         transition: 0.3s ease;
+        border: 3px solid #909090;
     }
 
     p {
@@ -148,13 +208,11 @@ S {
     {
         padding: 0;
         white-space: pre;
-        /* padding-top: 15px; */
     }
 
     /* c = chord, acorde */
     p.c {
         color: #00e2ff;
-        /* color: red; */
         line-height: 0.7em;
     }
 
