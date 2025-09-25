@@ -1,4 +1,4 @@
-*{
+* {
     margin:0;
     padding:0;
 }
@@ -10,12 +10,20 @@ body {
     color: white;
     width: 100%;
     height: 100%;
-    font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif';
+    /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
+    font-family: monospace, Arial, 'Roboto Slab', Tahoma, 'sans serif';
     /* overflow: hidden; */
     background: black;
     background-image: url('../images/bible_open6.jpg');
     background-size: cover;
     background-position: center;
+}
+
+.d-block{
+    display: block !important;
+}
+.d-none{
+    display: none !important;
 }
 
 
@@ -64,22 +72,34 @@ S {
 }
 
 .trad_inner {
+    /* background: #FF9800; */
+    /* border: 1px solid #FF5722; */
     /* padding: 25px; */
-    padding: 5rem;
+    /* padding: 5rem; */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* border: 1px solid yellow; */
     align-items: center;
 }
 
 
 .verse {
+    /* background: #5d025d; */
     font-weight: 600;
     white-space: nowrap;
-    /* background: #5d025d; */
     text-align: center;
+
+    display: flex;
+    gap: 1rem;
+    align-content: space-between;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wr_d_line {
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -121,16 +141,18 @@ S {
 
 
 .song_titulo {
-    color: #313131;
+    background: #2d2d2d;
+    color: #909090;
+    padding: 10px 20px;
 }
 
 
-.wr_d_puntos,
-.wr_d_music,
+/* .wr_d_puntos,
+.wr_d_music, */
 legend,
-p.c, /* acordes*/
-p.b, /* bolas o puntitos */
-p.n  /* n = nota */
+.c, /* acordes*/
+.b, /* bolas o puntitos */
+.n  /* n = nota */
 {
     display: none;
 }
@@ -141,23 +163,68 @@ fieldset.kuplet {
 }
 
 
+.d_legend {
+    /* background: pink; */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+
+.d_line.d_legend::before {
+    content:  '';
+    position: absolute;
+    background: #9E9E9E;
+    width: 100%;
+    height: 3px;
+    top: 50%;
+}
+
+.d_legend div {
+    background: #555353;
+    border: 6px solid grey;
+    scale: 0.5;
+    font-style: italic;
+    color: grey;
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 20px;
+}
+
+
+
+
 
 
 /* solo si hay que mostrar acordes para musicos */
 .show_acordes {
+    .verse {
+        text-align:left;
+    }
     
-    legend,
-    p.c, /* acordes*/
-    p.b, /* bolas o puntitos */
-    p.n  /* n = nota */
+    /* .d_legend, */
+    .wr_d_puntos,
+    .wr_d_music
     {
-        display: block;
+        display: none;
+    }
+
+    .espacio {
+        white-space: pre;
+    }
+
+    legend,
+    .c, /* acordes*/
+    .b, /* bolas o puntitos */
+    .n  /* n = nota */
+    {
+        display: inline-block;
     }
     .fld_song_titulo legend {
         display: none;
     }
 
-    legend, span.barra, p.b {
+    legend, span.barra, .b {
         color: #909090;
     }
     span.barra {
@@ -203,38 +270,44 @@ fieldset.kuplet {
     }
 
 
-    p.c, /* acordes*/
-    p.b /* bolas o puntitos */
+    .c, /* acordes*/
+    .b /* bolas o puntitos */
     {
         padding: 0;
         white-space: pre;
     }
 
     /* c = chord, acorde */
-    p.c {
+    .c {
         color: #00e2ff;
         line-height: 0.7em;
     }
 
 
     /* b = bola, punto */
-    p.b {
+    .b {
         padding-top: 0px;
         padding-bottom: 15px;
     }
 
     /* n = nota */
-    p.n {
+    .n {
         /* color: green; */
         color: #909090;
         font-weight: normal;
         font-style: italic;
         padding-top: 0;
         padding-bottom: 15px;
+
+        /* background: orange; */
+        scale: 0.5;
+        width: 200%;
+        left: -50%;
+        position: relative;
     }
 
     /* t = texto */
-    p.t {
+    .t {
         margin-bottom: 15px;
     }
 }

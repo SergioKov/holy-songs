@@ -612,6 +612,11 @@ p.n {
     font-style: italic;
     padding-top: 0;
     padding-bottom: 15px;
+    /* background: orange; */
+    scale: 0.5;
+    width: 200%;
+    left: -50%;
+    position: relative;
 }
 
 /* t = texto */
@@ -824,10 +829,9 @@ legend span {
 }
 .vklads_head_inner {
     display: flex;
-    gap: 5px;
+    gap: 10px;
     padding: 0;
 }
-
 .bl_partes, .vklads_inner {
     background: #505050;
     display: flex;

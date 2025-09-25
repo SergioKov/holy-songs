@@ -189,20 +189,23 @@ function construirElementosYAppend(contenedor, arr_pantalla){
             const trad = document.createElement('div');
             trad.id = 'trad' + i;
             trad.className = 'trad';
-            trad.innerHTML = `
-                <div class="trad_inner">
-                    <div class="verse">
-                        ${arr_pantalla[i].slide_text}
-                        ${add_slide_html}
-                    </div>
-                </div>
-            `;
-            //DORABOTAT!!!
             // trad.innerHTML = `
             //     <div class="trad_inner">
-            //             ${arr_pantalla[i].fieldset_html}
+            //         <div class="verse">
+            //             ${arr_pantalla[i].slide_text}
+            //             ${add_slide_html}
+            //         </div>
             //     </div>
             // `;
+
+            //DORABOTAT!!!
+            trad.innerHTML = `
+                <div class="trad_inner">
+                        <div class="verse">
+                        ${arr_pantalla[i].fieldset_html}
+                        </div>
+                </div>
+            `;
             eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
             // eid_contenedor.append(trad);
             contenedor.append(trad);
@@ -325,35 +328,6 @@ function mySizePantallaShow() {//new como ajustarTexto()
 }
 
 
-
-window.addEventListener('load',function(d){
-    //console.log('load - window.innerWidth: '+window.innerWidth);
-    mySizePantallaShow();
-});
-
-window.addEventListener('resize',function(d){
-    //console.log('resize - window.innerWidth: '+window.innerWidth);
-    mySizePantallaShow();
-});
-
-
-function hay_id_songslide(func_name = ''){
-    console.log('=== function hay_id_song() ===');
-    
-    if(!id_songslide){
-        console.warn(func_name + ' --- No hay id_songslide. hago return...');
-        alert(func_name + ' --- No hay id_songslide. hago return...');
-        return false;
-    }
-    console.log(func_name + ' --- id_songslide: ', id_songslide);
-
-    return true;  
-}
-
-function esString(valor) {
-    return typeof valor === "string";
-}
-
 function make_add_slide_html(pant){
     if(!pant) return;
 
@@ -384,6 +358,37 @@ function make_add_slide_html(pant){
     return add_slide_html;
 }
 
+
+function hay_id_songslide(func_name = ''){
+    console.log('=== function hay_id_song() ===');
+    
+    if(!id_songslide){
+        console.warn(func_name + ' --- No hay id_songslide. hago return...');
+        alert(func_name + ' --- No hay id_songslide. hago return...');
+        return false;
+    }
+    console.log(func_name + ' --- id_songslide: ', id_songslide);
+
+    return true;  
+}
+
+
+function esString(valor) {
+    return typeof valor === "string";
+}
+
+
+
+
+window.addEventListener('load',function(d){
+    //console.log('load - window.innerWidth: '+window.innerWidth);
+    mySizePantallaShow();
+});
+
+window.addEventListener('resize',function(d){
+    //console.log('resize - window.innerWidth: '+window.innerWidth);
+    mySizePantallaShow();
+});
 
 /**
  * Limpia un HTML reemplazando comillas dobles (") en atributos por '__||__'
