@@ -535,38 +535,37 @@ async function make_arr_pantalla(currentSlide){
     const next_fieldset = arr_fieldsets[currentSlide + 1] || null ;
     console.log('next_fieldset: ',next_fieldset);
 
-
-
+    //Current
     const current_fieldset_cloned = current_fieldset.cloneNode(true);
     console.log('current_fieldset_cloned: ',current_fieldset_cloned);
-
+    
+    //Next
     const next_fieldset_cloned = (next_fieldset) ? next_fieldset.cloneNode(true) : null ;
     console.log('next_fieldset_cloned: ',next_fieldset_cloned);
-
 
 
     arr_pantalla = [];//reset   
     objPantalla = {};//reset 
 
     let slide_text_divs = '';
-    let slide_text = '';
-    let arr_p_text = [];
-    let arr_p_html = [];
 
     let count_p_t = 0;//contador de los 'p' de texto
     let count_p_c = 0;//contador de los 'p' de acordes
-
-    let add_tres_estrellas = false;
-    let add_d_puntos = false;
-    let add_d_music = false;
+    let add_next_slide = false;//por defecto no, si hay se pone a true
 
 
     //Todos los hijos directos 'legend' y 'p' de acordes y de texto
     let hijos_All = current_fieldset_cloned.querySelectorAll(':scope > *');
     console.log('hijos_All: ', hijos_All);
 
+    //Current element para slide
     const wr_d_line = document.createElement('div');
     wr_d_line.className = 'wr_d_line';
+    
+    //Next element para slide
+    const next_wr_d_line = document.createElement('div');
+    next_wr_d_line.className = 'next_wr_d_line';
+
 
     hijos_All.forEach((hijo, i, arr) => {
         console.log('hijo: ', hijo); 
@@ -595,8 +594,6 @@ async function make_arr_pantalla(currentSlide){
         wr_d_line.append(d_line);
     });
 
-    //Añado al div 
-    slide_text_divs = wr_d_line.outerHTML;
 
 
     //Si hay sig kuplet, saco 2 primeras lineas...
@@ -621,11 +618,7 @@ async function make_arr_pantalla(currentSlide){
             los_p_t[1].remove();
         }
 
-        let next_hijos_All_solo2 = next_fieldset_cloned.querySelectorAll(':scope > *');
-
-
-        const next_wr_d_line = document.createElement('div');
-        next_wr_d_line.className = 'wr_d_line';
+        const next_hijos_All_solo2 = next_fieldset_cloned.querySelectorAll(':scope > *');
 
         next_hijos_All_solo2.forEach((hijo, i, arr) => {
             console.log('hijo: ', hijo); 
@@ -643,26 +636,21 @@ async function make_arr_pantalla(currentSlide){
             next_wr_d_line.append(d_line);
         });
 
-        //Añado al div 
-        slide_text_divs += next_wr_d_line.outerHTML;
+        add_next_slide = true;
     }
 
 
-
-
-    let p_textAll = current_fieldset_cloned.querySelectorAll('p.t');//solo texto
-    console.log('p_textAll: ', p_textAll);
+    //let p_textAll = current_fieldset_cloned.querySelectorAll('p.t');//solo texto
+    //console.log('p_textAll: ', p_textAll);
    
     
     //si es ultimo slide
     if(currentSlide == arr_esquema_bucle.length - 1){
         //slide_text += `<span class="tres_estrellas">* * *</span>`;
-        const tres_estrellas = document.createElement('span');
-        tres_estrellas.className = 'tres_estrellas';
-        tres_estrellas.innerHTML = '* * *';
-        current_fieldset_cloned.append(tres_estrellas);
-
-        add_tres_estrellas = true;
+        const span_tres_estrellas = document.createElement('span');
+        span_tres_estrellas.className = 'tres_estrellas';
+        span_tres_estrellas.innerHTML = '* * *';        
+        wr_d_line.append(span_tres_estrellas);
     }
 
 
@@ -670,57 +658,70 @@ async function make_arr_pantalla(currentSlide){
         //alert('no hay texto en la diapositiva seleccionada. pero sigo...');
         let hay_song_titulo = current_fieldset_cloned.querySelector('.song_titulo');
         if(hay_song_titulo){
-            // slide_text += `
-            //     <div class="wr_d_puntos">
-            //         <p>...</p>
-            //     </div>
-            // `;
-            const wr_d_puntos = document.createElement('div');
-            wr_d_puntos.className = 'wr_d_puntos';
-            wr_d_puntos.innerHTML = '<p>...</p>';
-            current_fieldset_cloned.append(wr_d_puntos);
-
-            add_d_puntos = true;
+            const ejemplo = `
+                <div class="wr_d_puntos">
+                    <p>...</p>
+                </div>
+            `;
+            const div_wr_d_puntos = document.createElement('div');
+            div_wr_d_puntos.className = 'wr_d_puntos';
+            div_wr_d_puntos.innerHTML = '<p>...</p>';
+            wr_d_line.append(div_wr_d_puntos);
         }
 
         if(count_p_c > 0){
-            // slide_text += `
-            //     <div class="wr_d_music">
-            //         <img src="images/notas_de_musica_grey.svg">
-            //     </div>
-            // `;
-            const wr_d_music = document.createElement('div');
-            wr_d_music.className = 'wr_d_music';
-            wr_d_music.innerHTML = '<img src="images/notas_de_musica_grey.svg">';
-            current_fieldset_cloned.append(wr_d_music);
-
-            add_d_music = true;
+            const ejemplo = `
+                <div class="wr_d_music">
+                    <img src="images/notas_de_musica_grey.svg">
+                </div>
+            `;
+            const div_wr_d_music = document.createElement('div');
+            div_wr_d_music.className = 'wr_d_music';
+            div_wr_d_music.innerHTML = '<img src="images/notas_de_musica_grey.svg">';
+            wr_d_line.append(div_wr_d_music);
         }
+    }
+
+    //1. Añado current Slide al div 
+    slide_text_divs = wr_d_line.outerHTML;
+
+    //Añado existe next slide 
+    if(add_next_slide){
+        //2. Añado next Slide (solo 2 lineas) al div si hay... 
+        slide_text_divs += next_wr_d_line.outerHTML;
     }
 
     let fieldset_html_safe = sanitizeHtmlForJson(compactHtml(current_fieldset_cloned.outerHTML));
     console.log('fieldset_html_safe: ', fieldset_html_safe);
 
+    //Vars para formar tipo de contenido
+    let show_acordes = false;
+    let show_legend = false;
+    let show_next_slide = false;
+
+    let tipo_content = '';//sale: 'cl2' o '2lc'
+    tipo_content += 'c';//chords -> acordes
+    tipo_content += 'l';//legend -> titulos de kuplet o pripev
+    tipo_content += '2';//2 lineas del sig kuplet si hay
+
 
     objPantalla = {
         tipo_content: 'slide_text',
-        //arr_p_text: arr_p_text,
-        arr_p_html: arr_p_html,
-        fieldset_html: fieldset_html_safe,//se pasa como string
+        //fieldset_html: fieldset_html_safe,//se pasa como string
         id_song: id_song,
         slide_actual: currentSlide,
         slide_text: slide_text_divs,
         //slide_text: current_fieldset_cloned.outerHTML,
         //slide_text: slide_text,
         //slide_text: 'de momento nada...',
-        add_tres_estrellas,
-        add_d_puntos,
-        add_d_music,
         pantalla_show: pantallaShow,
     };
     console.log('objPantalla: ', objPantalla);
 
     arr_pantalla.push(objPantalla);
+    //arr_pantalla.push(objPantalla);//test
+    //arr_pantalla.push(objPantalla);//test
+
     console.log('arr_pantalla: ', arr_pantalla);
 
     arr_pantalla_string = JSON.stringify(arr_pantalla);//es global

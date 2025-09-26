@@ -168,19 +168,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $id_song = $conn->real_escape_string($datos['id_song']);//get parameter
     $slide_actual = $conn->real_escape_string($datos['slide_actual']);//get parameter
     $slide_text = $conn->real_escape_string($datos['slide_text']);//get parameter
-    //$arr_pantalla = $conn->real_escape_string($datos['arr_pantalla']);//get parameter
 
     $arr_pantalla_array = $datos['arr_pantalla'];
     //echo_json_x($arr_pantalla_array, 'arr_pantalla_array');
 
     $arr_pantalla_string = json_encode($datos['arr_pantalla'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+   
 
-    
-
-    //debug($tabla);
-    //debug($campo);
     //debug($arr, 'arr');
-    //echo_json_x($arr_esquema, 'arr_esquema');
     //echo_json_x($arr_esquema_array, 'arr_esquema_array');
 
     //exit('<br>hasta aki-2');
