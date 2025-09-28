@@ -246,7 +246,8 @@ async function guardarSongPantallaEnBd(){
             text_show = 'id_song insertado con éxito.';
             console.log(text_show);
 
-            showToast('ok', text_show, 5000);
+            // showToast('ok', text_show, 5000);
+            console.log('ok text_show', text_show);
 
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
@@ -257,7 +258,8 @@ async function guardarSongPantallaEnBd(){
             let text_show = 'Error al insertar id_song.';
             console.error('text_show: ', text_show);
 
-            showToast('ok', text_show, 5000);
+            //showToast('error', text_show, 5000);
+            console.log('error text_show', text_show);
         }
 
     } catch (error) {
@@ -283,10 +285,12 @@ async function guardarArrPantallaEnBd(){
         if(data.success){
             
             let text_show;
-            text_show = 'id_song insertado con éxito.';
+            text_show = '1. id_song insertado con éxito.';
             console.log(text_show);
 
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
 
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
@@ -294,10 +298,12 @@ async function guardarArrPantallaEnBd(){
             
         }else{
             
-            let text_show = 'Error al insertar id_song.';
+            let text_show = '2. Error al insertar id_song.';
             console.error('text_show: ', text_show);
 
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('error', text_show, 5000);
+            }
         }
 
     } catch (error) {

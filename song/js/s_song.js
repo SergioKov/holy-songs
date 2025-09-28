@@ -505,12 +505,12 @@ function hideMenu(){
             menu_contenido.style.top = -menu_contenido.offsetHeight + 'px';
         },300);
         setTimeout(()=>{
-            menu_contenido.style.top = '-100%';
+            menu_contenido.style.top = '-102%';
         },1000);
     }else{
         menu_contenido.style.top = -menu_contenido.offsetHeight + 'px';
         setTimeout(()=>{
-            menu_contenido.style.top = '-100%';
+            menu_contenido.style.top = '-102%';
         },1000);
     }
 }
@@ -1534,7 +1534,9 @@ function buildPage(){
         console.log('obj_pages es vacio: ');
         let aviso_text = `No sa ha podido dividir el texto de la canción en bloques para mostrarla. Edita el texto de la cancion para poder separarlo en bloques. Mira en la pestaña 'Ejemplo' como hacerlo.`;
 
-        showToast('error', aviso_text);
+        if(hayElementosModalesAbiertos()){
+            showToast('error', aviso_text);
+        }
         
         showEdit('cancion');
         editar_song();
@@ -1605,7 +1607,9 @@ async function buildSong(){
         console.log('obj_bloques es vacio: ');
         let aviso_text = `No sa ha podido dividir el texto de la canción en bloques para mostrarla. Edita el texto de la cancion para poder separarlo en bloques. Mira en la pestaña 'Ejemplo' como hacerlo.`;
 
-        showToast('error', aviso_text);
+        if(hayElementosModalesAbiertos()){
+            showToast('error', aviso_text);
+        }
         
         showEdit('cancion');
         editar_song();
@@ -2327,7 +2331,10 @@ async function guardarEsquema(){
         }
         console.log(text_show);
 
-        showToast('ok', text_show, 5000);
+        if(hayElementosModalesAbiertos()){
+            showToast('ok', text_show, 5000);
+        }
+
 
         if(data.id_song){
             console.log('id_song: ', data.id_song);
@@ -2356,8 +2363,10 @@ async function guardarEsquema(){
         console.error('data.error: ',data.error);
 
         let text_show = 'Error al guardar la esquema.';
-
-        showToast('error', text_show, 5000);
+        
+        if(hayElementosModalesAbiertos()){
+            showToast('error', text_show, 5000);
+        }
     }
 
     crearSlides();
@@ -2598,7 +2607,9 @@ async function guardarSong(event, id_contenedor, cancion_action){
             form.querySelector('.mensaje').innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
             //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
 
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
@@ -2639,7 +2650,9 @@ async function guardarSong(event, id_contenedor, cancion_action){
             form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('error', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('error', text_show, 5000);
+            }
         }
     
     } catch (error) {
@@ -2691,7 +2704,9 @@ async function deleteSong(event, id_contenedor){
             form.querySelector('.mensaje').innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
             contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
 
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
@@ -2739,8 +2754,10 @@ async function deleteSong(event, id_contenedor){
 
             form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
-
-            showToast('ok', text_show, 5000);
+            
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
         }
 
     } catch (error) {
@@ -2871,7 +2888,9 @@ async function guardarLista(event){
             form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
             //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
 
             setTimeout(()=>{
                 form_mensaje_lista.innerHTML = `
@@ -2926,7 +2945,9 @@ async function guardarLista(event){
             form_mensaje_lista.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('error', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('error', text_show, 5000);
+            }
         }
     
     } catch (error) {
@@ -3017,7 +3038,9 @@ async function deleteLista(){
             p_mensaje.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             contenedor_lista_sm.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
 
-            showToast('ok', text_show, 5000);
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
         }
     } catch (error) {
         // Código a realizar cuando se rechaza la promesa

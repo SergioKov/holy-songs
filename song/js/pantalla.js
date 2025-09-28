@@ -11,6 +11,9 @@ let show_acordes = false;
 let show_legend = false;
 let show_next_slide = false;
 
+let arr_pantalla_str_new = '';
+let arr_pantalla_str_old = '';
+
 
 
 // Obtiene toda la parte de la URL actual
@@ -83,7 +86,8 @@ function lanzarIntentos(){
     }
     
         
-    let arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
+    //let  arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
+    arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
     //console.log('arr_pantalla_str_old: ', arr_pantalla_str_old);
 
     if(arr_pantalla_str_old){
@@ -120,7 +124,7 @@ function lanzarIntentos(){
 
         // EN TEST - COMENTAR, SE CARGARÁ 1 VEZ AL RECARGAR CADA SLIDE CON F5.  
         // EN PROD - DESCOMENTAR!!!
-        //lanzarIntentosConDelay();
+        lanzarIntentosConDelay();
 
     }
 }
@@ -132,7 +136,8 @@ function lanzarIntentosConDelay(){
     //si ha cambiado, actualizo arr_pantalla y reconstruyo el contenedor
     setTimeout(()=>{//COMENTAR PARA TEST
         
-        let arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
+        // let arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
+        arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
         //console.log('arr_pantalla_str_new: ', arr_pantalla_str_new);
         
         //arr_pantalla_str_new = arr_pantalla_str_new.replaceAll('<br>','');
@@ -170,7 +175,7 @@ function construirElementosYAppend(){
     eid_contenedor.innerHTML = '';//reset
 
     //DESCOMENTAR EN PROD!!!
-    //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
+    eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
 
     if(arr_pantalla.length > 0){                
         arr_pantalla.forEach( (pant, i) => {
@@ -189,7 +194,7 @@ function construirElementosYAppend(){
             `;
 
             //DESCOMENTAR EN PROD!!!
-            //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
+            eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
             
             eid_contenedor.append(trad);
         });
@@ -231,8 +236,8 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
         trad.style.fontSize = mid + 'px';
 
         // Espera que el navegador pinte y calcule layout
-        await nextFrame();
-        //await sleep(100);
+        //await nextFrame();//cuando lo quito animacion es mejor!
+        //await sleep(100);//cuando lo quito animacion es mejor!
 
         const verse = trad.querySelector('.verse');
         if (!verse) break; // por seguridad
@@ -297,7 +302,7 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         clone.style.left = '-9999px';
         clone_contenedor.appendChild(clone);
 
-        let fontSize_new = await ajustarFuenteBinaria(trad, /*clone,*/ maxW, maxH);
+        let fontSize_new = await ajustarFuenteBinaria(/*trad,*/ clone, maxW, maxH);
         console.log("FontSize final. fontSize_new:", fontSize_new);
         //alert('1. sdfgsdg');
         

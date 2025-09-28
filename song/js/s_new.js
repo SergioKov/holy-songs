@@ -911,35 +911,54 @@ function hayElementosModalesAbiertos(opciones = { parcial: true }) {
     const modales = document.querySelectorAll('.elementos_modales');
 
     return [...modales].some(modal => {
+        console.log('elemento modal --- modal: ', modal);
+        
         // Si tiene la clase 'shown', se considera visible sin más comprobaciones
         if (modal.classList.contains('shown')) {
+            console.log('el modal se considera visible ya que tiene class shown. return true.');
             return true;
+        }else{
+            console.log('el modal NO se considera visible ya que NO tiene class shown: sigo...');
         }
 
         // Comprobar si está oculto en el DOM
-        if (!modal.offsetParent) return false;
+        if (!modal.offsetParent){
+            console.log('el modal se considera oculto en el DOM. return false.');
+            return false;
+        }else{
+            console.log('el modal se considera mostrado en el DOM. sigo...');
+        }
 
         // Obtener posición y dimensiones relativas a la ventana
         const rect = modal.getBoundingClientRect();
+        console.log('elemento modal rect: ', rect);
+
 
         // Comprobar tamaño
-        if (rect.width === 0 || rect.height === 0) return false;
+        if (rect.width === 0 || rect.height === 0) {
+            console.log('el modal tiene ancho y alto = 0. return false.');            
+            return false;
+        }
 
         // Verificar visibilidad según la opción parcial o total
         if (opciones.parcial) {
-            return (
+            const condicion_parcial = (
                 rect.bottom > 0 &&
                 rect.right > 0 &&
                 rect.top < window.innerHeight &&
                 rect.left < window.innerWidth
             );
+            console.log('condicion_parcial: ', condicion_parcial);
+            return condicion_parcial;
         } else {
-            return (
+            const condicion_total = (
                 rect.top >= 0 &&
                 rect.left >= 0 &&
                 rect.bottom <= window.innerHeight &&
                 rect.right <= window.innerWidth
             );
+            console.log('condicion_total: ', condicion_total);
+            return condicion_total;
         }
     });
 }
