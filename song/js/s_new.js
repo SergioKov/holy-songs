@@ -691,8 +691,9 @@ async function make_arr_pantalla(currentSlide){
         slide_text_divs += next_wr_d_line.outerHTML;
     }
 
-    let fieldset_html_safe = sanitizeHtmlForJson(compactHtml(current_fieldset_cloned.outerHTML));
-    console.log('fieldset_html_safe: ', fieldset_html_safe);
+    //let fieldset_html_safe = sanitizeHtmlForJson(compactHtml(current_fieldset_cloned.outerHTML));
+    //let slide_text_divs_safe = sanitizeHtmlForJson(compactHtml(slide_text_divs.outerHTML));
+    //console.log('fieldset_html_safe: ', fieldset_html_safe);
 
     //Vars para formar tipo de contenido
     let show_acordes = false;
@@ -711,6 +712,7 @@ async function make_arr_pantalla(currentSlide){
         id_song: id_song,
         slide_actual: currentSlide,
         slide_text: slide_text_divs,
+        //slide_text: slide_text_divs_safe, //dorabotat!!!
         //slide_text: current_fieldset_cloned.outerHTML,
         //slide_text: slide_text,
         //slide_text: 'de momento nada...',
@@ -728,61 +730,6 @@ async function make_arr_pantalla(currentSlide){
     console.log('arr_pantalla_string: ', arr_pantalla_string);
 
     localStorage.setItem('arr_pantalla',arr_pantalla_string);
-
-
-
-
-
-    // //1.------------------------
-    // const objPantallaToSend = {
-    //     id_song: id_song,
-    //     slide_actual: currentSlide,
-    //     slide_text: 'bd. de momento nada...',
-    //     arr_pantalla: arr_pantalla,
-    // };
-    // console.log('objPantallaToSend: ',objPantallaToSend);
-
-    // const objPantallaToSend_str = JSON.stringify(objPantallaToSend);
-    // console.log('objPantallaToSend_str: ', objPantallaToSend_str);
-
-    // const response = await fetch('insertar_arr_pantalla.php', {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: objPantallaToSend_str
-    // });
-
-    // if (!response.ok) {
-    //     throw new Error('Error al obtener datos');
-    // }
-    
-    // let data;
-    // if(debug){
-    //     data = await response.text();//test
-    // }else{
-    //     data = await response.json();
-    // }
-    // console.log('data: ',data); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // const result = await guardarSongPantallaEnBd();//objPantalla es global
     // console.log('arr_pantalla: ', arr_pantalla);

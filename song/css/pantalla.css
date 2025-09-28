@@ -147,8 +147,8 @@ S {
 .d_line {
     font-weight: bolder;
     font-family: Arial, Tahoma, 'sans serif';
-    line-height: 1em;
-    white-space: pre;
+    line-height: normal;
+    white-space: normal;/* para publico */
 }
 
 
@@ -211,6 +211,11 @@ fieldset.kuplet {
 .show_acordes {
     .verse {
         text-align:left;
+    }
+
+    .d_line {
+        line-height: 1em;
+        white-space: pre;
     }
     
     /* .d_legend, */
@@ -321,6 +326,7 @@ fieldset.kuplet {
     .t {
         margin-bottom: 15px;
     }
+
 }
 
 
@@ -333,7 +339,14 @@ fieldset.kuplet {
 
 
 
-
+/* para publico no muestro */
+.song_titulo {
+    display: none;
+}
+/* para musicos si muestro */
+.show_acordes .song_titulo {
+    display: block;
+}
 
 
 

@@ -3,9 +3,6 @@ let arr_pantalla = [];
 let delay_fn = 200;//200 por defecto
 let count_intentos = 0;
 
-let tipo_content = 'slide_text';//'slide_text' o 'slide_text_y_acordes' o 'slide_fieldset'
-//console.log('tipo_content: ', tipo_content);
-
 //Vars para formar tipo de contenido por defecto
 let show_acordes = false;
 let show_legend = false;
@@ -125,7 +122,6 @@ function lanzarIntentos(){
         // EN TEST - COMENTAR, SE CARGARÁ 1 VEZ AL RECARGAR CADA SLIDE CON F5.  
         // EN PROD - DESCOMENTAR!!!
         lanzarIntentosConDelay();
-
     }
 }
 
