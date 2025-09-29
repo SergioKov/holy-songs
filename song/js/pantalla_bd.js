@@ -85,8 +85,8 @@ async function cargar_datos_pantalla(){
 
     objPantalla.arr_pantalla.forEach(item => {
         console.log('item before: ', item);
-        if(item.slide_text){
-            item.slide_text = restoreHtmlFromSanitized(item.slide_text);
+        if(item.slide_html){
+            item.slide_html = restoreHtmlFromSanitized(item.slide_html);
         }
         console.log('item after: ', item);
     });
@@ -153,7 +153,7 @@ async function lanzarIntentos(){
 
     await cargar_datos_pantalla();
 
-    let pantallaShow = (objPantalla.arr_pantalla[0].pantalla_show == true) ? 'true' : 'false';
+    let pantallaShow = (objPantalla.pantalla_show == '1') ? 'true' : 'false';
     if(eid_contenedor){
         if(pantallaShow === 'true'){
             eid_contenedor.classList.add('shown');
@@ -264,7 +264,7 @@ function construirElementosYAppend(){
             trad.innerHTML = `
                 <div class="trad_inner">
                     <div class="verse">
-                        ${arr_pantalla[i].slide_text}
+                        ${arr_pantalla[i].slide_html}
                     </div>
                 </div>
             `;

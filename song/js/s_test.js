@@ -225,49 +225,6 @@ function ocultarElementosEditablesEn(elemento){
 
 
 
-async function guardarSongPantallaEnBd(){
-    console.log('=== function guardarSongPantallaEnBd() ===');
-
-    try {
-    
-        id_song = objSong.id_song;
-        console.log('id_song: ', id_song);
-
-        if(!id_song){
-            alert('en guardarSongPantallaEnBd() --- id_song no está indicado... hago return.');
-        }
-
-        const data = await insertarSongPantalla();
-        console.log('data: ',data);
-
-        if(data.success){
-            
-            let text_show;
-            text_show = 'id_song insertado con éxito.';
-            console.log(text_show);
-
-            // showToast('ok', text_show, 5000);
-            console.log('ok text_show', text_show);
-
-            if(data.id_song){
-                console.log('id_song: ', data.id_song);
-            }
-            
-        }else{
-            
-            let text_show = 'Error al insertar id_song.';
-            console.error('text_show: ', text_show);
-
-            //showToast('error', text_show, 5000);
-            console.log('error text_show', text_show);
-        }
-
-    } catch (error) {
-        // Código a realizar cuando se rechaza la promesa
-        console.error('guardarSongPantallaEnBd(). error: ',error);        
-    }
-
-}
 
 
 async function guardarArrPantallaEnBd(){
@@ -311,6 +268,56 @@ async function guardarArrPantallaEnBd(){
         console.error('guardarArrPantallaEnBd(). error: ',error);        
     }
 
+}
+
+
+async function insertarArrPantalla() {
+    console.log('=== function insertarArrPantalla() ===');
+
+    const {id_song, slide_actual} = objPantallaToSendToBd;//
+
+    try {
+        
+        // if(get_cookieConsent && get_cookieConsent === 'rejected'){
+        //     let aviso_text = `Si no aceptas cookies no puedes insertar datos. <a onclick="showBlockCookies(); closeModal(null,true);">Seleccionar Coockies</a>.`;
+        //     openModal('center','Cookies',aviso_text,'showAviso');
+        //     return;
+        // }
+
+        if(!id_song || isNaN(slide_actual) ){
+            alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            return;
+        }
+
+
+        objPantallaToSendToBd_str = JSON.stringify(objPantallaToSendToBd);//variable global
+        console.log('objPantallaToSendToBd_str: ', objPantallaToSendToBd_str);
+
+        const response = await fetch('insertar_arr_pantalla.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: objPantallaToSendToBd_str
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+        
+        let data;
+        if(debug){
+            data = await response.text();//test
+        }else{
+            data = await response.json();
+        }
+        console.log('data: ',data); 
+        
+        return data;
+
+    } catch (error) {
+        console.error('Error en la función insertarSongPantalla: ', error);
+    }
 }
 
 

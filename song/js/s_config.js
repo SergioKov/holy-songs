@@ -498,13 +498,48 @@ let arr_lista_ids = [];//[8051,8052] - solo los id_song
 
 let made_draggable_once = false;
 
+let slide_actual = 0;//slide para grabar en bd por defecto es 0; 
+
 let arr_pantalla = [];//array de objetos con los datos de la canción actual para pantalla
 let arr_pantalla_string = '';//array de objetos con los datos de la canción actual para pantalla
-let objPantalla = {};//objeto con datos de la canción actual para pantalla
+let one_pant_data = {};//objeto con datos de una pantalla para make_arr_pantalla()
+
 
 let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');//por defecto pantalla no se ve
 //pantallaShow = true;//test
 //pantallaShow = localStorage.setItem('pantallaShow', true);
+
+//Vars para formar tipo de contenido por defecto en Pantalla
+let pantalla_show = pantallaShow;
+let show_logo_en_fondo = false;
+let show_legend = false;
+let show_acordes = false;
+let show_next_slide = false;
+
+let objPantalla = {//objeto con datos de la canción actual para pantalla
+    id_song,
+    slide_actual,
+    arr_pantalla, //los datos en html con '__||__' en vez de comillas dobles (")
+    pantalla_show,//igual como 'is_fon_shown' (pantalla_show = true) => mostrar slide con texto; (pantalla_show = false) => ocultar slide y mostrar fondo con la biblia abierta
+    show_logo_en_fondo,// (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
+    show_legend,//mostrar legend en slide de pantalla.php
+    show_acordes,////mostrar acordes en slide de pantalla.php
+    show_next_slide,//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+}
+
+let objPantallaToSendToBd = {
+    id_song,
+    slide_actual,
+    arr_pantalla,//aki se añadirá 'arr_pantalla_safe'
+    pantalla_show,
+    show_logo_en_fondo,
+    show_legend,
+    show_acordes,
+    show_next_slide,
+};
+
+let objPantallaToSendToBd_str = '';
+
 
 let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_esquema, crear_esquema, select_slide]
 //obj_ajustes.sidebarTabActive = sidebarTabActive;
@@ -523,3 +558,6 @@ let pageActiveEjemplo = null;
 //let pageActiveLista = null;
 
 let mostrarPrim = true;
+
+
+

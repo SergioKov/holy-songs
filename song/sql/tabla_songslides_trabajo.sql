@@ -44,8 +44,8 @@ CREATE TABLE `songslides` (
 -- Volcado de datos para la tabla `songslides`
 --
 
-INSERT INTO `songslides` (`id_songslide`, `id_user`, `ip_user`, `id_song`, `slide_actual`, `slide_text`, `arr_pantalla`, `pantalla_show`, `created_at`, `updated_at`) VALUES
-(1, 1, '127.0.0.1', 7500, 2, 'Кто тебя любит так, как Спаситель?<br>Он умер за тебя!<br>Вечный Сын Божий - твой Искупитель,<br>Твой грех взял на Себя.', '[{\"id_song\":\"7500\",\"slide_actual\":2,\"slide_text\":\"Кто тебя любит так, как Спаситель?<br>Он умер за тебя!<br>Вечный Сын Божий - твой Искупитель,<br>Твой грех взял на Себя.\",\"add_tres_estrellas\":false,\"add_d_puntos\":false,\"add_d_music\":false,\"pantalla_show\":false}]', 'true', '2025-09-23 18:52:35', '2025-09-23 22:15:08');
+INSERT INTO `songslides` (`id_songslide`, `id_user`, `ip_user`, `id_song`, `slide_actual`, `slide_html`, `arr_pantalla`, `pantalla_show`, `created_at`, `updated_at`) VALUES
+(1, 1, '127.0.0.1', 7500, 2, 'Кто тебя любит так, как Спаситель?<br>Он умер за тебя!<br>Вечный Сын Божий - твой Искупитель,<br>Твой грех взял на Себя.', '[{\"id_song\":\"7500\",\"slide_actual\":2,\"slide_html\":\"Кто тебя любит так, как Спаситель?<br>Он умер за тебя!<br>Вечный Сын Божий - твой Искупитель,<br>Твой грех взял на Себя.\",\"add_tres_estrellas\":false,\"add_d_puntos\":false,\"add_d_music\":false,\"pantalla_show\":false}]', 'true', '2025-09-23 18:52:35', '2025-09-23 22:15:08');
 
 --
 -- Índices para tablas volcadas

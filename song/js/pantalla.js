@@ -184,7 +184,7 @@ function construirElementosYAppend(){
             trad.innerHTML = `
                 <div class="trad_inner">
                     <div class="verse">
-                        ${arr_pantalla[i].slide_text}
+                        ${arr_pantalla[i].slide_html}
                     </div>
                 </div>
             `;

@@ -1688,10 +1688,6 @@ async function buildSong(){
         slideContainer.append(slide_clone);
     });
 
-
-    //await guardarSongPantallaEnBd();
-
-
     //init();
     ajustarTexto();
     pintParrafosAcordes();

@@ -166,8 +166,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     $id_song = $conn->real_escape_string($datos['id_song']);//get parameter
     $slide_actual = $conn->real_escape_string($datos['slide_actual']);//get parameter
-    $slide_text = $conn->real_escape_string($datos['slide_text']);//get parameter
-    //$arr_pantalla = $conn->real_escape_string($datos['arr_pantalla']);//get parameter
 
     $arr_pantalla_array = $datos['arr_pantalla'];
     //echo_json_x($arr_pantalla_array, 'arr_pantalla_array');
@@ -272,7 +270,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     ip_user = '$ip_user',
                     id_song = '$id_song',
                     slide_actual = '$slide_actual',
-                    slide_text = '$slide_text',
                     arr_pantalla = '$arr_pantalla_string',
                     updated_at = '$fechaHoraActual'
                 WHERE id_user = '$id_user_logged'
@@ -284,7 +281,6 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     ip_user = '$ip_user',
                     id_song = '$id_song',
                     slide_actual = '$slide_actual',
-                    slide_text = '$slide_text',
                     arr_pantalla = '',
                     updated_at = '$fechaHoraActual'
                 WHERE id_user = '$id_user_logged'
@@ -300,16 +296,16 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         if (is_array($arr_pantalla_array) && !empty($arr_pantalla_array)) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_pantalla_ok';
             $sql2_in_init = "INSERT INTO songslides 
-                    (id_user,             ip_user,    id_song,    slide_actual,     slide_text,    arr_pantalla,           created_at) 
+                    (id_user,             ip_user,    id_song,    slide_actual,     arr_pantalla,           created_at) 
                 VALUES 
-                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$slide_text', '$arr_pantalla_string', '$fechaHoraActual')
+                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$arr_pantalla_string', '$fechaHoraActual')
             ";
         }else{//no es array o está vacío. no incluyo arr_pantalla en la SQL
             $action_tipo = 'is_insert_arr_pantalla_vacio';
             $sql2_in_init = "INSERT INTO songslides 
-                    (id_user,             ip_user,    id_song,    slide_actual,     slide_text,    created_at) 
+                    (id_user,             ip_user,    id_song,    slide_actual,    created_at) 
                 VALUES 
-                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$slide_text', '$fechaHoraActual')
+                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$fechaHoraActual')
             ";
         }
         $result2 = $conn->query($sql2_in_init);

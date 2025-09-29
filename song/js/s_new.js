@@ -544,10 +544,10 @@ async function make_arr_pantalla(currentSlide){
     console.log('next_fieldset_cloned: ',next_fieldset_cloned);
 
 
-    arr_pantalla = [];//reset   
     objPantalla = {};//reset 
+    arr_pantalla = [];//reset   
 
-    let slide_text_divs = '';
+    let slide_divs = '';
 
     let count_p_t = 0;//contador de los 'p' de texto
     let count_p_c = 0;//contador de los 'p' de acordes
@@ -646,7 +646,7 @@ async function make_arr_pantalla(currentSlide){
     
     //si es ultimo slide
     if(currentSlide == arr_esquema_bucle.length - 1){
-        //slide_text += `<span class="tres_estrellas">* * *</span>`;
+        //slide_html += `<span class="tres_estrellas">* * *</span>`;
         const span_tres_estrellas = document.createElement('span');
         span_tres_estrellas.className = 'tres_estrellas';
         span_tres_estrellas.innerHTML = '* * *';        
@@ -683,61 +683,86 @@ async function make_arr_pantalla(currentSlide){
     }
 
     //1. Añado current Slide al div 
-    slide_text_divs = wr_d_line.outerHTML;
+    slide_divs = wr_d_line.outerHTML;
 
     //Añado existe next slide 
     if(add_next_slide){
         //2. Añado next Slide (solo 2 lineas) al div si hay... 
-        slide_text_divs += next_wr_d_line.outerHTML;
+        slide_divs += next_wr_d_line.outerHTML;
     }
 
-    //let fieldset_html_safe = sanitizeHtmlForJson(compactHtml(current_fieldset_cloned.outerHTML));
-    //let slide_text_divs_safe = sanitizeHtmlForJson(compactHtml(slide_text_divs.outerHTML));
-    //console.log('fieldset_html_safe: ', fieldset_html_safe);
-
-    //Vars para formar tipo de contenido
-    let show_acordes = false;
-    let show_legend = false;
-    let show_next_slide = false;
 
     let tipo_content = '';//sale: 'cl2' o '2lc'
     tipo_content += 'c';//chords -> acordes
     tipo_content += 'l';//legend -> titulos de kuplet o pripev
-    tipo_content += '2';//2 lineas del sig kuplet si hay
+    tipo_content += 'n';//2 lineas del sig kuplet si hay
 
-
-    objPantalla = {
-        tipo_content: 'slide_text',
-        //fieldset_html: fieldset_html_safe,//se pasa como string
+    //creo datos solo para una pantalla...
+    one_pant_data = {
+        tipo_content: 'es_song_slide',
         id_song: id_song,
         slide_actual: currentSlide,
-        slide_text: slide_text_divs,
-        //slide_text: slide_text_divs_safe, //dorabotat!!!
-        //slide_text: current_fieldset_cloned.outerHTML,
-        //slide_text: slide_text,
-        //slide_text: 'de momento nada...',
-        pantalla_show: pantallaShow,
+        slide_html: slide_divs,
     };
-    console.log('objPantalla: ', objPantalla);
+    console.log('one_pant_data: ', one_pant_data);
 
-    arr_pantalla.push(objPantalla);
-    //arr_pantalla.push(objPantalla);//test
-    //arr_pantalla.push(objPantalla);//test
+    arr_pantalla.push(one_pant_data);
+    //arr_pantalla.push(one_pant_data);//test
+    //arr_pantalla.push(one_pant_data);//test
 
     console.log('arr_pantalla: ', arr_pantalla);
 
     arr_pantalla_string = JSON.stringify(arr_pantalla);//es global
     console.log('arr_pantalla_string: ', arr_pantalla_string);
 
-    localStorage.setItem('arr_pantalla',arr_pantalla_string);
+    localStorage.setItem('arr_pantalla',arr_pantalla_string);// para mostrar LOCALMENTE
 
-    // const result = await guardarSongPantallaEnBd();//objPantalla es global
-    // console.log('arr_pantalla: ', arr_pantalla);
-    // console.log('result: ', result);
+    //1. Objeto para LOCAL
+    objPantalla = {
+        id_song,
+        slide_actual,
+        arr_pantalla,
+        pantalla_show: pantallaShow,
+        show_logo_en_fondo,
+        show_legend,
+        show_acordes,
+        show_next_slide,
+    };
+    console.log('(local) --- objPantalla: ', objPantalla);
+
+
+    //2. Preparo para enviar a BD
+    let arr_pantalla_safe = structuredClone(arr_pantalla);
+    console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
+
+    //sanitizo cada item de array metiendo '__||__' en slide_html
+    arr_pantalla_safe.forEach((item, i) => {
+        console.log('item: ', item);
+        item.slide_html = sanitizeHtmlForJson(compactHtml(item.slide_html));
+    });        
+    console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
+
+    //asigno la variable global para enviar al BD
+    objPantallaToSendToBd = {
+        id_song: id_song,
+        slide_actual: slide_actual,
+        arr_pantalla: arr_pantalla_safe,
+        pantalla_show: pantallaShow,
+        show_logo_en_fondo,
+        show_legend,
+        show_acordes,
+        show_next_slide,
+    };
+    console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
+
+
+
+
     
-    const result2 = await guardarArrPantallaEnBd();//objPantalla es global
+    //guardo en la BD
+    const result = await guardarArrPantallaEnBd();//objPantalla es global
     console.log('arr_pantalla: ', arr_pantalla);
-    console.log('result2: ', result2);
+    console.log('result: ', result);
     
     console.log('fin make_arr_pantalla...');
 
