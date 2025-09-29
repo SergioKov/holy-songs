@@ -662,21 +662,35 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     </div><!--/.inner_content_head-->
 
                                                                     <div class="inner_content_body">
+
                                                                         <div class="contenedor_sel_pantalla">
-                                                                            <span>3. Mostrar la diapositiva en:</span>
+                                                                            <h4>Control LOCAL</h4>
+                                                                            <span>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</span>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button id="btn_pestania" class="btn" onclick="window.open('pantalla.php','miPestañaText');">Pestaña (Text)</button>
-                                                                                <button id="btn_ventana" class="btn" onclick="window.open('pantalla.php','miVentanaText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana (Text)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla.php','miPestañaText');">Pestaña Local (Text)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla.php','miVentanaText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Local (Text)</button>
                                                                             </div>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button id="btn_pestania_acordes" class="btn" onclick="window.open('pantalla.php?t=cln','miPestañaAcordes');">Pestaña (Acordes)</button>
-                                                                                <button id="btn_ventana_acordes" class="btn" onclick="window.open('pantalla.php?t=cln','miVentanaAcordes', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana (Acordes)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla.php?t=cln','miPestañaAcordes');">Pestaña Local (Acordes)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla.php?t=cln','miVentanaAcordes', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Local (Acordes)</button>
+                                                                            </div>
+                                                                        </div> 
+
+
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>Control REMOTO</h4>
+                                                                            <span>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</span>
+                                                                            <span>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php" target="_blank">SOLO TEXTO</a></span>
+                                                                            <span>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php?t=cln" target="_blank">TEXTO CON ACORDES</a></span>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn" onclick="window.open('pantalla_bd.php','miPestañaBdText');">Pestaña Remota (Text)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla_bd.php','miVentanaBdText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Remota (Text)</button>
                                                                             </div>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button id="btn_pestania_bd" class="btn" onclick="window.open('pantalla_bd.php','miPestañaBd');">Pestaña BD</button>
-                                                                                <button id="btn_ventana_bd" class="btn" onclick="window.open('pantalla_bd.php','miVentanaBd', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana BD</button>
+                                                                                <button class="btn" onclick="window.open('pantalla_bd.php?t=cln','miPestañaBdAcordes');">Pestaña Remota (Acordes)</button>
+                                                                                <button class="btn" onclick="window.open('pantalla_bd.php?t=cln','miVentanaBdAcordes', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Remota (Acordes)</button>
                                                                             </div>
                                                                         </div> 
                                                                         
@@ -684,6 +698,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                             <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
                                                                         </ul>
                                                                     </div><!--/.inner_content_body-->
+
                                                                 </div><!--/.inner_content_head_body-->
                                                                 
                                                             </div>

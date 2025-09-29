@@ -60,7 +60,7 @@
     `;
 ?>
 
-    <div id="contenedor" class="show_acordes shown">
+    <div id="contenedor" class="shown">
 
     </div><!--/#contenedor-->
     

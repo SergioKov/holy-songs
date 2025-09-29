@@ -1716,12 +1716,23 @@ async function insertarArrPantalla() {
         console.log('objSong: ',objSong);
         console.log('id_song: ',id_song);
 
+        let arr_pantalla_safe = structuredClone(arr_pantalla);
+        console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
+
+        //sanitizo cada item de array metiendo '__||__' en slide_text
+        arr_pantalla_safe.forEach((item, i) => {
+            console.log('item: ', item);
+            item.slide_text = sanitizeHtmlForJson(compactHtml(item.slide_text));
+        });
+        
+        console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
+
         
         const objPantallaToSend = {
             id_song: id_song,
             slide_actual: slide_actual,
             slide_text: slide_text,
-            arr_pantalla: arr_pantalla
+            arr_pantalla: arr_pantalla_safe
         };
         console.log('objPantallaToSend: ',objPantallaToSend);
 

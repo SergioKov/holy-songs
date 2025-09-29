@@ -59,9 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     //console.log('documento pantalla cargado'); 
     
     await cargar_datos_pantalla();
-
     lanzarIntentos();// dentro está mySizePantallaShow();
-    //mySizePantallaShow();
 });
 
 //Si HACE FALTA USAR 
@@ -69,7 +67,6 @@ window.addEventListener('load',function(d){
     //console.log('load - window.innerWidth: '+window.innerWidth);
 
     lanzarIntentos();// dentro está mySizePantallaShow();
-    //mySizePantallaShow();
 });
 
 window.addEventListener('resize',function(d){
@@ -135,9 +132,6 @@ async function getDataPantallaFromBd(){
         if(data.success){
             console.log('success is true');
 
-            let slide_text = data.slide_text; 
-            //console.log(`id_songslide: [${id_songslide}] --- id_song: [${data.id_song}] --- slide_text: [${slide_text}] --- data.pantalla_show: `, data.pantalla_show);
-
             data.arr_pantalla = (esString(data.arr_pantalla) && data.arr_pantalla != '' && data.arr_pantalla.length > 0) ? JSON.parse(data.arr_pantalla) : [] ;//IMPORTANTE!
             console.log(`parseado data.arr_pantalla: `, data.arr_pantalla);
 
@@ -169,7 +163,6 @@ async function lanzarIntentos(){
     }
     
         
-    // let arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
     arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
     //console.log('arr_pantalla_str_old: ', arr_pantalla_str_old);
 
@@ -202,9 +195,6 @@ async function lanzarIntentos(){
 
         construirElementosYAppend();
 
-        //construirElementosYAppend(eid_contenedor, arr_pantalla);
-        //construirElementosYAppend(eid_contenedor_prev_inner, arr_pantalla);
-
     }else{//el contenedor ya existe
         console.log('el contenedor YA EXISTE, no lo construyo de nuevo... lo relleno si ha cambiado localStorage');
 
@@ -217,13 +207,12 @@ async function lanzarIntentos(){
 
 async function lanzarIntentosConDelay(){
     
-    await cargar_datos_pantalla();
-
     //lanzo intenos cada 0.2 seg para comprobar si ha cambiado localStorage
     //si ha cambiado, actualizo arr_pantalla y reconstruyo el contenedor
-    setTimeout(async  ()=>{//COMENTAR PARA TEST
+    setTimeout(async ()=>{//COMENTAR PARA TEST
         
-        // let arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
+        await cargar_datos_pantalla();//new
+
         arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
         //console.log('arr_pantalla_str_new: ', arr_pantalla_str_new);
         
@@ -241,7 +230,7 @@ async function lanzarIntentosConDelay(){
                 //DESCOMENTAR EN PROD!!!
                 //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
                 
-                construirElementosYAppend(/*eid_contenedor, arr_pantalla*/);         
+                construirElementosYAppend();         
             }
         }else{
             //console.log('arr_pantalla old y new so IGUALES. no hago nada...');
@@ -346,65 +335,6 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
 
     return best;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function old_construirElementosYAppend(contenedor, arr_pantalla){
-
-    //eid_contenedor.innerHTML = '';//reset
-    contenedor.innerHTML = '';//reset
-    eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
-
-    if(arr_pantalla.length > 0){                
-        arr_pantalla.forEach( (pant, i) => {
-            
-            let add_slide_html = make_add_slide_html(pant);
-
-            const trad = document.createElement('div');
-            trad.id = 'trad' + i;
-            trad.className = 'trad';
-            // trad.innerHTML = `
-            //     <div class="trad_inner">
-            //         <div class="verse">
-            //             ${arr_pantalla[i].slide_text}
-            //             ${add_slide_html}
-            //         </div>
-            //     </div>
-            // `;
-
-            //DORABOTAT!!!
-            trad.innerHTML = `
-                <div class="trad_inner">
-                        <div class="verse">
-                        ${arr_pantalla[i].fieldset_html}
-                        </div>
-                </div>
-            `;
-            eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
-            // eid_contenedor.append(trad);
-            contenedor.append(trad);
-        });
-
-        mySizePantallaShow();
-    }else{
-        const p = document.createElement('p');
-        p.textContent = 'No hay datos que mostrar';
-        // eid_contenedor.append(p);
-        contenedor.append(p);
-    }
-
-}//end function construirElementosYAppend()
 
 
 async function mySizePantallaShow() {//new como ajustarTexto()

@@ -2986,3 +2986,23 @@ span.sp_number {
     height: 100%;
     width: 33.33%;
 }
+
+
+
+.contenedor_sel_pantalla a {
+    white-space: nowrap;
+    color: orange;
+    transition: 0.3s ease;
+    
+}
+.contenedor_sel_pantalla a:hover {
+    color: yellow;
+}
+
+.inner_content p {
+    white-space: normal;
+    font-family: Arial;
+    font-weight: normal;
+    line-height: normal;
+    padding: 3px 0;
+}
