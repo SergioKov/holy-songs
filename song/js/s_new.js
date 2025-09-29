@@ -524,6 +524,9 @@ async function make_arr_pantalla(currentSlide){
     console.log('currentSlide: ',currentSlide);
     console.log('arr_fieldsets: ', arr_fieldsets);
     console.log('arr_esquema_bucle: ',arr_esquema_bucle);
+    
+    slide_actual = currentSlide;
+    console.log('slide_actual: ',slide_actual);
 
     if(arr_fieldsets.length == 0 || arr_esquema_bucle.length == 0){
         return;
@@ -745,7 +748,7 @@ async function make_arr_pantalla(currentSlide){
     //asigno la variable global para enviar al BD
     objPantallaToSendToBd = {
         id_song: id_song,
-        slide_actual: slide_actual,
+        slide_actual,
         arr_pantalla: arr_pantalla_safe,
         pantalla_show: pantallaShow,
         show_logo_en_fondo,
@@ -767,6 +770,65 @@ async function make_arr_pantalla(currentSlide){
     console.log('fin make_arr_pantalla...');
 
     //buildArrPantallaDesktop(arr_pantalla);
+}
+
+function showTipoContent(btn, param){
+    console.log('=== function showTipoContent() ===');
+    
+    if(!param || !btn) return;
+
+    switch (param) {
+        case 'i'://iglesia => mostrar logotipo de la iglesia en el fondo (cuando no se ve el slide)
+            if(show_logo_en_fondo == 1){
+                show_logo_en_fondo = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_logo_en_fondo = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
+            make_arr_pantalla(currentSlide);    
+            break;
+
+        case 'c'://chords => acordes
+            if(show_acordes == 1){
+                show_acordes = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_acordes = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_acordes', show_acordes);
+            make_arr_pantalla(currentSlide);    
+            break;
+
+        case 'l'://legend => títulos
+            if(show_legend == 1){
+                show_legend = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_legend = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_legend', show_legend);
+            make_arr_pantalla(currentSlide);
+            break;
+
+        case 'n'://next slide => mostrar 2 lineas de sig slide
+            if(show_next_slide == 1){
+                show_next_slide = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_next_slide = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_next_slide', show_next_slide);
+            make_arr_pantalla(currentSlide);
+            break;
+    
+        default:
+            break;
+    }
 }
 
 

@@ -664,8 +664,18 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     <div class="inner_content_body">
 
                                                                         <div class="contenedor_sel_pantalla">
+                                                                            <h4>Mostrar / Ocultar</h4>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button class="btn" onclick="showTipoContent(this,'l')">Títulos</button>
+                                                                                <button class="btn" onclick="showTipoContent(this,'c')">Acordes</button>
+                                                                                <button class="btn" onclick="showTipoContent(this,'n')">Sig. Diapositiva</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="contenedor_sel_pantalla">
                                                                             <h4>Control LOCAL</h4>
-                                                                            <span>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</span>
+                                                                            <p>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn" onclick="window.open('pantalla.php','miPestañaText');">Pestaña Local (Text)</button>
                                                                                 <button class="btn" onclick="window.open('pantalla.php','miVentanaText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Local (Text)</button>
@@ -680,9 +690,9 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
                                                                         <div class="contenedor_sel_pantalla">
                                                                             <h4>Control REMOTO</h4>
-                                                                            <span>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</span>
-                                                                            <span>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php" target="_blank">SOLO TEXTO</a></span>
-                                                                            <span>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php?t=cln" target="_blank">TEXTO CON ACORDES</a></span>
+                                                                            <p>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</p>
+                                                                            <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php" target="_blank">SOLO TEXTO</a></p>
+                                                                            <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php?t=cln" target="_blank">TEXTO CON ACORDES</a></p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn" onclick="window.open('pantalla_bd.php','miPestañaBdText');">Pestaña Remota (Text)</button>
                                                                                 <button class="btn" onclick="window.open('pantalla_bd.php','miVentanaBdText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Remota (Text)</button>

@@ -172,7 +172,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //echo_json_x($arr_pantalla_array, 'arr_pantalla_array');
 
     $arr_pantalla_string = json_encode($datos['arr_pantalla'], JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
-   
+
+    $pantalla_show = $conn->real_escape_string($datos['pantalla_show']);//get parameter
+    $show_logo_en_fondo = $conn->real_escape_string($datos['show_logo_en_fondo']);//get parameter
+    $show_legend = $conn->real_escape_string($datos['show_legend']);//get parameter
+    $show_acordes = $conn->real_escape_string($datos['show_acordes']);//get parameter
+    $show_next_slide = $conn->real_escape_string($datos['show_next_slide']);//get parameter
+
 
     //debug($arr, 'arr');
     //echo_json_x($arr_esquema_array, 'arr_esquema_array');
@@ -269,6 +275,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     id_song = '$id_song',
                     slide_actual = '$slide_actual',
                     arr_pantalla = '$arr_pantalla_string',
+                    pantalla_show = '$pantalla_show',
+                    show_logo_en_fondo = '$show_logo_en_fondo',
+                    show_legend = '$show_legend',
+                    show_acordes = '$show_acordes',
+                    show_next_slide = '$show_next_slide',
                     updated_at = '$fechaHoraActual'
                 WHERE id_user = '$id_user_logged'
             ";
@@ -280,6 +291,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     id_song = '$id_song',
                     slide_actual = '$slide_actual',
                     arr_pantalla = '',
+                    pantalla_show = '$pantalla_show',
+                    show_logo_en_fondo = '$show_logo_en_fondo',
+                    show_legend = '$show_legend',
+                    show_acordes = '$show_acordes',
+                    show_next_slide = '$show_next_slide',
                     updated_at = '$fechaHoraActual'
                 WHERE id_user = '$id_user_logged'
             ";
@@ -294,16 +310,60 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         if (is_array($arr_pantalla_array) && !empty($arr_pantalla_array)) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_pantalla_ok';
             $sql2_in_init = "INSERT INTO songslides 
-                    (id_user,             ip_user,    id_song,    slide_actual,     arr_pantalla,           created_at) 
+                    (
+                        id_user,
+                        ip_user,
+                        id_song,
+                        slide_actual,
+                        arr_pantalla,
+                        pantalla_show,
+                        show_logo_en_fondo,
+                        show_legend,
+                        show_acordes,
+                        show_next_slide,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$arr_pantalla_string', '$fechaHoraActual')
+                    (
+                        '$id_user_logged',
+                        '$ip_user',
+                        '$id_song',
+                        '$slide_actual',
+                        '$arr_pantalla_string',
+                        '$show_logo_en_fondo',
+                        '$show_legend',
+                        '$show_acordes',
+                        '$show_next_slide',
+                        '$fechaHoraActual'
+                    )
             ";
         }else{//no es array o está vacío. no incluyo arr_pantalla en la SQL
             $action_tipo = 'is_insert_arr_pantalla_vacio';
             $sql2_in_init = "INSERT INTO songslides 
-                    (id_user,             ip_user,    id_song,    slide_actual,     created_at) 
+                    (
+                        id_user,
+                        ip_user,
+                        id_song,
+                        slide_actual,
+                        pantalla_show,
+                        show_logo_en_fondo,
+                        show_legend,
+                        show_acordes,
+                        show_next_slide,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$id_user_logged', '$ip_user', '$id_song', '$slide_actual',  '$fechaHoraActual')
+                    (
+                        '$id_user_logged',
+                        '$ip_user',
+                        '$id_song',
+                        '$slide_actual',
+                        '$show_logo_en_fondo',
+                        '$show_legend',
+                        '$show_acordes',
+                        '$show_next_slide',
+                        '$fechaHoraActual'
+                    )
             ";
         }
         $result2 = $conn->query($sql2_in_init);
