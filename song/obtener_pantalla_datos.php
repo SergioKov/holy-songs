@@ -83,7 +83,17 @@ $sql_init = "SELECT
                 id_song, 
                 slide_actual, 
                 arr_pantalla, 
+
                 pantalla_show, 
+                show_logo_en_fondo,
+                show_bible_en_fondo,
+                show_black_en_fondo,
+                user_view_control,
+
+                show_legend,
+                show_acordes,
+                show_next_slide,
+
                 created_at, 
                 updated_at
             FROM songslides
@@ -113,13 +123,24 @@ if($result->num_rows > 0){
     $id_song_bd = $row['id_song'];
     $data = [
         'success' => true,
+        
         'id_songslide' => $row['id_songslide'],
         'id_user' => $row['id_user'],
         'ip_user' => $row['ip_user'],
         'id_song' => $row['id_song'],
         'slide_actual' => $row['slide_actual'],
         'arr_pantalla' => $row['arr_pantalla'],
+
         'pantalla_show' => $row['pantalla_show'],
+        'show_logo_en_fondo' => $row['show_logo_en_fondo'],
+        'show_bible_en_fondo' => $row['show_bible_en_fondo'],
+        'show_black_en_fondo' => $row['show_black_en_fondo'],
+        'user_view_control' => $row['user_view_control'],
+
+        'show_legend' => $row['show_legend'],
+        'show_acordes' => $row['show_acordes'],
+        'show_next_slide' => $row['show_next_slide'],
+
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
         'valorData' => 'hay_datos'

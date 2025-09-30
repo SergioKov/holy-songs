@@ -727,6 +727,9 @@ async function make_arr_pantalla(currentSlide){
         arr_pantalla,
         pantalla_show: pantallaShow,
         show_logo_en_fondo,
+        show_bible_en_fondo,
+        show_black_en_fondo,
+        user_view_control,
         show_legend,
         show_acordes,
         show_next_slide,
@@ -752,6 +755,9 @@ async function make_arr_pantalla(currentSlide){
         arr_pantalla: arr_pantalla_safe,
         pantalla_show: pantallaShow,
         show_logo_en_fondo,
+        show_bible_en_fondo,
+        show_black_en_fondo,
+        user_view_control,
         show_legend,
         show_acordes,
         show_next_slide,
@@ -772,10 +778,22 @@ async function make_arr_pantalla(currentSlide){
     //buildArrPantallaDesktop(arr_pantalla);
 }
 
-function showTipoContent(btn, param){
+
+
+async function showTipoContent(btn, param){
     console.log('=== function showTipoContent() ===');
     
     if(!param || !btn) return;
+
+    if(btn.classList.contains('opt_fondo')){
+        const contenedor = eid_block_esquema.querySelector('.wr_opt_fondo');
+        if(contenedor){
+            resetBtnActive(contenedor);
+            show_logo_en_fondo = 0;//reset
+            show_bible_en_fondo = 0;//reset
+            show_black_en_fondo = 0;//reset
+        }
+    }
 
     switch (param) {
         case 'i'://iglesia => mostrar logotipo de la iglesia en el fondo (cuando no se ve el slide)
@@ -787,7 +805,52 @@ function showTipoContent(btn, param){
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
-            make_arr_pantalla(currentSlide);    
+            break;
+
+        case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
+            if(show_bible_en_fondo == 1){
+                show_bible_en_fondo = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_bible_en_fondo = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
+            break;
+
+        case 'f'://fondo => mostrar fondo black en el fondo (cuando no se ve el slide)
+            if(show_black_en_fondo == 1){
+                show_black_en_fondo = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_black_en_fondo = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
+            break;
+
+        case 'u'://user => usuario puede controlar que mostrar en la vista de slide: legend, acordes, next_slide 
+            if(user_view_control == 1){
+                user_view_control = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                user_view_control = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('user_view_control', user_view_control);
+            break;            
+
+
+        //Control por usuario    
+        case 'l'://legend => títulos
+            if(show_legend == 1){
+                show_legend = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_legend = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_legend', show_legend);
             break;
 
         case 'c'://chords => acordes
@@ -799,20 +862,8 @@ function showTipoContent(btn, param){
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_acordes', show_acordes);
-            make_arr_pantalla(currentSlide);    
             break;
 
-        case 'l'://legend => títulos
-            if(show_legend == 1){
-                show_legend = 0;//hext action
-                btn.classList.remove('btn_active');
-            }else{
-                show_legend = 1;//hext action
-                btn.classList.add('btn_active');
-            }
-            localStorage.setItem('show_legend', show_legend);
-            make_arr_pantalla(currentSlide);
-            break;
 
         case 'n'://next slide => mostrar 2 lineas de sig slide
             if(show_next_slide == 1){
@@ -823,13 +874,46 @@ function showTipoContent(btn, param){
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_next_slide', show_next_slide);
-            make_arr_pantalla(currentSlide);
             break;
     
         default:
             break;
     }
+
+    //Admin control
+    //p -> (pantalla) -> pantalla_show
+    //i -> (iglesia)  -> show_logo_en_fondo
+    //b -> (bible)    -> show_bible_en_fondo
+    //f -> (fondo)    -> show_black_en_fondo
+    //u -> (user)     -> user_viev_control
+    
+    //User control si (user_viev_control == true)
+    //l -> (legend)   -> user_viev_control
+    //c -> (chords)   -> show_acordes
+    //n -> (next)     -> show_next_slide
+    if(['p','i','b','f','u',   'l','c','n'].includes(param)){
+        
+        //asigno la variable global para enviar al BD
+        objPantallaParamsToSendToBd = {
+            id_song,
+            pantalla_show: pantallaShow,
+            show_logo_en_fondo,
+            show_bible_en_fondo,
+            show_black_en_fondo,
+            user_view_control,
+            show_legend,
+            show_acordes,
+            show_next_slide,
+        };
+        console.log('objPantallaParamsToSendToBd: ',objPantallaParamsToSendToBd);        
+        
+        //actualizo en BD SOLO los parametros de vista. No datos del arr_pantalla
+        const resultParams = await guardarPantallaParamsEnBd();//objPantallaParamsToSendToBd es global
+        console.log('resultParams: ', resultParams);
+    }
 }
+
+
 
 
 function enableDisablePantallaShow(){//muestra o oculta

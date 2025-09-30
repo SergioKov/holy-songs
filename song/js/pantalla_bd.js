@@ -1,7 +1,7 @@
 const eid_contenedor = document.getElementById('contenedor');
 //const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');
 let arr_pantalla = [];
-let delay_fn = 200;//200 por defecto
+let delay_fn = 1200;//200 por defecto
 let count_intentos = 0;
 
 let id_songslide = 1;//test
@@ -10,43 +10,38 @@ let debug = false;
 //debug = true;
 
 //Vars para formar tipo de contenido por defecto
-let show_acordes = false;
+//Admin control
+let pantalla_show = false;
+let show_logo_en_fondo = false;
+let show_bible_en_fondo = false;
+let show_black_en_fondo = false;
+let user_view_control = false;
+
+//User control
 let show_legend = false;
+let show_acordes = false;
 let show_next_slide = false;
 
-let arr_pantalla_str_new = '';
 let arr_pantalla_str_old = '';
+let arr_pantalla_str_new = '';
 
 
-// Obtiene toda la parte de la URL actual
-const params = new URLSearchParams(window.location.search);
-
-// Leer un parámetro específico
-const id = params.get("id");   // "8050"
-const t  = params.get("t");    // "lc2" //en local solo hay 't' ya que 'id' es el elegido por el admin
-
-if(t){
-    if(t.includes('c')){//acordes
-        show_acordes = true;
-        eid_contenedor.classList.add('show_acordes');
-    }else{
-        eid_contenedor.classList.remove('show_acordes');
-    }
-
-    if(t.includes('l')){//legend
-        show_legend = true;
-        eid_contenedor.classList.add('show_legend');
-    }else{
-        eid_contenedor.classList.remove('show_legend');
-    }
-
-    if(t.includes('n')){//next 2 lineas del sig kuplet si hay
-        show_acordes = true;
-        eid_contenedor.classList.add('show_next_slide');
-    }else{
-        eid_contenedor.classList.remove('show_next_slide');
-    }
+let objPantallaParams = {
+    pantalla_show,
+    show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control,
+    show_legend,
+    show_acordes,
+    show_next_slide,
 }
+
+let objPantallaParams_str_new = '';
+let objPantallaParams_str_old = '';
+
+
+
 
 
 
@@ -56,21 +51,19 @@ if(t){
 localStorage.setItem('pantalla_abierta','true');
 
 document.addEventListener('DOMContentLoaded', async () => {
-    //console.log('documento pantalla cargado'); 
-    
-    await cargar_datos_pantalla();
-    lanzarIntentos();// dentro está mySizePantallaShow();
+    //console.log('documento pantalla cargado');    
+    //await cargar_datos_pantalla();
+    await lanzarIntentos();// dentro está cargar_datos_pantalla(); y mySizePantallaShow();
 });
 
 //Si HACE FALTA USAR 
-window.addEventListener('load',function(d){
-    //console.log('load - window.innerWidth: '+window.innerWidth);
-
-    lanzarIntentos();// dentro está mySizePantallaShow();
+window.addEventListener('load', async () => {
+    //console.log('load - window.innerWidth: ', window.innerWidth);
+    await lanzarIntentos();// dentro está mySizePantallaShow();
 });
 
-window.addEventListener('resize',function(d){
-    //console.log('resize - window.innerWidth: '+window.innerWidth);
+window.addEventListener('resize', async () => {
+    //console.log('resize - window.innerWidth: ', window.innerWidth);
     mySizePantallaShow();
 });
 
@@ -80,25 +73,37 @@ async function cargar_datos_pantalla(){
     console.log('=== function cargar_datos_pantalla() ===');
 
     objPantalla = await getDataPantallaFromBd();//IMPORTANTE para cojer todos los datos necesarios
-    console.log('objPantalla: ', objPantalla);
-    console.log('de bd --- objPantalla.arr_pantalla: ', objPantalla.arr_pantalla);
+    //console.log('objPantalla: ', objPantalla);
+    //console.log('de bd --- objPantalla.arr_pantalla: ', objPantalla.arr_pantalla);
 
     objPantalla.arr_pantalla.forEach(item => {
-        console.log('item before: ', item);
+        //console.log('item before: ', item);
         if(item.slide_html){
             item.slide_html = restoreHtmlFromSanitized(item.slide_html);
         }
-        console.log('item after: ', item);
+        //console.log('item after: ', item);
     });
+    //console.log('restoreHtmlFromSanitized(objPantalla.arr_pantalla): ', objPantalla.arr_pantalla);
 
-    console.log('restoreHtmlFromSanitized(objPantalla.arr_pantalla): ', objPantalla.arr_pantalla);
+    objPantallaParams = {
+        pantalla_show: objPantalla.pantalla_show,
+        show_logo_en_fondo: objPantalla.show_logo_en_fondo,
+        show_bible_en_fondo: objPantalla.show_bible_en_fondo,
+        show_black_en_fondo: objPantalla.show_black_en_fondo,
+        user_view_control: objPantalla.user_view_control,
+        show_legend: objPantalla.show_legend,
+        show_acordes: objPantalla.show_acordes,
+        show_next_slide: objPantalla.show_next_slide,
+    }
+    //console.log('de bd --- objPantallaParams: ', objPantallaParams);
 
     localStorage.setItem('arr_pantalla', JSON.stringify(objPantalla.arr_pantalla) );//IMPORTANTE!
+    localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 }
 
 
 async function getDataPantallaFromBd(){
-    console.log('=== function getDataPantallaFromBd() ===');
+    //console.log('=== function getDataPantallaFromBd() ===');
 
     try {
         
@@ -127,13 +132,13 @@ async function getDataPantallaFromBd(){
         }else{
             data = await response.json();
         }
-        console.log('data: ', data);  
+        //console.log('data: ', data);  
         
         if(data.success){
-            console.log('success is true');
+            //console.log('success is true');
 
             data.arr_pantalla = (esString(data.arr_pantalla) && data.arr_pantalla != '' && data.arr_pantalla.length > 0) ? JSON.parse(data.arr_pantalla) : [] ;//IMPORTANTE!
-            console.log(`parseado data.arr_pantalla: `, data.arr_pantalla);
+            //console.log(`parseado data.arr_pantalla: `, data.arr_pantalla);
 
             return data;
 
@@ -153,18 +158,35 @@ async function lanzarIntentos(){
 
     await cargar_datos_pantalla();
 
-    let pantallaShow = (objPantalla.pantalla_show == '1') ? 'true' : 'false';
-    if(eid_contenedor){
-        if(pantallaShow === 'true'){
-            eid_contenedor.classList.add('shown');
-        }else{
-            eid_contenedor.classList.remove('shown');
-        }
-    }
+    //se hace vista de CSS en aplicarVista();
+    aplicarVista();
+
+    // let pantallaShow = (objPantalla.pantalla_show == '1') ? 'true' : 'false';
+    // if(eid_contenedor){
+    //     if(pantallaShow === 'true'){
+    //         eid_contenedor.classList.add('shown');
+    //     }else{
+    //         eid_contenedor.classList.remove('shown');
+    //     }
+    // }
+
+    //NEW
+    // pantalla_show = (objPantallaParams.pantalla_show == '1') ? true : false;
+    // if(eid_contenedor){
+    //     if(pantalla_show === true){
+    //         eid_contenedor.classList.add('shown');
+    //     }else{
+    //         eid_contenedor.classList.remove('shown');
+    //     }
+    // }
+
     
         
     arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
     //console.log('arr_pantalla_str_old: ', arr_pantalla_str_old);
+    
+    objPantallaParams_str_old = localStorage.getItem('objPantallaParams');
+    //console.log('objPantallaParams_str_old: ', objPantallaParams_str_old);
 
 
     if(arr_pantalla_str_old){
@@ -184,15 +206,14 @@ async function lanzarIntentos(){
     }
 
     arr_pantalla = JSON.parse(arr_pantalla_str_old);
+    objPantallaParams = JSON.parse(objPantallaParams_str_old);
     //console.log('old --- arr_pantalla: ', arr_pantalla);
 
     //si el contenedor está vacío, lo construyo
     if(arr_pantalla && eid_contenedor && eid_contenedor.querySelector('.trad') == null ){
         //console.log('el contenedor está vacío, lo construyo...');
 
-        //DESCOMENTAR EN PROD!!!
-        //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
-
+        aplicarVista();
         construirElementosYAppend();
 
     }else{//el contenedor ya existe
@@ -215,26 +236,48 @@ async function lanzarIntentosConDelay(){
 
         arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
         //console.log('arr_pantalla_str_new: ', arr_pantalla_str_new);
+
+        objPantallaParams_str_new = localStorage.getItem('objPantallaParams');
+        //console.log('objPantallaParams_str_new: ', objPantallaParams_str_new);
         
         //arr_pantalla_str_new = arr_pantalla_str_new.replaceAll('<br>','');
         //console.log('<br> quitados --- arr_pantalla_str_new: ', arr_pantalla_str_new);
+        
+        
+        //1. Params de Slide
+        objPantallaParams = JSON.parse(objPantallaParams_str_new);
+        //console.log('nuevo objPantallaParams: ', objPantallaParams);
 
+        //si ha cambiado algo en losparametros de pantalla de localStorage, reviso que mostrar/ocultar
+        if(objPantallaParams_str_old !== objPantallaParams_str_new){
+            // let aviso = '1. objPantallaParams old y new SON DISTINTOS. hago cosas...';
+            // console.log('aviso: ', aviso);
+            // alert('aviso: ' + aviso);
+
+            aplicarVista();
+            mySizePantallaShow();//importante!
+        }else{
+            //console.log('objPantallaParams old y new son IGUALES. no hago nada...');
+        } 
+
+
+        //2. Datos de Slide
         arr_pantalla = JSON.parse(arr_pantalla_str_new);
-        //console.log('nuevo arr_pantalla: ', arr_pantalla);
+        //console.log('nuevo arr_pantalla: ', arr_pantalla);        
 
         //si ha cambiado la longitud de localStorage, construyo nuevos versículos
         if(arr_pantalla_str_old !== arr_pantalla_str_new){
-            //console.log('arr_pantalla old y new SON DISTINTOS. hago cosas...');
+            // let aviso = '2. arr_pantalla old y new SON DISTINTOS. hago cosas...';
+            // console.log('aviso: ', aviso);
+            // alert('aviso: ' + aviso);
 
-            if(eid_contenedor){            
-                //DESCOMENTAR EN PROD!!!
-                //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
-                
+            if(eid_contenedor){                            
                 construirElementosYAppend();         
             }
         }else{
             //console.log('arr_pantalla old y new so IGUALES. no hago nada...');
         }
+       
 
         lanzarIntentos();//COMENTAR PARA TEST
 
@@ -244,9 +287,138 @@ async function lanzarIntentosConDelay(){
 
 /**
  * eid_contenedor es global
+ * objPantallaParams es global
+ */
+function aplicarVista(){
+    console.log('=== function aplicarVista() ===');
+
+    //Admin control
+    pantalla_show = (objPantallaParams.pantalla_show == '1') ? true : false;
+    show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? true : false;
+    show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? true : false;
+    show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? true : false;
+    user_view_control = (objPantallaParams.user_view_control == '1') ? true : false;
+    
+    //User control
+    show_legend = (objPantallaParams.show_legend == '1') ? true : false;
+    show_acordes = (objPantallaParams.show_acordes == '1') ? true : false;
+    show_next_slide = (objPantallaParams.show_next_slide == '1') ? true : false;
+
+    // si hay contenedor...
+    if(eid_contenedor){
+        
+        //Admin control
+        if(pantalla_show === true){
+            eid_contenedor.classList.add('shown');
+            document.body.classList.remove('logo_en_fondo');
+            document.body.classList.remove('bible_en_fondo');
+            document.body.classList.remove('black_en_fondo');
+        }else{
+            eid_contenedor.classList.remove('shown');
+
+            if(show_logo_en_fondo === true){
+                document.body.classList.add('logo_en_fondo');
+            }else{
+                document.body.classList.remove('logo_en_fondo');
+            }
+
+            if(show_bible_en_fondo === true){
+                document.body.classList.add('bible_en_fondo');
+            }else{
+                document.body.classList.remove('bible_en_fondo');
+            }
+
+            if(show_black_en_fondo === true){
+                document.body.classList.add('black_en_fondo');
+            }else{
+                document.body.classList.remove('black_en_fondo');
+            }
+        }
+
+
+        //User control
+        if(show_acordes === true){
+            eid_contenedor.classList.add('show_acordes');
+        }else{
+            eid_contenedor.classList.remove('show_acordes');
+        }
+
+        if(show_legend === true){
+            eid_contenedor.classList.add('show_legend');
+        }else{
+            eid_contenedor.classList.remove('show_legend');
+        }
+
+        if(show_next_slide === true){
+            eid_contenedor.classList.add('show_next_slide');
+        }else{
+            eid_contenedor.classList.remove('show_next_slide');
+        }
+    }
+
+
+    //si está permitido para el usuario controlar la vista, ...
+    if(user_view_control === true){
+        //code...
+        console.log('aplico vista usuario...');
+
+        aplicarVistaUsuario();
+
+    }
+
+    //DESCOMENTAR EN PROD!!!
+    //eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
+
+}//end function aplicarVista()
+
+
+function aplicarVistaUsuario(){
+    console.log('=== function aplicarVistaUsuario() ===');
+
+    // Obtiene toda la parte de la URL actual
+    const params = new URLSearchParams(window.location.search);
+
+    // Leer un parámetro específico
+    const id = params.get("id");   // "8050"
+    const t  = params.get("t");    // "lc2" //en local solo hay 't' ya que 'id' es el elegido por el admin
+
+    if(t){
+
+        //legend
+        if(t.includes('l')){
+            show_legend = true;
+            eid_contenedor.classList.add('show_legend');
+        }else{
+            show_legend = false;
+            eid_contenedor.classList.remove('show_legend');
+        }
+
+        //acordes
+        if(t.includes('c')){
+            show_acordes = true;
+            eid_contenedor.classList.add('show_acordes');
+        }else{
+            show_acordes = false;
+            eid_contenedor.classList.remove('show_acordes');
+        }
+
+        //next_slide.  2 lineas del sig kuplet si hay
+        if(t.includes('n')){
+            show_acordes = true;
+            eid_contenedor.classList.add('show_next_slide');
+        }else{
+            show_acordes = false;
+            eid_contenedor.classList.remove('show_next_slide');
+        }
+    }
+}
+
+/**
+ * eid_contenedor es global
  * arr_pantalla es global
  */
 function construirElementosYAppend(){
+    console.log('=== function construirElementosYAppend() ===');
 
     eid_contenedor.innerHTML = '';//reset
 
@@ -304,8 +476,8 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
     let lo = min, hi = max, best = min;
 
     const { width: trad_width, height: trad_height } = trad.getBoundingClientRect();
-    console.log('trad_width: ', trad_width);
-    console.log('trad_height: ', trad_height);
+    //console.log('trad_width: ', trad_width);
+    //console.log('trad_height: ', trad_height);
 
     while (lo <= hi) {
         const mid = Math.floor((lo + hi) / 2);
@@ -319,8 +491,8 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
         if (!verse) break; // por seguridad
 
         const { width: verse_width, height: verse_height } = verse.getBoundingClientRect();
-        console.log('verse_width: ', verse_width);
-        console.log('verse_height: ', verse_height);
+        //console.log('verse_width: ', verse_width);
+        //console.log('verse_height: ', verse_height);
 
         if (verse_width <= maxW && verse_height <= maxH      /*&& verse_width <= trad_width && verse_height <= trad_height*/ ) {
             best = mid;      // cabe → probamos más grande
@@ -331,7 +503,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
     }
 
     trad.style.fontSize = best + 'px';
-    console.log("dentro de func ajustarFuenteBinaria --- FontSize final:", best);
+    //console.log("dentro de func ajustarFuenteBinaria --- FontSize final:", best);
 
     return best;
 }
@@ -379,7 +551,7 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         clone_contenedor.appendChild(clone);
 
         let fontSize_new = await ajustarFuenteBinaria(/*trad,*/ clone, maxW, maxH);
-        console.log("FontSize final. fontSize_new:", fontSize_new);
+        //console.log("FontSize final. fontSize_new:", fontSize_new);
         //alert('1. sdfgsdg');
         
         trad.style.fontSize = fontSize_new + 'px';
@@ -400,16 +572,30 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         document.body.removeChild(clone_contenedor);//ok
     });
 
-    let pantallaShow = localStorage.getItem('pantallaShow');
-    if(eid_contenedor){
-        if(pantallaShow === 'true'){
-            //console.log('add shown');
-            eid_contenedor.classList.add('shown');
-        }else{
-            //console.log('remove shown');
-            eid_contenedor.classList.remove('shown');
-        }
-    }
+    aplicarVista();
+
+    // let pantallaShow = localStorage.getItem('pantallaShow');
+    // if(eid_contenedor){
+    //     if(pantallaShow === 'true'){
+    //         //console.log('add shown');
+    //         eid_contenedor.classList.add('shown');
+    //     }else{
+    //         //console.log('remove shown');
+    //         eid_contenedor.classList.remove('shown');
+    //     }
+    // }
+
+    //NEW ?
+    // pantalla_show = localStorage.getItem('objPantallaPasrams.pantalla_Show');
+    // if(eid_contenedor){
+    //     if(pantalla_show === true){
+    //         //console.log('add shown');
+    //         eid_contenedor.classList.add('shown');
+    //     }else{
+    //         //console.log('remove shown');
+    //         eid_contenedor.classList.remove('shown');
+    //     }
+    // }
 }
 
 

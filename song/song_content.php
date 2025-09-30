@@ -664,9 +664,26 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                     <div class="inner_content_body">
 
                                                                         <div class="contenedor_sel_pantalla">
-                                                                            <h4>Mostrar / Ocultar</h4>
+                                                                            <h4>Control de Admin</h4>
+                                                                            <p>Habilitar / Deshabilitar:</p>
+                                                                            <h5>Fondo cuando slide es oculto</h5>
+                                                                            <div class="wr_sel_pantalla wr_opt_fondo">
+                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
+                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'f')">Black en Fondo</button>
+                                                                            </div>
+
+                                                                            <h5>Control de Usuario</h5>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button class="btn" onclick="showTipoContent(this,'u')">Control de Usuario</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>Control de Usuario</h4>
+                                                                            <p>Vista de Diapositiva</p>
+                                                                            <p>Mostrar / Ocultar:</p>
+                                                                            <div class="wr_sel_pantalla">
                                                                                 <button class="btn" onclick="showTipoContent(this,'l')">Títulos</button>
                                                                                 <button class="btn" onclick="showTipoContent(this,'c')">Acordes</button>
                                                                                 <button class="btn" onclick="showTipoContent(this,'n')">Sig. Diapositiva</button>
@@ -674,7 +691,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                         </div>
 
                                                                         <div class="contenedor_sel_pantalla">
-                                                                            <h4>Control LOCAL</h4>
+                                                                            <h4>Diapositiva LOCAL</h4>
                                                                             <p>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn" onclick="window.open('pantalla.php','miPestañaText');">Pestaña Local (Text)</button>
@@ -689,7 +706,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
 
 
                                                                         <div class="contenedor_sel_pantalla">
-                                                                            <h4>Control REMOTO</h4>
+                                                                            <h4>Diapositiva REMOTO</h4>
                                                                             <p>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</p>
                                                                             <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php" target="_blank">SOLO TEXTO</a></p>
                                                                             <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php?t=cln" target="_blank">TEXTO CON ACORDES</a></p>

@@ -14,9 +14,20 @@ body {
     font-family: monospace, Arial, 'Roboto Slab', Tahoma, 'sans serif';
     /* overflow: hidden; */
     background: black;
-    background-image: url('../images/bible_open6.jpg');
+    /* background-image: url('../images/bible_open6.jpg'); */
     background-size: cover;
     background-position: center;
+    transition: 1s;
+}
+
+body.logo_en_fondo {
+    background-image: url('../images/logo_iglesia.png');
+}
+body.bible_en_fondo {
+    background-image: url('../images/bible_open6.jpg');
+}
+body.black_en_fondo {
+    background: black;
 }
 
 .d-block{
@@ -145,7 +156,7 @@ S {
 
 
 .d_line {
-    font-weight: bolder;
+    font-weight: bold;
     font-family: Arial, Tahoma, 'sans serif';
     line-height: normal;
     white-space: normal;/* para publico */
@@ -303,7 +314,7 @@ fieldset.kuplet {
     /* b = bola, punto */
     .b {
         padding-top: 0px;
-        padding-bottom: 15px;
+        padding-bottom: 3px;
     }
 
     /* n = nota */
@@ -313,7 +324,7 @@ fieldset.kuplet {
         font-weight: normal;
         font-style: italic;
         padding-top: 0;
-        padding-bottom: 15px;
+        padding-bottom: 3px;
 
         /* background: orange; */
         scale: 0.5;

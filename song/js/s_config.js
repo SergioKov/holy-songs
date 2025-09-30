@@ -510,21 +510,37 @@ let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');/
 //pantallaShow = localStorage.setItem('pantallaShow', true);
 
 //Vars para formar tipo de contenido por defecto en Pantalla
+//igual como 'is_fon_shown' 
+// (pantalla_show = true) => mostrar slide con texto; 
+// (pantalla_show = false) => ocultar slide y mostrar fondo con la biblia abierta
 let pantalla_show = pantallaShow;
+
+// (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = false;
-let show_legend = false;
-let show_acordes = false;
-let show_next_slide = false;
+
+// (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
+let show_bible_en_fondo = false;
+
+// (show_black_en_fondo = true) => mostrar el fondo black cuando el fondo esta mostrado con (pantalla_show = false)
+let show_black_en_fondo = false;
+
+let user_view_control = false;//usuario puede/no puede elegir qué mostrar en el slide: legend, acordes, next_slide
+let show_legend = false;//mostrar/no mostrar legend en slide de pantalla.php
+let show_acordes = false;//mostrar acordes en slide de pantalla.php
+let show_next_slide = false;//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 
 let objPantalla = {//objeto con datos de la canción actual para pantalla
     id_song,
     slide_actual,
     arr_pantalla, //los datos en html con '__||__' en vez de comillas dobles (")
-    pantalla_show,//igual como 'is_fon_shown' (pantalla_show = true) => mostrar slide con texto; (pantalla_show = false) => ocultar slide y mostrar fondo con la biblia abierta
-    show_logo_en_fondo,// (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
-    show_legend,//mostrar legend en slide de pantalla.php
-    show_acordes,////mostrar acordes en slide de pantalla.php
-    show_next_slide,//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+    pantalla_show,
+    show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control, 
+    show_legend,
+    show_acordes,
+    show_next_slide,
 }
 
 let objPantallaToSendToBd = {
@@ -533,12 +549,28 @@ let objPantallaToSendToBd = {
     arr_pantalla,//aki se añadirá 'arr_pantalla_safe'
     pantalla_show,
     show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control, 
     show_legend,
     show_acordes,
     show_next_slide,
 };
 
 let objPantallaToSendToBd_str = '';
+
+let objPantallaParamsToSendToBd = {
+    id_song,
+    pantalla_show,
+    show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control,
+    show_legend,
+    show_acordes,
+    show_next_slide,
+};
+let objPantallaParamsToSendToBd_str = '';
 
 
 let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_esquema, crear_esquema, select_slide]

@@ -322,6 +322,110 @@ async function insertarArrPantalla() {
 
 
 
+
+
+
+
+
+async function guardarPantallaParamsEnBd(){
+    console.log('=== function guardarPantallaParamsEnBd() ===');
+
+    try {
+
+        if(arr_pantalla.length == 0){
+            alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+        }
+
+        const data = await insertarPantallaParams();
+        console.log('data: ',data);
+
+        if(data.success){
+            
+            let text_show;
+            text_show = '3. pantalla params insertado con éxito.';
+            console.log(text_show);
+
+            if(hayElementosModalesAbiertos()){
+                showToast('ok', text_show, 5000);
+            }
+
+            if(data.id_song){
+                console.log('id_song: ', data.id_song);
+            }
+            
+        }else{
+            
+            let text_show = '3. Error al insertar pantalla params.';
+            console.error('text_show: ', text_show);
+
+            if(hayElementosModalesAbiertos()){
+                showToast('error', text_show, 5000);
+            }
+        }
+
+    } catch (error) {
+        // Código a realizar cuando se rechaza la promesa
+        console.error('guardarPantallaParamsEnBd(). error: ',error);        
+    }
+
+}
+
+
+async function insertarPantallaParams() {
+    console.log('=== function insertarPantallaParams() ===');
+
+    const {id_song} = objPantallaToSendToBd;//
+
+    try {
+        
+        // if(get_cookieConsent && get_cookieConsent === 'rejected'){
+        //     let aviso_text = `Si no aceptas cookies no puedes insertar datos. <a onclick="showBlockCookies(); closeModal(null,true);">Seleccionar Coockies</a>.`;
+        //     openModal('center','Cookies',aviso_text,'showAviso');
+        //     return;
+        // }
+
+        if(!id_song || isNaN(pantalla_show) || isNaN(show_logo_en_fondo) || isNaN(user_view_control) || isNaN(show_legend) || isNaN(show_acordes) || isNaN(show_next_slide) ){
+            alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            return;
+        }
+
+        objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);//variable global
+        console.log('objPantallaParamsToSendToBd_str: ', objPantallaParamsToSendToBd_str);
+
+        const response = await fetch('insertar_pantalla_params.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: objPantallaParamsToSendToBd_str
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+        
+        let data;
+        if(debug){
+            data = await response.text();//test
+        }else{
+            data = await response.json();
+        }
+        console.log('data: ',data); 
+        
+        return data;
+
+    } catch (error) {
+        console.error('Error en la función insertarPantallaParams. error: ', error);
+    }
+}
+
+
+
+
+
+
+
+
 // no funciona correctamente...
 // async function getPublicIP() {
 //   const res = await fetch('https://api.ipify.org?format=json');
