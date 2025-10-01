@@ -646,6 +646,121 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                                                 
                                                     </div><!--/.wr_panels-->                                                
                                                 
+
+
+
+
+
+
+
+
+
+
+                                                    <button id="btn_select_slide_settings" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_select_slide_settings');" title="Settings">
+                                                        <img class="btn_img_sm" src="./images/settings7_white.svg">
+                                                    </button>
+                                                    <div id="bl_select_slide_settings" class="bl_set bl_actions" style="display:none;">
+                                                        <div class="bl_set_inner bl_closed">
+                                                            <div class="inner_content">
+
+                                                                <div class="inner_content_head_body">
+                                                                    <div class="inner_content_head">
+                                                                        <div class="wr_title_btn_close">
+                                                                            <span>Ajustes de vista de diapositivas</span>
+                                                                            <span class="sp_close">✕</span>
+                                                                        </div>
+                                                                    </div><!--/.inner_content_head-->
+
+                                                                    <div class="inner_content_body">
+
+                                                                        <h4>Admin</h4>
+
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>Fondo cuando la diapositiva está oculta</h4>
+                                                                            <p>Habilitar / Deshabilitar:</p>
+                                                                            <div class="wr_sel_pantalla wr_opt_fondo">
+                                                                                <button id="btn_show_logo_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button id="btn_show_bible_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
+                                                                                <button id="btn_show_black_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'f')">Black en Fondo</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>Permiso al Usuario personalizar la vista de la diapositiva</h4>
+                                                                            <p>Si está habilitado, el usuario puede elegir qué quiere ver en la diapositiva: títulos, acordes, una parte de la siguiente diapositiva.</p>
+                                                                            <p>Habilitar / Deshabilitar:</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_user_view_control" class="btn w_100" onclick="showTipoContent(this,'u')">Control de Usuario</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <h4>Vista de Diapositiva</h4>
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <p>Mostrar / Ocultar:</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_show_legend" class="btn w_100" onclick="showTipoContent(this,'l')">Títulos</button>
+                                                                                <button id="btn_show_acordes" class="btn w_100" onclick="showTipoContent(this,'c')">Acordes</button>
+                                                                                <button id="btn_show_next_slide" class="btn w_100" onclick="showTipoContent(this,'n')">Siguiente Diapositiva</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <h4>Ubicación</h4>
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>LOCAL</h4>
+                                                                            <p>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</p>
+                                                                            <p>
+                                                                                Escoge esta opción si usas otra pantalla desde el dispositivo actual (PC o MAC) para mostrar en otra pantalla conectada las diapositivas para el público.
+                                                                            </p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="window.open('pantalla.php','miPestaña');">Pestaña Local</button>
+                                                                                <button class="btn w_100" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Local</button>
+                                                                            </div>
+                                                                        </div> 
+
+
+                                                                        <div class="contenedor_sel_pantalla">
+                                                                            <h4>REMOTO</h4>
+                                                                            <p>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</p>
+                                                                            <p>
+                                                                                Escoge esta opción si quieres que otros usuarios vean esta pantalla desde sus dispositivos (Móviles, Tablets, PC o MAC). Para aquello ellos deben acceder al enlace abajo:
+                                                                            </p>
+                                                                            <p>
+                                                                                <a id="link_pantalla_bd" href="" target="_blank"><!--se añade por js--></a>
+                                                                            </p>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="window.open('pantalla_bd.php','miPestañaBd');">Pestaña Remota</button>
+                                                                                <button class="btn w_100" onclick="window.open('pantalla_bd.php','miVentanaBd', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Remota</button>
+                                                                            </div>
+                                                                        </div> 
+
+                                                                        <div class="wr_qr_code">
+                                                                            <h4>Escanea el código QR</h4>
+                                                                            <div class="wr_qr_img">
+                                                                                <img class="w_100" src="./images/qr_pantalla_bd.png">
+                                                                            </div>
+                                                                            <div class="wr_qr_inpt">
+                                                                                <input id="inpt_pantalla_bd" type="text" value="" readonly>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        
+                                                                    </div><!--/.inner_content_body-->
+
+                                                                </div><!--/.inner_content_head_body-->
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+
+
+
                                                     <button id="btn_actions_select_slide" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide');" title="Acciones">
                                                         <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
                                                     </button>
@@ -661,66 +776,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                         </div>
                                                                     </div><!--/.inner_content_head-->
 
-                                                                    <div class="inner_content_body">
-
-                                                                        <div class="contenedor_sel_pantalla">
-                                                                            <h4>Control de Admin</h4>
-                                                                            <p>Habilitar / Deshabilitar:</p>
-                                                                            <h5>Fondo cuando slide es oculto</h5>
-                                                                            <div class="wr_sel_pantalla wr_opt_fondo">
-                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
-                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
-                                                                                <button class="btn opt_fondo" onclick="showTipoContent(this,'f')">Black en Fondo</button>
-                                                                            </div>
-
-                                                                            <h5>Control de Usuario</h5>
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="showTipoContent(this,'u')">Control de Usuario</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="contenedor_sel_pantalla">
-                                                                            <h4>Control de Usuario</h4>
-                                                                            <p>Vista de Diapositiva</p>
-                                                                            <p>Mostrar / Ocultar:</p>
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="showTipoContent(this,'l')">Títulos</button>
-                                                                                <button class="btn" onclick="showTipoContent(this,'c')">Acordes</button>
-                                                                                <button class="btn" onclick="showTipoContent(this,'n')">Sig. Diapositiva</button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="contenedor_sel_pantalla">
-                                                                            <h4>Diapositiva LOCAL</h4>
-                                                                            <p>Mostrar la diapositiva en EL MISMO DISPOSITIVO:</p>
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="window.open('pantalla.php','miPestañaText');">Pestaña Local (Text)</button>
-                                                                                <button class="btn" onclick="window.open('pantalla.php','miVentanaText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Local (Text)</button>
-                                                                            </div>
-
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="window.open('pantalla.php?t=cln','miPestañaAcordes');">Pestaña Local (Acordes)</button>
-                                                                                <button class="btn" onclick="window.open('pantalla.php?t=cln','miVentanaAcordes', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Local (Acordes)</button>
-                                                                            </div>
-                                                                        </div> 
-
-
-                                                                        <div class="contenedor_sel_pantalla">
-                                                                            <h4>Diapositiva REMOTO</h4>
-                                                                            <p>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</p>
-                                                                            <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php" target="_blank">SOLO TEXTO</a></p>
-                                                                            <p>Accede a: <a href="http://holy-songs.local/song/pantalla_bd.php?t=cln" target="_blank">TEXTO CON ACORDES</a></p>
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="window.open('pantalla_bd.php','miPestañaBdText');">Pestaña Remota (Text)</button>
-                                                                                <button class="btn" onclick="window.open('pantalla_bd.php','miVentanaBdText', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Remota (Text)</button>
-                                                                            </div>
-
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn" onclick="window.open('pantalla_bd.php?t=cln','miPestañaBdAcordes');">Pestaña Remota (Acordes)</button>
-                                                                                <button class="btn" onclick="window.open('pantalla_bd.php?t=cln','miVentanaBdAcordes', 'width=800,height=600,top=100,left=100,resizable=yes,scrollbars=yes');">Ventana Remota (Acordes)</button>
-                                                                            </div>
-                                                                        </div> 
-                                                                        
+                                                                    <div class="inner_content_body">               
                                                                         <ul class="ul_action">
                                                                             <p class="prim">3.Los botones de acciones se verán al selecionar la canción...</p>
                                                                         </ul>

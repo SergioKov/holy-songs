@@ -63,7 +63,9 @@
         display: block;
     }
 
-    .partes {
+    .partes ,
+    .wr_dbtns_panels
+    {
         display: none !important;
     }
     .partes.bl_active {

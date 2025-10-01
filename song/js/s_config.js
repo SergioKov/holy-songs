@@ -143,6 +143,20 @@ const eid_contenedor_prev = document.getElementById('contenedor_prev');//para sl
 const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');//para slide en select_slide()
 const eid_vklad_btn_pantallaShow = document.getElementById('vklad_btn_pantallaShow');
 const eid_titulo_shown = document.getElementById('titulo_shown');
+
+//botones - Fondo
+const eid_btn_show_logo_en_fondo = document.getElementById('btn_show_logo_en_fondo');
+const eid_btn_show_bible_en_fondo = document.getElementById('btn_show_bible_en_fondo');
+const eid_btn_show_black_en_fondo = document.getElementById('btn_show_black_en_fondo');
+
+//Control de usuario
+const eid_btn_user_view_control = document.getElementById('btn_user_view_control');
+
+//Vista de Diapositiva
+const eid_btn_show_legend = document.getElementById('btn_show_legend');
+const eid_btn_show_acordes = document.getElementById('btn_show_acordes');
+const eid_btn_show_next_slide = document.getElementById('btn_show_next_slide');
+
 //========================================================//
 //end - block_esquema
 //========================================================//
@@ -516,13 +530,13 @@ let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');/
 let pantalla_show = pantallaShow;
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
-let show_logo_en_fondo = false;
+let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? 'false');// def false;
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
-let show_bible_en_fondo = false;
+let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? 'false');//def false
 
 // (show_black_en_fondo = true) => mostrar el fondo black cuando el fondo esta mostrado con (pantalla_show = false)
-let show_black_en_fondo = false;
+let show_black_en_fondo = JSON.parse(localStorage.getItem('show_black_en_fondo') ?? 'false');//def false
 
 let user_view_control = false;//usuario puede/no puede elegir qué mostrar en el slide: legend, acordes, next_slide
 let show_legend = false;//mostrar/no mostrar legend en slide de pantalla.php
@@ -559,6 +573,19 @@ let objPantallaToSendToBd = {
 
 let objPantallaToSendToBd_str = '';
 
+let objPantallaParams = {
+    id_song,
+    pantalla_show,
+    show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control,
+    show_legend,
+    show_acordes,
+    show_next_slide,
+};
+let objPantallaParams_str = '';
+
 let objPantallaParamsToSendToBd = {
     id_song,
     pantalla_show,
@@ -590,6 +617,10 @@ let pageActiveEjemplo = null;
 //let pageActiveLista = null;
 
 let mostrarPrim = true;
+
+const web_protocol = window.location.protocol;//'http:' o 'https:'
+const web_host = window.location.host;//'holy-songs.local' o 'holy-songs.com'
+const web_protocol_y_host = `${web_protocol}//${web_host}`;//'http://holy-songs.local'
 
 
 

@@ -2199,6 +2199,15 @@ async function select_slide(){
         select_slide_wr_vista_btns.append(btn_simple);
     });
 
+    const eid_link_pantalla_bd = document.getElementById('link_pantalla_bd');
+    const eid_inpt_pantalla_bd = document.getElementById('inpt_pantalla_bd');
+    const link_fichero = `${web_protocol_y_host}/song/pantalla_bd.php`;//
+    
+    //meto el valor en link y input 
+    eid_link_pantalla_bd.href = link_fichero;
+    eid_link_pantalla_bd.textContent = link_fichero;
+    eid_inpt_pantalla_bd.value = link_fichero;
+
     select_slide_ul_action.innerHTML = `
         <li class="li_action" onclick="crearSlides();">Crear slides (Inicio)</li>
         <li class="li_action" onclick="crearSlides(); closeAll();">Crear + Ver slides (inicio)</li>

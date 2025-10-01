@@ -65,6 +65,8 @@
     </div><!--/#contenedor-->
     
     
+    <script src="js/pantalla_config.js"></script>
     <script src="js/pantalla.js"></script>
+    <script src="js/pantalla_both.js"></script>
 </body>
 </html>

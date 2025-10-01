@@ -764,9 +764,6 @@ async function make_arr_pantalla(currentSlide){
     };
     console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
 
-
-
-
     
     //guardo en la BD
     const result = await guardarArrPantallaEnBd();//objPantalla es global
@@ -911,6 +908,8 @@ async function showTipoContent(btn, param){
         const resultParams = await guardarPantallaParamsEnBd();//objPantallaParamsToSendToBd es global
         console.log('resultParams: ', resultParams);
     }
+
+    localStorage.setItem('objPantallaParams', objPantallaParams);
 }
 
 
@@ -940,7 +939,7 @@ function mostrar_pantallaShow(){
     // eid_btn_pantallaShow.classList.add('btn_active');
     eid_vklad_btn_pantallaShow.classList.add('btn_active');
     eid_contenedor_prev.classList.add('shown');
-    eid_fondo_body.classList.add('fondo_black');
+    //eid_fondo_body.classList.add('fondo_black');
 
     localStorage.setItem('pantallaShow','true');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
@@ -950,7 +949,7 @@ function ocultar_pantallaShow(){
     // eid_btn_pantallaShow.classList.remove('btn_active');
     eid_vklad_btn_pantallaShow.classList.remove('btn_active');
     eid_contenedor_prev.classList.remove('shown');
-    eid_fondo_body.classList.remove('fondo_black');
+    //eid_fondo_body.classList.remove('fondo_black');
     
     localStorage.setItem('pantallaShow','false');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
@@ -960,7 +959,18 @@ function ocultar_pantallaShow(){
 
 
 
-
+function check_show_logo_en_fondo(){
+    console.log('=== function check_show_logo_en_fondo() ===');
+    console.log('show_logo_en_fondo: ', show_logo_en_fondo);
+    
+    if(show_logo_en_fondo){
+        eid_show_logo_en_fondo.classList.add('btn_active');
+        // mostrar_pantallaShow();
+    }else{
+        eid_show_logo_en_fondo.classList.remove('btn_active');
+        // ocultar_pantallaShow();
+    }
+}
 
 
 
