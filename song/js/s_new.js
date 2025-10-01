@@ -909,7 +909,9 @@ async function showTipoContent(btn, param){
         console.log('resultParams: ', resultParams);
     }
 
-    localStorage.setItem('objPantallaParams', objPantallaParams);
+    objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);
+
+    localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
 }
 
 

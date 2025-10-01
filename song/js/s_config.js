@@ -573,18 +573,6 @@ let objPantallaToSendToBd = {
 
 let objPantallaToSendToBd_str = '';
 
-let objPantallaParams = {
-    id_song,
-    pantalla_show,
-    show_logo_en_fondo,
-    show_bible_en_fondo,
-    show_black_en_fondo,
-    user_view_control,
-    show_legend,
-    show_acordes,
-    show_next_slide,
-};
-let objPantallaParams_str = '';
 
 let objPantallaParamsToSendToBd = {
     id_song,
