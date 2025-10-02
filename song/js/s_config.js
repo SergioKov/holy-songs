@@ -543,7 +543,10 @@ let show_legend = false;//mostrar/no mostrar legend en slide de pantalla.php
 let show_acordes = false;//mostrar acordes en slide de pantalla.php
 let show_next_slide = false;//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 
-let objPantalla = {//objeto con datos de la canción actual para pantalla
+//Objeto con datos de la canción actual para pantalla. 
+// SE USA EN 'pantalla_bd.js' 
+// Y NO SE USA EN 'pantalla.js' de localStorage
+let objPantalla = {
     id_song,
     slide_actual,
     arr_pantalla, //los datos en html con '__||__' en vez de comillas dobles (")
@@ -557,6 +560,7 @@ let objPantalla = {//objeto con datos de la canción actual para pantalla
     show_next_slide,
 }
 
+//Object con todos los params
 let objPantallaToSendToBd = {
     id_song,
     slide_actual,
@@ -574,6 +578,12 @@ let objPantallaToSendToBd = {
 let objPantallaToSendToBd_str = '';
 
 
+// objPantallaParams se inicializa en 'pantalla_config.js' en 2 ficheros 'pantalla.php' (localStorage) y 'pantalla_bd.php' (BD)
+
+
+
+
+//Params (sin arr_pantalla)
 let objPantallaParamsToSendToBd = {
     id_song,
     pantalla_show,

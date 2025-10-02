@@ -162,11 +162,13 @@ function construirElementosYAppend(){
         });
 
         mySizePantallaShow();
+
     }else{
+
         const p = document.createElement('p');
         p.textContent = 'No hay datos que mostrar';
-        // eid_contenedor.append(p);
-        contenedor.append(p);
+        eid_contenedor.append(p);
+        
     }
 
 }//end function construirElementosYAppend()

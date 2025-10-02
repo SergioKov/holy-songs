@@ -748,7 +748,7 @@ async function make_arr_pantalla(currentSlide){
     });        
     console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
 
-    //asigno la variable global para enviar al BD
+    //Objeto para BD. asigno la variable global para enviar al BD
     objPantallaToSendToBd = {
         id_song: id_song,
         slide_actual,
@@ -766,7 +766,7 @@ async function make_arr_pantalla(currentSlide){
 
     
     //guardo en la BD
-    const result = await guardarArrPantallaEnBd();//objPantalla es global
+    const result = await guardarArrPantallaEnBd();//se envia objPantallaToSendToBd
     console.log('arr_pantalla: ', arr_pantalla);
     console.log('result: ', result);
     
@@ -907,11 +907,14 @@ async function showTipoContent(btn, param){
         //actualizo en BD SOLO los parametros de vista. No datos del arr_pantalla
         const resultParams = await guardarPantallaParamsEnBd();//objPantallaParamsToSendToBd es global
         console.log('resultParams: ', resultParams);
+
+
+        //
+        objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);
+        localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
     }
 
-    objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);
 
-    localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
 }
 
 
