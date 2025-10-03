@@ -181,7 +181,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 
     //debug($arr, 'arr');
-    echo_json_x($pantalla_show, 'pantalla_show');
+    //echo_json_x($pantalla_show, 'pantalla_show');
 
     //exit('<br>hasta aki-2');
 
