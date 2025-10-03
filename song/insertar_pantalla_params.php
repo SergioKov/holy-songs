@@ -304,6 +304,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 (
                     '$id_user_logged',
                     '$ip_user',
+                    '$pantalla_show',
                     '$show_logo_en_fondo',
                     '$show_bible_en_fondo',
                     '$show_black_en_fondo',
