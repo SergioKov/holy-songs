@@ -302,7 +302,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         }
         $result2 = $conn->query($sql2_up_init);
         //debug_x($sql2_up_preparada, 'sql2_up_preparada');
-        //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');	
+        //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');
 
     }else{
         
@@ -421,7 +421,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $respuesta = [
                 'success' => false,
                 'error' => 'arr_pantalla. Error al actualizar datos: ',
-                'sql' => $sql2_in_init,
+                'sql' => $sql2_up_init,
                 'conn_error' => $conn->error
             ];
         }else{
