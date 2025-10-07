@@ -754,7 +754,8 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                         <div class="wr_qr_code">
                                                                             <h4>Escanea el código QR</h4>
                                                                             <div class="wr_qr_img">
-                                                                                <img class="w_100" src="./images/qr_pantalla_bd.png">
+                                                                                <!-- <img class="w_100" src="./images/qr_show_screen_com.png"> -->
+                                                                                <img class="w_100" src="./images/qr_show_screen_com.svg">
                                                                             </div>
                                                                             <div class="wr_qr_inpt">
                                                                                 <input id="inpt_pantalla_bd" type="text" value="" readonly>

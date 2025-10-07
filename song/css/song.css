@@ -3029,6 +3029,8 @@ span.sp_number {
 .wr_qr_img img {
     outline: 3px solid #737373;
     border-radius: 10px;
+    padding: 10px;
+    background: white;
 }
 
 .wr_qr_inpt {
