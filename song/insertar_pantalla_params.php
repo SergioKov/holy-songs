@@ -367,7 +367,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
             $respuesta = [
                 'success' => false,
-                'error' => 'Error al actualizar datos: ',
+                'error' => 'params. Error al actualizar datos: ',
                 'conn_error' => $conn->error
             ];
         }else{
