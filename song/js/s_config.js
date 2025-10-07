@@ -620,5 +620,16 @@ const web_protocol = window.location.protocol;//'http:' o 'https:'
 const web_host = window.location.host;//'holy-songs.local' o 'holy-songs.com'
 const web_protocol_y_host = `${web_protocol}//${web_host}`;//'http://holy-songs.local'
 
+const web_host_parts = web_host.split('.');
+const web_tld = web_host_parts.pop(); // "com" o "local"
+//console.log('web_tld: ', web_tld);
+
+let web_show_screen_host;
+
+if(web_tld === 'com'){//hostalia
+    web_show_screen_host = `${web_protocol}//show-screen.com/`;//'https://show-screen.com'
+}else{//localhost
+    web_show_screen_host = `${web_protocol}//show-screen.local/`;//'https://show-screen.local'
+}
 
 

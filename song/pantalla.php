@@ -1,3 +1,23 @@
+<?php
+// Conexión a la base de datos
+// if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
+//     //echo"hostalia";
+// 	$href_css = "http://show-screen.com/css/pantalla.css";//.com
+
+// 	$src_pantalla_config = "http://show-screen.com/js/pantalla_config.js";
+// 	$src_pantalla = "http://show-screen.com/js/pantalla.js";
+// 	$src_pantalla_both = "http://show-screen.com/js/pantalla_both.js";
+    
+// }else{//LOCALHOST
+//     //echo"localhost";
+// 	$href_css = "http://show-screen.local/css/pantalla.css";//.local
+
+// 	$src_pantalla_config = "http://show-screen.local/js/pantalla_config.js";
+// 	$src_pantalla = "http://show-screen.local/js/pantalla.js";
+// 	$src_pantalla_both = "http://show-screen.local/js/pantalla_both.js";
+// }
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,7 +37,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/pantalla.css">
+    
+    <link rel="stylesheet" href="./css/song_pantalla.css">
 </head>
 <body>
 
@@ -65,8 +86,7 @@
     </div><!--/#contenedor-->
     
     
-    <script src="js/pantalla_config.js"></script>
-    <script src="js/pantalla.js"></script>
-    <script src="js/pantalla_both.js"></script>
+    <script src="js/s_pantalla.js"></script>
+
 </body>
 </html>

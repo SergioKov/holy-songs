@@ -2201,7 +2201,7 @@ async function select_slide(){
 
     const eid_link_pantalla_bd = document.getElementById('link_pantalla_bd');
     const eid_inpt_pantalla_bd = document.getElementById('inpt_pantalla_bd');
-    const link_fichero = `${web_protocol_y_host}/song/pantalla_bd.php`;//
+    const link_fichero = web_show_screen_host;//screen_pantalla.php en 'show-screen.com' o 'show-screen.local'
     
     //meto el valor en link y input 
     eid_link_pantalla_bd.href = link_fichero;

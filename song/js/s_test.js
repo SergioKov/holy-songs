@@ -434,27 +434,35 @@ async function insertarPantallaParams() {
 // }
 
 
+
+
 /**
- * Limpia un HTML reemplazando comillas dobles (") en atributos por '__||__'
+ * Limpia un HTML reemplazando comillas dobles (") en todo html por '__||__'
+ * Limpia un HTML reemplazando comillas simples (') en todo html por '__|__'
  * para que sea seguro guardar en JSON en BD.
  * @param {string} html - El HTML completo.
  * @returns {string} HTML seguro para JSON/BD.
  */
 function sanitizeHtmlForJson(html) {
-    return html.replace(/(\w+)="([^"]*)"/g, (match, attrName, attrValue) => {
-        return `${attrName}=__||__${attrValue}__||__`; // reemplaza " por '__||__'
-    });
+    return html
+        .replace(/"/g, '__||__')   // reemplaza todas las comillas dobles " por '__||__'
+        .replace(/'/g, '__|__');   // reemplaza todas las comillas simples ' por '__|__'
 }
+
 
 
 /**
- * Revertir HTML sanitizado reemplazando '__||__' por comillas dobles.
- * @param {string} sanitizedHtml - HTML con '__||__' en los atributos.
- * @returns {string} HTML original con comillas dobles.
+ * Revertir HTML sanitizado reemplazando '__||__' y '__|__' por comillas dobles y simples.
+ * @param {string} sanitizedHtml - HTML con '__||__' y ''__|__' en todo.
+ * @returns {string} HTML original con comillas dobles y simples.
  */
 function restoreHtmlFromSanitized(sanitizedHtml) {
-    return sanitizedHtml.replace(/=__\|\|__(.*?)__\|\|__/g, '="$1"');
+    return sanitizedHtml
+        .replace(/__\|\|__/g, '"')  // reemplaza __||__ por "
+        .replace(/__\|__/g, "'");   // reemplaza __|__ por '
 }
+
+
 
 
 

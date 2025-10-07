@@ -3,6 +3,23 @@
 //include('../includes/templates/check_auth.php');//antes (sin el enrutador en /index.php)
 include __DIR__ . '/../includes/templates/check_auth.php';
 ?>
+
+<?php
+//Rutas al show-screen dependiendo de hosting actual
+if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
+    //echo"hostalia";
+	//$href_css = "http://show-screen.com/css/pantalla.css";//.com
+
+	$ruta_screen_pantalla = "https://show-screen.com/";//en 'index.php' hay 'screen_pantalla.php'
+    
+}else{//LOCALHOST
+    //echo"localhost";
+	//$href_css = "https://show-screen.local/css/pantalla.css";//.local
+    
+	$ruta_screen_pantalla = "http://show-screen.local/";//en 'index.php' hay 'screen_pantalla.php'
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -729,8 +746,8 @@ include __DIR__ . '/../includes/templates/check_auth.php';
                                                                             </p>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="window.open('pantalla_bd.php','miPestañaBd');">Pestaña Remota</button>
-                                                                                <button class="btn w_100" onclick="window.open('pantalla_bd.php','miVentanaBd', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Remota</button>
+                                                                                <button class="btn w_100" onclick="window.open('<?=$ruta_screen_pantalla;?>','miPestañaBd');">Pestaña Remota</button>
+                                                                                <button class="btn w_100" onclick="window.open('<?=$ruta_screen_pantalla;?>','miVentanaBd', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Remota</button>
                                                                             </div>
                                                                         </div> 
 
