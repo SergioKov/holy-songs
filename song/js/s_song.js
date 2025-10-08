@@ -2123,8 +2123,6 @@ async function select_slide(){
     
     arr_fieldsets = [];//reset
     currentSlide = 0;//aki siempre para con click dcho empezar desde inicio de canción
-
-    check_pantallaShow();//reviso si marco en rojo o no
     
     resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
     eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
@@ -2213,9 +2211,26 @@ async function select_slide(){
         <li class="li_action" onclick="crearSlides(); closeAll();">Crear + Ver slides (inicio)</li>
     `;
     select_slide_ul_action.onclick = e => close_ul_action(e);
+
+    //pinto botones en rojo si están marcados antes desde localStorage
+    check_PantallaParams();
     
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
     mySizeEsquema();
+}
+
+function check_PantallaParams(){//pinto botones en rojo si están marcados antes desde localStorage
+    console.log('=== function check_PantallaParams() ===');
+    
+    //marco/desmarco los botones de fondo y demás segun las variables desde localStorage
+    check_pantalla_show();//reviso si marco en rojo o no
+    check_show_logo_en_fondo();
+    check_show_bible_en_fondo();
+    check_show_black_en_fondo();
+    check_user_view_control();
+    check_show_legend();
+    check_show_acordes();
+    check_show_next_slide();
 }
 
 

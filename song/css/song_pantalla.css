@@ -4,20 +4,20 @@
 }
 
 body {
+    /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
+    font-family: monospace, Arial, 'Roboto Slab', Tahoma, 'sans serif';
     margin: 0 auto;
     padding: 0;
-    /* background: linear-gradient(to bottom right, white 0%, #9dd3fd 10%, #1875bf 45%, #012643 100%); */
     color: white;
     width: 100%;
     height: 100%;
-    /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
-    font-family: monospace, Arial, 'Roboto Slab', Tahoma, 'sans serif';
-    /* overflow: hidden; */
-    background: black;
+    /* background: linear-gradient(to bottom right, white 0%, #9dd3fd 10%, #1875bf 45%, #012643 100%); */
     /* background-image: url('../images/bible_open6.jpg'); */
+    background: black;
     background-size: cover;
     background-position: center;
     transition: 1s;
+    overflow: hidden;
 }
 
 body.logo_en_fondo {
@@ -72,7 +72,7 @@ S {
 .trad {
     box-sizing: border-box;
     font-size: 30px;
-    box-shadow: 0px 0px 35px -15px #ffffff;
+    /* box-shadow: 0px 0px 35px -15px #ffffff; */
     overflow: hidden;
     position: relative;
 }
@@ -84,6 +84,12 @@ S {
     height: 1px;
     bottom: 0;
 }
+
+.shown .trad:not(.trad:last-child) {
+    box-shadow: 0px 0px 35px -15px #ffffff;
+}
+
+
 
 .trad_inner {
     /* background: #FF9800; */

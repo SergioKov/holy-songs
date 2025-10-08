@@ -1,5 +1,4 @@
 const eid_contenedor = document.getElementById('contenedor');
-console.log('es pantalla_config.js');
 
 let arr_pantalla = [];
 let delay_fn = 200;//200 por defecto
@@ -12,21 +11,49 @@ let debug = false;
 
 //Vars para formar tipo de contenido por defecto
 //Admin control
-let pantalla_show = false;
-let show_logo_en_fondo = false;
-let show_bible_en_fondo = false;
-let show_black_en_fondo = false;
-let user_view_control = false;
-//User control
-let show_legend = false;
-let show_acordes = false;
-let show_next_slide = false;
+// let pantalla_show = 0;
+// let show_logo_en_fondo = 0;
+// let show_bible_en_fondo = 0;
+// let show_black_en_fondo = 0;
+// let user_view_control = 0;
+// //User control
+// let show_legend = 0;
+// let show_acordes = 0;
+// let show_next_slide = 0;
+
+
+//Vars para formar tipo de contenido por defecto en Pantalla
+//igual como 'is_fon_shown' 
+// (pantalla_show == 1) => mostrar slide con texto; 
+// (pantalla_show == 0) => ocultar slide y mostrar fondo con la biblia abierta
+let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//por defecto pantalla no se ve;
+
+// (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
+let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
+
+// (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
+let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
+
+// (show_black_en_fondo = true) => mostrar el fondo black cuando el fondo esta mostrado con (pantalla_show = false)
+let show_black_en_fondo = JSON.parse(localStorage.getItem('show_black_en_fondo') ?? '0');//def false
+
+// usuario puede/no puede elegir qué mostrar en el slide: legend, acordes, next_slide
+let user_view_control = JSON.parse(localStorage.getItem('user_view_control') ?? '0');// def false;
+
+//mostrar/no mostrar legend en slide de pantalla.php
+let show_legend = JSON.parse(localStorage.getItem('show_legend') ?? '0');// def false;
+
+//mostrar acordes en slide de pantalla.php
+let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// def false;
+
+//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 
 let arr_pantalla_str_old = '';
 let arr_pantalla_str_new = '';
 
 
-let objPantallaParams = {
+let objPantallaParams_def = {
     pantalla_show,
     show_logo_en_fondo,
     show_bible_en_fondo,
@@ -36,9 +63,12 @@ let objPantallaParams = {
     show_acordes,
     show_next_slide,
 }
+// localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 
 let objPantallaParams_str_new = '';
 let objPantallaParams_str_old = '';
+
+let objPantallaParams = JSON.parse(localStorage.getItem('objPantallaParams')) || objPantallaParams_def;
 
 
 
@@ -46,7 +76,6 @@ let objPantallaParams_str_old = '';
 //==================================================================================//
 // F U N C I O N E S
 //==================================================================================//
-console.log('es pantalla.js');
 
 //si se abre este ficheo , añado la info de esto en localStorage
 localStorage.setItem('pantalla_abierta','true');
@@ -57,12 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //Si HACE FALTA USAR 
-window.addEventListener('load',function(d){
+window.addEventListener('load',() => {
     //console.log('load - window.innerWidth: ', window.innerWidth);
     lanzarIntentos();// dentro está mySizePantallaShow();
 });
 
-window.addEventListener('resize',function(d){
+window.addEventListener('resize',() => {
     //console.log('resize - window.innerWidth: ', window.innerWidth);
     mySizePantallaShow();
 });
@@ -70,9 +99,6 @@ window.addEventListener('resize',function(d){
 
 function lanzarIntentos(){
     //console.log('=== function lanzarIntentos() ===');
-
-    //se hace vista de CSS en aplicarVista();
-    aplicarVista();   
         
     arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
     //console.log('arr_pantalla_str_old: ', arr_pantalla_str_old);
@@ -106,7 +132,7 @@ function lanzarIntentos(){
     if(arr_pantalla && eid_contenedor && eid_contenedor.querySelector('.trad') == null ){
         //console.log('el contenedor está vacío, lo construyo...');
 
-        aplicarVista();
+        aplicarVista();//importante al cargar por primera vez
         construirElementosYAppend();
     
     }else{//el contenedor ya existe
@@ -142,11 +168,15 @@ function lanzarIntentosConDelay(){
         //si ha cambiado algo en losparametros de pantalla de localStorage, reviso que mostrar/ocultar
         if(objPantallaParams_str_old !== objPantallaParams_str_new){
             // let aviso = '1. objPantallaParams old y new SON DISTINTOS. hago cosas...';
-            // //console.log('aviso: ', aviso);
-            // alert('aviso: ' + aviso);
+            // console.log('aviso: ', aviso);
+            // alert('aviso: ', aviso);
 
             aplicarVista();
-            mySizePantallaShow();//importante!
+
+            //solo calculo fontSize si hay que mostrar el slide...
+            if(pantalla_show){
+                mySizePantallaShow();//importante!
+            }
         }
 
         //2. Datos de Slide
@@ -156,11 +186,16 @@ function lanzarIntentosConDelay(){
         //si ha cambiado la longitud de localStorage, construyo nuevos versículos
         if(arr_pantalla_str_old !== arr_pantalla_str_new){
             // let aviso = '2. arr_pantalla old y new SON DISTINTOS. hago cosas...';
-            // //console.log('aviso: ', aviso);
-            // alert('aviso: ' + aviso);
+            // console.log('aviso: ', aviso);
+            // alert('aviso: ', aviso);
 
-            if(eid_contenedor){                            
-                construirElementosYAppend();         
+            if(eid_contenedor){ 
+                aplicarVista(); 
+
+                //solo construyo elementos si hay que mostrar el slide...
+                if(pantalla_show){
+                    construirElementosYAppend();
+                }
             }
         }
 
@@ -170,14 +205,12 @@ function lanzarIntentosConDelay(){
 
 }
 
-//====================================================================================//
-// BOTH
-//====================================================================================//
-
 //========================================================================================//
-//aki el codigo que se usa con ambos (both) local 'pantall.js' y remoto 'pantalla_bd.js'
+// B O T H
 //========================================================================================//
-console.log('es pantalla_both.js');
+//========================================================================================//
+//aki el codigo que se usa con ambos (both) local 'pantall.js' y remoto 'screen_pantalla.js'
+//========================================================================================//
 
 /**
  * eid_contenedor es global
@@ -187,42 +220,44 @@ function aplicarVista(){
     //console.log('=== function aplicarVista() ===');
 
     //Admin control
-    pantalla_show = (objPantallaParams.pantalla_show == '1') ? true : false;
-    show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? true : false;
-    show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? true : false;
-    show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? true : false;
-    user_view_control = (objPantallaParams.user_view_control == '1') ? true : false;
+    pantalla_show = (objPantallaParams.pantalla_show == '1') ? 1 : 0;
+    show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
+    show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? 1 : 0;
+    show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? 1 : 0;
+    user_view_control = (objPantallaParams.user_view_control == '1') ? 1 : 0;
     
     //User control
-    show_legend = (objPantallaParams.show_legend == '1') ? true : false;
-    show_acordes = (objPantallaParams.show_acordes == '1') ? true : false;
-    show_next_slide = (objPantallaParams.show_next_slide == '1') ? true : false;
+    show_legend = (objPantallaParams.show_legend == '1') ? 1 : 0;
+    show_acordes = (objPantallaParams.show_acordes == '1') ? 1 : 0;
+    show_next_slide = (objPantallaParams.show_next_slide == '1') ? 1 : 0;
 
     // si hay contenedor...
     if(eid_contenedor){
         
         //Admin control
-        if(pantalla_show === true){
+        if(pantalla_show){
             eid_contenedor.classList.add('shown');
+            
             document.body.classList.remove('logo_en_fondo');
             document.body.classList.remove('bible_en_fondo');
             document.body.classList.remove('black_en_fondo');
-        }else{
+
+        }else{            
             eid_contenedor.classList.remove('shown');
 
-            if(show_logo_en_fondo === true){
+            if(show_logo_en_fondo){
                 document.body.classList.add('logo_en_fondo');
             }else{
                 document.body.classList.remove('logo_en_fondo');
             }
 
-            if(show_bible_en_fondo === true){
+            if(show_bible_en_fondo){
                 document.body.classList.add('bible_en_fondo');
             }else{
                 document.body.classList.remove('bible_en_fondo');
             }
 
-            if(show_black_en_fondo === true){
+            if(show_black_en_fondo){
                 document.body.classList.add('black_en_fondo');
             }else{
                 document.body.classList.remove('black_en_fondo');
@@ -231,28 +266,27 @@ function aplicarVista(){
 
 
         //User control
-        if(show_acordes === true){
+        if(show_acordes){
             eid_contenedor.classList.add('show_acordes');
         }else{
             eid_contenedor.classList.remove('show_acordes');
         }
 
-        if(show_legend === true){
+        if(show_legend){
             eid_contenedor.classList.add('show_legend');
         }else{
             eid_contenedor.classList.remove('show_legend');
         }
 
-        if(show_next_slide === true){
+        if(show_next_slide){
             eid_contenedor.classList.add('show_next_slide');
         }else{
             eid_contenedor.classList.remove('show_next_slide');
         }
     }
 
-
     //si está permitido para el usuario controlar la vista, ...
-    if(user_view_control === true){
+    if(user_view_control){
         //console.log('aplico vista usuario...');
         aplicarVistaUsuario();
     }
@@ -274,28 +308,28 @@ function aplicarVistaUsuario(){
 
         //legend
         if(t.includes('l')){
-            show_legend = true;
+            show_legend = 1;
             eid_contenedor.classList.add('show_legend');
         }else{
-            show_legend = false;
+            show_legend = 0;
             eid_contenedor.classList.remove('show_legend');
         }
 
         //acordes
         if(t.includes('c')){
-            show_acordes = true;
+            show_acordes = 1;
             eid_contenedor.classList.add('show_acordes');
         }else{
-            show_acordes = false;
+            show_acordes = 0;
             eid_contenedor.classList.remove('show_acordes');
         }
 
         //next_slide.  2 lineas del sig kuplet si hay
         if(t.includes('n')){
-            show_acordes = true;
+            show_acordes = 1;
             eid_contenedor.classList.add('show_next_slide');
         }else{
-            show_acordes = false;
+            show_acordes = 0;
             eid_contenedor.classList.remove('show_next_slide');
         }
     }
@@ -312,9 +346,6 @@ function construirElementosYAppend(){
 
     eid_contenedor.innerHTML = '';//reset
 
-    //DESCOMENTAR EN PROD!!!
-    eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
-
     if(arr_pantalla.length > 0){                
         arr_pantalla.forEach( (pant, i) => {
             
@@ -330,14 +361,9 @@ function construirElementosYAppend(){
                     </div>
                 </div>
             `;
-
-            //DESCOMENTAR EN PROD!!!
-            eid_contenedor.classList.remove('shown');//se añade 'shown' en mySizePantallaShow();
             
             eid_contenedor.append(trad);
         });
-
-        mySizePantallaShow();
 
     }else{
 
@@ -346,6 +372,8 @@ function construirElementosYAppend(){
         eid_contenedor.append(p);
         
     }
+
+    mySizePantallaShow();
 
 }//end function construirElementosYAppend()
 
@@ -367,7 +395,7 @@ function nextFrame() {
 async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
     let lo = min, hi = max, best = min;
 
-    const { width: trad_width, height: trad_height } = trad.getBoundingClientRect();
+    //const { width: trad_width, height: trad_height } = trad.getBoundingClientRect();
     //console.log('trad_width: ', trad_width);
     //console.log('trad_height: ', trad_height);
 
@@ -376,7 +404,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
         trad.style.fontSize = mid + 'px';
 
         // Espera que el navegador pinte y calcule layout
-        //await nextFrame();//cuando lo quito animacion es mejor!
+        await nextFrame();//cuando lo quito animacion es mejor!
         //await sleep(100);//cuando lo quito animacion es mejor!
 
         const verse = trad.querySelector('.verse');
@@ -386,7 +414,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
         //console.log('verse_width: ', verse_width);
         //console.log('verse_height: ', verse_height);
 
-        if (verse_width <= maxW && verse_height <= maxH      /*&& verse_width <= trad_width && verse_height <= trad_height*/ ) {
+        if (verse_width <= maxW && verse_height <= maxH) {
             best = mid;      // cabe → probamos más grande
             lo = mid + 1;
         } else {
@@ -421,9 +449,14 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         maxH = window.innerHeight / count_trad - 32;        
     }
 
+
     //recorrer...
     tradAll.forEach( async (trad) => {
         //console.log('trad: ', trad);
+        
+        if(pantalla_show){
+            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        }
 
         const trad_inner = trad.querySelector('.trad_inner');
         //console.log('trad_inner: ', trad_inner);
@@ -432,6 +465,7 @@ async function mySizePantallaShow() {//new como ajustarTexto()
 
         const clone_contenedor = eid_contenedor.cloneNode(true);
         clone_contenedor.style.position = 'relative';
+        //clone_contenedor.style.position = 'absolute';
         clone_contenedor.style.visibility = 'hidden';
         clone_contenedor.style.left = '-9999px';
         document.body.appendChild(clone_contenedor);
@@ -459,27 +493,18 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         //console.log('trad_w: ', trad_w);
 
         trad_inner.style.height = trad_h + 'px';
-        trad_inner.style.width = trad_w + 'px';        
+        trad_inner.style.width = trad_w + 'px'; 
+
+        if(pantalla_show){
+            trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        }       
         
         document.body.removeChild(clone_contenedor);//ok
     });
-
+    
     aplicarVista();
 }
 
-
-function hay_id_songslide(func_name = ''){
-    //console.log('=== function hay_id_song() ===');
-    
-    if(!id_songslide){
-        console.warn(func_name + ' --- No hay id_songslide. hago return...');
-        alert(func_name + ' --- No hay id_songslide. hago return...');
-        return false;
-    }
-    //console.log(func_name + ' --- id_songslide: ', id_songslide);
-
-    return true;  
-}
 
 function esString(valor) {
     return typeof valor === "string";

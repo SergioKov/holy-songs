@@ -877,7 +877,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                     <img src="images/arrow_left_r_icon_white.svg">
                                                 </div>
 
-                                                <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="enableDisablePantallaShow()">
+                                                <div id="vklad_btn_pantallaShow" class="dbtn" title="Mostrar Pantalla" onclick="toggle_pantalla_show()">
                                                     <img src="images/monitor_1_white.png">
                                                     <span id="titulo_shown">...</span>
                                                 </div>

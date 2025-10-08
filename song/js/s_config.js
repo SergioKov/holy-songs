@@ -519,29 +519,36 @@ let arr_pantalla_string = '';//array de objetos con los datos de la canción act
 let one_pant_data = {};//objeto con datos de una pantalla para make_arr_pantalla()
 
 
-let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? 'false');//por defecto pantalla no se ve
-//pantallaShow = true;//test
-//pantallaShow = localStorage.setItem('pantallaShow', true);
+//let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? '0');//por defecto pantalla no se ve
+//pantallaShow = 1;//test
+//pantallaShow = localStorage.setItem('pantallaShow', 1);
 
 //Vars para formar tipo de contenido por defecto en Pantalla
 //igual como 'is_fon_shown' 
-// (pantalla_show = true) => mostrar slide con texto; 
-// (pantalla_show = false) => ocultar slide y mostrar fondo con la biblia abierta
-let pantalla_show = pantallaShow;
+// (pantalla_show == 1) => mostrar slide con texto; 
+// (pantalla_show == 0) => ocultar slide y mostrar fondo con la biblia abierta
+let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//por defecto pantalla no se ve;
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
-let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? 'false');// def false;
+let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
-let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? 'false');//def false
+let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
 
 // (show_black_en_fondo = true) => mostrar el fondo black cuando el fondo esta mostrado con (pantalla_show = false)
-let show_black_en_fondo = JSON.parse(localStorage.getItem('show_black_en_fondo') ?? 'false');//def false
+let show_black_en_fondo = JSON.parse(localStorage.getItem('show_black_en_fondo') ?? '0');//def false
 
-let user_view_control = false;//usuario puede/no puede elegir qué mostrar en el slide: legend, acordes, next_slide
-let show_legend = false;//mostrar/no mostrar legend en slide de pantalla.php
-let show_acordes = false;//mostrar acordes en slide de pantalla.php
-let show_next_slide = false;//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+// usuario puede/no puede elegir qué mostrar en el slide: legend, acordes, next_slide
+let user_view_control = JSON.parse(localStorage.getItem('user_view_control') ?? '0');// def false;
+
+//mostrar/no mostrar legend en slide de pantalla.php
+let show_legend = JSON.parse(localStorage.getItem('show_legend') ?? '0');// def false;
+
+//mostrar acordes en slide de pantalla.php
+let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// def false;
+
+//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 
 //Objeto con datos de la canción actual para pantalla. 
 // SE USA EN 'pantalla_bd.js' 
@@ -559,6 +566,7 @@ let objPantalla = {
     show_acordes,
     show_next_slide,
 }
+let objPantalla_str = '';
 
 //Object con todos los params
 let objPantallaToSendToBd = {
@@ -574,13 +582,22 @@ let objPantallaToSendToBd = {
     show_acordes,
     show_next_slide,
 };
-
 let objPantallaToSendToBd_str = '';
 
 
 // objPantallaParams se inicializa en 'pantalla_config.js' en 2 ficheros 'pantalla.php' (localStorage) y 'pantalla_bd.php' (BD)
 
-
+let objPantallaParams = {
+    pantalla_show,
+    show_logo_en_fondo,
+    show_bible_en_fondo,
+    show_black_en_fondo,
+    user_view_control,
+    show_legend,
+    show_acordes,
+    show_next_slide,
+}
+//localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 
 
 //Params (sin arr_pantalla)

@@ -720,12 +720,12 @@ async function make_arr_pantalla(currentSlide){
 
     localStorage.setItem('arr_pantalla',arr_pantalla_string);// para mostrar LOCALMENTE
 
-    //1. Objeto para LOCAL
+    //1.1 Objeto para LOCAL
     objPantalla = {
         id_song,
         slide_actual,
         arr_pantalla,
-        pantalla_show: pantallaShow,
+        pantalla_show,
         show_logo_en_fondo,
         show_bible_en_fondo,
         show_black_en_fondo,
@@ -735,6 +735,27 @@ async function make_arr_pantalla(currentSlide){
         show_next_slide,
     };
     console.log('(local) --- objPantalla: ', objPantalla);
+    
+    //1.2 Objeto Params para LOCAL
+    objPantallaParams = {
+        pantalla_show,
+        show_logo_en_fondo,
+        show_bible_en_fondo,
+        show_black_en_fondo,
+        user_view_control,
+        show_legend,
+        show_acordes,
+        show_next_slide,
+    };
+    console.log('(local) --- objPantallaParams: ', objPantallaParams);
+    
+    //guardo en localStorage
+    objPantalla_str = JSON.stringify(objPantalla);
+    localStorage.setItem('objPantalla', objPantalla_str);
+
+    objPantallaParams_str = JSON.stringify(objPantallaParams);
+    localStorage.setItem('objPantallaParams', objPantallaParams_str);
+
 
 
     //2. Preparo para enviar a BD
@@ -753,7 +774,7 @@ async function make_arr_pantalla(currentSlide){
         id_song: id_song,
         slide_actual,
         arr_pantalla: arr_pantalla_safe,
-        pantalla_show: pantallaShow,
+        pantalla_show,
         show_logo_en_fondo,
         show_bible_en_fondo,
         show_black_en_fondo,
@@ -769,6 +790,8 @@ async function make_arr_pantalla(currentSlide){
     const result = await guardarArrPantallaEnBd();//se envia objPantallaToSendToBd
     console.log('arr_pantalla: ', arr_pantalla);
     console.log('result: ', result);
+
+
     
     console.log('fin make_arr_pantalla...');
 
@@ -789,6 +812,11 @@ async function showTipoContent(btn, param){
             show_logo_en_fondo = 0;//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
+            
+            //guardo en local
+            localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
+            localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
+            localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
         }
     }
 
@@ -890,10 +918,28 @@ async function showTipoContent(btn, param){
     //n -> (next)     -> show_next_slide
     if(['p','i','b','f','u',   'l','c','n'].includes(param)){
         
-        //asigno la variable global para enviar al BD
+        //1. asigno la variable global para localStorage
+        objPantallaParams = {
+            pantalla_show,
+            show_logo_en_fondo,
+            show_bible_en_fondo,
+            show_black_en_fondo,
+            user_view_control,
+            show_legend,
+            show_acordes,
+            show_next_slide,
+        };
+        console.log('objPantallaParams: ',objPantallaParams);
+        
+        //guardo en localStorage
+        objPantallaParams_str = JSON.stringify(objPantallaParams);
+        localStorage.setItem('objPantallaParams', objPantallaParams_str);
+
+
+        //2. asigno la variable global para enviar al BD
         objPantallaParamsToSendToBd = {
             id_song,
-            pantalla_show: pantallaShow,
+            pantalla_show,
             show_logo_en_fondo,
             show_bible_en_fondo,
             show_black_en_fondo,
@@ -908,27 +954,21 @@ async function showTipoContent(btn, param){
         const resultParams = await guardarPantallaParamsEnBd();//objPantallaParamsToSendToBd es global
         console.log('resultParams: ', resultParams);
 
-
-        //
+        //guardo en localStorage
         objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);
         localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
     }
-
-
 }
-
-
 
 
 function enableDisablePantallaShow(){//muestra o oculta
     if(pantallaShow){
-        pantallaShow = false;//siguiente accion
+        pantallaShow = 0;//siguiente accion
     }else{        
-        pantallaShow = true;//siguiente accion
+        pantallaShow = 1;//siguiente accion
     }
     check_pantallaShow();
 }
-
 function check_pantallaShow(){
     console.log('=== function check_pantallaShow() ===');
     console.log('pantallaShow: ', pantallaShow);
@@ -939,14 +979,13 @@ function check_pantallaShow(){
         ocultar_pantallaShow();
     }
 }
-
 function mostrar_pantallaShow(){   
     // eid_btn_pantallaShow.classList.add('btn_active');
     eid_vklad_btn_pantallaShow.classList.add('btn_active');
     eid_contenedor_prev.classList.add('shown');
     //eid_fondo_body.classList.add('fondo_black');
 
-    localStorage.setItem('pantallaShow','true');
+    localStorage.setItem('pantallaShow','1');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
 }
 
@@ -956,7 +995,45 @@ function ocultar_pantallaShow(){
     eid_contenedor_prev.classList.remove('shown');
     //eid_fondo_body.classList.remove('fondo_black');
     
-    localStorage.setItem('pantallaShow','false');
+    localStorage.setItem('pantallaShow','0');
+    make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+}
+
+
+function toggle_pantalla_show(){//muestra o oculta
+    if(pantalla_show){
+        pantalla_show = 0;//siguiente accion
+    }else{        
+        pantalla_show = 1;//siguiente accion
+    }
+    check_pantalla_show();
+}
+function check_pantalla_show(){
+    console.log('=== function check_pantalla_show() ===');
+    console.log('pantalla_show: ', pantalla_show);
+
+    if(pantalla_show){
+        mostrar_pantalla_show();
+    }else{
+        ocultar_pantalla_show();
+    }
+}
+function mostrar_pantalla_show(){   
+    // eid_btn_pantallaShow.classList.add('btn_active');
+    eid_vklad_btn_pantallaShow.classList.add('btn_active');
+    eid_contenedor_prev.classList.add('shown');
+    //eid_fondo_body.classList.add('fondo_black');
+
+    localStorage.setItem('pantalla_show','1');
+    make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+}
+function ocultar_pantalla_show(){
+    // eid_btn_pantallaShow.classList.remove('btn_active');
+    eid_vklad_btn_pantallaShow.classList.remove('btn_active');
+    eid_contenedor_prev.classList.remove('shown');
+    //eid_fondo_body.classList.remove('fondo_black');
+    
+    localStorage.setItem('pantalla_show','0');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
 }
 
@@ -969,14 +1046,77 @@ function check_show_logo_en_fondo(){
     console.log('show_logo_en_fondo: ', show_logo_en_fondo);
     
     if(show_logo_en_fondo){
-        eid_show_logo_en_fondo.classList.add('btn_active');
-        // mostrar_pantallaShow();
+        eid_btn_show_logo_en_fondo.classList.add('btn_active');
     }else{
-        eid_show_logo_en_fondo.classList.remove('btn_active');
-        // ocultar_pantallaShow();
+        eid_btn_show_logo_en_fondo.classList.remove('btn_active');
     }
 }
 
+function check_show_bible_en_fondo(){
+    console.log('=== function check_show_bible_en_fondo() ===');
+    console.log('show_bible_en_fondo: ', show_bible_en_fondo);
+    
+    if(show_bible_en_fondo){
+        eid_btn_show_bible_en_fondo.classList.add('btn_active');
+    }else{
+        eid_btn_show_bible_en_fondo.classList.remove('btn_active');
+    }
+}
+
+function check_show_black_en_fondo(){
+    console.log('=== function check_show_black_en_fondo() ===');
+    console.log('show_black_en_fondo: ', show_black_en_fondo);
+    
+    if(show_black_en_fondo){
+        eid_btn_show_black_en_fondo.classList.add('btn_active');
+    }else{
+        eid_btn_show_black_en_fondo.classList.remove('btn_active');
+    }
+}
+
+
+function check_user_view_control(){
+    console.log('=== function check_user_view_control() ===');
+    console.log('user_view_control: ', user_view_control);
+    
+    if(user_view_control){
+        eid_btn_user_view_control.classList.add('btn_active');
+    }else{
+        eid_btn_user_view_control.classList.remove('btn_active');
+    }
+}
+
+
+function check_show_legend(){
+    console.log('=== function check_show_legend() ===');
+    console.log('show_legend: ', show_legend);
+    
+    if(show_legend){
+        eid_btn_show_legend.classList.add('btn_active');
+    }else{
+        eid_btn_show_legend.classList.remove('btn_active');
+    }
+}
+function check_show_acordes(){
+    console.log('=== function check_show_acordes() ===');
+    console.log('show_acordes: ', show_acordes);
+    
+    if(show_acordes){
+        eid_btn_show_acordes.classList.add('btn_active');
+    }else{
+        eid_btn_show_acordes.classList.remove('btn_active');
+    }
+}
+function check_show_next_slide(){
+    console.log('=== function check_show_next_slide() ===');
+    console.log('show_next_slide: ', show_next_slide);
+    
+    if(show_next_slide){
+        eid_btn_show_next_slide.classList.add('btn_active');
+    }else{
+        eid_btn_show_next_slide.classList.remove('btn_active');
+    }
+}
 
 
 
@@ -1224,6 +1364,8 @@ function parteCentral(param){
 
 function showToast(tipo = 'info', mensaje, duration = null) {
     
+    eid_toast_container.innerHTML = '';//reset
+
     // Crear toast
     const toast = document.createElement('div');
     toast.className = `toast ${tipo}`;
