@@ -1482,7 +1482,7 @@ async function crearSlides(goToSlide = null){
     arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
 
-    buildSong();
+    await buildSong();
 }
 
 async function crearPages(goToSlide = null){
@@ -1634,7 +1634,7 @@ async function buildSong(){
         step.dataset.index = i;
 
         let titulo_text;
-        if(esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0 && objSongBd.arr_esquema[i].veces > 1){//si hay repeticion del titulo
+        if(esArray(objSongBd.arr_esquema) && objSongBd.arr_esquema.length > 0 && objSongBd.arr_esquema[i]?.veces > 1){//si hay repeticion del titulo
             titulo_text = `${titulo} <span>x${objSongBd.arr_esquema[i].veces}</span>`;
         }else{
             titulo_text = titulo;
