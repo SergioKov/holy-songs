@@ -1349,14 +1349,10 @@ function crear_arr_esquema_bucle(obj_bloques){
         arr_esquema_titlulos = objSongBd.arr_esquema.map(el => el.nombre);//desde BD
     }else{
         arr_esquema_titlulos = Object.keys(obj_bloques).map(el => el);
+        arr_esquema_titlulos = addCoroAfterVerse();//solo añado pripev despues de kuplet si no hay esquema en bd.
     }
     console.log('arr_esquema_bd: ', arr_esquema_bd);
     console.log('arr_esquema_titlulos: ', arr_esquema_titlulos);
-
-
-
-    arr_esquema_titlulos = addCoroAfterVerse();//test
-
 
 
     if(arr_esquema_titlulos.length > 0){
