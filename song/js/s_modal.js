@@ -401,10 +401,12 @@ function buildFormCancion(contenedor, cancion_action = null){
                 
                 <p class="mensaje"></p>
 
+
                 <div class="form_group wr_title">
                     <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" ">
                     <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
                 </div>
+
 
                 <div class="wr_sel_category select_container">
                     <select id="${id_vstavka}category" name="category" class="sel_opt" required="">
@@ -468,12 +470,16 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <label for="${id_vstavka}category">Category</label>
                 </div>
 
+
                 <div class="wr_sel_category select_container">
                     <select id="${id_vstavka}songbook" name="songbook" class="sel_opt" required="">
                         <!-- se pintan los songbook aki desde bd -->
                     </select>
                     <label for="${id_vstavka}songbook">Пісенник (Збірник пісень)</label>
                 </div>
+
+
+
 
                 <div class="wr_group">
 
@@ -485,47 +491,6 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <div class="form_group wr_song_number">
                         <input id="${id_vstavka}song_number" name="song_number" type="number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
                         <label for="${id_vstavka}song_number">Número</label>
-                    </div>
-
-                    <div class="form_group wr_tune select_container">
-                        <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
-                            <option value="" disabled selected hidden></option>
-                            <option value="C">C</option>
-                            <option value="Cm">Cm</option>
-                            <option value="C#">C#</option>
-                            <option value="C#m">C#m</option>
-                            <option value="Db">Db</option>
-                            <option value="Dbm">Dbm</option>
-                            <option value="D">D</option>
-                            <option value="Dm">Dm</option>
-                            <option value="D#">D#</option>
-                            <option value="D#m">D#m</option>
-                            <option value="Eb">Eb</option>
-                            <option value="Ebm">Ebm</option>
-                            <option value="E">E</option>
-                            <option value="Em">Em</option>
-                            <option value="F">F</option>
-                            <option value="Fm">Fm</option>
-                            <option value="F#">F#</option>
-                            <option value="F#m">F#m</option>
-                            <option value="Gb">Gb</option>
-                            <option value="Gbm">Gbm</option>
-                            <option value="G">G</option>
-                            <option value="Gm">Gm</option>
-                            <option value="G#">G#</option>
-                            <option value="G#m">G#m</option>
-                            <option value="Ab">Ab</option>
-                            <option value="Abm">Abm</option>
-                            <option value="A">A</option>
-                            <option value="Am">Am</option>
-                            <option value="A#">A#</option>
-                            <option value="A#m">A#m</option>
-                            <option value="Bb">Bb</option>
-                            <option value="Bbm">Bbm</option>
-                            <option value="H">H</option>
-                            <option value="Hm">Hm</option>
-                        </select>
-                        <label for="${id_vstavka}tune">Tonalidad</label>
                     </div>
 
                     <div class="form_group wr_lang">
@@ -540,6 +505,104 @@ function buildFormCancion(contenedor, cancion_action = null){
                     </div>
 
                 </div>
+            
+
+
+
+
+                <div class="wr_group">
+
+                    <div class="form_group wr_tune select_container">
+                        <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
+                            <option value="" disabled selected hidden></option>
+
+                            <option>C</option>
+                            <option>Cm</option>
+                            <option>C#</option>
+                            <option>C#m</option>
+                            <option>Db</option>
+                            <option>Dbm</option>
+                            <option>D</option>
+                            <option>Dm</option>
+                            <option>D#</option>
+                            <option>D#m</option>
+                            <option>Eb</option>
+                            <option>Ebm</option>
+                            <option>E</option>
+                            <option>Em</option>
+                            <option>F</option>
+                            <option>Fm</option>
+                            <option>F#</option>
+                            <option>F#m</option>
+                            <option>Gb</option>
+                            <option>Gbm</option>
+                            <option>G</option>
+                            <option>Gm</option>
+                            <option>G#</option>
+                            <option>G#m</option>
+                            <option>Ab</option>
+                            <option>Abm</option>
+                            <option>A</option>
+                            <option>Am</option>
+                            <option>A#</option>
+                            <option>A#m</option>
+                            <option>Bb</option>
+                            <option>Bbm</option>
+                            <option>H</option>
+                            <option>Hm</option>
+                        </select>
+                        <label for="${id_vstavka}tune">Tonalidad</label>
+                    </div>
+
+                    <div class="form_group wr_tipo_acorde">
+                        <select id="${id_vstavka}tipo_acorde" name="tipo_acorde" class="sel_opt" required="">
+                            <option value="" disabled selected hidden></option>
+                            <option selected>#</option>
+                            <option>b</option>
+                        </select>
+                        <label for="${id_vstavka}tipo_acorde">Tipo Acorde</label>
+                    </div>                    
+
+                    <div class="form_group wr_tune_transpose select_container">
+                        <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt" required="">
+                            <option value="" disabled selected hidden></option>
+                            
+                            <option>+12</option>
+                            <option>+11</option>
+                            <option>+10</option>
+                            <option>+9</option>
+                            <option>+8</option>
+                            <option>+7</option>
+                            <option>+6</option>
+                            <option>+5</option>
+                            <option>+4</option>
+                            <option>+3</option>
+                            <option>+2</option>
+                            <option>+1</option>
+                            
+                            <option selected>0</option>
+                            
+                            <option>-1</option>
+                            <option>-2</option>
+                            <option>-3</option>
+                            <option>-4</option>
+                            <option>-5</option>
+                            <option>-6</option>
+                            <option>-7</option>
+                            <option>-8</option>
+                            <option>-9</option>
+                            <option>-10</option>
+                            <option>-11</option>
+                            <option>-12</option>
+                            
+                        </select>
+                        <label for="${id_vstavka}tune_transpose">Transpose</label>
+                    </div>
+
+                </div>
+
+            
+
 
                 <div class="form_group">
                     <textarea id="${id_vstavka}song_text" name="song_text" rows="25" required="" placeholder=" "></textarea>
@@ -569,7 +632,9 @@ function buildFormCancion(contenedor, cancion_action = null){
             `;
             id_song = null;
             form_cancion.querySelector('.mensaje').innerHTML = mensaje_html;
+
             form.reset();//reseteo formulario
+
             form.elements["id_song"].disabled = true;//deshabilito input id_song   
             form.querySelector('.wr_id_song').style.display = 'none';//oculto el wr_id_song
             
@@ -578,7 +643,24 @@ function buildFormCancion(contenedor, cancion_action = null){
             //2. escucho al cambiar el texto...
             form.elements['song_text'].oninput = (e) => {
                 handleFormInput(e, eid_block_cancion);
-            }           
+            }
+            
+            //3. añado escuchador de change al 'transpose' 
+            form.elements['tune_transpose'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const transpose_val = Number(e.currentTarget.value);
+                handleFormTranspose(transpose_val);
+            }
+
+            //4. añado escuchador de change al 'tipo_acorde' 
+            form.elements['tipo_acorde'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const tipo_acorde_val = e.currentTarget.value;
+                handleFormTipoAcorde(tipo_acorde_val);
+            }
+                        
             break;
                     
         default:
@@ -598,8 +680,6 @@ function buildFormCancion(contenedor, cancion_action = null){
             // cancion_song_bloques.querySelector('.puntos_def').style.display = 'none';//oculto '...'
             // cancion_form_container.style.display = 'block';//mostrar formulario de canción
 
-
-
             form.reset();//reseteo formulario    
             
             form.elements['title'].value = objSong.title || '';
@@ -610,18 +690,38 @@ function buildFormCancion(contenedor, cancion_action = null){
             form.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
             form.elements['song_number'].value = objSong.song_number || '';
             form.elements['tune'].value = objSong.tune || '';
+            form.elements['tune_transpose'].value = objSong.tune_transpose || '';
+            form.elements['tipo_acorde'].value = objSong.tipo_acorde || '';
             form.elements['lang'].value = objSong.lang;
             form.elements['song_text'].value = objSong.song_text || '';
             form.elements['notes'].value = objSong.notes || '';
 
-            //1. importante para que pinte bloques al añadir form (si hacer oninput)
+            //1. importante para que pinte bloques al añadir form (sin hacer oninput)
             handleFormInput(form.elements['song_text'], eid_block_cancion);
+            handleFormTranspose(Number(objSong.tune_transpose));//para transponer al cargar el form
+            handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
 
             //2. escucho al cambiar el texto...
             form.elements['song_text'].oninput = (e) => {
                 handleFormInput(e, eid_block_cancion);
             }
 
+            //3. añado escuchador de change al 'transpose' 
+            form.elements['tune_transpose'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const transpose_val = Number(e.currentTarget.value);
+                handleFormTranspose(transpose_val);
+            }
+
+            //4. añado escuchador de change al 'tipo_acorde' 
+            form.elements['tipo_acorde'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const tipo_acorde_val = e.currentTarget.value;
+                handleFormTipoAcorde(tipo_acorde_val);
+            }
+            
             buildEsquemaSoloTitulos(form.querySelector('.d_esquema_titulos'), objSong.arr_esquema);             
             break;
     }
@@ -647,7 +747,23 @@ function buildFormCancion(contenedor, cancion_action = null){
 }
 
 
+function handleFormTranspose(transpose_val){
+    console.log('=== function handleFormTranspose() ===');
 
+    //if(transpose_val != 0){
+        transponerTodosLosAcordes(Number(transpose_val));
+    //}
+}
+
+function handleFormTipoAcorde(tipo_acorde_val){
+    console.log('=== function handleFormTipoAcorde() ===');
+
+    if(tipo_acorde_val == 'b'){
+        changeTipoAcorde('bemol');
+    } else {//si es '#' o por defecto es '#'
+        changeTipoAcorde('diez');
+    }
+}
 
 function buildFormEjemplo(contenedor, lang){
     console.log('=== function buildFormEjemplo() ===');
@@ -987,6 +1103,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                     
                     <span class="sp_flex_btns">
                         <span class="l_tune">${item.tune || ''}</span>
+                        <span class="l_tune_transpose">${(item.tune_transpose != 0) ? item.tune_transpose : ''}</span>
                         <span class="l_id">${item.id_song}</span>
                         <span class="l_edit"><img src="images/icon_edit_white.svg"></span>
                         <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>
@@ -1274,6 +1391,7 @@ function buildListaSort(contenedor, arr_lista_bucle){
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">${item.title}</span>
                 <span class="l_tune">${item.tune || ''}</span>
+                <span class="l_tune_transpose">${(item.tune_transpose != 0) ? item.tune_transpose : ''}</span>
                 <span class="l_id">${item.id_song}</span>
                 <span class="l_drag">
                     <span></span>

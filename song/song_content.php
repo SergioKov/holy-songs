@@ -448,6 +448,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                         <th class="td_songbook">Songbook</th>
                                                                         <th class="td_idioma">Idioma</th>
                                                                         <th class="td_tonalidad">Tonalidad</th>
+                                                                        <th class="td_transpose">Transpose</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -461,6 +462,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                         <td class="td_songbook">...</td>
                                                                         <td class="td_idioma">...</td>
                                                                         <td class="td_tonalidad">...</td>
+                                                                        <td class="td_transpose">...</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>

@@ -211,7 +211,8 @@ if($result->num_rows > 0){
                     id_song, 
                     song_number, 
                     title, 
-                    tune
+                    tune,
+                    tune_transpose
                 FROM songs
                 WHERE id_song IN ($string_ids)
 
@@ -226,7 +227,8 @@ if($result->num_rows > 0){
                         'id_song' => $row_s['id_song'],
                         'song_number' => $row_s['song_number'],
                         'title' => $row_s['title'],
-                        'tune' => $row_s['tune']
+                        'tune' => $row_s['tune'],
+                        'tune_transpose' => $row_s['tune_transpose']
                     ];
                     $arr_lista_from_table_songs[] = $data_s;
                 }            

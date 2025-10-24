@@ -281,7 +281,7 @@ function pintParrafosAcordes() {
 
 
         let resultado = partes.map(parte => {
-            if ( parte === '|' || parte === '/' || parte === '-' || parte === '(' || parte === ')' ) {
+            if ( ['|', '/', '-', '(', ')', ':'].includes(parte) ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
                 return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
@@ -1687,6 +1687,10 @@ async function buildSong(){
     //init();
     ajustarTexto();
     pintParrafosAcordes();
+    if(currentTransposition != 0){
+        console.log('currentTransposition: ', currentTransposition);
+        transponerTodosLosAcordes(currentTransposition);
+    }
     pintTipoAcorde();
     scrollToSlide(currentSlide);
 }
@@ -2527,6 +2531,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
         let songbook = form.elements["songbook"].value.trim();
         let song_number = form.elements["song_number"].value.trim();
         let tune = form.elements["tune"].value.trim();
+        let tune_transpose = form.elements["tune_transpose"].value.trim();
+        let tipo_acorde = form.elements["tipo_acorde"].value.trim();
         let lang = form.elements["lang"].value.trim();
         let song_text = form.elements["song_text"].value.trim();
         let notes = form.elements["notes"].value.trim();
@@ -2584,6 +2590,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
             category: category,
             songbook: songbook,
             tune: tune,
+            tune_transpose: tune_transpose,
+            tipo_acorde: tipo_acorde,
             lang: lang,
             song_text: song_text,
             notes: notes,
@@ -2642,6 +2650,32 @@ async function guardarSong(event, id_contenedor, cancion_action){
                 } else {
                     console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
                 }
+
+                const itemListaUpdate = objDataListas.arr_data?.find(item => item.id_lista == id_lista);
+                if (itemListaUpdate) {
+                    //si hay lista con el id_song guardado, actualizo los datos de la song para mostrar en la lista 
+                    const itemSongOfLista = itemListaUpdate.arr_lista?.find(item => item.id_song == id_song);
+                    if(itemSongOfLista){
+                        //actualizo solo los campos necesarios
+                        let songDataOfLista_new = {
+                            song_number: objSong.song_number,
+                            title: objSong.title,
+                            tune: objSong.tune,
+                            tune_transpose: objSong.tune_transpose,
+                        }
+                        console.warn('songDataOfLista_new: ', songDataOfLista_new);
+
+                        Object.assign(itemSongOfLista, songDataOfLista_new);
+                        console.warn('(actualizado) --- objLista.arr_lista: ', objLista.arr_lista);
+                        
+                        pintListaActive();//actualizo vista lista activa
+                    }else{
+                        console.warn('No encontrado itemSongOfLista. no hago nada...');
+                    }
+                    // el objeto dentro de arr_data ya está actualizado
+                } else {
+                    console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
+                }                
 
                 form.elements['id_song'].disabled = true;//deshabilito input id_song   
                 form.elements['id_song'].value = id_song;
@@ -3114,15 +3148,16 @@ function resetPListaActive() {
 
 function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
     //const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
-    const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
-;
+    //const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
+    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;
+
     //'|D      |F#m |G  |G - (Cm7) |' => true;
     //'| Вступ |Dm  |G  |C         |' =>  false (palabra 'Вступ' no es acorde) 
     return regexAcorde.test(str.trim());
 }
 
 function contieneAcordes(str) {// busca CUALQUIER acorde , barra y texto
-    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
+    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
     //'|D      |F#m |G  |G  |'  => true;
     //'| Вступ |Dm  |G  |C  |' =>  true (aunque hay palabra 'Вступ' que no es acorde en el texto hay al menos un acorde) 
     return regexAcorde.test(str);
@@ -3419,6 +3454,7 @@ async function findWordsSong(){
                 <td class="td_songbook" data-songbook="${el.songbook || ''}">${songbook_title_text}</td>            
                 <td class="td_idioma" data-lang_name="${el.lang_name}">${lang_name_text}</td>
                 <td class="td_tonalidad">${el.tune}</td>
+                <td class="td_transpose">${el.tune_transpose}</td>
             `;
 
             tr_song.onclick = (e)=>{
@@ -3869,6 +3905,7 @@ function addToLista(){
             song_number: objSong.song_number,
             title: objSong.title,
             tune: objSong.tune,
+            tune_transpose: objSong.tune_transpose,
         };
 
         arr_lista.push(objSongSmall);

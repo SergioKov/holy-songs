@@ -178,6 +178,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $arr_esquema_string = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
 
     $tune  = $conn->real_escape_string($datos['tune']);//get parameter
+    $tune_transpose  = $conn->real_escape_string($datos['tune_transpose']);//get parameter
+    $tipo_acorde  = $conn->real_escape_string($datos['tipo_acorde']);//get parameter
     $lang  = $conn->real_escape_string($datos['lang']);//get parameter
     $notes  = $conn->real_escape_string($datos['notes']);//get parameter
     //$count  = $conn->real_escape_string($datos['count']);//get parameter
@@ -235,6 +237,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     song_text = '$song_text',
                     arr_esquema = '$arr_esquema_string',
                     tune = '$tune',
+                    tune_transpose = '$tune_transpose',
+                    tipo_acorde = '$tipo_acorde',
                     lang = '$lang',
                     notes = '$notes',
                     updated_at = '$fechaHoraActual'
@@ -251,6 +255,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     song_text = '$song_text',
                     arr_esquema = '',
                     tune = '$tune',
+                    tune_transpose = '$tune_transpose',
+                    tipo_acorde = '$tipo_acorde',
                     lang = '$lang',
                     notes = '$notes',
                     updated_at = '$fechaHoraActual'
@@ -266,16 +272,66 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_esquema_ok';
             $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    songbook,   song_text,    arr_esquema,    tune,    lang,    notes,    created_at) 
+                    (
+                        song_number,
+                        title,
+                        category,
+                        songbook,
+                        song_text,
+                        arr_esquema,
+                        tune,
+                        tune_transpose,
+                        tipo_acorde,
+                        lang,
+                        notes,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$arr_esquema_string', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    (
+                        '$song_number', 
+                        '$title', 
+                        '$category', 
+                        '$songbook', 
+                        '$song_text', 
+                        '$arr_esquema_string', 
+                        '$tune', 
+                        '$tune_transpose', 
+                        '$tipo_acorde', 
+                        '$lang', 
+                        '$notes', 
+                        '$fechaHoraActual'
+                    )
             ";
         }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
             $action_tipo = 'is_insert_arr_esquema_vacio';
             $sql2_in_init = "INSERT INTO songs 
-                    (song_number,      title,    category,    songbook,    song_text,    tune,    lang,    notes,    created_at) 
+                    (
+                        song_number,
+                        title,
+                        category,
+                        songbook,
+                        song_text,
+                        tune,
+                        tune_transpose,
+                        tipo_acorde,
+                        lang,
+                        notes,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$song_number', '$title', '$category', '$songbook', '$song_text', '$tune', '$lang', '$notes', '$fechaHoraActual')
+                    (
+                        '$song_number',
+                        '$title',
+                        '$category',
+                        '$songbook',
+                        '$song_text',
+                        '$tune',
+                        '$tune_transpose',
+                        '$tipo_acorde',
+                        '$lang',
+                        '$notes',
+                        '$fechaHoraActual'
+                    )
             ";
         }
         $result2 = $conn->query($sql2_in_init);

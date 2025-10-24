@@ -621,7 +621,8 @@ p.n {
 
 /* t = texto */
 p.t {
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
+    margin-bottom: 3px;
 }
 
 
@@ -1578,6 +1579,8 @@ textarea:not(:placeholder-shown) + label
 .wr_fecha,
 .wr_song_number,
 .wr_tune,
+.wr_tune_transpose,
+.wr_tipo_acorde,
 .wr_lang
  {
     /* background: red; */
@@ -1732,7 +1735,7 @@ p.p_lista {
     width: 100%;
     display: flex;
     padding: 10px;
-    gap: 20px;
+    gap: 10px;
     color: yellow;
     font-family: arial;
     border-radius: 3px;
@@ -1793,6 +1796,9 @@ p.p_lista:hover {
 }
 .l_tune {
     color: #51ebff;
+}
+.l_tune_transpose {
+    color: #ffffff;
 }
 .l_drag {
     width: 34px;
@@ -2010,7 +2016,8 @@ p.p_sm b {
 }
 .dragging .l_n,
 .dragging .l_title,
-.dragging .l_tune
+.dragging .l_tune,
+.dragging .l_tune_transpose
 {
     color: white;
 }

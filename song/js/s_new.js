@@ -114,6 +114,7 @@ function pintSongActiveSoloDatos(){
 
     tr_song.querySelector('.td_idioma').textContent = lang_name_text;
     tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
+    tr_song.querySelector('.td_transpose').textContent = objSong.tune_transpose || '';
    
 
    // Normalizamos palabras de 'arr_words' (global)

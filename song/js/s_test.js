@@ -9,6 +9,8 @@ function generarSQLInsertMultiple(datos, id_songbook, lang_val) {
         const songbook = item.songbook ?? id_songbook;//mirar en bd
         const song_text = item.song_text ? `'${item.song_text.replace(/'/g, "''")}'` : "''";
         const tune = item.tune ? `'${item.tune.replace(/'/g, "''")}'` : "''";
+        const tune_transpose = item.tune_transpose ? `'${item.tune_transpose.replace(/'/g, "''")}'` : "''";
+        const tipo_acorde = item.tipo_acorde ? `'${item.tipo_acorde.replace(/'/g, "''")}'` : "''";
         const words = item.words ? `'${item.words.replace(/'/g, "''")}'` : "''";
         const music = item.music ? `'${item.music.replace(/'/g, "''")}'` : "''";
         const notes = item.notes ? `'${item.notes.replace(/'/g, "''")}'` : "''";
@@ -16,10 +18,10 @@ function generarSQLInsertMultiple(datos, id_songbook, lang_val) {
         const count = item.count ?? 0;
         const created_at = convertirFecha(item.date) ?? 'NULL';
 
-        values.push(`(${song_number}, ${title}, ${category}, ${songbook}, ${song_text}, ${tune}, ${words}, ${music}, ${notes}, ${lang}, ${count}, ${created_at})`);
+        values.push(`(${song_number}, ${title}, ${category}, ${songbook}, ${song_text}, ${tune}, ${tune_transpose}, ${tipo_acorde}, ${words}, ${music}, ${notes}, ${lang}, ${count}, ${created_at})`);
     });
 
-    const sql = `INSERT INTO songs (song_number, title, category, songbook, song_text, tune, words, music, notes, lang, count, created_at) VALUES ${values.join(',\r\n')};`;
+    const sql = `INSERT INTO songs (song_number, title, category, songbook, song_text, tune, tune_transpose, tipo_acorde,  words, music, notes, lang, count, created_at) VALUES ${values.join(',\r\n')};`;
 
     return sql;
 }

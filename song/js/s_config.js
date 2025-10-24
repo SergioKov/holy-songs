@@ -354,6 +354,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Esquema',
     
     'Інтро',
+    'Вступ',
     'Куплет',
     'Перед Приспів',
     'Передприспів',
@@ -369,6 +370,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Схема',
     
     'Інтро',
+    'Вступление',
     'Куплет',
     'Пред Припев',
     'Предприпев',
