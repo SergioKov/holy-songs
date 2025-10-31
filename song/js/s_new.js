@@ -2144,3 +2144,30 @@ function ocultar_panel(btnSideElement, panelSideElement){
     //obj_ajustes.sidebarShow = sidebarShow;
     //update_obj_ajustes();
 }
+
+
+
+
+
+
+
+
+
+
+
+function ajustarAnchoMaximo(selectorDelElemento) {
+    const bloques = document.querySelectorAll(selectorDelElemento);//'.tema_black fieldset'
+    let maxWidth = 0;
+
+    // resetear antes de medir
+    bloques.forEach(b => b.style.width = "auto");
+
+    bloques.forEach(b => {
+        if (b.offsetWidth > maxWidth) maxWidth = b.offsetWidth;
+    });
+
+    bloques.forEach(b => b.style.width = maxWidth + "px");
+}
+//ejemplos de uso:
+// ajustarAnchoMaximo('.tema_black fieldset');
+// ajustarAnchoMaximo('.tema_white fieldset');

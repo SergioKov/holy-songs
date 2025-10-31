@@ -3049,3 +3049,95 @@ span.sp_number {
     border-color: transparent;
     font-size: 14px;
 }
+
+
+
+
+
+
+
+
+
+
+/********************* START - TEMA BLACK *********************/
+/* color de fondo */
+.tema_black .wr_vista_blocks {
+    overflow: auto;
+    font-size: 22px;
+    background: #280861;
+    /* background: #ffffff; */
+}
+
+/* fondo de fieldset */
+.tema_white .wr_vista_blocks fieldset {
+    background: white;
+}
+
+/* color de texto */
+.tema_black .bloques{
+    color: white;
+}
+
+/* color de acordes */
+.tema_white p.c {
+    color: #00e2ff;
+}
+
+/* color de border de fieldset y legend */
+.tema_black fieldset, 
+.tema_black legend 
+{
+    border: 3px solid #333333;
+    border-radius: 10px;
+}
+
+/* fondo de legend */
+.tema_black .wr_vista_blocks legend {
+    color: #FFEB3B;
+    background: #545454;
+    font-size: 12px;
+}
+/********************* END - TEMA BLACK *********************/
+
+
+
+
+
+/********************* START - TEMA WHITE *********************/
+/* color de fondo */
+.tema_white .wr_vista_blocks {
+    overflow: auto;
+    font-size: 22px;
+    background: white;
+}
+
+/* fondo de fieldset */
+.tema_white .wr_vista_blocks fieldset {
+    background: white;
+}
+
+/* color de texto 'p' */
+.tema_white .bloques{
+    color: black;
+}
+
+/* color de acordes */
+.tema_white p.c {
+    color: red;
+}
+
+/* color de border de fieldset y legend */
+.tema_white fieldset, 
+.tema_white legend 
+{
+    border: 3px solid #e8e8e8;
+    border-radius: 10px;
+}
+
+/* fondo de legend */
+.tema_white .wr_vista_blocks legend {
+    color: #00a707;
+    background: #f3f3f3;
+    font-size: 12px;
+}
+/********************* END - TEMA WHITE *********************/

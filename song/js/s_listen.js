@@ -499,6 +499,7 @@ function handleFormInput(e, container_block){
     });
 
     pintParrafosAcordes();
+    changeTipoAcorde(tipoAcorde);
 }
 
 

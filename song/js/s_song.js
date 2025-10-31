@@ -1687,10 +1687,13 @@ async function buildSong(){
     //init();
     ajustarTexto();
     pintParrafosAcordes();
+    changeTipoAcorde(tipoAcorde);
+
     if(currentTransposition != 0){
         console.log('currentTransposition: ', currentTransposition);
         transponerTodosLosAcordes(currentTransposition);
     }
+    
     pintTipoAcorde();
     scrollToSlide(currentSlide);
 }
@@ -3149,7 +3152,7 @@ function resetPListaActive() {
 function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
     //const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
     //const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
-    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;
+    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;
 
     //'|D      |F#m |G  |G - (Cm7) |' => true;
     //'| Вступ |Dm  |G  |C         |' =>  false (palabra 'Вступ' no es acorde) 
@@ -3157,7 +3160,7 @@ function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
 }
 
 function contieneAcordes(str) {// busca CUALQUIER acorde , barra y texto
-    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
+    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
     //'|D      |F#m |G  |G  |'  => true;
     //'| Вступ |Dm  |G  |C  |' =>  true (aunque hay palabra 'Вступ' que no es acorde en el texto hay al menos un acorde) 
     return regexAcorde.test(str);
@@ -3475,7 +3478,7 @@ async function findWordsSong(){
         
         tbody.innerHTML = `
             <tr>
-                <td colspan="9" class="td_no_data">
+                <td colspan="10" class="td_no_data">
                     <p class="prim">No se encontraron canciones con la frase: "<b>${words_input}</b>"</p>
                 </td>
             </tr>
