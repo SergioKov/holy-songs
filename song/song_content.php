@@ -1286,7 +1286,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                             <!--/parte_variable-->
                                             <div class="parte_variable">
-                                                <div class="bloques_outer">                                                    
+                                                <div class="bloques_outer tema_black">
                                                     <div class="bloques wr_vista_blocks">
                                                         <!-- aki vista previa -->
                                                         ...

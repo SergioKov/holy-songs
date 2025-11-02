@@ -3701,6 +3701,10 @@ async function nueva_song(){
 
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
+
+        <div class="razdel">Test:</div>
+        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
+        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
     
@@ -3748,6 +3752,11 @@ function ver_song(){
         <div class="razdel">Diapositivas:</div>
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
+
+        <div class="razdel">Test:</div>
+        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
+        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
+
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 
@@ -3792,7 +3801,11 @@ function editar_song(){
         
         <div class="razdel">Diapositivas:</div>
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
-        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>        
+        <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>  
+        
+        <div class="razdel">Test:</div>
+        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
+        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 

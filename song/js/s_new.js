@@ -2171,3 +2171,77 @@ function ajustarAnchoMaximo(selectorDelElemento) {
 //ejemplos de uso:
 // ajustarAnchoMaximo('.tema_black fieldset');
 // ajustarAnchoMaximo('.tema_white fieldset');
+
+
+
+function copyTextFromVista(selectorFieldset){
+    console.log('=== function copyTextFromVista() ==='); 
+
+    let text = ''; 
+
+    const fieldsetAll = document.querySelectorAll(selectorFieldset);//'.tema_white fieldset', '.tema_black fieldset'
+
+    fieldsetAll.forEach(f => { 
+        Array.from(f.children).forEach(line => { 
+            //console.log('line: ', line);
+
+            if(line.tagName === 'LEGEND'){
+                if(text == ''){//si es la primera vez
+                    text += line.innerText;
+                }else{
+                    text += '\n\n\n\n' + line.innerText; 
+                }                
+            }else if(line.tagName === 'P'){
+                text += '\n' + line.innerText; 
+            }else{
+                return;//continue
+            }
+        });
+        //console.log('text: ', text); 
+    });
+
+    console.log('abajo --- todo text: '); 
+    console.log(text);
+
+    copyTextToClibboard(text);
+}
+//ejemplo de uso:
+//copyTextFromVista('.tema_black fieldset');
+
+
+async function copyTextToClibboard(text = null) {  
+    if(text != null){
+        
+        // Verifica si la API de portapapeles está disponible
+        if(navigator.clipboard) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    //console.log('[copyTextToClibboard()] --- [navigator.clipboard] --- Texto copiado al portapapeles con éxito');
+                    //console.log('El texto copiado: \n', text);
+                    showToast('ok', 'Texto copiado al portapapeles', 2000);
+                })
+                .catch(error => {
+                    console.error('[copyTextToClibboard()] --- Error al copiar el texto al portapapeles:', error);
+                    showToast('error', 'Error al copiar el texto', 3000);
+                });
+        } else {
+            //console.log('[copyTextToClibboard()] --- La API de portapapeles no está disponible en este navegador. Intento copiar con document.execCommand(copy)');
+
+            const areaTexto = document.createElement('textarea');
+            areaTexto.style.position = 'fixed';
+            areaTexto.style.top = '-9999px';
+            areaTexto.style.left = '-9999px';
+            document.body.appendChild(areaTexto);
+            areaTexto.value = text;
+            areaTexto.select();
+            document.execCommand('copy');
+            document.body.removeChild(areaTexto);
+            //console.log('[copyTextToClibboard] --- El texto copiado: \n', text);
+            showToast('ok', '(areaTexto.) Texto copiado al portapapeles', 2000);
+        }
+
+    }else{
+        console.error('[copyTextToClibboard()] --- El texto no se ha copiado porque no está seleccionado.');
+        showToast('error', 'El texto no se ha copiado porque no está seleccionado.', 3000);
+    }    
+}
