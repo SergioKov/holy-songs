@@ -2176,8 +2176,8 @@ p.p_sm b {
     height: 100%;
     font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif';
     background: black;
-    /* background-image: url('../images/bible_open6.jpg'); */
-    background-image: url('../images/fondo_opera.jpg');
+    background-image: url('../images/bible_open6.jpg');
+    /* background-image: url('../images/fondo_opera.jpg'); */
     background-size: cover;
     background-position: center;
     overflow: auto;
