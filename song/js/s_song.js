@@ -3703,8 +3703,12 @@ async function nueva_song(){
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
 
         <div class="razdel">Test:</div>
-        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
-        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
+        <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
+        <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
+        <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
+        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
     
@@ -3754,9 +3758,12 @@ function ver_song(){
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
 
         <div class="razdel">Test:</div>
-        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
-        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
-
+        <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
+        <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
+        <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
+        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 
@@ -3804,8 +3811,12 @@ function editar_song(){
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>  
         
         <div class="razdel">Test:</div>
-        <li class="li_action" onclick="copyTextFromVista('.tema_black fieldset');">tema_black fieldset Copy Text en consola</li>
-        <li class="li_action" onclick="copyTextFromVista('.tema_white fieldset');">tema_white fieldset Copy Text en consola</li>
+        <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
+        <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
+        <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
+        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 

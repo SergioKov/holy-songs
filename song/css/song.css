@@ -3137,7 +3137,15 @@ span.sp_number {
 /* fondo de legend */
 .tema_white .wr_vista_blocks legend {
     color: #00a707;
-    background: #f3f3f3;
+    /* background: #f3f3f3; */
+    background: white;
     font-size: 12px;
 }
 /********************* END - TEMA WHITE *********************/
+
+
+.exit_fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}

@@ -2155,8 +2155,8 @@ function ocultar_panel(btnSideElement, panelSideElement){
 
 
 
-function ajustarAnchoMaximo(selectorDelElemento) {
-    const bloques = document.querySelectorAll(selectorDelElemento);//'.tema_black fieldset'
+function ajustarAnchoMaximo(selectorElemento) {
+    const bloques = document.querySelectorAll(selectorElemento);//'.tema_black fieldset'
     let maxWidth = 0;
 
     // resetear antes de medir
@@ -2172,6 +2172,13 @@ function ajustarAnchoMaximo(selectorDelElemento) {
 // ajustarAnchoMaximo('.tema_black fieldset');
 // ajustarAnchoMaximo('.tema_white fieldset');
 
+
+function resetAnchoMaximo(selectorElemento) {
+    const bloques = document.querySelectorAll(selectorElemento);//'.tema_black fieldset'
+
+    // resetear antes de medir
+    bloques.forEach(b => b.removeAttribute('style'));
+}
 
 
 function copyTextFromVista(selectorFieldset){
@@ -2245,3 +2252,93 @@ async function copyTextToClibboard(text = null) {
         showToast('error', 'El texto no se ha copiado porque no está seleccionado.', 3000);
     }    
 }
+
+
+function copiarConFormato(selectorContenedor) {
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+
+    const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.querySelectorAll('fieldset').forEach( (f,i) => {
+        if(i > 0){
+            f.outerHTML = '<br><br>' + f.outerHTML;
+        }
+    });
+
+    contenedor.querySelectorAll('p').forEach(p => {
+        p.innerHTML = reemplazarEspacios(p.innerText);
+    });
+
+    // Crear un rango que abarque el contenido
+    const rango = document.createRange();
+    rango.selectNode(contenedor);
+
+    // Limpiar selección previa
+    const seleccion = window.getSelection();
+    seleccion.removeAllRanges();
+    seleccion.addRange(rango);
+
+    // Ejecutar el comando copiar (copia con formato)
+    document.execCommand("copy");
+
+    // Limpiar selección
+    seleccion.removeAllRanges();
+
+    alert("Contenido copiado con formato ✅");
+
+    contenedor.replaceWith(clone);//reemplazo con el contenido original
+}
+
+function reemplazarEspacios(texto) {
+    return texto.replace(/ /g, '&nbsp;');
+}
+
+function pantallaCompleta(selectorElement) {
+    const elem = document.querySelector(selectorElement);
+
+    const btn = document.createElement('button');
+    btn.className = 'btn exit_fullscreen';
+    btn.innerHTML = `
+        Salir de Fullscreen
+    `;
+    btn.onclick = (e)=> {
+        e.stopPropagation();
+        salirPantallaCompleta();
+    }
+
+    elem.prepend(btn);
+
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { // Safari
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { // IE/Edge antiguo
+        elem.msRequestFullscreen();
+    }
+}
+
+function salirPantallaCompleta() {
+    document.querySelector('.exit_fullscreen')?.remove();
+    
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+function cambiarTema(selectorElement) {// '.block_cancion .bloques_outer'
+    const elem = document.querySelector(selectorElement);
+
+    if (elem.classList.contains("tema_black")) {
+        elem.classList.replace("tema_black", "tema_white");
+    } else if (elem.classList.contains("tema_white")) {
+        elem.classList.replace("tema_white", "tema_black");
+    } else {
+        // Si no tiene ninguna de las dos, asignamos un valor por defecto
+        elem.classList.add("tema_black");
+    }
+}
+//cambiarTema('#tema_block');
