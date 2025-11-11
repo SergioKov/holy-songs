@@ -198,7 +198,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
                                                 <p class="prim opt_prim">
-                                                    Para ver los datos de la canción, búscala y selecciónala antes en esta pestaña o crea una nueva pulsando en <b>'Nueva Canción'</b>.
+                                                    Búsca la canción o crea una nueva.
                                                 </p>
 
                                                 <button class="btn opt_edit" onclick="crearPages(); closeAll();">crearPages()</button>
@@ -521,7 +521,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
                                                 <p class="prim opt_prim">
-                                                    Para ver el esquema de la canción, búscala y selecciónala antes en la pestaña <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button>.
+                                                    Búsca la canción <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button>.
                                                 </p>
 
                                                 <button id="btn_ver_esquema" class="btn opt_edit" onclick="showVklad(this,'ver_esquema')">Ver</button>
@@ -1175,7 +1175,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
                                                 <p class="prim opt_prim">
-                                                    Para ver los datos de la canción, búscala y selecciónala antes en la pestaña <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button> o crea una nueva pulsando en <b>'Nueva'</b>.
+                                                    Búsca la canción <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button> o crea una nueva.
                                                 </p>
 
                                                 <button id="btn_song_ver" class="btn opt_edit" onclick="ver_song()">Ver</button>
@@ -1446,7 +1446,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
                                                 <p class="prim opt_prim">
-                                                    Para ver los datos de la lista, búscala y selecciónala antes en esta pestaña o crea una nueva pulsando en <b>'Nueva'</b>.
+                                                    Búsca la lista o crea una nueva.
                                                 </p>
 
                                                 <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
