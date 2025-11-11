@@ -37,6 +37,9 @@ let currentTransposition = parseInt(localStorage.getItem('currentTransposition')
 let tipoAcorde = localStorage.getItem('tipoAcorde') || 'diez';//'diez' o 'bemol'//diez por defecto
 const d_currentTipoAcorde = document.getElementById('d_currentTipoAcorde');
 
+let tipoFuente = localStorage.getItem('tipoFuente') || 'a';//'a'(Arial) o 'm'(Monospace)// 'a'(Arial) por defecto
+
+
 const btn_menu = document.getElementById('btn_menu');
 const menu_contenido = document.getElementById('menu_contenido');
 const eid_puntosMenu = document.getElementById('puntosMenu');
@@ -369,7 +372,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Структура',
     'Схема',
     
-    'Інтро',
+    'Интро',
     'Вступление',
     'Куплет',
     'Пред Припев',

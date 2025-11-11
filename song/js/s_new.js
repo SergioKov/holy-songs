@@ -1263,7 +1263,20 @@ function esElementoVisible(elemento) {
 
 
 
+function hideShowBlock(id_div){
+    console.log('=== function hideShowBlock() ===');
+    console.log('id_div: ',id_div);
 
+    const divElement = document.getElementById(id_div);
+    const block_css = window.getComputedStyle(divElement);
+    const block_display = block_css.display;
+   
+    if(block_display == 'block'){//si es visible
+        divElement.style.display = 'none';//oculto
+    }else{//muestro
+        divElement.style.display = 'block';//muestro
+    }    
+}
 
 
 
@@ -2342,3 +2355,19 @@ function cambiarTema(selectorElement) {// '.block_cancion .bloques_outer'
     }
 }
 //cambiarTema('#tema_block');
+
+
+
+
+
+   
+
+function addMonospaceFont() {
+    ecl_bl_body.classList.add('monospace_font');
+    slideContainer.classList.add('monospace_font'); 
+}
+
+function removeMonospaceFont() {
+    ecl_bl_body.classList.remove('monospace_font');
+    slideContainer.classList.remove('monospace_font');   
+}

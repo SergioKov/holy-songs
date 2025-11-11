@@ -94,6 +94,9 @@ carousel.addEventListener('click', async (e) => {
 
     if(hayElementosModalesAbiertos()){
         console.log('hay algun elemento modal abierto. no dejo ir al slide');
+        if(esElementoVisible(menu_contenido)){
+            hideMenu();
+        }
         return;
     }
 

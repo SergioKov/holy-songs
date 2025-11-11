@@ -407,200 +407,232 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
                 </div>
 
+                <div class="form_group wr_detalles">
+                    <div class="wr_detalles_head" onclick="hideShowBlock('form_detalles');">
+                        Detalles de la canción
+                    </div>
 
-                <div class="wr_sel_category select_container">
-                    <select id="${id_vstavka}category" name="category" class="sel_opt" required="">
-                        <option value="" disabled selected hidden></option>
-                        <option value="1">1. Наприкінці церковного зібрання</option>
-                        <option value="2">2. На рукопокладення</option>
-                        <option value="3">3. Хрещення</option>
-                        <option value="4">4. Перед церковним зібранням</option>
-                        <option value="5">5. Біблійні історії</option>
-                        <option value="6">6. Заклик до покаяння</option>
-                        <option value="7">7. Діти та сім'я</option>
-                        <option value="8">8. Християнська радість</option>
-                        <option value="9">9. Різдво</option>
-                        <option value="10">10. Церква</option>
-                        <option value="11">11. Утіха та підбадьорення</option>
-                        <option value="12">12. Рішучість і вірність</option>
-                        <option value="13">13. Слідування за Христом</option>
-                        <option value="14">14. Для новонавернених</option>
-                        <option value="15">15. Похорон</option>
-                        <option value="16">16. Бог, Його любов і велич</option>
-                        <option value="17">17. Євангеліє</option>
-                        <option value="18">18. Жнива</option>
-                        <option value="19">19. Небесне житло</option>
-                        <option value="20">20. Святий Дух</option>
-                        <option value="21">21. Настанови та самоперевірка</option>
-                        <option value="22">22. Ісус Христос</option>
-                        <option value="23">23. Шлях віри, віра і надія</option>
-                        <option value="24">24. Останні дні</option>
-                        <option value="25">25. Любов</option>
-                        <option value="26">26. Мама</option>
-                        <option value="27">27. Новий рік</option>
-                        <option value="28">28. Вечеря Господня</option>
-                        <option value="29">29. Різне</option>
-                        <option value="30">30. Практичне життя з Богом</option>
-                        <option value="31" selected>31. Хвала і подяка</option>
-                        <option value="32">32. Молитва</option>
-                        <option value="33">33. Спасіння</option>
-                        <option value="34">34. Духовна боротьба і перемога</option>
-                        <option value="35">35. Страждання і смерть Христа</option>
-                        <option value="36">36. Захід / Схід сонця</option>
-                        <option value="37">37. Воскресіння Христа</option>
-                        <option value="38">38. Слово Боже</option>
-                        <option value="39">39. Заклик до праці</option>
-                        <option value="40">40. Друге пришестя Христа і суд</option>
-                        <option value="41">41. Час</option>
-                        <option value="42">42. Різні християнські свята</option>
-                        <option value="43">43. Весілля</option>
-                        <option value="44">44. Привітання та прощання</option>
-                        <option value="45">45. Молодь</option>
-                        <option value="46">46. Інструментальна</option>
-                        <option value="47">47. Колискові</option>
-                        <option value="48">48. Дитячі</option>
-                        <option value="49">49. Табірні</option>
-                        <option value="50">50. Зцілення</option>
-                        <option value="51">51. Прощення</option>
-                        <option value="52">52. В’їзд до Єрусалима</option>
-                        <option value="53">53. Вознесіння Господнє</option>
-                        <option value="54">54. Пасхальні</option>
-                        <option value="55">55. Трійця</option>
-                    </select>
-                    <label for="${id_vstavka}category">Category</label>
+                    <div id="form_detalles" class="wr_detalles_body">                    
+
+                        <div class="wr_sel_category select_container">
+                            <select id="${id_vstavka}category" name="category" class="sel_opt" required="">
+                                <option value="" disabled selected hidden></option>
+                                <option value="1">1. Наприкінці церковного зібрання</option>
+                                <option value="2">2. На рукопокладення</option>
+                                <option value="3">3. Хрещення</option>
+                                <option value="4">4. Перед церковним зібранням</option>
+                                <option value="5">5. Біблійні історії</option>
+                                <option value="6">6. Заклик до покаяння</option>
+                                <option value="7">7. Діти та сім'я</option>
+                                <option value="8">8. Християнська радість</option>
+                                <option value="9">9. Різдво</option>
+                                <option value="10">10. Церква</option>
+                                <option value="11">11. Утіха та підбадьорення</option>
+                                <option value="12">12. Рішучість і вірність</option>
+                                <option value="13">13. Слідування за Христом</option>
+                                <option value="14">14. Для новонавернених</option>
+                                <option value="15">15. Похорон</option>
+                                <option value="16">16. Бог, Його любов і велич</option>
+                                <option value="17">17. Євангеліє</option>
+                                <option value="18">18. Жнива</option>
+                                <option value="19">19. Небесне житло</option>
+                                <option value="20">20. Святий Дух</option>
+                                <option value="21">21. Настанови та самоперевірка</option>
+                                <option value="22">22. Ісус Христос</option>
+                                <option value="23">23. Шлях віри, віра і надія</option>
+                                <option value="24">24. Останні дні</option>
+                                <option value="25">25. Любов</option>
+                                <option value="26">26. Мама</option>
+                                <option value="27">27. Новий рік</option>
+                                <option value="28">28. Вечеря Господня</option>
+                                <option value="29">29. Різне</option>
+                                <option value="30">30. Практичне життя з Богом</option>
+                                <option value="31" selected>31. Хвала і подяка</option>
+                                <option value="32">32. Молитва</option>
+                                <option value="33">33. Спасіння</option>
+                                <option value="34">34. Духовна боротьба і перемога</option>
+                                <option value="35">35. Страждання і смерть Христа</option>
+                                <option value="36">36. Захід / Схід сонця</option>
+                                <option value="37">37. Воскресіння Христа</option>
+                                <option value="38">38. Слово Боже</option>
+                                <option value="39">39. Заклик до праці</option>
+                                <option value="40">40. Друге пришестя Христа і суд</option>
+                                <option value="41">41. Час</option>
+                                <option value="42">42. Різні християнські свята</option>
+                                <option value="43">43. Весілля</option>
+                                <option value="44">44. Привітання та прощання</option>
+                                <option value="45">45. Молодь</option>
+                                <option value="46">46. Інструментальна</option>
+                                <option value="47">47. Колискові</option>
+                                <option value="48">48. Дитячі</option>
+                                <option value="49">49. Табірні</option>
+                                <option value="50">50. Зцілення</option>
+                                <option value="51">51. Прощення</option>
+                                <option value="52">52. В’їзд до Єрусалима</option>
+                                <option value="53">53. Вознесіння Господнє</option>
+                                <option value="54">54. Пасхальні</option>
+                                <option value="55">55. Трійця</option>
+                            </select>
+                            <label for="${id_vstavka}category">Category</label>
+                        </div>
+
+
+                        <div class="wr_sel_category select_container">
+                            <select id="${id_vstavka}songbook" name="songbook" class="sel_opt" required="">
+                                <!-- se pintan los songbook aki desde bd -->
+                            </select>
+                            <label for="${id_vstavka}songbook">Пісенник (Збірник пісень)</label>
+                        </div>
+
+
+
+
+                        <div class="wr_group">
+
+                            <div class="form_group wr_id_song">
+                                <input id="${id_vstavka}id_song" name="id_song" class="inpt_id_song" type="number" required="" placeholder=" ">
+                                <label for="${id_vstavka}id_song">Id</label>
+                            </div>
+
+                            <div class="form_group wr_song_number">
+                                <input id="${id_vstavka}song_number" name="song_number" type="number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                                <label for="${id_vstavka}song_number">Número</label>
+                            </div>
+
+                            <div class="form_group wr_lang">
+                                <select id="${id_vstavka}lang" name="lang" class="sel_opt" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="ua">Українська</option>
+                                    <option value="ru">Русский</option>
+                                    <option value="es">Español</option>
+                                    <option value="en">English</option>
+                                </select>
+                                <label for="${id_vstavka}lang">Idioma</label>
+                            </div>
+
+                            <div class="form_group wr_tipo_fuente">
+                                <select id="${id_vstavka}tipo_fuente" name="tipo_fuente" class="sel_opt" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    <option value="a" selected>Normal - (Arial)</option>
+                                    <option value="m">Monospace - (espacios iguales a letras)</option>
+                                </select>
+                                <label for="${id_vstavka}lang">Tipo Fuente</label>
+                            </div>
+
+                        </div>
+                    
+
+
+
+
+                        <div class="wr_group">
+
+                            <div class="form_group wr_tune select_container">
+                                <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
+                                    <option value="" disabled selected hidden></option>
+
+                                    <option>C</option>
+                                    <option>Cm</option>
+                                    <option>C#</option>
+                                    <option>C#m</option>
+                                    <option>Db</option>
+                                    <option>Dbm</option>
+                                    <option>D</option>
+                                    <option>Dm</option>
+                                    <option>D#</option>
+                                    <option>D#m</option>
+                                    <option>Eb</option>
+                                    <option>Ebm</option>
+                                    <option>E</option>
+                                    <option>Em</option>
+                                    <option>F</option>
+                                    <option>Fm</option>
+                                    <option>F#</option>
+                                    <option>F#m</option>
+                                    <option>Gb</option>
+                                    <option>Gbm</option>
+                                    <option>G</option>
+                                    <option>Gm</option>
+                                    <option>G#</option>
+                                    <option>G#m</option>
+                                    <option>Ab</option>
+                                    <option>Abm</option>
+                                    <option>A</option>
+                                    <option>Am</option>
+                                    <option>A#</option>
+                                    <option>A#m</option>
+                                    <option>Bb</option>
+                                    <option>Bbm</option>
+                                    <option>H</option>
+                                    <option>Hm</option>
+                                </select>
+                                <label for="${id_vstavka}tune">Tonalidad</label>
+                            </div>
+
+                            <div class="form_group wr_tipo_acorde">
+                                <select id="${id_vstavka}tipo_acorde" name="tipo_acorde" class="sel_opt" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    <option selected>#</option>
+                                    <option>b</option>
+                                </select>
+                                <label for="${id_vstavka}tipo_acorde">Tipo Acorde</label>
+                            </div>                    
+
+                            <div class="form_group wr_tune_transpose select_container">
+                                <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    
+                                    <option>+12</option>
+                                    <option>+11</option>
+                                    <option>+10</option>
+                                    <option>+9</option>
+                                    <option>+8</option>
+                                    <option>+7</option>
+                                    <option>+6</option>
+                                    <option>+5</option>
+                                    <option>+4</option>
+                                    <option>+3</option>
+                                    <option>+2</option>
+                                    <option>+1</option>
+                                    
+                                    <option selected>0</option>
+                                    
+                                    <option>-1</option>
+                                    <option>-2</option>
+                                    <option>-3</option>
+                                    <option>-4</option>
+                                    <option>-5</option>
+                                    <option>-6</option>
+                                    <option>-7</option>
+                                    <option>-8</option>
+                                    <option>-9</option>
+                                    <option>-10</option>
+                                    <option>-11</option>
+                                    <option>-12</option>
+                                    
+                                </select>
+                                <label for="${id_vstavka}tune_transpose">Transpose</label>
+                            </div>
+
+                            <div class="form_group wr_tempo_bpm">
+                                <input id="${id_vstavka}tempo_bpm" name="tempo_bpm" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                                <label for="${id_vstavka}tempo_bpm">Tempo (BPM)</label>
+                            </div>
+
+                        </div>
+
+                        <div class="form_group wr_url_youtube">
+                            <input id="${id_vstavka}url_youtube" name="url_youtube" type="text" required="" placeholder=" ">
+                            <label for="${id_vstavka}url_youtube">Enlace de vídeo de YouTube</label>
+                        </div>
+
+                        <div class="form_group wr_url_recurso">
+                            <input id="${id_vstavka}url_recurso" name="url_recurso" type="text" required="" placeholder=" ">
+                            <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/17077)</label>
+                        </div>
+
+                    </div>
                 </div>
-
-
-                <div class="wr_sel_category select_container">
-                    <select id="${id_vstavka}songbook" name="songbook" class="sel_opt" required="">
-                        <!-- se pintan los songbook aki desde bd -->
-                    </select>
-                    <label for="${id_vstavka}songbook">Пісенник (Збірник пісень)</label>
-                </div>
-
-
-
-
-                <div class="wr_group">
-
-                    <div class="form_group wr_id_song">
-                        <input id="${id_vstavka}id_song" name="id_song" class="inpt_id_song" type="number" required="" placeholder=" ">
-                        <label for="${id_vstavka}id_song">Id</label>
-                    </div>
-
-                    <div class="form_group wr_song_number">
-                        <input id="${id_vstavka}song_number" name="song_number" type="number" maxlength="6" pattern="\d*" inputmode="numeric" required placeholder=" ">
-                        <label for="${id_vstavka}song_number">Número</label>
-                    </div>
-
-                    <div class="form_group wr_lang">
-                        <select id="${id_vstavka}lang" name="lang" class="sel_opt" required="">
-                            <option value="" disabled selected hidden></option>
-                            <option value="ua">Українська</option>
-                            <option value="ru">Русский</option>
-                            <option value="es">Español</option>
-                            <option value="en">English</option>
-                        </select>
-                        <label for="${id_vstavka}lang">Idioma</label>
-                    </div>
-
-                </div>
-            
-
-
-
-
-                <div class="wr_group">
-
-                    <div class="form_group wr_tune select_container">
-                        <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
-                            <option value="" disabled selected hidden></option>
-
-                            <option>C</option>
-                            <option>Cm</option>
-                            <option>C#</option>
-                            <option>C#m</option>
-                            <option>Db</option>
-                            <option>Dbm</option>
-                            <option>D</option>
-                            <option>Dm</option>
-                            <option>D#</option>
-                            <option>D#m</option>
-                            <option>Eb</option>
-                            <option>Ebm</option>
-                            <option>E</option>
-                            <option>Em</option>
-                            <option>F</option>
-                            <option>Fm</option>
-                            <option>F#</option>
-                            <option>F#m</option>
-                            <option>Gb</option>
-                            <option>Gbm</option>
-                            <option>G</option>
-                            <option>Gm</option>
-                            <option>G#</option>
-                            <option>G#m</option>
-                            <option>Ab</option>
-                            <option>Abm</option>
-                            <option>A</option>
-                            <option>Am</option>
-                            <option>A#</option>
-                            <option>A#m</option>
-                            <option>Bb</option>
-                            <option>Bbm</option>
-                            <option>H</option>
-                            <option>Hm</option>
-                        </select>
-                        <label for="${id_vstavka}tune">Tonalidad</label>
-                    </div>
-
-                    <div class="form_group wr_tipo_acorde">
-                        <select id="${id_vstavka}tipo_acorde" name="tipo_acorde" class="sel_opt" required="">
-                            <option value="" disabled selected hidden></option>
-                            <option selected>#</option>
-                            <option>b</option>
-                        </select>
-                        <label for="${id_vstavka}tipo_acorde">Tipo Acorde</label>
-                    </div>                    
-
-                    <div class="form_group wr_tune_transpose select_container">
-                        <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt" required="">
-                            <option value="" disabled selected hidden></option>
-                            
-                            <option>+12</option>
-                            <option>+11</option>
-                            <option>+10</option>
-                            <option>+9</option>
-                            <option>+8</option>
-                            <option>+7</option>
-                            <option>+6</option>
-                            <option>+5</option>
-                            <option>+4</option>
-                            <option>+3</option>
-                            <option>+2</option>
-                            <option>+1</option>
-                            
-                            <option selected>0</option>
-                            
-                            <option>-1</option>
-                            <option>-2</option>
-                            <option>-3</option>
-                            <option>-4</option>
-                            <option>-5</option>
-                            <option>-6</option>
-                            <option>-7</option>
-                            <option>-8</option>
-                            <option>-9</option>
-                            <option>-10</option>
-                            <option>-11</option>
-                            <option>-12</option>
-                            
-                        </select>
-                        <label for="${id_vstavka}tune_transpose">Transpose</label>
-                    </div>
-
-                </div>
-
             
 
 
@@ -660,6 +692,14 @@ function buildFormCancion(contenedor, cancion_action = null){
                 const tipo_acorde_val = e.currentTarget.value;
                 handleFormTipoAcorde(tipo_acorde_val);
             }
+
+            //5. añado escuchador de change al 'tipo_fuente' 
+            form.elements['tipo_fuente'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const tipo_fuente_val = e.currentTarget.value;
+                handleFormTipoFuente(tipo_fuente_val);
+            }            
                         
             break;
                     
@@ -692,6 +732,10 @@ function buildFormCancion(contenedor, cancion_action = null){
             form.elements['tune'].value = objSong.tune || '';
             form.elements['tune_transpose'].value = objSong.tune_transpose || '';
             form.elements['tipo_acorde'].value = objSong.tipo_acorde || '';
+            form.elements['tipo_fuente'].value = objSong.tipo_fuente || '';
+            form.elements['url_youtube'].value = objSong.url_youtube || '';
+            form.elements['url_recurso'].value = objSong.url_recurso || '';
+            form.elements['tempo_bpm'].value = objSong.tempo_bpm || '';
             form.elements['lang'].value = objSong.lang;
             form.elements['song_text'].value = objSong.song_text || '';
             form.elements['notes'].value = objSong.notes || '';
@@ -700,6 +744,7 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormInput(form.elements['song_text'], eid_block_cancion);
             handleFormTranspose(Number(objSong.tune_transpose));//para transponer al cargar el form
             handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
+            handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
 
             //2. escucho al cambiar el texto...
             form.elements['song_text'].oninput = (e) => {
@@ -720,6 +765,14 @@ function buildFormCancion(contenedor, cancion_action = null){
                 
                 const tipo_acorde_val = e.currentTarget.value;
                 handleFormTipoAcorde(tipo_acorde_val);
+            }
+
+            //5. añado escuchador de change al 'tipo_fuente' 
+            form.elements['tipo_fuente'].onchange = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                
+                const tipo_fuente_val = e.currentTarget.value;
+                handleFormTipoFuente(tipo_fuente_val);
             }
             
             buildEsquemaSoloTitulos(form.querySelector('.d_esquema_titulos'), objSong.arr_esquema);             
@@ -762,6 +815,14 @@ function handleFormTipoAcorde(tipo_acorde_val){
         changeTipoAcorde('bemol');
     } else {//si es '#' o por defecto es '#'
         changeTipoAcorde('diez');
+    }
+}
+
+function handleFormTipoFuente(tipo_fuente_val){
+    console.log('=== function handleFormTipoFuente() ===');
+
+    if(['a','m'].includes(tipo_fuente_val)){
+        changeTipoFuente(tipo_fuente_val);
     }
 }
 

@@ -592,6 +592,24 @@ function changeTipoAcorde(tipo){
     }
 }
 
+function changeTipoFuente(tipo){
+    console.log('=== function changeTipoFuente() ===');    
+    if (['a','m'].includes(tipo)) {
+        
+        tipoFuente = tipo;
+        localStorage.setItem('tipoFuente', tipoFuente);
+        // pintTipoFuente();
+
+        if(tipo == 'a'){//Arial
+            removeMonospaceFont();//quito Monospace y se aplica 'Arial'
+        } else if(tipo == 'm'){//Monospace
+            addMonospaceFont();//añado Monospace y se aplica 'Monospace'
+        }
+        
+        console.log(`Clic en .btn de tipo_fuente.`);
+    }
+}
+
 function changeTranspose(direction){
     console.log('=== function changeTranspose() ==='); 
     
@@ -1593,6 +1611,9 @@ async function buildSong(){
     slideContainer.innerHTML = '';//reset
     slideContainer.dataset.id_song = objSongBd.id_song;
 
+    //cojo valor de tipo_fuente de bd 
+    tipoFuente = objSongBd.tipo_fuente;
+
     arr_fieldsets = [];//reset    
     totalSlides = arr_esquema_bucle.length;//total de slides a pintar
 
@@ -1685,6 +1706,9 @@ async function buildSong(){
     });
 
     //init();
+    changeTipoFuente(tipoFuente);//debe ser antes de ajustarTexto() para medir bien el width!
+    await sleep(100);
+
     ajustarTexto();
     pintParrafosAcordes();
     changeTipoAcorde(tipoAcorde);
@@ -2536,6 +2560,10 @@ async function guardarSong(event, id_contenedor, cancion_action){
         let tune = form.elements["tune"].value.trim();
         let tune_transpose = form.elements["tune_transpose"].value.trim();
         let tipo_acorde = form.elements["tipo_acorde"].value.trim();
+        let tipo_fuente = form.elements["tipo_fuente"].value.trim();
+        let url_youtube = form.elements["url_youtube"].value.trim();
+        let url_recurso = form.elements["url_recurso"].value.trim();
+        let tempo_bpm = form.elements["tempo_bpm"].value.trim();
         let lang = form.elements["lang"].value.trim();
         let song_text = form.elements["song_text"].value.trim();
         let notes = form.elements["notes"].value.trim();
@@ -2595,6 +2623,10 @@ async function guardarSong(event, id_contenedor, cancion_action){
             tune: tune,
             tune_transpose: tune_transpose,
             tipo_acorde: tipo_acorde,
+            tipo_fuente: tipo_fuente,
+            url_youtube: url_youtube,
+            url_recurso: url_recurso,
+            tempo_bpm: tempo_bpm,
             lang: lang,
             song_text: song_text,
             notes: notes,
@@ -3817,6 +3849,10 @@ function editar_song(){
         <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
         <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
         <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
+        
+        <div class="razdel">Fuente:</div>
+        <li class="li_action" onclick="addMonospaceFont();">Add Monospace font</li>
+        <li class="li_action" onclick="removeMonospaceFont();">Remove Monospace font</li>
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 
@@ -4400,4 +4436,12 @@ function pintSoloNumerosDeOrden(contenedor){
         item.textContent = `${i + 1}.`;
     });
 
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function nextFrame() {
+    return new Promise(requestAnimationFrame);
 }

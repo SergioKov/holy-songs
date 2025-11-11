@@ -180,6 +180,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $tune  = $conn->real_escape_string($datos['tune']);//get parameter
     $tune_transpose  = $conn->real_escape_string($datos['tune_transpose']);//get parameter
     $tipo_acorde  = $conn->real_escape_string($datos['tipo_acorde']);//get parameter
+    $tipo_fuente  = $conn->real_escape_string($datos['tipo_fuente']);//get parameter
+    $url_youtube  = $conn->real_escape_string($datos['url_youtube']);//get parameter
+    $url_recurso  = $conn->real_escape_string($datos['url_recurso']);//get parameter
+    $tempo_bpm  = $conn->real_escape_string($datos['tempo_bpm']);//get parameter
     $lang  = $conn->real_escape_string($datos['lang']);//get parameter
     $notes  = $conn->real_escape_string($datos['notes']);//get parameter
     //$count  = $conn->real_escape_string($datos['count']);//get parameter
@@ -239,6 +243,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     tune = '$tune',
                     tune_transpose = '$tune_transpose',
                     tipo_acorde = '$tipo_acorde',
+                    tipo_fuente = '$tipo_fuente',
+                    url_youtube = '$url_youtube',
+                    url_recurso = '$url_recurso',
+                    tempo_bpm = '$tempo_bpm',
                     lang = '$lang',
                     notes = '$notes',
                     updated_at = '$fechaHoraActual'
@@ -257,6 +265,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     tune = '$tune',
                     tune_transpose = '$tune_transpose',
                     tipo_acorde = '$tipo_acorde',
+                    tipo_fuente = '$tipo_fuente',
+                    url_youtube = '$url_youtube',
+                    url_recurso = '$url_recurso',
+                    tempo_bpm = '$tempo_bpm',
                     lang = '$lang',
                     notes = '$notes',
                     updated_at = '$fechaHoraActual'
@@ -282,6 +294,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                         tune,
                         tune_transpose,
                         tipo_acorde,
+                        tipo_fuente,
+                        url_youtube,
+                        url_recurso,
+                        tempo_bpm,
                         lang,
                         notes,
                         created_at
@@ -297,6 +313,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                         '$tune', 
                         '$tune_transpose', 
                         '$tipo_acorde', 
+                        '$tipo_fuente', 
+                        '$url_youtube', 
+                        '$url_recurso', 
+                        '$tempo_bpm', 
                         '$lang', 
                         '$notes', 
                         '$fechaHoraActual'
@@ -314,6 +334,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                         tune,
                         tune_transpose,
                         tipo_acorde,
+                        tipo_fuente,
+                        url_youtube,
+                        url_recurso,
+                        tempo_bpm,
                         lang,
                         notes,
                         created_at
@@ -328,6 +352,10 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                         '$tune',
                         '$tune_transpose',
                         '$tipo_acorde',
+                        '$tipo_fuente',
+                        '$url_youtube',
+                        '$url_recurso',
+                        '$tempo_bpm',
                         '$lang',
                         '$notes',
                         '$fechaHoraActual'
