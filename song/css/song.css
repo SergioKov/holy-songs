@@ -3193,3 +3193,30 @@ span.sp_number {
     border: 1px solid #dddddd;
     border-radius: 0 0 5px 5px;
 }
+
+
+
+.ocultar_acordes p.c,
+.ocultar_acordes p.n,
+.ocultar_acordes p.b
+{
+    display: none !important;
+}
+
+.mostrar_acordes p.c,
+.mostrar_acordes p.n,
+.mostrar_acordes p.b
+{
+    display: block !important;
+}
+
+
+.ocultar_texto p.t
+{
+    display: none !important;
+}
+
+.mostrar_texto p.t
+{
+    display: block !important;
+}

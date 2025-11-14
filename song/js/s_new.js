@@ -1273,9 +1273,13 @@ function hideShowBlock(id_div){
    
     if(block_display == 'block'){//si es visible
         divElement.style.display = 'none';//oculto
+        display_form_detalles = 'none';
     }else{//muestro
         divElement.style.display = 'block';//muestro
-    }    
+        display_form_detalles = 'block';
+    } 
+
+    localStorage.setItem('display_form_detalles',display_form_detalles);
 }
 
 
@@ -2301,6 +2305,90 @@ function copiarConFormato(selectorContenedor) {
 
     contenedor.replaceWith(clone);//reemplazo con el contenido original
 }
+
+function copiarSinAcordesConFormato(selectorContenedor) {
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+
+    const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.querySelectorAll('fieldset').forEach( (f,i) => {
+        if(i > 0){
+            f.outerHTML = '<br><br>' + f.outerHTML;
+        }
+    });
+
+    contenedor.querySelectorAll('p').forEach(p => {
+        if(!p.classList.contains('t')){//si no es texto, lo elimino
+            p.remove();//elimino las líneas de acordes
+            return;
+        }
+        //p.innerHTML = reemplazarEspacios(p.innerText);
+    });
+
+    let resultado = Array.from(contenedor.querySelectorAll('p')).filter(p => {
+        if(p.classList.contains('t')){
+            return true;
+        }
+    });
+    
+    console.log('resultado: ', resultado);
+
+    // Crear un rango que abarque el contenido
+    const rango = document.createRange();
+    rango.selectNode(contenedor);
+
+    // Limpiar selección previa
+    const seleccion = window.getSelection();
+    seleccion.removeAllRanges();
+    seleccion.addRange(rango);
+
+    // Ejecutar el comando copiar (copia con formato)
+    document.execCommand("copy");
+
+    // Limpiar selección
+    seleccion.removeAllRanges();
+
+    alert("Contenido copiado con formato ✅");
+
+    contenedor.replaceWith(clone);//reemplazo con el contenido original
+}
+
+function ocultarAcordes(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('mostrar_acordes');
+    contenedor.classList.add('ocultar_acordes');
+}
+
+function mostrarAcordes(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('ocultar_acordes');
+    contenedor.classList.add('mostrar_acordes');
+}
+
+
+
+function ocultarTexto(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('mostrar_texto');
+    contenedor.classList.add('ocultar_texto');
+}
+
+function mostrarTexto(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('ocultar_texto');
+    contenedor.classList.add('mostrar_texto');
+}
+
+
+
 
 function reemplazarEspacios(texto) {
     return texto.replace(/ /g, '&nbsp;');

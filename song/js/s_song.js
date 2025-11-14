@@ -3734,13 +3734,27 @@ async function nueva_song(){
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
 
-        <div class="razdel">Test:</div>
+        <div class="razdel">Aspecto:</div>
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
-        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
         <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
+
+        <div class="razdel">Acordes y Texto:</div>
+        <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>
+        <li class="li_action" onclick="mostrarAcordes('#tema_block');">Mostrar Acordes</li>
+        <li class="li_action" onclick="ocultarTexto('#tema_block');">Ocultar Texto</li>
+        <li class="li_action" onclick="mostrarTexto('#tema_block');">Mostrar Texto</li>
+        
+        <div class="razdel">Copiar:</div>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copiar texto en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copiar texto con formato</li>
+        <li class="li_action" onclick="copiarSinAcordesConFormato('#tema_block');">Copiar texto SIN ACORDES</li>
+        
+        <div class="razdel">Fuente:</div>
+        <li class="li_action" onclick="addMonospaceFont();">Add Monospace font</li>
+        <li class="li_action" onclick="removeMonospaceFont();">Remove Monospace font</li>
+
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
     
@@ -3789,13 +3803,27 @@ function ver_song(){
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>
 
-        <div class="razdel">Test:</div>
+        <div class="razdel">Aspecto:</div>
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
-        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
         <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
+
+        <div class="razdel">Acordes y Texto:</div>
+        <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>
+        <li class="li_action" onclick="mostrarAcordes('#tema_block');">Mostrar Acordes</li>
+        <li class="li_action" onclick="ocultarTexto('#tema_block');">Ocultar Texto</li>
+        <li class="li_action" onclick="mostrarTexto('#tema_block');">Mostrar Texto</li>
+        
+        <div class="razdel">Copiar:</div>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copiar texto en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copiar texto con formato</li>
+        <li class="li_action" onclick="copiarSinAcordesConFormato('#tema_block');">Copiar texto SIN ACORDES</li>
+        
+        <div class="razdel">Fuente:</div>
+        <li class="li_action" onclick="addMonospaceFont();">Add Monospace font</li>
+        <li class="li_action" onclick="removeMonospaceFont();">Remove Monospace font</li>
+
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 
@@ -3842,13 +3870,22 @@ function editar_song(){
         <li class="li_action" onclick="crearSlides();">Crear slides</li>
         <li class="li_action" onclick="crearSlides(); closeAll()">Crear slides + Ver</li>  
         
-        <div class="razdel">Test:</div>
+        <div class="razdel">Aspecto:</div>
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copy Text en consola</li>        
-        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copy Text con formato</li>
         <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
+
+        <div class="razdel">Acordes y Texto:</div>
+        <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>
+        <li class="li_action" onclick="mostrarAcordes('#tema_block');">Mostrar Acordes</li>
+        <li class="li_action" onclick="ocultarTexto('#tema_block');">Ocultar Texto</li>
+        <li class="li_action" onclick="mostrarTexto('#tema_block');">Mostrar Texto</li>
+        
+        <div class="razdel">Copiar:</div>
+        <li class="li_action" onclick="copyTextFromVista('#tema_block fieldset');">Copiar texto en consola</li>        
+        <li class="li_action" onclick="copiarConFormato('#tema_block');">Copiar texto con formato</li>
+        <li class="li_action" onclick="copiarSinAcordesConFormato('#tema_block');">Copiar texto SIN ACORDES</li>
         
         <div class="razdel">Fuente:</div>
         <li class="li_action" onclick="addMonospaceFont();">Add Monospace font</li>

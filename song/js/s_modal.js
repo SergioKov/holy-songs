@@ -391,6 +391,8 @@ function buildFormCancion(contenedor, cancion_action = null){
     `;
 
 
+
+
     //FORMULARIO
     const form_cancion = document.createElement('div');
     //form_cancion.id = 'form_cancion';
@@ -412,7 +414,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                         Detalles de la canción
                     </div>
 
-                    <div id="form_detalles" class="wr_detalles_body">                    
+                    <div id="form_detalles" class="wr_detalles_body" style="display: ${display_form_detalles};">                    
 
                         <div class="wr_sel_category select_container">
                             <select id="${id_vstavka}category" name="category" class="sel_opt" required="">

@@ -555,6 +555,9 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 
+
+let display_form_detalles = localStorage.getItem('display_form_detalles') || 'none';// def 'none';
+
 //Objeto con datos de la canción actual para pantalla. 
 // SE USA EN 'pantalla_bd.js' 
 // Y NO SE USA EN 'pantalla.js' de localStorage
