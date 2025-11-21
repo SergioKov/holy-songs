@@ -777,39 +777,39 @@ async function make_arr_pantalla(currentSlide){
     update_objPantalla();//guardo en localStorage
     update_objPantallaParams();//guardo en localStorage
 
+
+    //2. Preparo para enviar a BD
+    let arr_pantalla_safe = structuredClone(arr_pantalla);
+    console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
+
+    //sanitizo cada item de array metiendo '__||__' en slide_html
+    arr_pantalla_safe.forEach((item, i) => {
+        console.log('item: ', item);
+        item.slide_html = sanitizeHtmlForJson(compactHtml(item.slide_html));
+    });        
+    console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
+
+    //Objeto para BD. asigno la variable global para enviar al BD
+    objPantallaToSendToBd = {
+        id_song,
+        slide_actual,
+        arr_pantalla: arr_pantalla_safe,
+        pantalla_show,
+        show_logo_en_fondo,
+        show_bible_en_fondo,
+        show_black_en_fondo,
+        user_view_control,
+        show_legend,
+        show_acordes,
+        show_next_slide,
+        tiempo_ms,//solo meter en la bd, no en local!
+    };
+    console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
+
     //solo grabo en bd si estan abiertas las pestaña o ventana remotas
     if(miPestaniaRemota || miVentanaRemota){
         console.log('grabo en BD...');
 
-        //2. Preparo para enviar a BD
-        let arr_pantalla_safe = structuredClone(arr_pantalla);
-        console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
-
-        //sanitizo cada item de array metiendo '__||__' en slide_html
-        arr_pantalla_safe.forEach((item, i) => {
-            console.log('item: ', item);
-            item.slide_html = sanitizeHtmlForJson(compactHtml(item.slide_html));
-        });        
-        console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
-
-        //Objeto para BD. asigno la variable global para enviar al BD
-        objPantallaToSendToBd = {
-            id_song,
-            slide_actual,
-            arr_pantalla: arr_pantalla_safe,
-            pantalla_show,
-            show_logo_en_fondo,
-            show_bible_en_fondo,
-            show_black_en_fondo,
-            user_view_control,
-            show_legend,
-            show_acordes,
-            show_next_slide,
-            tiempo_ms,//solo meter en la bd, no en local!
-        };
-        console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
-
-        
         //guardo en la BD
         const result = await guardarArrPantallaEnBd();//se envia objPantallaToSendToBd
         console.log('arr_pantalla: ', arr_pantalla);
