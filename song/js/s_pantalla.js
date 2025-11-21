@@ -405,7 +405,7 @@ function construirElementosYAppend(){
             mySizePantallaShow();//vuelvo a llamar para ajustar altura
         }
 
-    },3500);
+    },500);
 
 }//end function construirElementosYAppend()
 
