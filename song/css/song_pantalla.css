@@ -167,6 +167,9 @@ S {
     line-height: normal;
     white-space: normal;/* para publico */
 }
+.monospace_font .d_line {
+    font-family: monospace, 'sans serif';
+}
 
 
 .song_titulo {
@@ -297,9 +300,13 @@ fieldset.kuplet {
 
     p {
         font-weight: bolder;
-        font-family: monospace, Arial, Tahoma, 'sans serif';
+        font-family: mono---space, Arial, Tahoma, 'sans serif';
         line-height: 1em;
         white-space: pre;
+    }
+
+    .monospace_font p {
+        font-family: monospace, 'sans serif';
     }
 
 
@@ -369,7 +376,10 @@ fieldset.kuplet {
 
 /* show_acordes */
 .show_acordes .d_line {
-    font-family: monospace, Arial, Tahoma, 'sans serif';
+    font-family: Arial, Tahoma, 'sans serif';
+}
+.show_acordes.monospace_font .d_line {
+    font-family: monospace, 'sans serif';
 }
 
 

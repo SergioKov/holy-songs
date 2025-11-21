@@ -731,7 +731,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                                 Escoge esta opción si usas otra pantalla desde el dispositivo actual (PC o MAC) para mostrar en otra pantalla conectada las diapositivas para el público.
                                                                             </p>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="window.open('pantalla.php','miPestaña');">Pestaña Local</button>
+                                                                                <button class="btn w_100" onclick="abrirPestana();">Pestaña Local</button>
                                                                                 <button class="btn w_100" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Local</button>
                                                                             </div>
                                                                         </div> 
@@ -1104,7 +1104,11 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
-                                                    <h4>3. Esquema actual:</h4>
+                                                    <h4 class="h4_vista_previa">
+                                                        <span>3. Esquema actual:</span>     
+                                                        <button class="btn" onclick="recargarPestana()">Reload</button>
+                                                        <button class="btn" onclick="cerrarPestana()">X</button>
+                                                    </h4>
                                                 </div><!--/.parte_fija-->
 
                                                 <!--/parte_variable-->

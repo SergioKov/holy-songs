@@ -178,6 +178,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $show_legend = $conn->real_escape_string($datos['show_legend']);//get parameter
     $show_acordes = $conn->real_escape_string($datos['show_acordes']);//get parameter
     $show_next_slide = $conn->real_escape_string($datos['show_next_slide']);//get parameter
+    $tiempo_ms = $conn->real_escape_string($datos['tiempo_ms']);//get parameter
 
 
     //debug($arr, 'arr');
@@ -187,6 +188,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     // Obtener la fecha y hora actual
     $fechaHoraActual = date("Y-m-d H:i:s");
+    //echo $fechaHoraActual; // 2024-01-15 14:30:45
+
+    // fecha y hora con milisegundos (con DateTime):
+    $fechaHoraActual_ms = (new DateTime())->format("Y-m-d H:i:s.v");
+    //echo $fecha_con_ms; // 2024-01-15 14:30:45.123
     
 
     //===================================================================//
@@ -232,7 +238,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //===================================================================//
     $sql_prep_user = "SELECT * 
                 FROM songslides 
-                WHERE id_user = ? 
+                WHERE 
+                    id_user = ? 
     ";
     $arr_params_user = [$id_user_logged];
     $sql_preparada_user = prepararQuery($conn, $sql_prep_user, $arr_params_user);
@@ -247,6 +254,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }else{
         $hay_id_user_en_tabla = false;
     }
+    //echo_json_x($hay_id_song_en_tabla, 'hay_id_song_en_tabla');
 
 
     /* Uso */
@@ -258,135 +266,130 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         //echo "No se pudo determinar la IP del cliente.";
         $ip_user = '';
     }
-
-	//echo_json_x($hay_id_song_en_tabla, 'hay_id_song_en_tabla');
+	
 
     $sign = '__[(&)]__';//IMPORTANTE! para que ho haya errores con $arr en json
     
-    // Realizar la inserción o (update) en la base de datos 
+
+
+    if (is_array($arr_pantalla_array) && !empty($arr_pantalla_array)) {// Es un array y tiene elementos
+        
+        if($hay_id_user_en_tabla){//hago update
+            $action_tipo = 'is_update_arr_pantalla_ok';
+        }else{//hago insert
+            $action_tipo = 'is_insert_arr_pantalla_ok';
+        }                
+        $tipo_slide_valor = '';//luego cambiar por tipo_fuente
+        $comentario = $action_tipo;
+        $arr_pantalla_valor = $arr_pantalla_string;
+        //arr_pantalla = '$arr_pantalla_string', es obligatorio en la consulta
+
+    }else{//no es array o está VACÍO. no incluyo arr_pantalla en la SQL
+        
+        if($hay_id_user_en_tabla){//hago update
+            $action_tipo = 'is_update_arr_pantalla_vacio';
+        }else{//hago insert
+            $action_tipo = 'is_insert_arr_pantalla_vacio';
+        }
+        $tipo_slide_valor = '';//luego cambiar por tipo_fuente
+        $comentario = $action_tipo;
+        $arr_pantalla_valor = '';
+
+    }
+
+
+
+    //antes
+    ///*
+
+    //paso 1a. Insertar nuevo registro
+    if(!$hay_id_user_en_tabla){
+    
+        //hago insert
+        $sql2_in = "INSERT INTO songslides 
+                (
+                    id_user,
+                    ip_user,
+                    id_song,
+                    tipo_slide,
+                    comentario,
+                    slide_actual,
+                    arr_pantalla,
+                    pantalla_show,
+                    show_logo_en_fondo,
+                    show_legend,
+                    show_acordes,
+                    show_next_slide,
+                    tiempo_ms,
+                    created_at
+                ) 
+            VALUES 
+                (
+                    '$id_user_logged',
+                    '$ip_user',
+                    '$id_song',
+                    '$tipo_slide_valor',
+                    '$comentario',
+                    '$slide_actual',
+                    '$arr_pantalla_valor',
+                    '$pantalla_show',
+                    '$show_logo_en_fondo',
+                    '$show_legend',
+                    '$show_acordes',
+                    '$show_next_slide',
+                    '$tiempo_ms',
+                    '$fechaHoraActual_ms'
+                )
+        ";
+        $result2 = $conn->query($sql2_in);
+        //debug_x($sql2_in, 'sql2_in');
+        //echo_json_x($sql2_in, 'sql2_in');
+        
+    }
+
+
+    // paso 1b. Realizar UPDATE del registro ya existente 
     if($hay_id_user_en_tabla){
         //hago update
 
-        if (is_array($arr_pantalla_array) && !empty($arr_pantalla_array) ) {// Es un array y tiene elementos
-            $action_tipo = 'is_update_arr_pantalla_ok';
-            //arr_pantalla = '$arr_pantalla_string', es obligatorio en la consulta
-            $sql2_up_init = "UPDATE songslides SET
-                    ip_user = '$ip_user',
-                    id_song = '$id_song',
-                    slide_actual = '$slide_actual',
-                    arr_pantalla = '$arr_pantalla_string',
-                    pantalla_show = '$pantalla_show',
-                    show_logo_en_fondo = '$show_logo_en_fondo',
-                    show_legend = '$show_legend',
-                    show_acordes = '$show_acordes',
-                    show_next_slide = '$show_next_slide',
-                    updated_at = '$fechaHoraActual'
-                WHERE id_user = '$id_user_logged'
-            ";
-            //echo_json_x($sql2_up_init, 'sql2_up_init');
-        }else{//no es array o está vacío. no incluyo arr_pantalla en la SQL
-            $action_tipo = 'is_update_arr_pantalla_vacio';
-            $sql2_up_init = "UPDATE songslides SET
-                    ip_user = '$ip_user',
-                    id_song = '$id_song',
-                    slide_actual = '$slide_actual',
-                    arr_pantalla = '',
-                    pantalla_show = '$pantalla_show',
-                    show_logo_en_fondo = '$show_logo_en_fondo',
-                    show_legend = '$show_legend',
-                    show_acordes = '$show_acordes',
-                    show_next_slide = '$show_next_slide',
-                    updated_at = '$fechaHoraActual'
-                WHERE id_user = '$id_user_logged'
-            ";
-        }
-        $result2 = $conn->query($sql2_up_init);
-        //debug_x($sql2_up_preparada, 'sql2_up_preparada');
-        //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');
+        $sql2_up = "UPDATE songslides SET
+                ip_user = '$ip_user',
+                id_song = '$id_song',
+                tipo_slide = '$tipo_slide_valor',
+                comentario = '$comentario',
+                slide_actual = '$slide_actual',
+                arr_pantalla = '$arr_pantalla_valor',
+                pantalla_show = '$pantalla_show',
+                show_logo_en_fondo = '$show_logo_en_fondo',
+                show_legend = '$show_legend',
+                show_acordes = '$show_acordes',
+                show_next_slide = '$show_next_slide',
+                tiempo_ms = '$tiempo_ms',
+                updated_at = '$fechaHoraActual_ms'
+            WHERE id_user = '$id_user_logged'
+        ";
+        //echo_json_x($sql2_up, 'sql2_up');
 
-    }else{
+        $result2 = $conn->query($sql2_up);
+        //debug_x($sql2_up, 'sql2_up');
+        //echo_json_x($sql2_up, 'sql2_up');
         
-        //hago insert
-        if (is_array($arr_pantalla_array) && !empty($arr_pantalla_array)) {// Es un array y tiene elementos
-            $action_tipo = 'is_insert_arr_pantalla_ok';
-            $sql2_in_init = "INSERT INTO songslides 
-                    (
-                        id_user,
-                        ip_user,
-                        id_song,
-                        slide_actual,
-                        arr_pantalla,
-                        pantalla_show,
-                        show_logo_en_fondo,
-                        show_legend,
-                        show_acordes,
-                        show_next_slide,
-                        created_at
-                    ) 
-                VALUES 
-                    (
-                        '$id_user_logged',
-                        '$ip_user',
-                        '$id_song',
-                        '$slide_actual',
-                        '$arr_pantalla_string',
-                        '$pantalla_show',
-                        '$show_logo_en_fondo',
-                        '$show_legend',
-                        '$show_acordes',
-                        '$show_next_slide',
-                        '$fechaHoraActual'
-                    )
-            ";
-        }else{//no es array o está vacío. no incluyo arr_pantalla en la SQL
-            $action_tipo = 'is_insert_arr_pantalla_vacio';
-            $sql2_in_init = "INSERT INTO songslides 
-                    (
-                        id_user,
-                        ip_user,
-                        id_song,
-                        slide_actual,
-                        pantalla_show,
-                        show_logo_en_fondo,
-                        show_legend,
-                        show_acordes,
-                        show_next_slide,
-                        created_at
-                    ) 
-                VALUES 
-                    (
-                        '$id_user_logged',
-                        '$ip_user',
-                        '$id_song',
-                        '$slide_actual',
-                        '$pantalla_show',
-                        '$show_logo_en_fondo',
-                        '$show_legend',
-                        '$show_acordes',
-                        '$show_next_slide',
-                        '$fechaHoraActual'
-                    )
-            ";
-        }
-        $result2 = $conn->query($sql2_in_init);
-        //debug_x($sql2_in_preparada, 'sql2_in_preparada');
-        
-    }
-	//echo_json_x($result2, 'result2');
+    } 
+    
+    //Resultado de INSERT o UPDATE
+    //echo_json_x($result2, 'result2');
 
 
-    //Update o insert datos en la tabla $tabla
+
+
+
+
+
+    //INSERT o UPDATE de datos en la tabla
     if($result2 === TRUE) {
-        if($hay_id_user_en_tabla){
-            $respuesta = [
-                'success' => true,
-                'id_songslide' => $stored_id_songslide,
-                'id_song' => $id_song,
-                'action' => 'is_update',
-                'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos actualizados correctamente.'
-            ];
-        }else{
+
+        //insert
+        if(!$hay_id_user_en_tabla){
             //consulta para saber id_song de la cancion añadida
             $sql_id_songslide = "SELECT id_songslide
                             FROM songslides
@@ -411,30 +414,51 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos insertados correctamente.'
             ];
-        }
+        }        
+        
+        //update
+        if($hay_id_user_en_tabla){
+            $respuesta = [
+                'success' => true,
+                'id_songslide' => $stored_id_songslide,
+                'id_song' => $id_song,
+                'action' => 'is_update',
+                'action_tipo' => $action_tipo,
+                'mensaje' => 'Datos actualizados correctamente.'
+            ];
+        }       
 
-    }else{
+    }else{//error
 
+        //insert
+        if(!$hay_id_user_en_tabla){
+            //writeLog("Error al insertar datos. Error: [" . $conn->error . "]");
+
+            $respuesta = [
+                'success' => false,
+                'mensaje' => 'Error al INSERTAR datos: ',
+                'sql' => $sql2_in,
+                'conn_error' => $conn->error
+            ];
+        }        
+        
+
+        //update
         if($hay_id_user_en_tabla){
             //writeLog("Error al actualizar datos. Error: [" . $conn->error . "]");
 
             $respuesta = [
                 'success' => false,
-                'error' => 'arr_pantalla. Error al actualizar datos: ',
-                'sql' => $sql2_up_init,
+                'error' => 'arr_pantalla. Error al ACTUALIZAR datos: ',
+                'sql' => $sql2_up,
                 'conn_error' => $conn->error
             ];
-        }else{
-            //writeLog("Error al insertar datos. Error: [" . $conn->error . "]");
+        }        
 
-            $respuesta = [
-                'success' => false,
-                'mensaje' => 'Error al insertar datos: ',
-                'sql' => $sql2_in_init,
-                'conn_error' => $conn->error
-            ];
-        }
     }
+
+
+
 
     //Cierro conexion con bd
     $conn->close();	

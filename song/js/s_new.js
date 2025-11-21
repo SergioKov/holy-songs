@@ -689,7 +689,7 @@ async function make_arr_pantalla(currentSlide){
     //1. Añado current Slide al div 
     slide_divs = wr_d_line.outerHTML;
 
-    //Añado existe next slide 
+    //Añado next slide si existe 
     if(add_next_slide){
         //2. Añado next Slide (solo 2 lineas) al div si hay... 
         slide_divs += next_wr_d_line.outerHTML;
@@ -721,6 +721,9 @@ async function make_arr_pantalla(currentSlide){
 
     localStorage.setItem('arr_pantalla',arr_pantalla_string);// para mostrar LOCALMENTE
 
+    let tiempo_ms = Date.now();//tiempo en milisegundos
+
+
     //1.1 Objeto para LOCAL
     objPantalla = {
         id_song,
@@ -734,6 +737,8 @@ async function make_arr_pantalla(currentSlide){
         show_legend,
         show_acordes,
         show_next_slide,
+        tipo_fuente,
+        tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
     };
     console.log('(local) --- objPantalla: ', objPantalla);
     
@@ -747,17 +752,29 @@ async function make_arr_pantalla(currentSlide){
         show_legend,
         show_acordes,
         show_next_slide,
+        tipo_fuente,
+        tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
     };
     console.log('(local) --- objPantallaParams: ', objPantallaParams);
+
+
+    let objPantalla_local = (localStorage.getItem('objPantalla')) ? JSON.parse(localStorage.getItem('objPantalla')) : null ;
+
+    //Si se hace click en el mismo slide porque no se ve bien el texto...
+    if( objPantalla_local && 
+        id_song == objPantalla_local.id_song &&
+        currentSlide == objPantalla_local.slide_actual 
+    ){
+        //meto el parametro y lo guardo en localStorage para que se ajuste de nuevo el tamaño de fuente         
+        //objPantalla.tiempo_ms = tiempo_ms;
+        //objPantallaParams.tiempo_ms = tiempo_ms;
+
+        console.log('(meto tiempo_ms en local) --- objPantalla: ', objPantalla);
+        console.log('(meto tiempo_ms en local) --- objPantallaParams: ', objPantallaParams);
+    }
     
-    //guardo en localStorage
-    objPantalla_str = JSON.stringify(objPantalla);
-    localStorage.setItem('objPantalla', objPantalla_str);
-
-    objPantallaParams_str = JSON.stringify(objPantallaParams);
-    localStorage.setItem('objPantallaParams', objPantallaParams_str);
-
-
+    update_objPantalla();//guardo en localStorage
+    update_objPantallaParams();//guardo en localStorage
 
     //2. Preparo para enviar a BD
     let arr_pantalla_safe = structuredClone(arr_pantalla);
@@ -772,7 +789,7 @@ async function make_arr_pantalla(currentSlide){
 
     //Objeto para BD. asigno la variable global para enviar al BD
     objPantallaToSendToBd = {
-        id_song: id_song,
+        id_song,
         slide_actual,
         arr_pantalla: arr_pantalla_safe,
         pantalla_show,
@@ -783,6 +800,7 @@ async function make_arr_pantalla(currentSlide){
         show_legend,
         show_acordes,
         show_next_slide,
+        tiempo_ms,//solo meter en la bd, no en local!
     };
     console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
 
@@ -1178,6 +1196,18 @@ function update_vkladActive(){
     // update_obj_ajustes();
 }
 
+function update_objPantalla(){
+    //actualizo variable global objPantalla en localStorage
+    objPantalla_str = JSON.stringify(objPantalla);
+    localStorage.setItem('objPantalla', objPantalla_str);
+}
+
+function update_objPantallaParams(){
+    //actualizo variable global objPantallaParams en localStorage
+    objPantallaParams_str = JSON.stringify(objPantallaParams);
+    localStorage.setItem('objPantallaParams', objPantallaParams_str);
+}
+
 
 
 
@@ -1382,7 +1412,7 @@ function parteCentral(param){
 
 function showToast(tipo = 'info', mensaje, duration = null) {
     
-    eid_toast_container.innerHTML = '';//reset
+    //eid_toast_container.innerHTML = '';//reset
 
     // Crear toast
     const toast = document.createElement('div');
@@ -2458,4 +2488,38 @@ function addMonospaceFont() {
 function removeMonospaceFont() {
     ecl_bl_body.classList.remove('monospace_font');
     slideContainer.classList.remove('monospace_font');   
+}
+
+
+
+function abrirPestana() {
+    // Verificar si ya está abierta
+    if (miPestana && !miPestana.closed) {
+        console.log('La pestaña ya está abierta');
+        miPestana.focus(); // Llevar al frente
+        return miPestana;
+    }
+    
+    // Abrir y guardar la referencia en la variable
+    miPestana = window.open('pantalla.php', 'miPestaña');
+    
+    console.log('Pestaña abierta:', miPestana);
+    return miPestana;
+}
+
+function recargarPestana() {
+    // Usar la variable que contiene la referencia
+    if (miPestana && !miPestana.closed) {
+        miPestana.location.reload();
+        miPestana.focus();
+    } else {
+        console.log('La pestaña está cerrada o no existe');
+    }
+}
+
+function cerrarPestana() {
+    if (miPestana && !miPestana.closed) {
+        miPestana.close();
+    }
+    miPestana = null; // Limpiar la referencia
 }

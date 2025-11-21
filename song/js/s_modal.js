@@ -504,7 +504,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                             <div class="form_group wr_lang">
                                 <select id="${id_vstavka}lang" name="lang" class="sel_opt" required="">
                                     <option value="" disabled selected hidden></option>
-                                    <option value="ua">Українська</option>
+                                    <option value="ua" selected>Українська</option>
                                     <option value="ru">Русский</option>
                                     <option value="es">Español</option>
                                     <option value="en">English</option>
@@ -617,7 +617,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                             </div>
 
                             <div class="form_group wr_tempo_bpm">
-                                <input id="${id_vstavka}tempo_bpm" name="tempo_bpm" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" ">
+                                <input id="${id_vstavka}tempo_bpm" name="tempo_bpm" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" " value="0">
                                 <label for="${id_vstavka}tempo_bpm">Tempo (BPM)</label>
                             </div>
 

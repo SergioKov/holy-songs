@@ -245,10 +245,12 @@ async function guardarArrPantallaEnBd(){
         const data = await insertarArrPantalla();
         console.log('data: ',data);
 
+        let text_show;
+
         if(data.success){
-            
-            let text_show;
-            text_show = '1. id_song insertado con éxito.';
+            // '1. insertado/actualizado con éxito.
+            text_show = `${data.mensaje}`;
+            text_show += (debug) ? `\n(${data.action_tipo})` : '' ;
             console.log(text_show);
 
             if(hayElementosModalesAbiertos()){
@@ -261,13 +263,16 @@ async function guardarArrPantallaEnBd(){
             
         }else{
             
-            let text_show = '2. Error al insertar id_song.';
-            console.error('text_show: ', text_show);
+            //2. Error al insertar/actualizar datos
+            text_show = `${data.error}`;
+            console.error('(ERROR) --- text_show: ', text_show);
+            console.error('(ERROR) --- data: ', data);
 
             if(hayElementosModalesAbiertos()){
                 showToast('error', text_show, 5000);
             }
         }
+        return data;
 
     } catch (error) {
         // Código a realizar cuando se rechaza la promesa

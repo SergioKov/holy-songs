@@ -38,6 +38,7 @@ let tipoAcorde = localStorage.getItem('tipoAcorde') || 'diez';//'diez' o 'bemol'
 const d_currentTipoAcorde = document.getElementById('d_currentTipoAcorde');
 
 let tipoFuente = localStorage.getItem('tipoFuente') || 'a';//'a'(Arial) o 'm'(Monospace)// 'a'(Arial) por defecto
+let tipo_fuente = localStorage.getItem('tipo_fuente') || 'a';// para local pantalla
 
 
 const btn_menu = document.getElementById('btn_menu');
@@ -366,6 +367,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Програш',
     'Перед Брідж',
     'Брідж',
+    'Міст',
     'Кінцівка',
     'Кода',
     'Закінчення:',
@@ -382,6 +384,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Проигрыш',
     'Пред Бридж',
     'Бридж',
+    'Мост',
     'Концовка',
     'Кода',
     'Окончание',
@@ -657,4 +660,7 @@ if(web_tld === 'com'){//hostalia
     web_show_screen_host = `${web_protocol}//show-screen.local/`;//'https://show-screen.local'
 }
 
+
+// Variable para almacenar la referencia de la Pestaña
+let miPestana = null;
 

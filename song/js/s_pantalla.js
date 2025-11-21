@@ -49,6 +49,9 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 
+//mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
+let tipo_fuente = localStorage.getItem('tipo_fuente') ?? 'm';// def m = monospace;
+
 let arr_pantalla_str_old = '';
 let arr_pantalla_str_new = '';
 
@@ -62,6 +65,7 @@ let objPantallaParams_def = {
     show_legend,
     show_acordes,
     show_next_slide,
+    tipo_fuente,
 }
 // localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 
@@ -230,6 +234,7 @@ function aplicarVista(){
     show_legend = (objPantallaParams.show_legend == '1') ? 1 : 0;
     show_acordes = (objPantallaParams.show_acordes == '1') ? 1 : 0;
     show_next_slide = (objPantallaParams.show_next_slide == '1') ? 1 : 0;
+    tipo_fuente = (objPantallaParams.tipo_fuente == 'm') ? 'm' : 'a';
 
     // si hay contenedor...
     if(eid_contenedor){
@@ -283,6 +288,12 @@ function aplicarVista(){
         }else{
             eid_contenedor.classList.remove('show_next_slide');
         }
+
+        if(tipo_fuente == 'm'){
+            eid_contenedor.classList.add('monospace_font');
+        }else{
+            eid_contenedor.classList.remove('monospace_font');
+        }        
     }
 
     //si está permitido para el usuario controlar la vista, ...
@@ -331,6 +342,15 @@ function aplicarVistaUsuario(){
         }else{
             show_acordes = 0;
             eid_contenedor.classList.remove('show_next_slide');
+        }
+
+        //tipo_fuente.  monospace/arial
+        if(t.includes('m')){
+            tipo_fuente = 'm';
+            eid_contenedor.classList.add('monospace_font');
+        }else{
+            tipo_fuente = 'a';
+            eid_contenedor.classList.remove('monospace_font');
         }
     }
 }
@@ -535,18 +555,4 @@ function restoreHtmlFromSanitized(sanitizedHtml) {
         .replace(/__\|\|__/g, '"')  // reemplaza __||__ por "
         .replace(/__\|__/g, "'");   // reemplaza __|__ por '
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

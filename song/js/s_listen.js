@@ -58,6 +58,7 @@ header.addEventListener('click', (e) => {
         if (!isNaN(indexSlide)) {
             currentSlide = indexSlide;
             scrollToSlide(currentSlide);
+            showOneSlideFrom(null, index_esquema = currentSlide);
             console.log(`Clic en .step, salto al slide ${currentSlide}`);
         }
     }

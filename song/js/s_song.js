@@ -598,6 +598,9 @@ function changeTipoFuente(tipo){
         
         tipoFuente = tipo;
         localStorage.setItem('tipoFuente', tipoFuente);
+
+        //tipo_fuente = tipo;//?...
+        //localStorage.setItem('tipo_fuente', tipo_fuente);
         // pintTipoFuente();
 
         if(tipo == 'a'){//Arial
@@ -1613,6 +1616,7 @@ async function buildSong(){
 
     //cojo valor de tipo_fuente de bd 
     tipoFuente = objSongBd.tipo_fuente;
+    tipo_fuente = objSongBd.tipo_fuente;//para local pantalla
 
     arr_fieldsets = [];//reset    
     totalSlides = arr_esquema_bucle.length;//total de slides a pintar
@@ -2423,7 +2427,8 @@ async function guardarEsquema(){
 function resetEsquema(){
     crear_esquema_wr_vista_btns.innerHTML = '';//reset
     crear_esquema_wr_vista_blocks.innerHTML = '';//reset
-    crear_esquema_ul_action.innerHTML = 'gggggggggggg';//reset
+    // crear_esquema_ul_action.innerHTML = 'Esquema reseteada.';//reset
+    crear_esquema_ul_action.innerHTML = '';//reset
     
     arr_esquema_obj = [];
     if(objSong.arr_esquema.length > 0){
@@ -2710,7 +2715,18 @@ async function guardarSong(event, id_contenedor, cancion_action){
                     // el objeto dentro de arr_data ya está actualizado
                 } else {
                     console.warn('No encontrado objSong.id_song en objDataSongs.arr_data');
-                }                
+                } 
+                
+                let hay_id_song_en_arr_pantalla = arr_pantalla.find(v => v.id_song == id_song);
+
+                if(hay_id_song_en_arr_pantalla){
+                    //si la canción está en pantalla, actualizo datos en pantalla
+                    objPantalla.tipo_fuente = objSong.tipo_fuente;
+                    update_objPantalla();//actualizo en el localStorage    
+                    
+                    objPantallaParams.tipo_fuente = objSong.tipo_fuente;
+                    update_objPantallaParams();//actualizo en el localStorage
+                }
 
                 form.elements['id_song'].disabled = true;//deshabilito input id_song   
                 form.elements['id_song'].value = id_song;
