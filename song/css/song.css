@@ -3220,3 +3220,8 @@ span.sp_number {
 {
     display: block !important;
 }
+
+.btn_img_sm2 {
+    width: 10px;
+    height: 10px;
+}

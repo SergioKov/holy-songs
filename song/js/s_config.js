@@ -662,5 +662,11 @@ if(web_tld === 'com'){//hostalia
 
 
 // Variable para almacenar la referencia de la Pestaña
-let miPestana = null;
+let miPestaniaLocal = null;
+let miVentanaLocal = null;
+
+let miPestaniaRemota = null;
+let miVentanaRemota = null;
+
+let variable = 555;
 

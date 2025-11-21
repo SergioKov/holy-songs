@@ -395,6 +395,18 @@ function construirElementosYAppend(){
 
     mySizePantallaShow();
 
+    //reviso si ha conseguido mySizePantallaShow() ajustar el fontSize a todo anco y alto
+    setTimeout(()=>{
+
+        let count_trads = eid_contenedor.querySelectorAll('.trad').length;
+
+        //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
+        if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
+            mySizePantallaShow();//vuelvo a llamar para ajustar altura
+        }
+
+    },3500);
+
 }//end function construirElementosYAppend()
 
 

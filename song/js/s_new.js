@@ -700,6 +700,7 @@ async function make_arr_pantalla(currentSlide){
     tipo_content += 'c';//chords -> acordes
     tipo_content += 'l';//legend -> titulos de kuplet o pripev
     tipo_content += 'n';//2 lineas del sig kuplet si hay
+    tipo_content += 'm';//m (monospace) y 'a' (arial) si hay tipo_fuente
 
     //creo datos solo para una pantalla...
     one_pant_data = {
@@ -776,41 +777,44 @@ async function make_arr_pantalla(currentSlide){
     update_objPantalla();//guardo en localStorage
     update_objPantallaParams();//guardo en localStorage
 
-    //2. Preparo para enviar a BD
-    let arr_pantalla_safe = structuredClone(arr_pantalla);
-    console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
+    //solo grabo en bd si estan abiertas las pestaña o ventana remotas
+    if(miPestaniaRemota || miVentanaRemota){
+        console.log('grabo en BD...');
 
-    //sanitizo cada item de array metiendo '__||__' en slide_html
-    arr_pantalla_safe.forEach((item, i) => {
-        console.log('item: ', item);
-        item.slide_html = sanitizeHtmlForJson(compactHtml(item.slide_html));
-    });        
-    console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
+        //2. Preparo para enviar a BD
+        let arr_pantalla_safe = structuredClone(arr_pantalla);
+        console.log('antes. clonado --- arr_pantalla_safe: ', arr_pantalla_safe);
 
-    //Objeto para BD. asigno la variable global para enviar al BD
-    objPantallaToSendToBd = {
-        id_song,
-        slide_actual,
-        arr_pantalla: arr_pantalla_safe,
-        pantalla_show,
-        show_logo_en_fondo,
-        show_bible_en_fondo,
-        show_black_en_fondo,
-        user_view_control,
-        show_legend,
-        show_acordes,
-        show_next_slide,
-        tiempo_ms,//solo meter en la bd, no en local!
-    };
-    console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
+        //sanitizo cada item de array metiendo '__||__' en slide_html
+        arr_pantalla_safe.forEach((item, i) => {
+            console.log('item: ', item);
+            item.slide_html = sanitizeHtmlForJson(compactHtml(item.slide_html));
+        });        
+        console.log('despues. con __||__ --- arr_pantalla_safe: ', arr_pantalla_safe);
 
-    
-    //guardo en la BD
-    const result = await guardarArrPantallaEnBd();//se envia objPantallaToSendToBd
-    console.log('arr_pantalla: ', arr_pantalla);
-    console.log('result: ', result);
+        //Objeto para BD. asigno la variable global para enviar al BD
+        objPantallaToSendToBd = {
+            id_song,
+            slide_actual,
+            arr_pantalla: arr_pantalla_safe,
+            pantalla_show,
+            show_logo_en_fondo,
+            show_bible_en_fondo,
+            show_black_en_fondo,
+            user_view_control,
+            show_legend,
+            show_acordes,
+            show_next_slide,
+            tiempo_ms,//solo meter en la bd, no en local!
+        };
+        console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
 
-
+        
+        //guardo en la BD
+        const result = await guardarArrPantallaEnBd();//se envia objPantallaToSendToBd
+        console.log('arr_pantalla: ', arr_pantalla);
+        console.log('result: ', result);
+    }
     
     console.log('fin make_arr_pantalla...');
 
@@ -1412,7 +1416,7 @@ function parteCentral(param){
 
 function showToast(tipo = 'info', mensaje, duration = null) {
     
-    //eid_toast_container.innerHTML = '';//reset
+    eid_toast_container.innerHTML = '';//reset
 
     // Crear toast
     const toast = document.createElement('div');
@@ -2491,35 +2495,99 @@ function removeMonospaceFont() {
 }
 
 
-
-function abrirPestana() {
+/*
+    funciones para manejar una pestaña LOCAL con pantalla
+    referencia es:
+    - pestaña 'miPestaniaLocal' con nombre_referencia 'miPestañaLocal'
+    - ventana 'miVentanaLocal' con nombre_referencia 'miVentanaLocal'
+*/
+function abrirReferencia(referencia) {
+    console.log('=== function abrirReferenciaLocal() ===');
+    
+    let nombre_referencia = '';
+    
     // Verificar si ya está abierta
-    if (miPestana && !miPestana.closed) {
-        console.log('La pestaña ya está abierta');
-        miPestana.focus(); // Llevar al frente
-        return miPestana;
+    if (referencia && !referencia.closed) {
+        console.log(`La ${referencia} ya está abierta`);
+        referencia.focus(); // Llevar al frente
+        return referencia;
+    }
+
+    // Abrir y guardar la referencia en la variable
+    switch (referencia) {
+        //LOCAL
+        case miPestaniaLocal:
+            nombre_referencia = 'miPestañaLocal';
+            referencia = window.open('pantalla.php', 'miPestañaLocal');
+            miPestaniaLocal = referencia; // 🔥 Actualizar la variable global
+            break;
+
+        case miVentanaLocal:
+            nombre_referencia = 'miVentanaLocal';
+            referencia = window.open('pantalla.php','miVentanaLocal', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');
+            miVentanaLocal = referencia; // 🔥 Actualizar la variable global
+            break;
+
+        //REMOTO
+        //ruta_screen_pantalla: 'http://show-screen.local/' en localhost
+        //ruta_screen_pantalla: 'https://show-screen.com/' en prod 
+        case miPestaniaRemota:
+            nombre_referencia = 'miPestañaRemota';
+            referencia = window.open(ruta_screen_pantalla,'miPestañaRemota');
+            miPestaniaRemota = referencia; // 🔥 Actualizar la variable global
+            break;
+
+        case miVentanaRemota:
+            nombre_referencia = 'miVentanaRemota';
+            referencia = window.open(ruta_screen_pantalla,'miVentanaRemota', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');
+            miVentanaRemota = referencia; // 🔥 Actualizar la variable global
+            break;
+    
+        default:
+            break;
     }
     
-    // Abrir y guardar la referencia en la variable
-    miPestana = window.open('pantalla.php', 'miPestaña');
-    
-    console.log('Pestaña abierta:', miPestana);
-    return miPestana;
+    console.log(`${nombre_referencia} abierta. referencia: `, referencia);
+    return referencia;
 }
+
+function recargarReferencia(referencia) {
+    // Usar la variable que contiene la referencia
+    if (referencia && !referencia.closed) {
+        referencia.location.reload();
+        referencia.focus();
+    } else {
+        console.log('La referencia está cerrada o no existe');
+    }
+}
+
+function cerrarReferencia(referencia) {
+    if (referencia && !referencia.closed) {
+        referencia.close();
+    }
+    referencia = null; // Limpiar la referencia
+}
+
+
+
+
+
 
 function recargarPestana() {
     // Usar la variable que contiene la referencia
-    if (miPestana && !miPestana.closed) {
-        miPestana.location.reload();
-        miPestana.focus();
+    if (miPestaniaLocal && !miPestaniaLocal.closed) {
+        miPestaniaLocal.location.reload();
+        miPestaniaLocal.focus();
     } else {
         console.log('La pestaña está cerrada o no existe');
     }
 }
 
 function cerrarPestana() {
-    if (miPestana && !miPestana.closed) {
-        miPestana.close();
+    if (miPestaniaLocal && !miPestaniaLocal.closed) {
+        miPestaniaLocal.close();
     }
-    miPestana = null; // Limpiar la referencia
+    miPestaniaLocal = null; // Limpiar la referencia
 }
+
+

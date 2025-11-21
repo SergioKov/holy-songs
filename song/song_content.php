@@ -11,12 +11,23 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 	//$href_css = "http://show-screen.com/css/pantalla.css";//.com
 
 	$ruta_screen_pantalla = "https://show-screen.com/";//en 'index.php' hay 'screen_pantalla.php'
+    echo"
+        <script>
+            let ruta_screen_pantalla = 'https://show-screen.com/';
+        </script>
+    ";
     
 }else{//LOCALHOST
     //echo"localhost";
 	//$href_css = "https://show-screen.local/css/pantalla.css";//.local
     
 	$ruta_screen_pantalla = "http://show-screen.local/";//en 'index.php' hay 'screen_pantalla.php'
+    echo"
+        <script>
+            let ruta_screen_pantalla = 'http://show-screen.local/';
+        </script>
+    ";
+
 }
 
 ?>
@@ -731,14 +742,27 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                                 Escoge esta opción si usas otra pantalla desde el dispositivo actual (PC o MAC) para mostrar en otra pantalla conectada las diapositivas para el público.
                                                                             </p>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirPestana();">Pestaña Local</button>
-                                                                                <button class="btn w_100" onclick="window.open('pantalla.php','miVentana', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Local</button>
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miPestaniaLocal);">Pestaña Local</button>
+                                                                                <button class="btn" onclick="recargarReferencia(miPestaniaLocal);">
+                                                                                    <img class="btn_img_sm" src="images/reload_white_32x32.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miPestaniaLocal);">✕</button>                                                                                
+                                                                            </div>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miVentanaLocal);">Ventana Local</button>
+                                                                                <button class="btn" onclick="recargarReferencia(miVentanaLocal);">
+                                                                                    <img class="btn_img_sm" src="images/reload_white_32x32.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miVentanaLocal);">✕</button>
                                                                             </div>
                                                                         </div> 
 
 
                                                                         <div class="contenedor_sel_pantalla">
-                                                                            <h4>REMOTO</h4>
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>REMOTO</span>
+                                                                                <button class="btn btn_active">Grabar Slides en BD</button>
+                                                                            </h4>
                                                                             <p>Mostrar la diapositiva en EL DISPOSITIVO REMOTO:</p>
                                                                             <p>
                                                                                 Escoge esta opción si quieres que otros usuarios vean esta pantalla desde sus dispositivos (Móviles, Tablets, PC o MAC). Para aquello ellos deben acceder al enlace abajo:
@@ -747,9 +771,18 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                                 <a id="link_pantalla_bd" href="" target="_blank"><!--se añade por js--></a>
                                                                             </p>
 
+                                                                            <p>
+                                                                                Si escojes esta opción se habilitará la grabación de diapositivas en la base de datos lo que te ayudará a ver las diapositivas en diferentes dispositivos al entrar en la dirección mostrada arriba.
+                                                                            </p>
+
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="window.open('<?=$ruta_screen_pantalla;?>','miPestañaBd');">Pestaña Remota</button>
-                                                                                <button class="btn w_100" onclick="window.open('<?=$ruta_screen_pantalla;?>','miVentanaBd', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');">Ventana Remota</button>
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miPestaniaRemota);">Pestaña Remota</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miPestaniaRemota);">✕</button>
+                                                                            </div>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miVentanaRemota);">Ventana Remota</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miVentanaRemota);">✕</button>
                                                                             </div>
                                                                         </div> 
 
@@ -1104,11 +1137,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                                 <!--/parte_fija-->
                                                 <div class="parte_fija">
-                                                    <h4 class="h4_vista_previa">
-                                                        <span>3. Esquema actual:</span>     
-                                                        <button class="btn" onclick="recargarPestana()">Reload</button>
-                                                        <button class="btn" onclick="cerrarPestana()">X</button>
-                                                    </h4>
+                                                    <h4>3. Esquema actual:</h4>
                                                 </div><!--/.parte_fija-->
 
                                                 <!--/parte_variable-->
@@ -1128,11 +1157,10 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                                <!--parte_fija-->
                                                 <div class="parte_fija">
-                                                    <h4 class="h4_vista_previa">
-                                                        <span>3. Diapositiva actual:</span>
-                                                        
-                                                        <button style="display: none;" id="btn_actions_select_slide" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_select_slide');" title="Acciones">
-                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                     <h4 class="h4_vista_previa">
+                                                        <span>3. Diapositiva actual:</span>     
+                                                        <button class="btn" onclick="recargarReferencia(miPestaniaLocal);">
+                                                            <img class="btn_img_sm2" src="images/reload_white_32x32.png">
                                                         </button>
                                                     </h4>
                                                 </div><!--/.parte_fija-->                                                
