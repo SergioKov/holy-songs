@@ -628,11 +628,6 @@ function buildFormCancion(contenedor, cancion_action = null){
                             <label for="${id_vstavka}url_youtube">Enlace de vídeo de YouTube</label>
                         </div>
 
-                        <div class="form_group wr_url_recurso">
-                            <input id="${id_vstavka}url_recurso" name="url_recurso" type="text" required="" placeholder=" ">
-                            <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/17077)</label>
-                        </div>
-
                     </div>
                 </div>
             
@@ -645,6 +640,11 @@ function buildFormCancion(contenedor, cancion_action = null){
                 
                 <!-- Esquema -->
                 <div class="d_esquema_titulos parte_lista"></div>
+
+                <div class="form_group wr_url_recurso">
+                    <input id="${id_vstavka}url_recurso" name="url_recurso" type="text" required="" placeholder=" ">
+                    <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/17077)</label>
+                </div>
 
                 <div class="form_group">
                     <textarea id="${id_vstavka}notes" name="notes" rows="7" required="" placeholder=" "></textarea>

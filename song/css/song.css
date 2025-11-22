@@ -1518,6 +1518,7 @@ form > .form_group:last-of-type {
   margin-bottom: 0;
 }
 form > .form_group:has(+ .wr_btns_form),
+form > .form_group:has(+ .wr_url_youtube), 
 form > .form_group:has(+ .wr_btns_guardar),
 form > .form_group:has(+ .wr_btns_eliminar) 
 {
@@ -1791,7 +1792,7 @@ p.p_lista:hover {
 .l_id {
     /* background: darkred; */
     /* color: grey; */
-    min-width: 50px;
+    min-width: 56px;
     font-style: italic;
     font-size: 0.8rem;
     display: flex;
@@ -2716,12 +2717,13 @@ p.p_sm b {
 .sp_flex_btns {
     /* background: #4d4848; */
     display: flex;
-    width: 100%;
     gap: 10px;
     justify-content: flex-end;
     align-content: center;
     align-items: center;
-    max-width: 160px;
+    width: auto;
+    /* max-width: 160px; */
+    /* max-width: 200px; */
 }
 .sp_flex_n_title {
     /* background: green; */
@@ -3225,3 +3227,4 @@ span.sp_number {
     width: 10px;
     height: 10px;
 }
+

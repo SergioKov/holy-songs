@@ -95,6 +95,15 @@
     .wr_block_option .btn {
         /* width: 100%; */
     }
+    .wn_2_flex {
+        flex-direction: column;
+        max-width: 100%;
+        gap: 5px;
+    }    
+    .sp_flex_btns{
+        /* max-width: 100%; */
+        width: 100%;
+    }
 
 }
 
@@ -122,15 +131,6 @@
     .barra_estado::-webkit-scrollbar {
         height: 3px;
     }
-
-    .wn_2_flex {
-        flex-direction: column;
-        max-width: 100%;
-    }
-    .sp_flex_btns{
-        max-width: 100%;
-    }
-
 
 }
 

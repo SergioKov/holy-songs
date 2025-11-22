@@ -1617,6 +1617,7 @@ async function buildSong(){
     //cojo valor de tipo_fuente de bd 
     tipoFuente = objSongBd.tipo_fuente;
     tipo_fuente = objSongBd.tipo_fuente;//para local pantalla
+    currentTransposition = Number(objSongBd.tune_transpose);//para que coja el transpose de bd
 
     arr_fieldsets = [];//reset    
     totalSlides = arr_esquema_bucle.length;//total de slides a pintar
