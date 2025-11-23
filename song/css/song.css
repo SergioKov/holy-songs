@@ -1522,8 +1522,14 @@ form > .form_group:has(+ .wr_url_youtube),
 form > .form_group:has(+ .wr_btns_guardar),
 form > .form_group:has(+ .wr_btns_eliminar) 
 {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
+
+.wr_url_youtube {
+    margin-bottom: 0px;
+} 
+
+
 
 /* para id.notes */
 .form_group_last {
