@@ -688,6 +688,12 @@ fieldset.preview_next {
     /* border-radius: 10px 10px 0 0; */
 }
 
+fieldset:not(.song_bloques fieldset, .wr_vista_blocks fieldset)
+{
+    width: 100%;
+}
+
+
 legend {
     font-weight: bold;
     color: #909090;
@@ -1291,13 +1297,13 @@ tr.selected td.td_n {
 }
 
 
-.fld_active {
+.fld_active:not(#contenedor_prev_inner .fld_active) {
     background: #000000;
     border: 3px solid #f70000 !important;
     /* background: #930000 !important; */
     box-shadow: 0 0 40px 20px white;
 }
-.fld_active legend {
+.fld_active legend:not(#contenedor_prev_inner .fld_active legend) {
     border: 3px solid #f70000 !important;
     color: white;
     background: #b70000;
@@ -1364,7 +1370,7 @@ tr.selected td.td_n {
     margin-right: 0px;
 }
 
-.wr_vista_blocks legend {
+.wr_vista_blocks legend:not(#contenedor_prev_inner legend){
     color: #000000;
     background: #FFEB3B;
 }
@@ -1474,7 +1480,8 @@ p.prim .btn.tres_puntos .btn_img {
 /* start form song */
 form {
     background-color: white;
-    padding: 25px;
+    /* padding: 25px; */
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
@@ -1505,6 +1512,8 @@ form textarea {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     /* max-width: 400px; */
+    position: relative;
+    overflow: auto;
 }
 
 form .form_group {
@@ -2089,17 +2098,23 @@ p.p_sm b {
 
 
 
-.wr_full_block_inner fieldset,
-#contenedor_prev_inner fieldset
-{
+.wr_full_block_inner fieldset {
     border: 3px solid transparent !important;
     box-shadow: none;
     /* text-align: center;     */
 }
+
+#contenedor_prev_inner fieldset {
+    /* border: 3px solid transparent !important; */
+    box-shadow: none;
+    /* text-align: center;     */
+}
+
+
 .wr_full_block_inner legend,
 #contenedor_prev_inner legend 
 {
-    display: none;
+    /* display: none; */
 }
 .wr_full_block_inner .song_titulo ,
 #contenedor_prev_inner .song_titulo 
@@ -2205,7 +2220,7 @@ p.p_sm b {
     color: white;
     width: 100%;
     height: 100%;
-    font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif';
+    /* font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif'; */
     background: black;
     background-image: url('../images/bible_open6.jpg');
     /* background-image: url('../images/fondo_opera.jpg'); */
@@ -3093,8 +3108,10 @@ span.sp_number {
 
 /********************* START - TEMA BLACK *********************/
 /* color de fondo */
+#tema_block.tema_black {
+    background: #280861;
+}
 .tema_black .wr_vista_blocks {
-    overflow: auto;
     font-size: 22px;
     background: #280861;
     /* background: #ffffff; */
@@ -3137,8 +3154,10 @@ span.sp_number {
 
 /********************* START - TEMA WHITE *********************/
 /* color de fondo */
+#tema_block.tema_white {
+    background: white;
+}
 .tema_white .wr_vista_blocks {
-    overflow: auto;
     font-size: 22px;
     background: white;
 }
@@ -3176,12 +3195,57 @@ span.sp_number {
 /********************* END - TEMA WHITE *********************/
 
 
-.exit_fullscreen {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+
+.song_bloques .wr_dbtn_fullscreen {
+    position: sticky;
+    top: 15px;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    /* background: red; */
+    z-index: 9;
+    margin-bottom: -10px;
+    margin-top: -42px;
+    /* left: 5px; */
+    padding-right: 10px;
 }
 
+.wr_dbtn_fullscreen {
+    /* background: red; */
+    position: sticky;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    z-index: 9;
+}
+.bl_parte_l .bloques_outer .wr_dbtn_fullscreen {
+    top: 20px;
+    right: 0;
+    /* margin-bottom: -10px; */
+    margin-top: -30px;
+    padding-right: 25px;
+    /* margin-right: 21px; */
+}
+.dbtn_fullscreen {
+    position: sticky;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 5px;
+    opacity: 0.2;
+    transition: 0.3s ease;
+    border: 1px solid grey;
+}
+.dbtn_fullscreen img {
+    width: 20px;
+    height: 20px;
+}
+.dbtn_fullscreen:hover{
+    opacity: 1;
+}
 
 
 .wr_detalles {

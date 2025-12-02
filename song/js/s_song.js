@@ -1837,6 +1837,7 @@ async function ver_esquema(){
     
     ver_esquema_song_bloques.innerHTML = '';//reset
     ver_esquema_wr_vista_btns.innerHTML = '';//reset
+    ver_esquema_wr_vista_blocks.innerHTML = '';//reset
     ver_esquema_ul_action.innerHTML = '';//reset
 
     ver_esquema_ul_action.innerHTML = '<span class="sp_prim">Para ver la esquema hay que seleccionar antes la canción...</span>';
@@ -2198,7 +2199,6 @@ async function select_slide(){
             const index_esquema = e.currentTarget.dataset.idx;
             console.log('index_esquema: ', index_esquema);
             
-            // showOneSlideFrom(e.currentTarget);
             showOneSlideFrom(e.currentTarget, index_esquema);
         }
 
@@ -2217,7 +2217,6 @@ async function select_slide(){
             const index_esquema = e.currentTarget.dataset.idx;
             console.log('index_esquema: ', index_esquema);
             
-            // showOneSlideFrom(e.currentTarget);
             showOneSlideFrom(e.currentTarget, index_esquema);
         }
 
@@ -3755,7 +3754,6 @@ async function nueva_song(){
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
 
         <div class="razdel">Acordes y Texto:</div>
         <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>
@@ -3824,7 +3822,6 @@ function ver_song(){
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
 
         <div class="razdel">Acordes y Texto:</div>
         <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>
@@ -3874,6 +3871,24 @@ function editar_song(){
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
+    const wr_dbtn_fullscreen = document.createElement('div');
+    wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen';
+    wr_dbtn_fullscreen.innerHTML = `
+        <div class="dbtn_fullscreen">
+            <img src="/song/images/fullscreen.png">
+        </div>
+    `;
+    wr_dbtn_fullscreen.onclick = (e)=> {
+        //e.stopPropagation();
+        if(e.target.closest('.dbtn_fullscreen')){
+            btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
+            console.log('2. btnFullscreenActive: ', btnFullscreenActive);
+            toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
+        }
+    }
+
+    cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
+
     cancion_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
         <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
@@ -3891,7 +3906,6 @@ function editar_song(){
         <li class="li_action" onclick="cambiarTema('#tema_block');">Cambiar Tema</li>
         <li class="li_action" onclick="ajustarAnchoMaximo('#tema_block fieldset');">Ajustar Ancho Máximo</li>
         <li class="li_action" onclick="resetAnchoMaximo('#tema_block fieldset');">Reset Ancho Máximo</li>
-        <li class="li_action" onclick="pantallaCompleta('#tema_block');">Pantalla Completa</li>
 
         <div class="razdel">Acordes y Texto:</div>
         <li class="li_action" onclick="ocultarAcordes('#tema_block');">Ocultar Acordes</li>

@@ -390,6 +390,27 @@ function buildFormCancion(contenedor, cancion_action = null){
         <button id="btn_GuardarForm" class="btn btn_big" onclick="guardarSong(event, '${contenedor.id}','${cancion_action}');">Guardar</button>
     `;
 
+    //si no hay creado el boton de fullscreen izdo
+    if(!block_cancion.querySelector('.bl_parte_l .wr_dbtn_fullscreen')){
+        //Botón FULLSCREEN - FORMULARIO
+        const wr_dbtn_fullscreen = document.createElement('div');
+        wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen';
+        wr_dbtn_fullscreen.innerHTML = `
+            <div class="dbtn_fullscreen">
+                <img src="/song/images/fullscreen.png">
+            </div>
+        `;
+        wr_dbtn_fullscreen.onclick = (e)=> {
+            //e.stopPropagation();
+            if(e.target.closest('.dbtn_fullscreen')){
+                btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
+                console.log('1. btnFullscreenActive: ', btnFullscreenActive);
+                toggleFullscreen('#block_cancion .bloques_outer', btnFullscreenActive);
+            }
+        }
+    
+        cancion_song_bloques.parentElement.prepend(wr_dbtn_fullscreen);
+    }
 
 
 
@@ -656,7 +677,10 @@ function buildFormCancion(contenedor, cancion_action = null){
     `;
 
 
+    
+
     const form = form_cancion.querySelector('form');
+    //form.prepend(wr_dbtn_fullscreen);
 
 
     switch (cancion_action) {
@@ -784,12 +808,14 @@ function buildFormCancion(contenedor, cancion_action = null){
     if(['ver'].includes(cancion_action)){
         //no apendo nada;
         makeInputsDisabled(form_cancion, true);//deshabilito los inputs
-    }else if(['nueva','editar'].includes(cancion_action)){
+    }
+    else if(['nueva','editar'].includes(cancion_action)){
         form_cancion.querySelector('form').append(wr_btns_form);
         if(['nueva'].includes(cancion_action)){
             makeInputsDisabled(form_cancion, false);//habilito los inputs
         }
-    }else if(['eliminar'].includes(cancion_action)){
+    }
+    else if(['eliminar'].includes(cancion_action)){
         form_cancion.querySelector('form').append(wr_btns_eliminar);
         makeInputsDisabled(form_cancion, true);//deshabilito los inputs
     }

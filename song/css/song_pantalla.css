@@ -125,6 +125,18 @@ S {
     display: none; /*por defecto*/
 }
 
+.wr_d_line,
+.next_wr_d_line
+{
+    width: 100%; 
+}
+
+.wr_d_line:not(.monospace_font .wr_d_line, .show_acordes .wr_d_line),
+.next_wr_d_line:not(.monospace_font .next_wr_d_line, .show_acordes .next_wr_d_line)
+{
+    align-items: center;  
+}
+
 
 .wr_d_puntos {
     font-family: monospace;

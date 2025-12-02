@@ -150,6 +150,7 @@ async function checkKey(e) {//funciona .codigo mas limpio aunque .keyCode is dep
             slideGo('prev');
         }
     }
+
     if(e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         //slideGo('next');
 
@@ -166,8 +167,41 @@ async function checkKey(e) {//funciona .codigo mas limpio aunque .keyCode is dep
         }        
     }
 
+    if (e.key === 'Escape' || e.key === 'Esc') {
+        console.log('keydown --- presionado escape');
+
+        if (document.fullscreenElement) {
+            console.log('Se pulsó Escape dentro de fullscreen (antes de salir quizá)');
+            // no puedes evitar que el navegador salga, pero puedes ejecutar acciones
+            //onEscapeWhileFullscreen(ev);
+        } else {
+            console.log('Se pulsó Escape fuera de fullscreen');
+        }
+    }
+
 }
 
+let is_fullscreen = false;
+
+// Escuchar cambio de fullscreen (entrar / salir)
+document.addEventListener('fullscreenchange', () => {
+    console.log('listener --- fullscreenchange');
+
+    if (!document.fullscreenElement) {
+        console.log('Se ha salido de pantalla completa');
+        //onSalirFullscreen();
+        is_fullscreen = false;
+    } else {
+        console.log('Ahora en pantalla completa:', document.fullscreenElement);
+        is_fullscreen = true;
+    }
+
+    //solo aki. en toggleFullscreen() !no hace falta!!!
+    pintBtnFullscreen(document.querySelector('#tema_block .dbtn_fullscreen'));
+    pintBtnFullscreen(document.querySelector('#block_cancion .bl_parte_l .dbtn_fullscreen'));
+
+    console.log('1. is_fullscreen: ', is_fullscreen);
+});
 
 
 //=== start - Swipe táctil ================================//

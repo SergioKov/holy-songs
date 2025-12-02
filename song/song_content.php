@@ -732,6 +732,13 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                                 <button id="btn_show_acordes" class="btn w_100" onclick="showTipoContent(this,'c')">Acordes</button>
                                                                                 <button id="btn_show_next_slide" class="btn w_100" onclick="showTipoContent(this,'n')">Siguiente Diapositiva</button>
                                                                             </div>
+                                                                            
+                                                                            <br>
+                                                                            <p>Alineación de texto:</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_text_align_left" class="btn w_100" onclick="showTipoContent(this,'x')">Izquierda</button>
+                                                                                <button id="btn_text_align_center" class="btn w_100" onclick="showTipoContent(this,'y')">Centro</button>
+                                                                            </div>
                                                                         </div>
 
                                                                         <h4>Ubicación</h4>

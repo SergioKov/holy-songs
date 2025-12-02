@@ -2429,31 +2429,33 @@ function reemplazarEspacios(texto) {
 }
 
 function pantallaCompleta(selectorElement) {
-    const elem = document.querySelector(selectorElement);
+    const element = document.querySelector(selectorElement);
 
-    const btn = document.createElement('button');
-    btn.className = 'btn exit_fullscreen';
-    btn.innerHTML = `
-        Salir de Fullscreen
-    `;
-    btn.onclick = (e)=> {
-        e.stopPropagation();
-        salirPantallaCompleta();
-    }
+    // const dbtn_fullscreen = document.createElement('div');
+    // dbtn_fullscreen.className = 'dbtn_fullscreen';
+    // dbtn_fullscreen.innerHTML = `
+    //     <img src="/song/images/fullscreen_adentro.png">
+    // `;
+    // dbtn_fullscreen.onclick = (e)=> {
+    //     e.stopPropagation();
+    //     salirPantallaCompleta();
+    // }
 
-    elem.prepend(btn);
+    element.prepend(dbtn_fullscreen);
 
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { // Safari
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { // IE/Edge antiguo
-        elem.msRequestFullscreen();
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } 
+    else if (element.webkitRequestFullscreen) { // Safari
+        element.webkitRequestFullscreen();
+    } 
+    else if (element.msRequestFullscreen) { // IE/Edge antiguo
+        element.msRequestFullscreen();
     }
 }
 
 function salirPantallaCompleta() {
-    document.querySelector('.exit_fullscreen')?.remove();
+    document.querySelector('.dbtn_fullscreen')?.remove();
     
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -2461,6 +2463,68 @@ function salirPantallaCompleta() {
         document.webkitExitFullscreen();
     } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
+    }
+}
+
+let btnFullscreenActive = null;
+
+function toggleFullscreen(selectorElementContenedor, btnElement) {
+    //const element = document.body;
+    const contenedor = document.querySelector(selectorElementContenedor);
+    //const btn_fullscreen = document.querySelector(selectorElementBtn);
+
+    btnFullscreenActive = btnElement;
+    console.log('ttt. btnFullscreenActive: ', btnFullscreenActive);
+
+    if (!document.fullscreenElement) {
+        
+        // Entrar en pantalla completa
+        if (contenedor.requestFullscreen) {
+            contenedor.requestFullscreen();
+        } 
+        else if (contenedor.webkitRequestFullscreen) { // Safari
+            contenedor.webkitRequestFullscreen();
+        } 
+        else if (contenedor.msRequestFullscreen) { // IE/Edge
+            contenedor.msRequestFullscreen();
+        }
+        is_fullscreen = true;
+        //btnElement.querySelector('img').src = './images/fullscreen_adentro.png';//sig. action es minimizar
+
+    } else {
+        
+        // Salir del modo pantalla completa
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } 
+        else if (document.webkitExitFullscreen) { // Safari
+            document.webkitExitFullscreen();
+        } 
+        else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+        is_fullscreen = false;
+        //btnElement.querySelector('img').src = './images/fullscreen.png';//sig. action es agrandar
+
+    }
+
+    // NO HACE FALTA: pintBtnFullscreen();    
+    console.log('toggle(Fullscreen) --- is_fullscreen: ', is_fullscreen);
+}
+
+function pintBtnFullscreen(btnElement) {
+    console.log('=== function pintBtnFullscreen() ===');
+    console.log('pintBtnFullscreen --- is_fullscreen: ', is_fullscreen);
+
+    //si existe boton de fullscreen en wr_vista_blocks
+    if(btnElement){
+        if(is_fullscreen){
+            btnElement.querySelector('img').src = '/song/images/fullscreen_adentro.png';
+            //sig. action -> minimizar
+        }else{
+            btnElement.querySelector('img').src = '/song/images/fullscreen.png';
+            //sig. action -> agrandar
+        }
     }
 }
 
