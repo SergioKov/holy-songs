@@ -138,6 +138,22 @@ S {
 }
 
 
+/* start - text align left */
+.text_align_left .wr_d_line .d_legend ,
+.text_align_left .next_wr_d_line .d_legend
+{ 
+    justify-content: flex-start!important;
+}
+
+.text_align_left .wr_d_line ,
+.text_align_left .next_wr_d_line
+{
+    align-items: flex-start;  
+}
+/* end - text align left */
+
+
+
 .wr_d_puntos {
     font-family: monospace;
     font-size: 100px;
