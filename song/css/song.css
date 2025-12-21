@@ -3142,8 +3142,8 @@ span.sp_number {
 
 /* fondo de legend */
 .tema_black .wr_vista_blocks legend {
-    color: #FFEB3B;
-    background: #545454;
+    color: #FFEB3B !important;
+    background: #545454 !important;
     font-size: 12px;
 }
 /********************* END - TEMA BLACK *********************/
@@ -3187,9 +3187,9 @@ span.sp_number {
 
 /* fondo de legend */
 .tema_white .wr_vista_blocks legend {
-    color: #00a707;
+    color: #00a707 !important;
     /* background: #f3f3f3; */
-    background: white;
+    background: white !important;
     font-size: 12px;
 }
 /********************* END - TEMA WHITE *********************/
