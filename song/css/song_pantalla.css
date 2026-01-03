@@ -20,7 +20,7 @@ body {
     overflow: hidden;
 }
 
-body.logo_en_fondo {
+/* body.logo_en_fondo {
     background-image: url('../images/logo_iglesia.png');
 }
 body.bible_en_fondo {
@@ -28,15 +28,42 @@ body.bible_en_fondo {
 }
 body.black_en_fondo {
     background: black;
+} */
+
+#fondo {
+    /* background-image: url('../images/logo_iglesia.png') !important; */
+    background: black;
+    margin: 0 auto;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;    
+    overflow: hidden;
+    z-index: 1;
+    position: fixed;
+    opacity: 0;
+}
+#fondo.shown {
+    opacity: 1 !important;
 }
 
-.d-block{
-    display: block !important;
+.logo_en_fondo #fondo{
+    background-image: url('../images/logo_iglesia.png');
 }
-.d-none{
-    display: none !important;
+.bible_en_fondo #fondo{
+    background-image: url('../images/bible_open6.jpg');
+}
+.black_en_fondo #fondo {
+    background: black;
 }
 
+
+
+#contenedor,
+#fondo {
+    transition: 1s;
+}
 
 #contenedor {
     height: 100%;
@@ -47,8 +74,8 @@ body.black_en_fondo {
     justify-content: space-between;
     align-items: stretch;
     opacity: 0;
-    transition: 1s;
 }
+
 .shown {
     opacity: 1 !important;
 }
@@ -67,6 +94,13 @@ body.black_en_fondo {
 
 S {
     display: none;
+}
+
+.d-block{
+    display: block !important;
+}
+.d-none{
+    display: none !important;
 }
 
 .trad {
@@ -411,18 +445,6 @@ fieldset.kuplet {
 }
 
 
-/* show_next_slide */
-.show_next_slide .next_wr_d_line {
-    display: flex;
-    flex-direction: column;
-}
-
-.show_next_slide .next_wr_d_line {
-    padding-top: 20px;
-    border-top: 3px solid #9E9E9E;
-    margin-top: 20px;
-}
-
 
 /* show_legend */
 .show_legend .next_wr_d_line {
@@ -435,6 +457,20 @@ fieldset.kuplet {
     justify-content: center;
     width: 100%;
     position: relative;
+}
+
+
+
+/* show_next_slide */
+.show_next_slide .next_wr_d_line {
+    display: flex;
+    flex-direction: column;
+}
+
+.show_next_slide .next_wr_d_line {
+    padding-top: 20px;
+    border-top: 3px solid #9E9E9E;
+    margin-top: 20px;
 }
 
 

@@ -1,3 +1,4 @@
+const eid_fondo = document.getElementById('fondo');
 const eid_contenedor = document.getElementById('contenedor');
 
 let arr_pantalla = [];
@@ -169,7 +170,7 @@ function lanzarIntentosConDelay(){
         objPantallaParams = JSON.parse(objPantallaParams_str_new);
         //console.log('nuevo objPantallaParams: ', objPantallaParams);
 
-        //si ha cambiado algo en losparametros de pantalla de localStorage, reviso que mostrar/ocultar
+        //si ha cambiado algo en los parametros de pantalla de localStorage, reviso que mostrar/ocultar
         if(objPantallaParams_str_old !== objPantallaParams_str_new){
             // let aviso = '1. objPantallaParams old y new SON DISTINTOS. hago cosas...';
             // console.log('aviso: ', aviso);
@@ -195,11 +196,7 @@ function lanzarIntentosConDelay(){
 
             if(eid_contenedor){ 
                 aplicarVista(); 
-
-                //solo construyo elementos si hay que mostrar el slide...
-                if(pantalla_show){
-                    construirElementosYAppend();
-                }
+                construirElementosYAppend();//siempre construyo
             }
         }
 
@@ -241,6 +238,7 @@ function aplicarVista(){
         
         //Admin control
         if(pantalla_show){
+            eid_fondo.classList.remove('shown');
             eid_contenedor.classList.add('shown');
             
             document.body.classList.remove('logo_en_fondo');
@@ -248,6 +246,7 @@ function aplicarVista(){
             document.body.classList.remove('black_en_fondo');
 
         }else{            
+            eid_fondo.classList.add('shown');
             eid_contenedor.classList.remove('shown');
 
             if(show_logo_en_fondo){

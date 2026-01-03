@@ -402,6 +402,8 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
     console.log('elementClicked: ', elementClicked);
 
     e = elementClicked;
+    currentSlide = Number(index_esquema);
+    let add_next_slide = false;//por defecto no, si hay se pone a true
 
     if(e instanceof Event) {
         console.log("Recibí un evento. e.type: ", e.type);
@@ -455,14 +457,31 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
     }
 
 
-    //clono fieldset nuevo para vista en contenedor_prev ya que le cambiaré font-size
-    const el_fieldset_cloned = arr_fieldsets[index_esquema].cloneNode(true); // true para clonar hijos
 
-    eid_titulo_shown.textContent = el_fieldset_cloned.querySelector('legend').textContent;
+
+
+
+
+
+
+
+
+
+
+    //clono fieldset nuevo para vista en contenedor_prev ya que le cambiaré font-size
+    const current_fieldset_cloned = arr_fieldsets[currentSlide].cloneNode(true); // true para clonar hijos
+    console.log('current_fieldset_cloned: ', current_fieldset_cloned);
+
+    const next_fieldset_cloned = arr_fieldsets[currentSlide + 1]?.cloneNode(true) || null ;
+    console.log('next_fieldset_cloned: ', next_fieldset_cloned);
+
+
+
+    eid_titulo_shown.textContent = current_fieldset_cloned.querySelector('legend').textContent;
 
     //Primer slide
     if( (elementClicked && elementClicked.dataset.titulo === '_titulo_cancion_') || index_esquema == 0){
-        el_fieldset_cloned.querySelector('.song_titulo').textContent = '...';//muestro ... en vez del título del slide 1
+        current_fieldset_cloned.querySelector('.song_titulo').textContent = '...';//muestro ... en vez del título del slide 1
         eid_titulo_shown.textContent = 'Título canción';
     }
 
@@ -471,16 +490,64 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
         const p = document.createElement('p');
         p.className = 'tres_estrellas';
         p.textContent = '* * *';
-        el_fieldset_cloned.append(p);//muestro ... en vez del título del slide 1
+        current_fieldset_cloned.append(p);//muestro ... en vez del título del slide 1
     }
 
-    eid_contenedor_prev_inner.append(el_fieldset_cloned);
 
-    const contenedorSlideView = eid_pantalla_body;
 
-    ajustarTextoContenedor(contenedorSlideView);
 
-    currentSlide = Number(index_esquema);
+
+
+
+    //Si hay sig kuplet, saco 2 primeras lineas...
+    if(next_fieldset_cloned){
+
+        //Todos los hijos directos 'legend' y 'p' de acordes y de texto
+        let next_hijos_All = next_fieldset_cloned.querySelectorAll(':scope > *');
+        console.log('next_hijos_All: ', next_hijos_All);
+
+        next_fieldset_cloned.classList.add('preview_next');
+
+        //1. elimino los p's dejando solo los 2 primeros
+        next_fieldset_cloned.querySelectorAll('p').forEach((el,i) => { 
+            if(i >= 2){
+                el.remove();
+            }
+        });
+
+        //2. si hay 2 filas de solo texto, elimino la 2 fila
+        let los_p_t = next_fieldset_cloned.querySelectorAll('p.t');
+        if(los_p_t.length == 2){
+            los_p_t[1].remove();
+        }
+
+        add_next_slide = true;
+    }
+
+
+
+
+
+
+
+
+
+
+                // eid_contenedor_prev_inner.append(current_fieldset_cloned);
+                
+                // //Añado next slide si existe 
+                // if(add_next_slide){
+                //     //2. Añado next Slide (solo 2 lineas) al div si hay... 
+                //     eid_contenedor_prev_inner.append(next_fieldset_cloned);
+                // }
+
+
+
+                // const contenedorSlideView = eid_pantalla_body;
+
+                // ajustarTextoContenedor(contenedorSlideView);
+
+    
 
     let li_actual;
 
@@ -696,6 +763,42 @@ async function make_arr_pantalla(currentSlide){
     }
 
 
+    //===================================================//
+    //start - experiment
+    //===================================================//
+    const miIframeDOM = document.getElementById('miIframe');
+    if(miIframeDOM){
+        miIframeDOM.remove();
+    }
+
+    // 1. Crear el elemento
+    const miIframe = document.createElement('iframe');
+    miIframe.id = "miIframe";
+
+    // 2. Configurar atributos básicos
+    miIframe.src = "pantalla.php";
+    miIframe.title = "Contenido externo";
+
+    // 3. Aplicar estilos para que ocupe todo el div padre
+    //miIframe.style.width = eid_contenedor_prev.offsetWidth + 'px';
+    //miIframe.style.height = eid_contenedor_prev.offsetHeight + 'px';
+    
+    miIframe.style.border = "none";
+    miIframe.style.display = "block";
+
+    // 4. Añadir seguridad (opcional pero recomendado)
+    miIframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+
+    // 5. Insertarlo en un div existente (suponiendo que su id es 'contenedor')
+    eid_contenedor_prev_inner.append(miIframe);
+    mySizeIframe(eid_contenedor_prev);
+    //===================================================//
+    //start - experiment
+    //===================================================//
+
+
+
+
     let tipo_content = '';//sale: 'cl2' o '2lc'
     tipo_content += 'c';//chords -> acordes
     tipo_content += 'l';//legend -> titulos de kuplet o pripev
@@ -835,6 +938,8 @@ async function showTipoContent(btn, param){
             show_logo_en_fondo = 0;//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
+
+            eid_fondo_body.className = '';//reset
             
             //guardo en local
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
@@ -852,6 +957,8 @@ async function showTipoContent(btn, param){
                 show_logo_en_fondo = 1;//hext action
                 btn.classList.add('btn_active');
             }
+            eid_fondo_body.className = '';//reset
+            eid_fondo_body.classList.add('logo_en_fondo');
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
             break;
 
@@ -863,6 +970,8 @@ async function showTipoContent(btn, param){
                 show_bible_en_fondo = 1;//hext action
                 btn.classList.add('btn_active');
             }
+            eid_fondo_body.className = '';//reset
+            eid_fondo_body.classList.add('bible_en_fondo');
             localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
             break;
 
@@ -874,6 +983,8 @@ async function showTipoContent(btn, param){
                 show_black_en_fondo = 1;//hext action
                 btn.classList.add('btn_active');
             }
+            eid_fondo_body.className = '';//reset
+            eid_fondo_body.classList.add('black_en_fondo');
             localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
             break;
 
@@ -983,7 +1094,8 @@ async function showTipoContent(btn, param){
     }
 }
 
-
+/*
+//no se usan en hs.
 function enableDisablePantallaShow(){//muestra o oculta
     if(pantallaShow){
         pantallaShow = 0;//siguiente accion
@@ -1021,6 +1133,7 @@ function ocultar_pantallaShow(){
     localStorage.setItem('pantallaShow','0');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
 }
+*/
 
 
 function toggle_pantalla_show(){//muestra o oculta
@@ -1045,7 +1158,7 @@ function mostrar_pantalla_show(){
     // eid_btn_pantallaShow.classList.add('btn_active');
     eid_vklad_btn_pantallaShow.classList.add('btn_active');
     eid_contenedor_prev.classList.add('shown');
-    //eid_fondo_body.classList.add('fondo_black');
+    eid_pantalla_body.classList.add('shown');
 
     localStorage.setItem('pantalla_show','1');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
@@ -1054,7 +1167,7 @@ function ocultar_pantalla_show(){
     // eid_btn_pantallaShow.classList.remove('btn_active');
     eid_vklad_btn_pantallaShow.classList.remove('btn_active');
     eid_contenedor_prev.classList.remove('shown');
-    //eid_fondo_body.classList.remove('fondo_black');
+    eid_pantalla_body.classList.remove('shown');
     
     localStorage.setItem('pantalla_show','0');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
@@ -1063,6 +1176,22 @@ function ocultar_pantalla_show(){
 
 
 
+
+function check_fondo_body(){
+    console.log('=== function check_fondo_body() ===');
+
+    eid_fondo_body.className = '';//reset
+
+    if(show_logo_en_fondo == 1){
+        eid_fondo_body.classList.add('logo_en_fondo');
+    } else if(show_bible_en_fondo == 1){
+        eid_fondo_body.classList.add('bible_en_fondo');
+    } else if(show_black_en_fondo == 1){
+        eid_fondo_body.classList.add('black_en_fondo');
+    } else{
+        eid_fondo_body.classList.add('bible_en_fondo');//bible
+    }
+}
 
 function check_show_logo_en_fondo(){
     console.log('=== function check_show_logo_en_fondo() ===');
@@ -2023,6 +2152,23 @@ function mySizeLista(){
 
     console.log('=== end func ===');
 }
+
+
+function mySizeIframe(contenedorDimenciones){
+    console.log('=== function mySizeIframe() ===');
+
+    const miIframe = document.getElementById('miIframe');
+    if(!miIframe){
+        console.log('no hay miIframe. return...');
+        return;
+    }
+
+    //ajusto tamaño del iframe al contenedor
+    miIframe.style.width = contenedorDimenciones.offsetWidth + 'px';
+    miIframe.style.height = contenedorDimenciones.offsetHeight + 'px';
+}
+
+
 
 function checkAllCboxes(id_contenedor){
     console.log('=== function checkAllCboxes() ===');

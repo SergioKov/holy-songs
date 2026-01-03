@@ -81,6 +81,12 @@
     `;
 ?>
 
+
+    <div id="fondo" class="">
+
+    </div><!--/#fondo-->
+
+
     <div id="contenedor" class="">
 
     </div><!--/#contenedor-->

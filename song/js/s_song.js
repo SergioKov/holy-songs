@@ -2255,6 +2255,7 @@ function check_PantallaParams(){//pinto botones en rojo si están marcados antes
     
     //marco/desmarco los botones de fondo y demás segun las variables desde localStorage
     check_pantalla_show();//reviso si marco en rojo o no
+    check_fondo_body();//new
     check_show_logo_en_fondo();
     check_show_bible_en_fondo();
     check_show_black_en_fondo();
@@ -2328,12 +2329,22 @@ function ajustarTextoContenedor(contenedor) {
 
     fontSize -= 3;//reduzco un poco para que no llegue al borde
 
-    // Aplicar al contenedor real
-    contenedor.querySelector('fieldset').style.fontSize = fontSize + 'px';
-    //console.log('contenedor fieldset. fontSize: ', fontSize);  
+            // Aplicar al contenedor real
+            //contenedor.querySelector('fieldset').style.fontSize = fontSize + 'px';
+            //console.log('contenedor fieldset. fontSize: ', fontSize);
+            
+            //por ahora dejo siempre igual legend
+            //legend.style.fontSize = fontSizeMin + 'px';//16px minimo para legend
+
+    contenedor.querySelectorAll('fieldset').forEach(fld => {
+        // el propio fieldset
+        fld.style.fontSize = fontSize + 'px';
+        
+        //por ahora dejo siempre igual legend
+        fld.querySelector('legend').style.fontSize = fontSizeMin + 'px';//16px minimo para legend
+    });
     
-    //por ahora dejo siempre igual legend
-    legend.style.fontSize = fontSizeMin + 'px';//16px minimo para legend
+
 
     // Eliminar clon de prueba
     document.body.removeChild(box);

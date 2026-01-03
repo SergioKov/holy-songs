@@ -565,16 +565,18 @@ legend span {
     background: #2d2d2d;
     color: #909090;
     padding: 10px 20px;
+    text-align: center;
 }
+
 fieldset.fld_song_titulo {
     cursor: default !important;
     border: 3px solid transparent !important;
     background: transparent !important;
 }
 .fld_song_titulo legend {
-    /* display: none !important; */
+    display: none !important;
     border: 3px solid transparent;
-    visibility: hidden;
+    /* visibility: hidden; */
 }
 
 
@@ -1199,6 +1201,10 @@ tr.selected td.td_n {
     background: #000000;
 }
 
+.datos_eliminados {
+    position: inherit;
+}
+
 .datos_eliminados::before {
     content: ' ';
     height: 18px;
@@ -1232,6 +1238,10 @@ tr.selected td.td_n {
     align-items: center;
     width: fit-content;
     min-width: 100%;
+}
+
+.bloques > fieldset:first-child {
+    margin-top: 20px;
 }
 .bloques > fieldset:last-child {
     margin-bottom: 20px;
@@ -1371,8 +1381,8 @@ tr.selected td.td_n {
 }
 
 .wr_vista_blocks legend:not(#contenedor_prev_inner legend){
-    color: #000000;
-    background: #FFEB3B;
+    /* color: #000000; */
+    /* background: #FFEB3B; */
 }
 
 .d-block{
@@ -2110,6 +2120,13 @@ p.p_sm b {
     /* text-align: center;     */
 }
 
+#contenedor_prev_inner fieldset.kuplet,
+#contenedor_prev_inner fieldset.preview_next 
+{
+    width: 100%;
+}
+
+
 
 .wr_full_block_inner legend,
 #contenedor_prev_inner legend 
@@ -2220,14 +2237,22 @@ p.p_sm b {
     color: white;
     width: 100%;
     height: 100%;
-    /* font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif'; */
-    background: black;
-    background-image: url('../images/bible_open6.jpg');
+    /* background: black; */
+    /* background-image: url('../images/bible_open6.jpg'); */
     /* background-image: url('../images/fondo_opera.jpg'); */
+    /* background: navy; */
     background-size: cover;
     background-position: center;
     overflow: auto;
-    /* background: navy; */
+}
+#fondo_body.logo_en_fondo {
+    background-image: url('../images/logo_iglesia.png');
+}
+#fondo_body.bible_en_fondo{
+    background-image: url('../images/bible_open6.jpg');
+}
+#fondo_body.black_en_fondo {
+    background: black;
 }
 
 #pantalla_body .fondo_black {
@@ -3297,4 +3322,20 @@ span.sp_number {
     width: 10px;
     height: 10px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
