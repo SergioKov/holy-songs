@@ -21,7 +21,9 @@ function pintSongActive(){//click en tr de la tabla de canciones
 
     buscar_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
-        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+        <li class="li_action btn_add_lista" onclick="addToLista();">    
+            <!--Añadir a una Lista nueva o a la lista actual-->
+        </li>
 
         <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
@@ -137,6 +139,28 @@ function pintSongActiveSoloDatos(){
         vista_html += `
             <p class="p_titulo">Título Canción:</p>
             <p class="texto_norm t_big">${titulo_text_red}</p>
+        `;
+    }
+
+    if(objSong.title2){
+        //Marco en rojo las palabras encontradas en title 
+        let titulo2_text_red = objSong.title2.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Coro u otro título:</p>
+            <p class="texto_norm t_big">${titulo2_text_red}</p>
+        `;
+    }
+
+    if(objSong.title_note){
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_note_text_red = objSong.title_note.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        vista_html += `
+            <p class="p_titulo">Nota al título:</p>
+            <p class="texto_norm t_big">${titulo_note_text_red}</p>
         `;
     }
 
@@ -1433,16 +1457,28 @@ function hideShowBlock(id_div){
     const divElement = document.getElementById(id_div);
     const block_css = window.getComputedStyle(divElement);
     const block_display = block_css.display;
+
+    let next_display = '';//para guardar en localStorage
    
     if(block_display == 'block'){//si es visible
-        divElement.style.display = 'none';//oculto
-        display_form_detalles = 'none';
+        next_display = 'none';//oculto
     }else{//muestro
-        divElement.style.display = 'block';//muestro
-        display_form_detalles = 'block';
+        next_display = 'block';//muestro
     } 
 
-    localStorage.setItem('display_form_detalles',display_form_detalles);
+    //aplico el cambio
+    divElement.style.display = next_display;
+
+    //guardo variable en localStorage
+    if(id_div == 'form_detalles'){
+        display_form_detalles = next_display;
+        localStorage.setItem('display_form_detalles',display_form_detalles);
+    }
+
+    if(id_div == 'title_detalles'){
+        display_title_detalles = next_display;
+        localStorage.setItem('display_title_detalles',display_title_detalles);
+    }    
 }
 
 
@@ -1461,7 +1497,33 @@ function hideShowDiv(id_div){
         closeDiv(divElement);//oculto
     }else{//muestro
         openDiv(divElement);//muestro
-    }    
+    }
+
+    let btn_add_lista_inner_html;
+
+    if(Object.keys(objLista).length === 0){//no hay lista activa
+        btn_add_lista_inner_html = `
+                Añadir a una Lista nueva
+        `;
+    }else{//hay lista activa
+        btn_add_lista_inner_html = `
+            <span>Añadir a la Lista: <b class="n_lista">${objLista.id_lista}</b></span>
+            <span class="title_lista">${objLista.title}</span>
+            <span class="fecha_lista">${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}</span>
+        `;
+    }
+    
+    switch (id_div) {
+        case 'bl_actions_buscar':
+            buscar_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            
+        case 'bl_actions_cancion':
+            cancion_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            break;
+    
+        default:
+            break;
+    }
 }
 
 function closeDiv(divElement){
@@ -2801,3 +2863,30 @@ function cerrarPestana() {
 }
 
 
+function normalizeSearchText(text) {
+    return text
+        // 1) minúsculas
+        .toLowerCase()
+
+        // 2) normalizar Unicode
+        .normalize('NFD')
+
+        // 3) eliminar diacríticos SOLO de letras latinas
+        .replace(/(?<=\p{Script=Latin})\p{Mn}+/gu, '')
+
+        // 4) recomponer Unicode
+        .normalize('NFC')
+
+        // 5) proteger apóstrofe entre letras
+        .replace(/(\p{L})'(\p{L})/gu, '$1§§§$2')
+
+        // 6) eliminar puntuación y símbolos
+        .replace(/[^\p{L}\p{N}§ ]+/gu, ' ')
+
+        // 7) restaurar apóstrofe
+        .replace(/§§§/g, "'")
+
+        // 8) normalizar espacios
+        .replace(/\s+/g, ' ')
+        .trim();
+}

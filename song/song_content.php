@@ -188,11 +188,26 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                         
                         <!--.bl_head-->
                         <div class="bl_head">
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar">Buscar</div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema">Esquema</div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion">Canción</div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo">Ejemplo</div>
-                            <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista">Lista</div>
+                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar" title="Buscar">
+                                <!--Buscar-->
+                                <img class="btn_img" src="./images/search_zoom_icon_white.svg">
+                            </div>
+                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
+                                <!--Esquema-->
+                                <img class="btn_img" src="./images/esquema_512x512_white.png">
+                            </div>
+                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
+                                <!--Canción-->
+                                <img class="btn_img" src="./images/song_512x512_white.png">
+                            </div>
+                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo" title="Ejemplo">
+                                <!--Ejemplo-->
+                                <img class="btn_img" src="./images/help_512x512_white.png">
+                            </div>
+                            <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
+                                <!--Lista-->
+                                <img class="btn_img" src="./images/playlist3_512x512_white.png">
+                            </div>
                         </div><!--/.bl_head-->
                         
                         <!--.bl_body-->
@@ -334,7 +349,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                                 <option value="2">2) Todas las palabras (no pueden ser parte de otras palabras, sin importar orden)</option>
                                                                                 <option value="3">3) Coincidir al menos una palabra</option>
                                                                                 <option value="4">4) Palabras en el orden establecido</option>
-                                                                                <option value="5">5) Frase exacta</option>
+                                                                                <option value="5" selected>5) Frase exacta</option>
                                                                                 <option value="6">6) Palabras exactas (no pueden ser parte de otras palabras, sin importar orden)</option>
                                                                             </select>
                                                                         </div>
@@ -1325,7 +1340,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                             <!--/parte_variable-->
                                             <div class="parte_variable">
-                                                <div id="tema_block" class="bloques_outer tema_black">
+                                                <div id="tema_block" class="bloques_outer tema_white">
                                                     <div class="bloques wr_vista_blocks">
                                                         <!-- aki vista previa -->
                                                         ...
@@ -1577,7 +1592,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                             type="text"
                                                             placeholder="Введите слово или фразу для поиска..."
                                                             data-dic=""
-                                                            value="2025">
+                                                            value="2026">
                                                         <div class="clear_inpt" onclick="clear_inpt('find_lista')">&times;</div>
                                                     </div>
 

@@ -158,23 +158,24 @@ if(empty($arr_songbooks_search)){
 switch ($buscar_en) {
     case '1'://Todos los campos por defecto disponibles (rápido)
     default:
-        $arr_campos = ['s.id_song', 's.song_number', 's.title', 's.song_text', 's.notes'];
+        $arr_campos = ['s.id_song', 's.song_number', 's.title', 's.title2', 's.title_note', 's.title_search', 's.song_text', 's.song_text_search', 's.notes'];
         break;
 
     case '2'://Todos los campos disponibles (lento)
-        $arr_campos = ['s.id_song', 's.song_number', 's.title', 'ct.name', 'ct.lang_name', 's.song_text', 's.notes'];
+        $arr_campos = ['s.id_song', 's.song_number', 's.title', 's.title2', 's.title_note', 's.title_search',  'ct.name', 'ct.lang_name', 's.song_text', 's.song_text_search', 's.notes'];
         break;
     
     case '3'://Todos los campos de texto disponibles
-        $arr_campos = ['s.title', 'ct.name', 's.song_text', 's.notes'];
+        $arr_campos = ['s.title', 's.title2', 's.title_note', 's.title_search', 'ct.name', 's.song_text', 's.song_text_search', 's.notes'];
         break;
 
     case '4'://Sólo el título de canción
-        $arr_campos = ['s.title'];
+        $arr_campos = ['s.title', 's.title2', 's.title_note', 's.title_search'];
         break;
 
     case '5'://Sólo el texto de canción
-        $arr_campos = ['s.song_text'];
+        // $arr_campos = ['s.song_text'];//antes
+        $arr_campos = ['s.song_text', 's.song_text_search'];//campo optimizado para busquedas
         break;
 
     case '6':// Sólo las notas de canción
@@ -217,12 +218,16 @@ $sql_init = "SELECT
                 s.id_song, 
                 s.song_number, 
                 s.title, 
+                s.title2, 
+                s.title_note, 
+                s.title_search, 
                 s.category,
                 ct.name AS category_name,
                 ct.lang_name AS lang_name,
                 s.songbook,
                 sb.title AS songbook_title,
                 s.song_text, 
+                s.song_text_search, 
                 s.arr_esquema, 
                 s.tune, 
                 s.tune_transpose, 
@@ -242,7 +247,7 @@ $sql_init = "SELECT
             LEFT JOIN songbooks sb 
                 ON sb.id_songbook = s.songbook
             WHERE $where
-            ORDER BY s.title, s.song_number, s.id_song DESC, s.songbook
+            ORDER BY s.title, s.title2, s.title_note, s.song_number, s.id_song DESC, s.songbook
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):
@@ -309,6 +314,8 @@ if($result->num_rows > 0){
             'id_song' => $row['id_song'],
             'song_number' => $row['song_number'],
             'title' => $row['title'],
+            'title2' => $row['title2'],
+            'title_note' => $row['title_note'],
             'category' => $row['category'],
             'category_name' => $row['category_name'],
             'songbook' => $row['songbook'],
@@ -349,6 +356,5 @@ $conn->close();
 // Enviar respuesta al cliente en formato JSON
 header('Content-Type: application/json');
 echo json_encode($result_data);
-
 
 ?>

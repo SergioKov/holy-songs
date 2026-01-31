@@ -1548,7 +1548,10 @@ form > .form_group:has(+ .wr_btns_eliminar)
     margin-bottom: 0px;
 } 
 
-
+.form_group.wr_title_note,
+.form_group.wr_url_youtube {
+    margin-bottom: 0;
+}
 
 /* para id.notes */
 .form_group_last {
@@ -1624,6 +1627,8 @@ textarea:not(:placeholder-shown) + label
 .wr_id_song,
 .wr_id_lista,
 .wr_title,
+.wr_title2,
+.wr_title_note,
 .wr_fecha,
 .wr_song_number,
 .wr_tune,
@@ -1812,7 +1817,8 @@ p.p_lista:hover {
 }
 
 .l_n {
-    width: 20px;
+    /* width: 20px; */
+    width: 25px;
 }
 .l_id {
     /* background: darkred; */
@@ -1840,10 +1846,26 @@ p.p_lista:hover {
     /* background: white; */
     /* color: black; */
 }
+
 .l_title {
     color: orange;
     width: 100%;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
 }
+.cl_title2 {
+    color: #FF5722;
+}
+.cl_title_note {
+    color: grey;
+    font-size: 0.75rem;
+}
+
+.active .cl_title_note {
+    color:#d88383;
+}
+
 .l_tune {
     color: #51ebff;
 }
@@ -2053,6 +2075,7 @@ p.p_sm b {
 }
 
 .dragging {
+    cursor: grabbing !important;
     background: #ad0000 !important;
     position: absolute;
     margin: 0 10px  0px;
@@ -3332,10 +3355,31 @@ span.sp_number {
 
 
 
+.btn_add_lista {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
 
 
 
+.n_lista{
+    float:right;
+}
+.title_lista {
+    border-top: 1px solid #737373;
+    padding-top: 5px;
+}
 
 
+.n_lista,
+.title_lista{
+    color: orange;
+}
+
+.fecha_lista{
+    color:grey;
+    font-size: 0.75rem;
+}
 
 

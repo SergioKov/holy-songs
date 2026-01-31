@@ -167,9 +167,24 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $id_song = $conn->real_escape_string($datos['id_song']);//get parameter
     $song_number = $conn->real_escape_string($datos['song_number']);//get parameter
     $title = $conn->real_escape_string($datos['title']);//get parameter
+    $title2 = $conn->real_escape_string($datos['title2']);//get parameter
+    $title_note = $conn->real_escape_string($datos['title_note']);//get parameter
     $category  = $conn->real_escape_string($datos['category']);//get parameter
     $songbook  = $conn->real_escape_string($datos['songbook']);//get parameter
     $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
+
+    //variables de busqueda
+    $title_search = normalizeSearchText($title ?? '');
+    
+    if($title2){
+        $title_search .= ' __|__ ' . normalizeSearchText($title2 ?? '');
+    }
+    if($title_note){
+        $title_search .= ' __|__ ' . normalizeSearchText($title_note ?? '');
+    }
+
+    $song_text_search  = normalizeSearchText($song_text);//quito puntuación, acentos, etc para mejorar búsquedas
+
     
     //$arr_esquema = $datos['arr_esquema'];
     $arr_esquema_array = $datos['arr_esquema'];
@@ -236,6 +251,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_up_init = "UPDATE songs SET
                     song_number = '$song_number',
                     title = '$title',
+                    title2 = '$title2',
+                    title_note = '$title_note',
+                    title_search = '$title_search',
                     category = '$category',
                     songbook = '$songbook',
                     song_text = '$song_text',
@@ -258,6 +276,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_up_init = "UPDATE songs SET
                     song_number = '$song_number',
                     title = '$title',
+                    title2 = '$title2',
+                    title_note = '$title_note',
+                    title_search = '$title_search',
                     category = '$category',
                     songbook = '$songbook',
                     song_text = '$song_text',
@@ -287,6 +308,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     (
                         song_number,
                         title,
+                        title2,
+                        title_note,
+                        title_search,
                         category,
                         songbook,
                         song_text,
@@ -306,6 +330,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     (
                         '$song_number', 
                         '$title', 
+                        '$title2', 
+                        '$title_note', 
+                        '$title_search', 
                         '$category', 
                         '$songbook', 
                         '$song_text', 
@@ -328,6 +355,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     (
                         song_number,
                         title,
+                        title2,
+                        title_note,
+                        title_search,
                         category,
                         songbook,
                         song_text,
@@ -346,6 +376,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     (
                         '$song_number',
                         '$title',
+                        '$title2',
+                        '$title_note',
+                        '$title_search',
                         '$category',
                         '$songbook',
                         '$song_text',

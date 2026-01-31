@@ -425,17 +425,41 @@ function buildFormCancion(contenedor, cancion_action = null){
                 <p class="mensaje"></p>
 
 
-                <div class="form_group wr_title">
-                    <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" ">
-                    <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
-                </div>
+
+                
+                <div class="form_group wr_detalles">
+                    <div class="wr_detalles_head" onclick="hideShowBlock('title_detalles');">
+                        Título (detalles)
+                    </div>                
+                
+                    <div id="title_detalles" class="wr_detalles_body" style="display: ${display_title_detalles};">
+                        
+                        <div class="form_group wr_title">
+                            <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" ">
+                            <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
+                        </div>
+
+                        <div class="form_group wr_title2">
+                            <input id="${id_vstavka}title2" name="title2" type="text" required="" placeholder=" ">
+                            <label for="${id_vstavka}title2">Coro u otro texto de la canción</label>
+                        </div>
+
+                        <div class="form_group wr_title_note">
+                            <input id="${id_vstavka}title_note" name="title_note" type="text" required="" placeholder=" ">
+                            <label for="${id_vstavka}title_note">Cantante, variante o nota al título</label>
+                        </div>
+
+                    </div><!--/#title_detalles-->
+                </div><!--/#wr_detalles-->
+
+
 
                 <div class="form_group wr_detalles">
                     <div class="wr_detalles_head" onclick="hideShowBlock('form_detalles');">
                         Detalles de la canción
                     </div>
 
-                    <div id="form_detalles" class="wr_detalles_body" style="display: ${display_form_detalles};">                    
+                    <div id="form_detalles" class="wr_detalles_body" style="display: ${display_form_detalles};">
 
                         <div class="wr_sel_category select_container">
                             <select id="${id_vstavka}category" name="category" class="sel_opt" required="">
@@ -749,6 +773,8 @@ function buildFormCancion(contenedor, cancion_action = null){
             form.reset();//reseteo formulario    
             
             form.elements['title'].value = objSong.title || '';
+            form.elements['title2'].value = objSong.title2 || '';
+            form.elements['title_note'].value = objSong.title_note || '';
             form.elements['category'].value = objSong.category || '';
             form.elements['songbook'].value = objSong.songbook || '';
             form.elements['id_song'].value = objSong.id_song;
@@ -1186,6 +1212,9 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                 p_lista.className = `p_lista`;
             }
 
+            const html_title2 = (item.title2) ? `<span class="cl_title2">${item.title2}</span>` : '';
+            const html_title_note = (item.title_note) ? `<span class="cl_title_note">${item.title_note}</span>` : '';
+
             p_lista.dataset.id_song = item.id_song;
             p_lista.innerHTML = `
                 <span class="wn_2_flex">
@@ -1200,7 +1229,11 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
 
                     <span class="sp_flex_n_title">
                         <span class="l_n">${i + 1}.</span>
-                        <span class="l_title">${item.title}</span>
+                        <span class="l_title">
+                            <span class="cl_title">${item.title}</span>
+                            ${html_title2}
+                            ${html_title_note}
+                        </span>
                     </span>
 
                 </span>
@@ -1475,10 +1508,17 @@ function buildListaSort(contenedor, arr_lista_bucle){
                 p.className = `p_lista p_drag draggable`;
             }
 
+            const html_title2 = (item.title2) ? `<span class="cl_title2">${item.title2}</span>` : '';
+            const html_title_note = (item.title_note) ? `<span class="cl_title_note">${item.title_note}</span>` : '';
+
             p.dataset.id_song = item.id_song;
             p.innerHTML = `
                 <span class="l_n">${i + 1}.</span>
-                <span class="l_title">${item.title}</span>
+                <span class="l_title">
+                    <span class="cl_title">${item.title}</span>
+                    ${html_title2}
+                    ${html_title_note}
+                </span>
                 <span class="l_tune">${item.tune || ''}</span>
                 <span class="l_tune_transpose">${(item.tune_transpose != 0) ? item.tune_transpose : ''}</span>
                 <span class="l_id">${item.id_song}</span>
@@ -1758,31 +1798,55 @@ async function getDataListasFromBdByFind(objFindListaParams){
             }), // Convertir los datos a formato JSON
         });
 
-        if (!response.ok) {
-            throw new Error('Error al obtener datos');
+
+        const text = await response.text();
+        console.log('text:', text);
+
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
         }
 
-        let data;
         if(debug){
-            data = await response.text();//test
-        }else{
-            data = await response.json();
+            console.log('text:', text);
         }
-        console.log('data: ', data);
-        
-        if(data.success){
-            console.log('success is true');
 
-            let arr_data = data.arr_data; 
-
-            console.log(`arr_data: `, arr_data);
-
-            return data;
-
-        }else{
-            console.log('success is false');
-            return 'no_hay_datos';
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error obtener_lista_by_find.php) ${response.status}`);
         }
+    
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+
+            if(data.success){
+                console.log('success is true');
+    
+                let arr_data = data.arr_data; 
+    
+                console.log(`arr_data: `, arr_data);
+    
+                return data;
+    
+            }else{
+                console.log('success is false');
+                return 'no_hay_datos';
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en read_book_to_json.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en read_book_to_json.php',
+                { cause: error }
+            );
+        } 
 
     } catch (error) {
         console.error('Error en getDataListasFromBdByFind(): error.message: ', error.message);
@@ -1821,19 +1885,40 @@ async function insertarSongDatos(objSong) {
             body: objSong_str
         });
 
-        if (!response.ok) {
-            throw new Error('Error al obtener datos');
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
         }
-        
-        let data;
+
         if(debug){
-            data = await response.text();//test
-        }else{
-            data = await response.json();
+            console.log('text:', text);
         }
-        console.log('data: ',data); 
-        
-        return data;
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error insertar_song_datos.php) ${response.status}`);
+        }
+    
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en insertar_song_datos.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en insertar_song_datos.php',
+                { cause: error }
+            );
+        }
 
     } catch (error) {
         console.error('Error en la función insertarSongDatos: ', error);

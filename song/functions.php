@@ -406,6 +406,50 @@ function get_client_ip_short(): ?string {
 //echo get_client_ip_short() ?? 'IP no encontrada';
 
 
+function normalizeSearchText(string $text): string {
+    // 1) minúsculas Unicode
+    $text = mb_strtolower($text, 'UTF-8');
+
+    // 2) normalizar Unicode (NFD)
+    $text = Normalizer::normalize($text, Normalizer::FORM_D);
+
+    // 3) eliminar diacríticos SOLO de letras latinas
+    //    equivalente a: (?<=\p{Script=Latin})\p{Mn}+
+    $text = preg_replace(
+        '/(?<=\p{Latin})\p{Mn}+/u',
+        '',
+        $text
+    );
+
+    // 4) recomponer Unicode (NFC)
+    $text = Normalizer::normalize($text, Normalizer::FORM_C);
+
+    // 5) proteger apóstrofe entre letras
+    $text = preg_replace(
+        '/(\p{L})\'(\p{L})/u',
+        '$1§§§$2',
+        $text
+    );
+
+    // 6) eliminar puntuación y símbolos
+    $text = preg_replace(
+        '/[^\p{L}\p{N}§ ]+/u',
+        ' ',
+        $text
+    );
+
+    // 7) restaurar apóstrofe
+    $text = str_replace('§§§', "'", $text);
+
+    // 8) normalizar espacios
+    $text = preg_replace('/\s+/u', ' ', $text);
+    $text = trim($text);
+
+    return $text;
+}
+
+
+
 //=====================================================================================//
 // FUNCTIONS - END
 //=====================================================================================//

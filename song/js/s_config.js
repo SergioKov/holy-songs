@@ -559,6 +559,7 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 
 
+let display_title_detalles = localStorage.getItem('display_title_detalles') || 'none';// def 'none';
 let display_form_detalles = localStorage.getItem('display_form_detalles') || 'none';// def 'none';
 
 //Objeto con datos de la canción actual para pantalla. 

@@ -2570,6 +2570,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
         const form = contenedor.querySelector("form");
 
         let title = form.elements["title"].value.trim();
+        let title2 = form.elements["title2"].value.trim();
+        let title_note = form.elements["title_note"].value.trim();
         let category = form.elements["category"].value.trim();
         let songbook = form.elements["songbook"].value.trim();
         let song_number = form.elements["song_number"].value.trim();
@@ -2631,21 +2633,23 @@ async function guardarSong(event, id_contenedor, cancion_action){
 
         const objSongToSend = {
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
-            song_number: song_number,
-            title: title,
+            song_number,
+            title,
+            title2,
+            title_note,
             arr_esquema: arr_esquema_guardar, //o '' o arr //new
-            category: category,
-            songbook: songbook,
-            tune: tune,
-            tune_transpose: tune_transpose,
-            tipo_acorde: tipo_acorde,
-            tipo_fuente: tipo_fuente,
-            url_youtube: url_youtube,
-            url_recurso: url_recurso,
-            tempo_bpm: tempo_bpm,
-            lang: lang,
-            song_text: song_text,
-            notes: notes,
+            category,
+            songbook,
+            tune,
+            tune_transpose,
+            tipo_acorde,
+            tipo_fuente,
+            url_youtube,
+            url_recurso,
+            tempo_bpm,
+            lang,
+            song_text,
+            notes,
         }
         console.log('objSongToSend: ',objSongToSend);
     
@@ -3400,7 +3404,8 @@ async function findWordsSong(){
     //console.log('=== async function findWordsSong() ===');
     console.time('time_findWordsNew');
 
-    let words_input = eid_inpt_find.value.trim();
+    let words_input_trimed = eid_inpt_find.value.trim();
+    let words_input = normalizeSearchText(words_input_trimed);//quito espacios duplicados, puntuacion, tildes etc...
     let modo = eid_modo.value;
     let buscar_en = eid_buscar_en.value;
     //console.log('--- words_input: ', words_input);
@@ -3538,7 +3543,7 @@ async function findWordsSong(){
         tbody.innerHTML = `
             <tr>
                 <td colspan="10" class="td_no_data">
-                    <p class="prim">No se encontraron canciones con la frase: "<b>${words_input}</b>"</p>
+                    <p class="prim">No se encontraron canciones con la frase: "<b>${words_input_trimed}</b>"</p>
                 </td>
             </tr>
         `;
@@ -3818,7 +3823,9 @@ function ver_song(){
 
     cancion_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
-        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+        <li class="li_action btn_add_lista" onclick="addToLista();">    
+            <!--Añadir a una Lista nueva o a la lista actual-->
+        </li>
 
         <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
@@ -3902,7 +3909,9 @@ function editar_song(){
 
     cancion_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
-        <li class="li_action" onclick="addToLista();">Añadir a la Lista</li>
+        <li class="li_action btn_add_lista" onclick="addToLista();">    
+            <!--Añadir a una Lista nueva o a la lista actual-->
+        </li>
 
         <div class="razdel">Esquema:</div>
         <li class="li_action" onclick="showBlockName('esquema'); ver_esquema();">Ver esquema</li>
@@ -4384,6 +4393,7 @@ function makeItemsDraggable(id_contenedor, class_element){
         //console.log('=== function moveDrag(e) ===');
         
         let y;
+        let x;
         let currentY;//test
         let currentX;//test
 
