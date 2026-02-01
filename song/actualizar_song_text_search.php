@@ -21,23 +21,23 @@ set_time_limit(0);
 ini_set('memory_limit', '512M');
 
 // forzar charset correcto
-$mysqli->set_charset('utf8mb4');
+$conn->set_charset('utf8mb4');
 
 // seleccionar datos
 $sql = "SELECT id, song_text FROM songs";
-$result = $mysqli->query($sql);
+$result = $conn->query($sql);
 
 if (!$result) {
-    die('ERROR SELECT: ' . $mysqli->error);
+    die('ERROR SELECT: ' . $conn->error);
 }
 
 // preparar UPDATE
-$update = $mysqli->prepare(
+$update = $conn->prepare(
     "UPDATE songs SET song_text_search = ? WHERE id = ?"
 );
 
 if (!$update) {
-    die('ERROR PREPARE: ' . $mysqli->error);
+    die('ERROR PREPARE: ' . $conn->error);
 }
 
 $updated = 0;
