@@ -60,7 +60,7 @@ while ($row = $result->fetch_assoc()) {
 
     // feedback cada 100 registros
     if ($updated % 100 === 0) {
-        echo "Actualizados: {$updated}\n";
+        echo "<br> Actualizados: {$updated}\n";
         flush();
     }
 }
@@ -68,6 +68,6 @@ while ($row = $result->fetch_assoc()) {
 $update->close();
 $result->free();
 
-echo "✔ Migración completada. Total: {$updated} registros.\n";
+echo "<br> ✔ Migración completada. Total: {$updated} registros.\n";
 
 ?>
