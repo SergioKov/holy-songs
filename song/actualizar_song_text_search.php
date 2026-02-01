@@ -6,9 +6,9 @@ set_time_limit(0);
 ini_set('memory_limit', '512M');
 
 // seguridad básica
-if (!class_exists('Normalizer')) {
-    die('ERROR: PHP intl extension is required.');
-}
+//if (!class_exists('Normalizer')) {
+//    die('ERROR: PHP intl extension is required.');
+//}
 
 // evitar timeouts en migraciones largas
 set_time_limit(0);
