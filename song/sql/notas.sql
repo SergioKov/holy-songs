@@ -82,3 +82,100 @@ JOIN listas_songs ls ON s.id_song = ls.id_song
 WHERE l.id_lista = 25 and ls.id_lista = 25
 ORDER BY ls.ordenar asc
 ;
+
+
+
+---------------------------------------------------------------------
+
+-- scripts SQL ---
+
+ALTER TABLE songs
+ADD COLUMN song_text_search TEXT AFTER song_text;
+
+
+UPDATE songs
+SET song_text_search =
+  REGEXP_REPLACE(
+    TRIM(
+      REGEXP_REPLACE(
+        LOWER(
+          -- 1) proteger apóstrofe entre letras
+          REGEXP_REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(song_text,'á','a'),
+            'é','e'),
+            'í','i'),
+            'ó','o'),
+            'ú','u'),
+            '([[:alpha:]])''([[:alpha:]])',
+            '\\1§§§\\2'
+          )
+        ),
+        -- 2) quitar puntuación
+        '[^[:alnum:] ñüА-Яа-яЁёІіЇїЄєҐґ§]',
+        ' '
+      )
+    ),
+    ' +',
+    ' '
+  );
+
+-- 3) restaurar apóstrofe protegido
+UPDATE songs
+SET song_text_search = REPLACE(song_text_search, '§§§', '''');
+
+
+
+
+
+
+
+ALTER TABLE `songs` CHANGE `title` `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE songs
+ADD COLUMN title2 VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER title;
+
+ALTER TABLE songs
+ADD COLUMN title_note VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER title2;
+
+ALTER TABLE songs
+ADD COLUMN title_search TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER title_note;
+
+
+
+UPDATE songs
+SET title_search =
+  REGEXP_REPLACE(
+    TRIM(
+      REGEXP_REPLACE(
+        LOWER(
+          -- 1) proteger apóstrofe entre letras
+          REGEXP_REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(
+            REPLACE(title,'á','a'),
+            'é','e'),
+            'í','i'),
+            'ó','o'),
+            'ú','u'),
+            '([[:alpha:]])''([[:alpha:]])',
+            '\\1§§§\\2'
+          )
+        ),
+        -- 2) quitar puntuación
+        '[^[:alnum:] ñüА-Яа-яЁёІіЇїЄєҐґ§]',
+        ' '
+      )
+    ),
+    ' +',
+    ' '
+  );
+
+-- 3) restaurar apóstrofe protegido
+UPDATE songs
+SET title_search = REPLACE(title_search, '§§§', '''');
