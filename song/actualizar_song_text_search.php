@@ -24,7 +24,7 @@ ini_set('memory_limit', '512M');
 $conn->set_charset('utf8mb4');
 
 // seleccionar datos
-$sql = "SELECT id, song_text FROM songs";
+$sql = "SELECT id_song, song_text FROM songs";
 $result = $conn->query($sql);
 
 if (!$result) {
@@ -33,7 +33,7 @@ if (!$result) {
 
 // preparar UPDATE
 $update = $conn->prepare(
-    "UPDATE songs SET song_text_search = ? WHERE id = ?"
+    "UPDATE songs SET song_text_search = ? WHERE id_song = ?"
 );
 
 if (!$update) {
@@ -47,7 +47,7 @@ while ($row = $result->fetch_assoc()) {
     $songText = $row['song_text'] ?? '';
     //$search   = normalizeSearchText($songText);//lo descomento cuando hostalia habilite intl
     $search   = normalizeSearchTextNoIntl($songText);//por ahora uso esta función sin intl
-    $id       = (int)$row['id'];
+    $id       = (int)$row['id_song'];
 
     $update->bind_param('si', $search, $id);
 
