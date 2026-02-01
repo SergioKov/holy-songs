@@ -4055,6 +4055,8 @@ function addToLista(){
             id_song: objSong.id_song,
             song_number: objSong.song_number,
             title: objSong.title,
+            title2: objSong.title2,
+            title_note: objSong.title_note,
             tune: objSong.tune,
             tune_transpose: objSong.tune_transpose,
         };
