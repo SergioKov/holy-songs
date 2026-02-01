@@ -448,6 +448,37 @@ function normalizeSearchText(string $text): string {
     return $text;
 }
 
+/*
+    ➕ Esta versión normalizeSearchTextNoIntl():
+    funciona sin intl
+    no necesita Normalizer
+    respeta cirílico y letras especiales
+
+    ❗ Limitaciones:
+    no quita diacríticos latinos (áéíóú → no se convierten a aeiou)
+    no elimina marcas Unicode complejas
+*/
+function normalizeSearchTextNoIntl(string $text): string {
+    // 1) minúsculas
+    $text = mb_strtolower($text, 'UTF-8');
+
+    // 2) proteger apóstrofe entre letras
+    $text = preg_replace('/(\p{L})\'(\p{L})/u', '$1§§§$2', $text);
+
+    // 3) quitar puntuación / símbolos
+    $text = preg_replace('/[^\p{L}\p{N}§ ]+/u', ' ', $text);
+
+    // 4) restaurar apóstrofe
+    $text = str_replace('§§§', "'", $text);
+
+    // 5) normalizar espacios
+    $text = preg_replace('/\s+/u', ' ', $text);
+    $text = trim($text);
+
+    return $text;
+}
+
+
 
 
 //=====================================================================================//

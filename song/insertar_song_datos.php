@@ -174,6 +174,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
 
     //variables de busqueda
+    /*
     $title_search = normalizeSearchText($title ?? '');
     
     if($title2){
@@ -184,6 +185,20 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }
 
     $song_text_search  = normalizeSearchText($song_text);//quito puntuación, acentos, etc para mejorar búsquedas
+    */
+
+
+    //por ahora sin intl
+    $title_search = normalizeSearchTextNoIntl($title ?? '');
+
+    if($title2){
+        $title_search .= ' __|__ ' . normalizeSearchTextNoIntl($title2 ?? '');
+    }
+    if($title_note){
+        $title_search .= ' __|__ ' . normalizeSearchTextNoIntl($title_note ?? '');
+    }
+
+    $song_text_search  = normalizeSearchTextNoIntl($song_text);//quito puntuación, acentos, etc para mejorar búsquedas
 
     
     //$arr_esquema = $datos['arr_esquema'];
