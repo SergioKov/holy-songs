@@ -405,7 +405,19 @@ function get_client_ip_short(): ?string {
 /* uso */
 //echo get_client_ip_short() ?? 'IP no encontrada';
 
+/*
+    Esta versión normalizeSearchText():
+    funciona con intl (intl debe habilitarse en el hosting)
+    necesita Normalizer
+    respeta cirílico y letras especiales
 
+    ✔ ñ intacta
+    ✔ ü intacta
+    ✔ й, ї, є, ґ intactas
+    ✔ apóstrofe ucraniano correcto
+    ✔ acentos latinos fuera
+    ✔ puntuación fuera
+*/
 function normalizeSearchText(string $text): string {
     // 1) minúsculas Unicode
     $text = mb_strtolower($text, 'UTF-8');
@@ -449,7 +461,7 @@ function normalizeSearchText(string $text): string {
 }
 
 /*
-    ➕ Esta versión normalizeSearchTextNoIntl():
+    Esta versión normalizeSearchTextNoIntl():
     funciona sin intl
     no necesita Normalizer
     respeta cirílico y letras especiales

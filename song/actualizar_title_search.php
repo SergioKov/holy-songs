@@ -45,8 +45,8 @@ $updated = 0;
 while ($row = $result->fetch_assoc()) {
 
     $title = $row['title'] ?? '';
-    //$search   = normalizeSearchText($title);//lo descomento cuando hostalia habilite intl
-    $search   = normalizeSearchTextNoIntl($title);//por ahora uso esta función sin intl
+    $search   = normalizeSearchText($title);//lo descomento cuando hostalia habilite intl
+    //$search   = normalizeSearchTextNoIntl($title);//por ahora uso esta función sin intl
     $id       = (int)$row['id_song'];
 
     $update->bind_param('si', $search, $id);
