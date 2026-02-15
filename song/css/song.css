@@ -1854,16 +1854,21 @@ p.p_lista:hover {
     gap: 5px;
     flex-direction: column;
 }
+
 .cl_title2 {
     color: #FF5722;
 }
+.active .cl_title2 {
+    color: #FFEB3B !important;
+}
+
 .cl_title_note {
     color: grey;
     font-size: 0.75rem;
 }
 
 .active .cl_title_note {
-    color:#d88383;
+    color: #e39b2f;
 }
 
 .l_tune {

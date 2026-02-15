@@ -2887,6 +2887,7 @@ async function deleteSong(event, id_contenedor){
 
 async function guardarLista(event){
     console.log('=== function guardarLista() ===');
+    
     if(event){
         console.log('hay event. no lo propago...')
         event.preventDefault();
