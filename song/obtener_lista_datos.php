@@ -127,6 +127,8 @@ if($result->num_rows > 0){
                 id_song, 
                 song_number, 
                 title, 
+                title2, 
+                title_note, 
                 tune,
                 tune_transpose
             FROM songs
@@ -142,6 +144,8 @@ if($result->num_rows > 0){
                     'id_song' => $row_s['id_song'],
                     'song_number' => $row_s['song_number'],
                     'title' => $row_s['title'],
+                    'title2' => $row_s['title2'],
+                    'title_note' => $row_s['title_note'],
                     'tune' => $row_s['tune'],
                     'tune_transpose' => $row_s['tune_transpose']
                 ];
