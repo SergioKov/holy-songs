@@ -276,12 +276,13 @@ function pintParrafosAcordes() {
     document.querySelectorAll('p.c').forEach(p => {
         let textOriginal = p.textContent;
 
+        const regexTexto = /(\([^()]*\))|([|\/\-\(\)])|(\s+)|([^\s|\/\-\(\)]+)/g;//separa símbolos, espacios y texto y todo lo que esté dentro de ( ... ) como una sola pieza
         //const partes = textOriginal.match(/([|\/])|(\s+)|([^\s|\/]+)/g);
-        const partes = textOriginal.match(/([|\/\-\(\)])|(\s+)|([^\s|\/\-\(\)]+)/g);
+        const partes = textOriginal.match(regexTexto);
 
 
         let resultado = partes.map(parte => {
-            if ( ['|', '/', '-', '(', ')', ':'].includes(parte) ) {
+            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)'].includes(parte) ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
                 return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
@@ -3216,7 +3217,9 @@ function resetPListaActive() {
 function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
     //const regexAcorde = /^(?:\s*\|?\s*[A-H](#|b)?(m|maj7|m7|7|sus|sus2|sus4|dim|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?\s*\|?)*$/;
     //const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
-    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;
+    //const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;//ok funciona
+
+    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||\([^()]*\)|[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;//test new
 
     //'|D      |F#m |G  |G - (Cm7) |' => true;
     //'| Вступ |Dm  |G  |C         |' =>  false (palabra 'Вступ' no es acorde) 
