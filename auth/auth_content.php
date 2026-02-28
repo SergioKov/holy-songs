@@ -61,8 +61,7 @@
     <div class="container">
 
         <h1 class="h1_title">
-            <!-- Holy-Songs.com -->
-            HS
+            Holy-Songs.com
             <span>(Demo)</span>
         </h1>
     

@@ -22,7 +22,9 @@
         max-width: 218px;
     }
 
-    .wr_lcr{
+    .wr_lcr,
+    .solo_en_mobile
+    {
         display: none;
     }
 
@@ -40,7 +42,9 @@
 
 /* Tablet */
 @media screen and (min-width: 768px) and (max-width: 1023px){
-    .wr_lcr{
+    .wr_lcr,
+    .solo_en_mobile
+    {
         display: none;
     }
 
@@ -59,12 +63,15 @@
         width: 100% !important;
         flex-direction: column;
     }
-    .wr_lcr{
+    .wr_lcr,
+    .solo_en_mobile
+    {
         display: block;
     }
 
     .partes ,
-    .wr_dbtns_panels
+    .wr_dbtns_panels,
+    .solo_en_desktop
     {
         display: none !important;
     }

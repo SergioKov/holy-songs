@@ -8,8 +8,11 @@ function pintSongActive(){//click en tr de la tabla de canciones
 
     console.log('asignado global --- id_song: ', id_song);
 
-    resetTrSelected(tbody);
-    tbody.querySelector(`.tr_song[data-id="${id_song}"]`).classList.add('selected');
+    //resetTrSelected(tbody);//antes
+    //tbody.querySelector(`.tr_song[data-id="${id_song}"]`).classList.add('selected');//antes
+    
+    resetPSongActive(eid_bl_songs_finded);//new
+    eid_bl_songs_finded.querySelector(`.p_song[data-id="${id_song}"]`).classList.add('active');//new
 
     mostrarPrim = false;
     ocultarElementosPrimEn(buscar_option_inner);
@@ -66,12 +69,20 @@ function pintSongActiveSoloDatos(){
     }
 
     //comprobar si existe tr_lista de lalista activa
-    const tr_song = tbody.querySelector(`.tr_song[data-id="${objSong.id_song}"]`);
-    console.log('tr_song: ', tr_song);
+    // const tr_song = tbody.querySelector(`.tr_song[data-id="${objSong.id_song}"]`);
+    //console.log('tr_song: ', tr_song);
+
+    const p_song = eid_bl_songs_finded.querySelector(`.p_song[data-id="${objSong.id_song}"]`);
+    console.log('p_song: ', p_song);
     
-    if(!tr_song){
+    // if(!tr_song){
+    //     //alert('no hay tr_song');
+    //     console.log('no hay tr_song. no actualizo tr_song...');
+    //     return;
+    // }
+    if(!p_song){
         //alert('no hay tr_song');
-        console.log('no hay tr_song. no actualizo tr_song...');
+        console.log('no hay p_song. no actualizo p_song...');
         return;
     }
 
@@ -104,19 +115,28 @@ function pintSongActiveSoloDatos(){
 
 
     //actualizo datos de tr_song
-    tr_song.querySelector('.td_numero').textContent = objSong.song_number || '';
-    tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
-    tr_song.querySelector('.td_esquema').textContent = hay_esquema_texto;
+    // tr_song.querySelector('.td_numero').textContent = objSong.song_number || '';
+    // tr_song.querySelector('.td_titulo').textContent = objSong.title || '';
+    // tr_song.querySelector('.td_esquema').textContent = hay_esquema_texto;
     
-    tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
-    tr_song.querySelector('.td_category').innerHTML = category_name_text;
+    // tr_song.querySelector('.td_category').dataset.category = objSong.category || '';
+    // tr_song.querySelector('.td_category').innerHTML = category_name_text;
 
-    tr_song.querySelector('.td_songbook').dataset.songbook = objSong.songbook || '';
-    tr_song.querySelector('.td_songbook').innerHTML = songbook_title_text;
+    // tr_song.querySelector('.td_songbook').dataset.songbook = objSong.songbook || '';
+    // tr_song.querySelector('.td_songbook').innerHTML = songbook_title_text;
 
-    tr_song.querySelector('.td_idioma').textContent = lang_name_text;
-    tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
-    tr_song.querySelector('.td_transpose').textContent = objSong.tune_transpose || '';
+    // tr_song.querySelector('.td_idioma').textContent = lang_name_text;
+    // tr_song.querySelector('.td_tonalidad').textContent = objSong.tune || '';
+    // tr_song.querySelector('.td_transpose').textContent = objSong.tune_transpose || '';
+
+
+    //new - actualizo datos de p_song
+    p_song.querySelector('.cl_title').textContent = objSong.title || '';
+    p_song.querySelector('.cl_title2').textContent = objSong.title2 || '';
+    p_song.querySelector('.cl_title_note').textContent = objSong.title_note || '';
+    //p_song.querySelector('.td_idioma').textContent = lang_name_text;
+    p_song.querySelector('.l_tune').textContent = objSong.tune || '';
+    p_song.querySelector('.l_tune_transpose').textContent = objSong.tune_transpose || '';
    
 
    // Normalizamos palabras de 'arr_words' (global)

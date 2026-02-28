@@ -97,6 +97,7 @@ const eid_inpt_filter = document.getElementById('inpt_filter');
 
 const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
 const tbody = eid_block_buscar.querySelector('.wr_tabla table tbody');
+const eid_bl_songs_finded = document.getElementById('bl_songs_finded');
 
 //bl_parte_r
 const buscar_vista_song_content = eid_block_buscar.querySelector('.vista_song_content');

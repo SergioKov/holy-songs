@@ -22,10 +22,7 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     
     <div class="container">
 
-        <!-- <h1 class="h1_title">Holy-Songs.com</h1> -->
-        <h1 class="h1_title">HS</h1>
-    
-        
+        <h1 class="h1_title">Holy-Songs.com</h1>
 
     </div><!--/container-->
 

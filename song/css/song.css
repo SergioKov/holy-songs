@@ -1785,7 +1785,9 @@ p.p_esquema:hover {
 }
 
 
-p.p_lista {
+p.p_song,
+p.p_lista
+ {
     background: #000000;
     width: 100%;
     display: flex;
@@ -1801,15 +1803,21 @@ p.p_lista {
     align-items: center;
     flex-direction: row;
 }
-p.p_lista:hover {
+p.p_song:hover ,
+p.p_lista:hover 
+{
     background: #494949;
 }
 
-.p_lista.active {
+.p_song.active, 
+.p_lista.active 
+{
     outline: 3px solid #FFEB3B;
     /* box-shadow: 0 0 10px 5px white; */
     background: #b00707;
 }
+.p_song.active .l_n,
+.p_song.active .l_title,
 .p_lista.active .l_n,
 .p_lista.active .l_title
 {
@@ -1871,6 +1879,10 @@ p.p_lista:hover {
     color: #e39b2f;
 }
 
+.l_idioma {
+    color: grey;
+    font-size: 70%;
+}
 .l_tune {
     color: #51ebff;
 }
@@ -1915,6 +1927,17 @@ p.p_lista:hover {
     opacity: 1;
 }
 
+.l_puntos img {
+    /* background: red; */
+    width: 24px;
+    height: 24px;
+    opacity: 0.4;
+    transition: 0.3s;
+}
+.l_puntos img:hover{
+    opacity: 1;
+}
+
 .btn_song_x {
     /* background: #E91E63; */
     padding: 2px 5px 0px;
@@ -1936,10 +1959,14 @@ p.p_lista:hover {
 .cl_tab:hover .btn_song_x {
     color: white;
 }
-.p_lista.active .btn_song_x:hover{
+.p_song.active .btn_song_x:hover,
+.p_lista.active .btn_song_x:hover
+{
     background: black;
 }
-.p_lista.active .btn_song_x {
+.p_song.active .btn_song_x ,
+.p_lista.active .btn_song_x 
+{
     color: white;
 }
 
@@ -2788,6 +2815,13 @@ p.p_sm b {
     align-items: center;
     flex-direction: row-reverse;
 }
+.contenedor_aviso .wn_2_flex{
+    flex-direction: column;
+}
+.contenedor_aviso .sp_flex_btns {
+    width: 100%;
+}
+
 .sp_flex_btns {
     /* background: #4d4848; */
     display: flex;
@@ -2805,6 +2839,14 @@ p.p_sm b {
     width: 100%;
     gap: 5px;
     align-items: center;
+}
+.wr_parte_noid {
+    /* background: grey; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .wr_head_avisos {

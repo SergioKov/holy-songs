@@ -2716,6 +2716,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
                         let songDataOfLista_new = {
                             song_number: objSong.song_number,
                             title: objSong.title,
+                            title2: objSong.title2,
+                            title_note: objSong.title_note,
                             tune: objSong.tune,
                             tune_transpose: objSong.tune_transpose,
                         }
@@ -3208,6 +3210,12 @@ function resetTrSelected(contenedor){
     });
 }
 
+function resetPSongActive(contenedor) {
+    contenedor.querySelectorAll('.p_song').forEach(p => {
+        p.classList.remove('active');
+    });
+}
+
 function resetPListaActive() {
     document.querySelectorAll('.p_lista').forEach(p => {
         p.classList.remove('active');
@@ -3454,7 +3462,8 @@ async function findWordsSong(){
         objDataSongs = structuredClone(objDataSongsBd);
         console.log('objDataSongs: ', objDataSongs);
 
-        tbody.innerHTML = '';//reset
+        //tbody.innerHTML = '';//reset
+        eid_bl_songs_finded.innerHTML = '';//reset
         
         eid_titulo_tabla_song.querySelector('b').style.display = 'inline';
         eid_titulo_tabla_song.querySelector('b').textContent = objDataSongs.arr_data.length;        
@@ -3478,7 +3487,9 @@ async function findWordsSong(){
         ];//se buscará texto en cada elemento de estos span's
         addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
 
-        //Recorrer canciones encontradas...
+        /*
+        //CREAR TABLA
+        //Recorrer canciones encontradas... 
         objDataSongs.arr_data.forEach((el, i, arr) => {
             //console.log('el: ', el);
 
@@ -3539,17 +3550,131 @@ async function findWordsSong(){
 
             tbody.append(tr_song);
         });
+        */
+
+
+
+        //CREAR DIV'S Y P'S
+        //Recorrer canciones encontradas... 
+        objDataSongs.arr_data.forEach((el, i, arr) => {
+            //console.log('el: ', el);
+
+            const p_song = document.createElement('p');
+            p_song.className = 'p_song';
+            p_song.dataset.id = el.id_song;
+
+            let hay_esquema_texto;
+
+            //convierto arr_esquema (string) en array correcto
+            if(esString(el.arr_esquema) && el.arr_esquema != ''){
+                el.arr_esquema = JSON.parse(el.arr_esquema);
+                hay_esquema_texto = `Sí (${el.arr_esquema.length})`;
+            }else{
+                el.arr_esquema = [];
+                hay_esquema_texto = '';
+            }
+            console.log('(parseado) --- el.arr_esquema: ', el.arr_esquema);
+
+            let category_name_text = '';
+            if(el.category != 0 && el.category_name != null){
+                //inportante en una linea
+                category_name_text = `<span class="sp_number">${el.category}.</span> <span class="sp_name">${el.category_name}</span>`;
+            }
+
+            let songbook_title_text = '';
+            if(el.songbook != 0 && el.songbook_title != null){
+                //inportante en una linea
+                songbook_title_text = `<span class="sp_number">${el.songbook}.</span> <span class="sp_name">${el.songbook_title}</span>`;
+            }
+
+            let lang_name_text = '';
+            if(el.lang){
+                lang_name_text = obj_lang_names[el.lang];
+            }
+
+            let cl_title = (el.title) ? '' : 'd-none';//si no hay título, lo oculto 
+            let cl_title2 = (el.title2) ? '' : 'd-none';//si no hay título, lo oculto 
+            let cl_title_note = (el.title_note) ? '' : 'd-none';//si no hay título, lo oculto 
+            let cl_tune_transpose = (el.tune_transpose != 0) ? '' : 'd-none';//si no hay título, lo oculto 
+
+            p_song.innerHTML = `
+                <span class="wn_2_flex">
+                
+                    <span class="sp_flex_btns">
+                        <span class="l_id solo_en_mobile">${el.id_song}</span>            
+                        <span class="wr_parte_noid">  
+                            <span class="l_idioma">${lang_name_text}</span>
+                            <span class="l_tune">${el.tune}</span>
+                            <span class="l_tune_transpose ${cl_tune_transpose}">${el.tune_transpose || ''}</span>
+                            <span class="l_edit"><img src="images/icon_edit_white.svg"></span> 
+                            <span class="l_puntos d-none"><img class="btn_img" src="./images/tres_puntos_vertical_white.svg"></span> 
+                        </span>
+                    </span>            
+            
+                    <span class="sp_flex_n_title"> 
+                        <span class="l_id solo_en_desktop">${el.id_song}</span>            
+                        <span class="l_title">
+                            <span class="cl_title ${cl_title}">${el.title || ''}</span>
+                            <span class="cl_title2 ${cl_title2}">${el.title2 || ''}</span>
+                            <span class="cl_title_note ${cl_title_note}">${el.title_note || ''}</span>
+                        </span>
+                    </span>
+            
+                </span>            
+            `;
+
+            p_song.onclick = async (e) => {
+                console.log('e.currentTarget: ', e.currentTarget);
+
+                id_song = e.currentTarget.dataset.id;
+                console.log('asigno global --- id_song: ', id_song); 
+
+                // siempre al clicar en cualquier parte del p_song se pinta como activo
+                // y se muestran datos a la derecha, pero dependiendo de donde se haga clic se muestra una cosa u otra:
+                pintSongActive();
+
+                //id_song
+                if(e.target.classList.contains('l_id') || e.target.closest('.l_id')){//clic en el id_song
+                    console.log('clic en el id de la cancion'); 
+                    showBlockName('esquema');
+                    showVklad(document.getElementById('btn_select_slide'),'select_slide');
+                }
+                
+                //edit
+                if(e.target.classList.contains('l_edit') || e.target.closest('.l_edit')){//clic en el boton de editar
+                    console.log('clic en el boton de editar');
+                    showBlockName('cancion'); 
+                    editar_song();
+                }
+                
+                //puntos - REVISAR LUEGO...
+                // if(e.target.classList.contains('l_puntos') || e.target.closest('.l_puntos')){
+                //     console.log('clic en el boton de opciones (tres puntos)');
+                //     btn_actions_buscar.click();//simulo click en tres puntos en head... 
+                // }               
+
+            }
+
+            eid_bl_songs_finded.append(p_song);
+        });
+
     }else{
         console.log('no hay coincidencias...');
         
         eid_sp_icon_filtro.classList.remove('d-none');//oculto el boton de filtro ya que no hay nada para filtrar
         
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="10" class="td_no_data">
-                    <p class="prim">No se encontraron canciones con la frase: "<b>${words_input_trimed}</b>"</p>
-                </td>
-            </tr>
+        //tabla. antes
+        // tbody.innerHTML = `
+        //     <tr>
+        //         <td colspan="10" class="td_no_data">
+        //             <p class="prim">No se encontraron canciones con la frase: "<b>${words_input_trimed}</b>"</p>
+        //         </td>
+        //     </tr>
+        // `;
+
+        //new
+        eid_bl_songs_finded.innerHTML = `
+            <p class="prim">No se encontraron canciones con la frase: "<b>${words_input_trimed}</b>"</p>
         `;
     }
 
