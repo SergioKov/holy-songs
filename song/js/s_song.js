@@ -282,7 +282,7 @@ function pintParrafosAcordes() {
 
 
         let resultado = partes.map(parte => {
-            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)'].includes(parte) ) {
+            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)','||:', ':||'].includes(parte) ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
                 return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;

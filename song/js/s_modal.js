@@ -1281,10 +1281,22 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                     })(e);
 
                 }else{
+                    
+                    
+                    //antes. comento por ahra...
                     //ver los slides en slideContainer (con acordes) cerrando ventanas modales
                     //llamo async autoejecutable ya que en crearSlidesForSongOfLista() hay awaits a la bd
-                    (async (e)=>{
-                        await crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = true);
+                    // (async (e)=>{
+                    //     await crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = true);
+                    // })(e);
+
+
+                    console.log('Editar canción de la lista. id_song: ', lista_id_song);
+                    e.stopPropagation();//evita que se dispare el onclick del padre
+                    //llamo async autoejecutable ya que en editSongOfLista() hay awaits a la bd
+                    (async () => {
+                        await editSongOfLista(e, lista_id_song);
+                        eid_block_cancion_body.querySelector('.wr_vista_blocks .dbtn_fullscreen').click();//para ir a fullscreen
                     })(e);
                 }
             }
