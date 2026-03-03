@@ -1125,7 +1125,7 @@ function buildLista(lista_action = null){
                     <select id="id_grupo" name="id_grupo" class="d_grupos_select sel_opt" required="">
                         <!-- aki grupos -->
                     </select>
-                    <label for="id_grupo">Nombre de grupo</label>
+                    <label for="id_grupo">Nombre de grupo o cantante</label>
                 </div>                
 
                 <div class="form_group wr_fecha">

@@ -2956,7 +2956,7 @@ async function guardarLista(event){
             errors.push('Título de la lista');
         }
         if(id_grupo == ''){
-            errors.push('Nombre de grupo que realiza el evento');
+            errors.push('Nombre de grupo o cantante que realiza el evento');
         }
         if(fecha == ''){
             errors.push('Fecha del evento');
