@@ -119,10 +119,11 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     $id_lista = $conn->real_escape_string($datos['id_lista']);//get parameter
     $title = $conn->real_escape_string($datos['title']);//get parameter
-    $notes  = $conn->real_escape_string($datos['notes']);//get parameter   
+    $id_grupo = $conn->real_escape_string($datos['id_grupo']);//get parameter
     $fecha  = $conn->real_escape_string($datos['fecha']);//get parameter
     $arr_lista_ids_string = $conn->real_escape_string($datos['arr_lista_ids']);
     $arr_lista_ids_array = json_decode($datos['arr_lista_ids'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
+    $notes  = $conn->real_escape_string($datos['notes']);//get parameter   
     
 
     //debug($title);
@@ -170,6 +171,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $action_tipo = 'is_update_arr_lista_ok';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
+                    id_grupo = '$id_grupo',
                     arr_lista_ids = '$arr_lista_ids_string',
                     notes = '$notes',
                     fecha = '$fecha',
@@ -180,6 +182,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $action_tipo = 'is_update_arr_lista_vacio';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
+                    id_grupo = '$id_grupo',
                     arr_lista_ids = '',
                     notes = '$notes',
                     fecha = '$fecha',
@@ -203,16 +206,42 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         if (is_array($arr_lista_ids_array) && !empty($arr_lista_ids_array) ) {// Es un array y tiene elementos
             $action_tipo = 'is_insert_arr_lista_ok';
             $sql2_in_init = "INSERT INTO listas 
-                    (  title,   arr_lista_ids,          fecha,    notes,    created_at) 
+                    (
+                        title,
+                        id_grupo,
+                        arr_lista_ids,
+                        fecha,
+                        notes,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$title', '$arr_lista_ids_string', '$fecha', '$notes', '$fechaHoraActual')
+                    (
+                        '$title',
+                        '$id_grupo',
+                        '$arr_lista_ids_string',
+                        '$fecha',
+                        '$notes',
+                        '$fechaHoraActual'
+                    )
             ";
         }else{//no es array o está vacío. no incluyo arr_lista en la SQL
             $action_tipo = 'is_insert_arr_lista_vacio';
             $sql2_in_init = "INSERT INTO listas 
-                    (  title,    fecha,    notes,    created_at) 
+                    (
+                        title,
+                        id_grupo,
+                        fecha,
+                        notes,
+                        created_at
+                    ) 
                 VALUES 
-                    ('$title', '$fecha', '$notes', '$fechaHoraActual')
+                    (
+                        '$title',
+                        '$id_grupo',
+                        '$fecha',
+                        '$notes',
+                        '$fechaHoraActual'
+                    )
             ";
         }
         // $sql2_in_prep = "INSERT INTO $tabla (id_user, $campo, created_at) 

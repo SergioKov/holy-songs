@@ -292,8 +292,12 @@ function pintListaActive(){
         
     console.log('asignado global --- id_lista: ', id_lista);
 
-    resetTrSelected(tbody_lista);
-    tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
+    //resetTrSelected(tbody_lista);
+    //tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
+
+    resetPListaActive(eid_bl_listas_finded);//new
+    eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`).classList.add('active');//new
+
     
     mostrarPrim = false;
     ocultarElementosPrimEn(lista_option_inner);
@@ -316,19 +320,40 @@ function pintListaActiveSoloDatos(){
         return;
     }
 
-    //comprobar si existe tr_lista de lalista activa
-    const tr_lista = tbody_lista.querySelector(`.tr_lista[data-id="${objLista.id_lista}"]`);
-    console.log('tr_lista: ', tr_lista);
+    //comprobar si existe tr_lista de la lista activa
+    // const tr_lista = tbody_lista.querySelector(`.tr_lista[data-id="${objLista.id_lista}"]`);
+    const p_lista = eid_bl_listas_finded.querySelector(`.p_lista[data-id="${objLista.id_lista}"]`);
+    console.log('p_lista: ', p_lista);
+
+    const btn_add_lista = document.querySelector(`.li_action.btn_add_lista`);
+    console.log('btn_add_lista: ', btn_add_lista);
     
-    if(tr_lista){
-        //alert('no hay tr_lista');
-        //return;
+    // if(tr_lista){
+    //     //alert('no hay tr_lista');
+    //     //return;
         
+    //     //Actualizo datos de tr_lista
+    //     tr_lista.querySelector('.td_titulo').textContent = objLista.title || '';
+    //     tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
+    //     tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
+    //     tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? `Sí (${objLista.arr_lista.length})` :  '';
+    // }
+
+    if(p_lista){
+        //Actualizo datos de p_lista
+        p_lista.querySelector('.cl_title').textContent = objLista.title || '';
+        p_lista.querySelector('.cl_grupo_nombre ').textContent = `${objLista.grupo_nombre}` || '';
+        p_lista.querySelector('.cl_dia_semana').textContent = diaSemana(objLista.fecha) || '';
+        p_lista.querySelector('.cl_fecha').textContent = objLista.fecha_ver || '';
+        p_lista.querySelector('.l_num_canciones').textContent = (objLista.arr_lista.length > 0) ? objLista.arr_lista.length :  '';
+    }
+    
+    if(btn_add_lista){        
         //Actualizo datos de tr_lista
-        tr_lista.querySelector('.td_titulo').textContent = objLista.title || '';
-        tr_lista.querySelector('.td_dia_semana').textContent = diaSemana(objLista.fecha) || '';
-        tr_lista.querySelector('.td_fecha').textContent = objLista.fecha_ver || '';
-        tr_lista.querySelector('.td_lista').textContent = (objLista.arr_lista.length > 0) ? `Sí (${objLista.arr_lista.length})` :  '';
+        btn_add_lista.querySelector('.fecha_lista').innerHTML = `${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}`;
+        btn_add_lista.querySelector('.title_lista').textContent = objLista.title || '';
+        btn_add_lista.querySelector('.grupo_lista ').textContent = `${objLista.grupo_nombre}` || '';
+
     }
 
     // //Actualizo parte derecha
@@ -370,6 +395,7 @@ function pintListaActiveSoloDatos(){
         lista_vista_lista_content.append(d_titulo);
     }
 
+    //id lista
     if(objLista.id_lista){
         //Marco en rojo las palabras encontradas en id 
         let id_lista_text_red = objLista.id_lista.toString().replace(regex, (x) => {
@@ -410,6 +436,22 @@ function pintListaActiveSoloDatos(){
         `;
         lista_vista_lista_content.append(d_fecha);
     }
+
+    //Grupo lista
+    if(objLista.id_grupo){
+        //Marco en rojo las palabras encontradas en title 
+        let grupo_nombre_text_red = objLista.grupo_nombre.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+
+        const d_titulo = document.createElement('div');
+        d_titulo.className = 'parte_lista';
+        d_titulo.innerHTML = `
+            <p class="p_titulo">Grupo que realiza el evento:</p>
+            <p class="texto_norm t_big">${grupo_nombre_text_red}</p>
+        `;
+        lista_vista_lista_content.append(d_titulo);
+    }    
 
     //Canciones
     const d_canciones_lista = document.createElement('div');
@@ -1527,9 +1569,10 @@ function hideShowDiv(id_div){
         `;
     }else{//hay lista activa
         btn_add_lista_inner_html = `
-            <span>Añadir a la Lista: <b class="n_lista">${objLista.id_lista}</b></span>
-            <span class="title_lista">${objLista.title}</span>
+            <span class="sp_add_a_lista">Añadir a la Lista: <b class="n_lista">${objLista.id_lista}</b></span>
             <span class="fecha_lista">${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}</span>
+            <span class="title_lista">${objLista.title}</span>
+            <span class="grupo_lista">${objLista.grupo_nombre}</span>
         `;
     }
     

@@ -12,6 +12,10 @@ async function init() {
     await crear_objSongbooks();
     //pintSongbooksOptionsEnBuscar(eid_songbook_search);//relleno select de songbook para buscar en
     pintSongbooksCheckboxEnBuscar(eid_wr_sb_checkboxes);//relleno contenedor de checkboxes
+
+    await crear_objGrupos();
+    //pintSongbooksOptionsEnBuscar(eid_songbook_search);//relleno select de songbook para buscar en
+    //pintSongbooksCheckboxEnBuscar(eid_wr_sb_checkboxes);//relleno contenedor de checkboxes
 }
 
 async function crear_objSongbooks(){
@@ -19,6 +23,13 @@ async function crear_objSongbooks(){
 
     objSongbooks = await getSongbooksFromBd();
     console.log(`objSongbooks: `, objSongbooks);
+}
+
+async function crear_objGrupos(){
+    console.log('=== function crear_objGrupos() ===');
+
+    objGrupos = await getGruposFromBd();
+    console.log(`objGrupos: `, objGrupos);
 }
 
 
@@ -42,7 +53,32 @@ function pintSongbooksOptionsEnBuscar(selectElement){
     });
 }
 
-let arr_songbooks = [];
+
+function pintGruposOptionsEnSelect(selectElement, id_grupo_selected = null){
+    console.log('=== function pintGruposOptionsEnSelect() ===');
+    
+    selectElement.innerHTML = '';//reset
+
+    if(!id_grupo_selected){
+        //añado opción por defecto para no seleccionar ningún grupo
+        selectElement.innerHTML = `
+            <option value="" disabled="" selected="" hidden=""></option>
+        `;
+    }
+
+
+    //Recorrer objGrupos
+    Object.values(objGrupos).forEach( (grupo, i) => {
+        const option = document.createElement('option');
+        option.value = grupo.id_grupo;
+        if(id_grupo_selected && grupo.id_grupo == id_grupo_selected){
+            option.selected = true;
+        }
+        option.innerHTML = `${grupo.id_grupo}. ${grupo.nombre}`;
+        selectElement.append(option);
+    });
+}
+
 
 function pintSongbooksCheckboxEnBuscar(divElement){
     console.log('=== function pintSongbooksCheckboxEnBuscar() ===');
@@ -2543,6 +2579,7 @@ function resetBlockLista(){
     //arr_lista = [];//reset
 
     resetTrSelected(tbody_lista);//reseteo tr_selected de tbody_lista
+    resetPListaActive(eid_bl_listas_finded);//reseteo listas finded
 
     console.log('end func');
 }
@@ -2909,16 +2946,20 @@ async function guardarLista(event){
         const form_mensaje_lista = form_lista.querySelector('form .mensaje');
 
         let title = form_lista.querySelector('#title').value.trim();
+        let id_grupo = form_lista.querySelector('#id_grupo').value.trim();
         let fecha = form_lista.querySelector('#fecha').value;
         let notes = form_lista.querySelector('#notes').value.trim();
     
         let errors = [];
 
         if(title == ''){
-            errors.push('título de la lista');
+            errors.push('Título de la lista');
+        }
+        if(id_grupo == ''){
+            errors.push('Nombre de grupo que realiza el evento');
         }
         if(fecha == ''){
-            errors.push('fecha del evento');
+            errors.push('Fecha del evento');
         }
        
         if(errors.length > 0){
@@ -2926,7 +2967,7 @@ async function guardarLista(event){
             errors.forEach(error => {
                 error_text += ' - ' + error + '<br>';
             });            
-            form_mensaje_lista.innerHTML = `<span class="add_result add_error">Por favor, introduce: <br> ${error_text}</span>`;
+            form_mensaje_lista.innerHTML = `<span class="add_result add_error">Por favor, rellena los siguientes datos: <br> ${error_text}</span>`;
             form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             return;
         }
@@ -2967,11 +3008,12 @@ async function guardarLista(event){
 
         const objListaToSend = {
             id_lista: id_lista || null, //ya que se añade una nueva lista, no hay id_lista
-            title: title,
+            title,
+            id_grupo,
             arr_lista_ids: arr_lista_ids_str, //como STRING siempre aki
-            fecha: fecha,
+            fecha,
             fecha_ver: convertirFecha(fecha, 'ver','/'),
-            notes: notes,
+            notes,
         }
         console.log('objListaToSend: ',objListaToSend);
     
@@ -3125,7 +3167,8 @@ async function deleteLista(){
                 console.log('id_lista: ', data.id_lista);
 
                 //Elimino elemento tr de la tabla tbody con la cancion eliminada
-                tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).remove();
+                // tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).remove();
+                eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`).remove();
 
                 resetBlockLista();
                 contenedor_lista_sm.querySelector('.wr_btns_eliminar').remove();
@@ -3216,8 +3259,14 @@ function resetPSongActive(contenedor) {
     });
 }
 
-function resetPListaActive() {
-    document.querySelectorAll('.p_lista').forEach(p => {
+// function resetPListaFindedActive(contenedor) {
+//     contenedor.querySelectorAll('.p_lista').forEach(p => {
+//         p.classList.remove('active');
+//     });
+// }
+
+function resetPListaActive(contenedor) {
+    contenedor.querySelectorAll('.p_lista').forEach(p => {
         p.classList.remove('active');
     });
 }
@@ -3474,16 +3523,24 @@ async function findWordsSong(){
         const contenedor_filtro = eid_d_filter_results;
         const sp_icon_filtro = eid_sp_icon_filtro;
         const el_input = eid_inpt_filter;
-        const selector_items = '.tr_song';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        // const selector_items = '.tr_song';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        const selector_items = '.p_song';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const arr_spans = [
-            '.td_id_song',    
-            '.td_numero',    
-            '.td_titulo',    
-            '.td_esquema',    
-            '.td_category',    
-            '.td_songbook',    
-            '.td_idioma',  
-            '.td_tonalidad'
+            '.l_title',    
+            '.l_title2',    
+            '.l_title_note',    
+            '.l_id',    
+            '.l_idioma',    
+            '.l_tune',    
+            '.l_tune_transpose',    
+            // '.td_id_song',    
+            // '.td_numero',    
+            // '.td_titulo',    
+            // '.td_esquema',    
+            // '.td_category',    
+            // '.td_songbook',    
+            // '.td_idioma',  
+            // '.td_tonalidad'
         ];//se buscará texto en cada elemento de estos span's
         addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
 
@@ -3620,7 +3677,7 @@ async function findWordsSong(){
                         </span>
                     </span>
             
-                </span>            
+                </span>
             `;
 
             p_song.onclick = async (e) => {
@@ -3722,7 +3779,8 @@ async function findWordsLista(){
         objDataListas = structuredClone(objDataListasBd);
         console.log('objDataListas: ', objDataListas);
 
-        tbody_lista.innerHTML = '';//reset
+        //tbody_lista.innerHTML = '';//reset
+        eid_bl_listas_finded.innerHTML = '';//reset
 
         eid_titulo_tabla_lista.querySelector('b').style.display = 'inline';
         eid_titulo_tabla_lista.querySelector('b').textContent = objDataListas.arr_data.length;
@@ -3734,19 +3792,25 @@ async function findWordsLista(){
         const contenedor_filtro = eid_d_filter_results_lista;
         const sp_icon_filtro = eid_sp_icon_filtro_lista;
         const el_input = eid_inpt_filter_lista;
-        const selector_items = '.tr_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        // const selector_items = '.tr_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
+        const selector_items = '.p_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const arr_spans = [
-            '.td_id_lista',    
-            '.td_titulo',    
-            '.td_dia_semana',    
-            '.td_fecha',    
-            '.td_lista'
+            '.l_id_lista',    
+            '.cl_dia_semana',    
+            '.cl_fecha',    
+            '.cl_title',    
+            '.cl_grupo_nombre'
+            // '.td_id_lista',    
+            // '.td_titulo',    
+            // '.td_dia_semana',    
+            // '.td_fecha',    
+            // '.td_lista'
         ];//se buscará texto en cada elemento de estos span's
         addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
 
 
-
-
+        /*
+        //CREAR TABLA
         //Recorrer listas encontradas...
         objDataListas.arr_data.forEach((el, i, arr) => {
             console.log('el: ', el);
@@ -3800,6 +3864,102 @@ async function findWordsLista(){
 
             tbody_lista.append(tr_lista);
         });
+        */
+
+        //CREAR DIV'S Y P'S
+        //Recorrer listas encontradas...
+        objDataListas.arr_data.forEach((el, i, arr) => {
+            console.log('el: ', el);
+
+            const p_lista = document.createElement('p');
+            p_lista.className = 'p_lista lista_finded';
+            p_lista.dataset.id = el.id_lista;
+
+            let hay_lista_texto;
+            let cl_num_canciones;
+
+            //convierto arr_esquema (string) en array correcto
+            if(esString(el.arr_lista) && el.arr_lista != ''){
+                el.arr_lista = JSON.parse(el.arr_lista);
+                hay_lista_texto = `${el.arr_lista.length}`;//antes: canciones: 12
+                cl_num_canciones = '';
+            }
+            else if(esArray(el.arr_lista) && el.arr_lista.length > 0){
+                hay_lista_texto = `${el.arr_lista.length}`;//antes: canciones: 12
+                cl_num_canciones = '';
+            }
+            else{
+                el.arr_lista = [];
+                hay_lista_texto = '';
+                cl_num_canciones = 'd-none';
+            }
+            console.log('(parseado) --- el.arr_lista: ', el.arr_lista);            
+
+            let fecha_str = (el.fecha && el.fecha !== '0000-00-00') ? el.fecha : '' ;
+            let diaSemana_val = '';
+            let fecha_val = '';
+
+            if(fecha_str){
+                diaSemana_val = diaSemana(fecha_str);
+                fecha_val = convertirFecha(fecha_str, 'ver', '/');
+            }
+
+            // p_lista.innerHTML = `
+            //     <td class="td_n">${i + 1}</td>
+            //     <td class="td_id_lista" data-id_lista="${el.id_lista}" title="${el.id_lista}">${el.id_lista}</td>
+            //     <td class="td_titulo">${el.title}</td>
+            //     <td class="td_dia_semana">${diaSemana_val}</td>            
+            //     <td class="td_fecha">${fecha_val}</td>            
+            //     <td class="td_lista">${hay_lista_texto}</td>
+            // `;
+
+            let cl_title = (el.title) ? '' : 'd-none';//si no hay título, lo oculto 
+            let cl_grupo_nombre = (el.id_grupo > 0 && el.grupo_nombre != '') ? '' : 'd-none';//si no hay grupo, lo oculto 
+            let cl_notes = (el.notes) ? '' : 'd-none';//si no hay título, lo oculto 
+
+
+
+            p_lista.innerHTML = `
+                <span class="wn_2_flex">
+                    
+                    <span class="sp_flex_btns">
+                        <span class="l_id_lista solo_en_mobile">${el.id_lista}</span>            
+                        <span class="wr_parte_noid">  
+                            <span class="l_num_canciones ${cl_num_canciones}">${hay_lista_texto}</span>
+                        </span>
+                    </span>            
+            
+                    <span class="sp_flex_n_title"> 
+                        <span class="l_id_lista solo_en_desktop">${el.id_lista}</span>            
+                        <span class="l_title">
+
+                            <span class="wr_dia_y_fecha">
+                                <span class="cl_dia_semana cl_title_note $ {cl_fecha_val}">${diaSemana_val}</span>
+                                <span class="cl_fecha cl_title_note $ {cl_fecha_val}">${fecha_val || ''}</span>
+                            </span>
+
+                            <span class="cl_title ${cl_title}">${el.title || ''}</span>
+                            <span class="cl_grupo_nombre ${cl_grupo_nombre}">${el.grupo_nombre}</span>
+                            <span class="cl_title_note ${cl_notes}">${el.notes || ''}</span>
+                        </span>
+                    </span>
+            
+                </span>
+            `;
+
+            p_lista.onclick = (e) => {                
+                console.log('e.currentTarget: ', e.currentTarget);
+    
+                id_lista = e.currentTarget.dataset.id;
+                console.log('asigno global --- id_lista: ', id_lista);                
+                
+                pintListaActive();//en la ventana a la derecha de la tabla de lista
+            }
+
+            // tbody_lista.append(tr_lista);
+            eid_bl_listas_finded.append(p_lista);
+        });
+
     }else{
         console.log('no hay coincidencias...');
 
@@ -4324,7 +4484,7 @@ async function crearSlidesForSongOfLista(e, lista_id_song, cerrar_modales = true
     resetBlockEsquema();
     resetBlockCancion();
 
-    resetPListaActive();
+    resetPListaActive(lista_vista_lista_content);
 
     if(e instanceof Event) {
         console.log("Recibí un evento. e.type: ", e.type);
@@ -4373,7 +4533,7 @@ async function editSongOfLista(e, lista_id_song) {
     resetBlockEsquema();
     resetBlockCancion();
 
-    resetPListaActive();
+    resetPListaActive(lista_vista_lista_content);
     e.currentTarget.classList.add('active');
 
     id_song = lista_id_song;

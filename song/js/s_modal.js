@@ -972,6 +972,8 @@ function buildLista(lista_action = null){
 
     let id_lista_val = '';
     let title_val = '';
+    let id_grupo_val = '';
+    let grupo_nombre_val = '';
     let diaSemana_val = '';
     let fecha_val = fecha_hoy;
     let notes_val = '';
@@ -995,6 +997,8 @@ function buildLista(lista_action = null){
         } 
         id_lista_val = objLista.id_lista;
         title_val = objLista.title;
+        id_grupo_val = objLista.id_grupo;
+        grupo_nombre_val = objLista.grupo_nombre;
         diaSemana_val = diaSemana(objLista.fecha);
         // fecha_val = convertirFecha(objLista.fecha, 'ver', '/');
         fecha_val = objLista.fecha_ver;//formato ya desde bd '03/08/2025'
@@ -1073,8 +1077,9 @@ function buildLista(lista_action = null){
     contenedor_lista_sm.innerHTML = `                    
         <div class="parte_lista">
             <p class="p_sm ${cl_id_lista}">Id: <b>${id_lista_val}</b></p>
-            <p class="p_sm">Titulo: <b>${title_val}</b></p>
             <p class="p_sm">Fecha: <b>${diaSemana_val} ${fecha_val}</b></p>
+            <p class="p_sm">Titulo: <b>${title_val}</b></p>
+            <p class="p_sm">Grupo: <b>${id_grupo_val}. ${grupo_nombre_val}</b></p>
         </div>
         
         <!-- Aviso ordenar -->
@@ -1111,7 +1116,15 @@ function buildLista(lista_action = null){
                 <div class="form_group wr_title">
                     <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
                     <label for="title">Título de la lista</label>
-                </div>
+                </div>                
+                
+                <!-- Grupos -->
+                <div class="form_group wr_id_grupo">
+                    <select id="id_grupo" name="id_grupo" class="d_grupos_select sel_opt" required="">
+                        <!-- aki grupos -->
+                    </select>
+                    <label for="id_grupo">Nombre de grupo</label>
+                </div>                
 
                 <div class="form_group wr_fecha">
                     <input type="date" id="fecha" name="fecha" required="" placeholder=" " value="${fecha_val}">
@@ -1140,7 +1153,9 @@ function buildLista(lista_action = null){
         if(lista_action == 'ver'){
             makeInputsDisabled(contenedor, true);//deshabilito los inputs
         }
+        pintGruposOptionsEnSelect(contenedor.querySelector('.d_grupos_select'), id_grupo_val);//relleno select de grupos
     }
+
 
     if(lista_action == 'sort'){
         buildListaSort(contenedor.querySelector('.d_canciones_lista'), arr_lista_bucle); 
@@ -1720,6 +1735,53 @@ async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el
             console.log(`objSongbooksBd: `, objSongbooksBd);
 
             return objSongbooksBd;
+
+        }else{
+            console.log('success is false');
+            return 'no_hay_datos';
+        }
+
+    } catch (error) {
+        console.error('Error en getSongbooksFromBd(): error.message: ', error.message);
+    }
+}
+
+
+async function getGruposFromBd(){//sacar TODOS los grupos para rellenar el <select></select> de lista
+    console.log('=== function getGruposFromBd() ===');
+
+    try {
+        
+        // if(!hay_id_song('getDataSongFromBd()')){
+        //     return; // <- se detiene aquí si no hay id_song
+        // } 
+               
+        const response = await fetch('obtener_grupos_datos.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify({
+                tipo_consulta: 'todo'//sacar todos los datos
+            }), // Convertir los datos a formato JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener datos');
+        }
+
+        const data = await response.json();
+        //const data = await response.text();//test
+        console.log(data);  
+        
+        if(data.success){
+            console.log('success is true');
+            console.log(`data.arr_grupos: `, data.arr_grupos);
+            
+            objGruposBd = data.arr_grupos; //asigno a variable global
+            console.log(`objGruposBd: `, objGruposBd);
+
+            return objGruposBd;
 
         }else{
             console.log('success is false');

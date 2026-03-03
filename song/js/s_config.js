@@ -234,6 +234,7 @@ const eid_inpt_filter_lista = document.getElementById('inpt_filter_lista');
 
 const eid_titulo_tabla_lista = document.getElementById('titulo_tabla_lista');
 const tbody_lista = eid_block_lista.querySelector('.wr_tabla table tbody');
+const eid_bl_listas_finded = document.getElementById('bl_listas_finded');
 
 //bl_parte_r
 const lista_vista_lista_content = eid_block_lista.querySelector('.vista_lista_content');
@@ -487,6 +488,10 @@ let lista_id_song = null;//id de song clicked de la lista actual
 
 let objSongbooksBd = {};//datos de BD de todos songbooks
 let objSongbooks = {};//datos de todos songbooks
+let arr_songbooks = [];//? no sé si hace falta...
+
+let objGruposBd = {};//datos de BD de todos grupos de una iglesia
+let objGrupos = {};//datos de todos grupos
 
 
 let obj_lang_names = {

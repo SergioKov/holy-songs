@@ -91,31 +91,31 @@ $arr_campos = [];
 switch ($buscar_en) {
     case '1'://Todos los campos por defecto disponibles - (rápido)
     default:
-        $arr_campos = ['id_lista', 'title', 'notes', 'fecha'];
+        $arr_campos = ['l.id_lista', 'l.title', 'l.id_grupo', 'g.nombre', 'l.notes', 'l.fecha'];
         break;
 
     case '2'://Todos los campos disponibles, los títulos de canciones incluidos - (lento)
-        $arr_campos = ['id_lista', 'title', 'notes', 'fecha'];
+        $arr_campos = ['l.id_lista', 'l.title', 'l.notes', 'l.fecha'];
         break;
     
     case '3'://Todos los campos de texto disponibles
-        $arr_campos = ['title', 'notes'];
+        $arr_campos = ['l.title', 'l.notes'];
         break;
 
     case '4'://Sólo el título de lista
-        $arr_campos = ['title'];
+        $arr_campos = ['l.title'];
         break;
 
     case '5'://Sólo las notas de lista
-        $arr_campos = ['notes'];
+        $arr_campos = ['l.notes'];
         break;
 
     case '6'://Sólo el identificador de lista
-        $arr_campos = ['id_lista'];
+        $arr_campos = ['l.id_lista'];
         break;
 
     case '7'://Sólo la fecha de lista
-        $arr_campos = ['fecha'];
+        $arr_campos = ['l.fecha'];
         break;
 }
 
@@ -128,16 +128,20 @@ $where = buildWhere($modo, $words_input, $arr_campos, $params, $types, $arr_song
 
 //test modos de where
 $sql_init = "SELECT 
-                id_lista, 
-                title,
-                notes,
-                arr_lista_ids,
-                fecha,
-                created_at,
-                updated_at 
-            FROM listas
+                l.id_lista, 
+                l.title,
+                l.id_grupo,
+                g.nombre AS grupo_nombre,
+                l.notes,
+                l.arr_lista_ids,
+                l.fecha,
+                l.created_at,
+                l.updated_at 
+            FROM listas l
+            LEFT JOIN grupos g 
+                ON g.id_grupo = l.id_grupo
             WHERE $where
-            ORDER BY fecha DESC, id_lista DESC, title ASC
+            ORDER BY l.fecha DESC, l.id_lista DESC, l.title ASC, g.nombre ASC
 ";
 
 // Si quieres ver la consulta “final” (sólo para debug, no ejecutar así en producción):
@@ -245,6 +249,8 @@ if($result->num_rows > 0){
             'success' => true,
             'id_lista' => $row['id_lista'],
             'title' => $row['title'],
+            'id_grupo' => $row['id_grupo'],
+            'grupo_nombre' => $row['grupo_nombre'],
             'notes' => $row['notes'],
             'arr_lista' => $arr_lista_from_table_songs_ordenado,
             'arr_lista_ids' => $row['arr_lista_ids'],

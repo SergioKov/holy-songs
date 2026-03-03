@@ -1695,7 +1695,12 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                     <div class="wr_tabla">
                                                         <div class="wr_tabla_inner">
 
-                                                            <table>
+                                                            <div id="bl_listas_finded" class="canciones_body">
+                                                                <!-- aki los p de listas encontradas-->
+                                                            </div><!--/.canciones_body-->
+
+
+                                                            <table style="display: none;">
                                                                 <thead>
                                                                     <tr>
                                                                         <th class="td_n">Nº</th>

@@ -77,15 +77,18 @@ $id_lista = $conn->real_escape_string($datos['id_lista']);//aki importante
 //busco si hay registro
 // Preparar y ejecutar la consulta
 $sql_init = "SELECT
-                id_lista, 
-                title, 
-                notes, 
-                arr_lista_ids, 
-                fecha, 
-                created_at, 
-                updated_at
-            FROM listas
-            WHERE id_lista = '$id_lista'
+                l.id_lista, 
+                l.title, 
+                l.id_grupo, 
+                g.nombre AS grupo_nombre, 
+                l.notes, 
+                l.arr_lista_ids, 
+                l.fecha, 
+                l.created_at, 
+                l.updated_at
+            FROM listas l
+                LEFT JOIN grupos g ON l.id_grupo = g.id_grupo 
+            WHERE l.id_lista = '$id_lista'
 ";
 //-- AND id_lista = '$id_lista'
 //$sql_prep = "SELECT $campo 
@@ -160,6 +163,8 @@ if($result->num_rows > 0){
         'success' => true,
         'id_lista' => $row['id_lista'],
         'title' => $row['title'],
+        'id_grupo' => $row['id_grupo'],
+        'grupo_nombre' => $row['grupo_nombre'],
         'notes' => $row['notes'],
         'arr_lista' => $arr_lista_from_table_songs_ordenado,
         'arr_lista_ids' => $row['arr_lista_ids'],

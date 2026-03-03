@@ -716,9 +716,10 @@ legend, span.barra, p.b {
     color: #909090;
 }
 
-span.barra {
+span.repryza {
     font-family: fantasy;
-} 
+    color: #909090;
+}
 
 fieldset.kuplet{
     border: none;
@@ -1640,6 +1641,7 @@ textarea:not(:placeholder-shown) + label
 .wr_tipo_acorde,
 .wr_tipo_fuente,
 .wr_tempo_bpm,
+.wr_id_grupo,
 .wr_lang
  {
     /* background: red; */
@@ -1813,6 +1815,10 @@ p.p_lista:hover
     background: #494949;
 }
 
+p.lista_finded {
+    background: #333333;
+}
+
 .p_song.active, 
 .p_lista.active 
 {
@@ -1820,6 +1826,12 @@ p.p_lista:hover
     /* box-shadow: 0 0 10px 5px white; */
     background: #b00707;
 }
+.p_song.active:hover, 
+.p_lista.active:hover 
+{
+    background: #be3131;
+}
+
 .p_song.active .l_n,
 .p_song.active .l_title,
 .p_lista.active .l_n,
@@ -1857,6 +1869,61 @@ p.p_lista:hover
     opacity: 1;
     /* background: white; */
     /* color: black; */
+}
+
+.l_id_lista {
+    /* background: darkred; */
+    /* color: grey; */
+    /* min-width: 56px; */
+    font-style: italic;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 5px;
+    display: flex;
+    align-content: center;
+    padding: 2px 4px;
+    cursor: pointer;
+    border: 2px solid white;
+    border-radius: 5px;
+    margin-right: 6px;
+    opacity: 0.5;
+    color: white;
+    transition: background-color 0.3s ease, opacity 0.3s ease, color 0.3s ease;
+}
+.l_id_lista:hover {
+    opacity: 1;
+    /* background: white; */
+    /* color: black; */
+}
+
+.wr_dia_y_fecha {
+    /* background: #FFC107; */
+    display: flex;
+    gap: 5px 10px;
+    justify-content: space-between;
+    /* flex-direction: column; */
+    max-width: 140px;
+}
+.l_num_canciones {
+    background: #000000;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 2px solid white;
+    padding: 2px 4px;
+    display: block;
+    /* width: 36px; */
+    /* height: 36px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    font-size: 0.8rem;
+    opacity: 0.4;
+}
+.cl_grupo_nombre {
+    color: #fac77b;
 }
 
 .l_title {
@@ -2391,6 +2458,7 @@ p.p_sm b {
 
 .wr_checkboxes input[type="checkbox"] {
     width: auto;
+    margin-left: 10px;
 }
 
 
@@ -3414,12 +3482,22 @@ span.sp_number {
 
 
 
+.sp_add_a_lista {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #737373;
+}
 .n_lista{
     float:right;
 }
+
 .title_lista {
-    border-top: 1px solid #737373;
-    padding-top: 5px;
+    /* border-top: 1px solid #737373; */
+    /* padding-top: 5px; */
+}
+.grupo_lista {
+    /* border-top: 1px solid #737373; */
+    /* padding-top: 5px; */
+    color: grey;
 }
 
 
