@@ -125,6 +125,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $arr_lista_ids_array = json_decode($datos['arr_lista_ids'], true);//'true' obligatorio ya que 'JSON_UNESCAPED_UNICODE' se usa con json_encode
     $notes  = $conn->real_escape_string($datos['notes']);//get parameter   
     
+    //variables de busqueda
+    $title_search = normalizeSearchText($title ?? '');
+    
+    if($notes){
+        $title_search .= ' __|__ ' . normalizeSearchText($notes ?? '');
+    }
+
 
     //debug($title);
     //debug($arr, 'arr');
@@ -171,6 +178,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $action_tipo = 'is_update_arr_lista_ok';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
+                    title_search = '$title_search',
                     id_grupo = '$id_grupo',
                     arr_lista_ids = '$arr_lista_ids_string',
                     notes = '$notes',
@@ -182,6 +190,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $action_tipo = 'is_update_arr_lista_vacio';
             $sql2_up_init = "UPDATE listas SET
                     title = '$title',
+                    title_search = '$title_search',
                     id_grupo = '$id_grupo',
                     arr_lista_ids = '',
                     notes = '$notes',
@@ -208,6 +217,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_in_init = "INSERT INTO listas 
                     (
                         title,
+                        title_search,
                         id_grupo,
                         arr_lista_ids,
                         fecha,
@@ -217,6 +227,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 VALUES 
                     (
                         '$title',
+                        '$title_search',
                         '$id_grupo',
                         '$arr_lista_ids_string',
                         '$fecha',
@@ -229,6 +240,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $sql2_in_init = "INSERT INTO listas 
                     (
                         title,
+                        title_search,
                         id_grupo,
                         fecha,
                         notes,
@@ -237,6 +249,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 VALUES 
                     (
                         '$title',
+                        '$title_search',
                         '$id_grupo',
                         '$fecha',
                         '$notes',

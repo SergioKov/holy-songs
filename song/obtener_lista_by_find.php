@@ -91,15 +91,15 @@ $arr_campos = [];
 switch ($buscar_en) {
     case '1'://Todos los campos por defecto disponibles - (rápido)
     default:
-        $arr_campos = ['l.id_lista', 'l.title', 'l.id_grupo', 'g.nombre', 'l.notes', 'l.fecha'];
+        $arr_campos = ['l.id_lista', 'l.title', 'l.title_search', 'l.id_grupo', 'g.nombre', 'l.notes', 'l.fecha'];
         break;
 
     case '2'://Todos los campos disponibles, los títulos de canciones incluidos - (lento)
-        $arr_campos = ['l.id_lista', 'l.title', 'l.notes', 'l.fecha'];
+        $arr_campos = ['l.id_lista', 'l.title', 'l.title_search', 'l.notes', 'l.fecha'];
         break;
     
     case '3'://Todos los campos de texto disponibles
-        $arr_campos = ['l.title', 'l.notes'];
+        $arr_campos = ['l.title', 'l.title_search', 'l.notes'];
         break;
 
     case '4'://Sólo el título de lista
@@ -130,6 +130,7 @@ $where = buildWhere($modo, $words_input, $arr_campos, $params, $types, $arr_song
 $sql_init = "SELECT 
                 l.id_lista, 
                 l.title,
+                l.title_search,
                 l.id_grupo,
                 g.nombre AS grupo_nombre,
                 l.notes,

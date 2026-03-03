@@ -992,6 +992,8 @@ h5 {
 .texto_pre {
     white-space: pre;
     font-weight: bolder;
+    font-family: monospace;
+    font-size: 1.4rem;
 }
 
 

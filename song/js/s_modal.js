@@ -578,6 +578,8 @@ function buildFormCancion(contenedor, cancion_action = null){
                                 <select id="${id_vstavka}tune" name="tune" class="sel_opt" required="">
                                     <option value="" disabled selected hidden></option>
 
+                                    <option></option><!--tonalidad sin asignar-->
+
                                     <option>C</option>
                                     <option>Cm</option>
                                     <option>C#</option>

@@ -3744,7 +3744,8 @@ async function findWordsLista(){
     console.log('=== async function findWordsLista() ===');
     console.time('time_findWordsLista');
     
-    let words_input = eid_inpt_find_lista.value.trim();
+    let words_input_trimed = eid_inpt_find_lista.value.trim();
+    let words_input = normalizeSearchText(words_input_trimed);//quito espacios duplicados, puntuacion, tildes etc...
     let modo = eid_modo_lista.value;
     let buscar_en = eid_buscar_en_lista.value;
     console.log('--- words_input: ', words_input);
@@ -3966,12 +3967,17 @@ async function findWordsLista(){
 
         eid_sp_icon_filtro_lista.classList.remove('d-none');//oculto el boton de filtro ya que no hay nada para filtrar
 
-        tbody_lista.innerHTML = `
-            <tr>
-                <td colspan="6" class="td_no_data">
-                    <p class="prim">No se encontraron listas con la frase: "<b>${words_input}</b>"</p>
-                </td>
-            </tr>
+        // tbody_lista.innerHTML = `
+        //     <tr>
+        //         <td colspan="6" class="td_no_data">
+        //             <p class="prim">No se encontraron listas con la frase: "<b>${words_input}</b>"</p>
+        //         </td>
+        //     </tr>
+        // `;
+
+        //new
+        eid_bl_listas_finded.innerHTML = `
+            <p class="prim">No se encontraron listas con la frase: "<b>${words_input_trimed}</b>"</p>
         `;
     }
 
