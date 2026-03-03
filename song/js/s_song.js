@@ -3091,6 +3091,7 @@ async function guardarLista(event){
                     
                     //pinto datos de bd
                     form_lista.querySelector('#title').value = objLista.title;
+                    form_lista.querySelector('#id_grupo').value = objLista.id_grupo;
                     form_lista.querySelector('#fecha').value = objLista.fecha;
                     form_lista.querySelector('#notes').value = objLista.notes;
                 }
@@ -3934,13 +3935,13 @@ async function findWordsLista(){
                         <span class="l_title">
 
                             <span class="wr_dia_y_fecha">
-                                <span class="cl_dia_semana cl_title_note $ {cl_fecha_val}">${diaSemana_val}</span>
-                                <span class="cl_fecha cl_title_note $ {cl_fecha_val}">${fecha_val || ''}</span>
+                                <span class="cl_dia_semana cl_title_note">${diaSemana_val}</span>
+                                <span class="cl_fecha cl_title_note">${fecha_val || ''}</span>
                             </span>
 
                             <span class="cl_title ${cl_title}">${el.title || ''}</span>
                             <span class="cl_grupo_nombre ${cl_grupo_nombre}">${el.grupo_nombre}</span>
-                            <span class="cl_title_note ${cl_notes}">${el.notes || ''}</span>
+                            <span class="cl_notes cl_title_note ${cl_notes}">${el.notes || ''}</span>
                         </span>
                     </span>
             

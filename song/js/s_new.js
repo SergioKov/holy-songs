@@ -346,6 +346,13 @@ function pintListaActiveSoloDatos(){
         p_lista.querySelector('.cl_dia_semana').textContent = diaSemana(objLista.fecha) || '';
         p_lista.querySelector('.cl_fecha').textContent = objLista.fecha_ver || '';
         p_lista.querySelector('.l_num_canciones').textContent = (objLista.arr_lista.length > 0) ? objLista.arr_lista.length :  '';
+        p_lista.querySelector('.cl_notes').textContent = objLista.notes || '';
+
+        if(objLista.notes != ''){//muestro
+            p_lista.querySelector('.cl_notes').classList.remove('d-none');//quito clase para mostrar nota si la hay
+        }else{//oculto
+            p_lista.querySelector('.cl_notes').classList.add('d-none');//añado clase para ocultar nota
+        }
     }
     
     if(btn_add_lista){        
