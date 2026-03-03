@@ -350,10 +350,15 @@ function pintListaActiveSoloDatos(){
     
     if(btn_add_lista){        
         //Actualizo datos de tr_lista
-        btn_add_lista.querySelector('.fecha_lista').innerHTML = `${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}`;
-        btn_add_lista.querySelector('.title_lista').textContent = objLista.title || '';
-        btn_add_lista.querySelector('.grupo_lista ').textContent = `${objLista.grupo_nombre}` || '';
+        const fecha_lista = btn_add_lista.querySelector('.fecha_lista');
+        const title_lista = btn_add_lista.querySelector('.title_lista');
+        const grupo_lista = btn_add_lista.querySelector('.grupo_lista');
 
+        if(fecha_lista && title_lista && grupo_lista){
+            fecha_lista.innerHTML = `${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}`;
+            title_lista.textContent = objLista.title || '';
+            grupo_lista.textContent = `${objLista.grupo_nombre}` || '';
+        }
     }
 
     // //Actualizo parte derecha

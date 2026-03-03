@@ -3474,7 +3474,9 @@ span.sp_number {
 
 
 
-.btn_add_lista {
+.btn_add_lista,
+.wr_datos_lista
+{
     display: flex;
     gap: 5px;
     flex-direction: column;
@@ -3508,7 +3510,7 @@ span.sp_number {
 
 .fecha_lista{
     color:grey;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
 }
 
 

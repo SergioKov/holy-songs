@@ -4327,6 +4327,23 @@ function addToLista(){
     //compruebo si ya está id_song enla lista
     let hay_en_la_lista = arr_lista.some(s => s.id_song == objSong.id_song);
 
+    
+
+    let datos_lista_html;
+    if(id_lista){
+        datos_lista_html = `
+            <div class="wr_datos_lista">
+                <span class="sp_add_a_lista">Lista: <b class="n_lista">${objLista.id_lista}</b></span>
+                <span class="fecha_lista">${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}</span>
+                <span class="title_lista">${objLista.title}</span>
+                <span class="grupo_lista">${objLista.grupo_nombre}</span>
+            </div>
+        `;
+    }else{
+        datos_lista_html = '';
+    }
+
+
     let aviso_text;
     let text_song_datos = `
         <br>
@@ -4359,6 +4376,7 @@ function addToLista(){
     const contenedor_lista_sm = document.createElement('div');
     contenedor_lista_sm.id = 'contenedor_lista_sm';
     contenedor_lista_sm.innerHTML = `
+        ${datos_lista_html}
         <div class="parte_lista">
             <p class="p_aviso">${aviso_text}</p>
             <p class="p_aviso d-none">${text_song_datos}</p>
