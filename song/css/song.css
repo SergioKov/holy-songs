@@ -1611,7 +1611,7 @@ input, textarea, select {
     width: 100%;
     padding: 12px;
     /* font-size: 16px; */
-    font-size: 100%;
+    /* font-size: 100%; */
     font-family: monospace;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -1619,8 +1619,13 @@ input, textarea, select {
     transition: border-color 0.3s ease;
     resize: none; /* Para evitar que el usuario cambie el tamaÃ±o del textarea */
 }
+
+input, select {
+    font-size: 80%;
+}
 textarea {
     min-height: auto; /* Esto deja que el atributo rows controle la altura mÃ­nima */
+    font-size: 100%;
 }
 
 label {
@@ -2118,6 +2123,7 @@ p.lista_finded {
     align-items: center;
     gap: 5px;
     cursor: pointer;
+    font-size: 1rem;
 }
 
 .sp_canciones{
@@ -2875,7 +2881,7 @@ p.p_sm b {
     gap: 10px;
     justify-content: space-between;
     margin-bottom: 0px;
-    align-items: center;
+    align-items: flex-start;
 }
 .btn_actions {
     padding: 0;
@@ -3478,6 +3484,7 @@ span.sp_number {
     padding: 5px;
     padding: 5px 5px 5px 10px;
     cursor: pointer;
+    font-size: 1rem;
 }
 .wr_detalles_body {
     display: none;
@@ -3574,7 +3581,11 @@ span.sp_number {
 
 .btns_fx {
     display: flex;
-    gap: 5px;
+    gap: 5px 15px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 

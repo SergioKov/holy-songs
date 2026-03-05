@@ -3119,8 +3119,12 @@ function changeFontSize(step) {
     const elementsAll = document.querySelectorAll(elementSelectors);
     elementsAll.forEach(el => {
         console.log('el: ', el);
-        let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
-        el.style.fontSize = (curFont + step) + 'px';
+        if(step == 0){
+            el.style.fontSize = '';//vuelvo al tamaño original quitando el style
+        }else{
+            let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
+            el.style.fontSize = (curFont + step) + 'px';
+        }
         console.log('fin el: ', el);
     });
 }

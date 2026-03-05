@@ -1340,12 +1340,17 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                 <h4 class="h4_vista_previa">
                                                     <span>Vista previa:</span>
                                                     <span class="btns_fx">
-                                                        <button class="btn" onclick="changeFontSize(-1)">A-</button>
-                                                        <button class="btn" onclick="changeFontSize(1)">A+</button>
-                                                        <button class="btn" onclick="makeColumns(1)">|</button>
-                                                        <button class="btn" onclick="makeColumns(2)">||</button>
-                                                        <button class="btn" onclick="makeColumns(3)">|||</button>
-                                                        <button class="btn" onclick="makeColumns(4)">||||</button>
+                                                        <span>
+                                                            <button class="btn" onclick="changeFontSize(-1)">A-</button>
+                                                            <button class="btn" onclick="changeFontSize(0)">A</button>
+                                                            <button class="btn" onclick="changeFontSize(1)">A+</button>
+                                                        </span>
+                                                        <span>
+                                                            <button class="btn" onclick="makeColumns(1)">|</button>
+                                                            <button class="btn" onclick="makeColumns(2)">||</button>
+                                                            <button class="btn" onclick="makeColumns(3)">|||</button>
+                                                            <button class="btn" onclick="makeColumns(4)">||||</button>
+                                                        </span>
                                                     </span>
                                                 </h4>
                                             </div><!--/.parte_fija-->                                        

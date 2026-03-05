@@ -115,6 +115,10 @@
         max-width: 100%;
     }
 
+    .btns_fx {
+        flex-direction: column;
+    }
+
 }
 
 
