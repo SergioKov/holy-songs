@@ -519,9 +519,18 @@ function handleFormInput(e, container_block){
     let arr_esquema = Object.keys(obj_bloques);
 
     //const vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');//antes
-    const vista_blocks = container_block.querySelector('.wr_vista_blocks');
-    vista_blocks.innerHTML = '';//reset
+    // const vista_blocks = container_block.querySelector('.wr_vista_blocks');
+    let vista_blocks;
+    
+    if(container_block == eid_block_cancion){//en cancion hay posibilidad mostraren varia columnas
+        console.log('es este bloque');
+        vista_blocks = container_block.querySelector('.wr_vista_blocks .contenedor');
+    }else{//otros
+        vista_blocks = container_block.querySelector('.wr_vista_blocks');
+    }
 
+    vista_blocks.innerHTML = '';//reset
+    
 
     //Recorrer el bucle - partes de song...
     arr_esquema.forEach( (titulo, i, arr) => {
@@ -534,6 +543,7 @@ function handleFormInput(e, container_block){
         console.log('slide_clone: ', slide_clone);  
                 
         vista_blocks.append(slide_clone.querySelector('fieldset'));
+        //vista_blocks.querySelector('.contenedor').append(slide_clone.querySelector('fieldset'));
     });
 
     pintParrafosAcordes();
@@ -609,8 +619,12 @@ function filtrarLista(contenedor_filtro, sp_icon_filtro, el_input, selector_item
     let filter = el_input.value.toLowerCase().trim();
     console.log('filter: ', filter);
 
+    // buscar varias palabras a la vez separadas por espacio ej:
+    // 'titulo autor' y se buscan ambas cosas aunque no estén juntas
+    // Evita problemas con espacios dobles.
+    let arr_filter = filter.split(/\s+/).filter(Boolean);
 
-    // Obtén todos los elementos 'li' o 'cl_trans' de la lista, donde buscar
+    // Obtén todos los elementos 'li' o 'cl_trans' o 'p_lista' de la lista, donde buscar
     let items = document.querySelectorAll(selector_items);//son los 'p' o 'tr' donde está el texto
     //console.log('items: ', items);
 
@@ -618,25 +632,32 @@ function filtrarLista(contenedor_filtro, sp_icon_filtro, el_input, selector_item
 
     // Recorre todos los elementos 'li' de la lista.
     for (let i = 0; i < items.length; i++) {
+        
+        let matchFound = false;
         let item = items[i];
         //console.log('an item: ', item);
 
-        let matchFound = false;
+        const selectorTodosSpans = arr_spans.join(',');//ej: '.sp_titulo, .sp_autor, .sp_otros'
+        let spans = item.querySelectorAll(selectorTodosSpans);//elementos de DOM
 
         // Recorre los spans dentro del 'li'
-        for (let j = 0; j < arr_spans.length; j++) {
+        for (let j = 0; j < spans.length; j++) {
             // let spanText = spans[j].textContent.toLowerCase();//antes
-            let span_buscado = item.querySelector(arr_spans[j]);
-            if(span_buscado == null){
-                continue;
-            }
-            //console.log(span_buscado);
+            let span_buscado = spans[j];//siempre será elemento que existe ya que .querySelectorAll(selectorTodosSpans) me da todos los que existen
+            console.log('span_buscado: ', span_buscado);
 
             let spanText = span_buscado.textContent.toLowerCase();
-            //console.log('spanText: ', spanText);                        
-
+            
+            // ignorar spans vacíos
+            if(!spanText){
+                continue;
+            }
+            //console.log('spanText: ', spanText); 
+            
+            
+            // coincidencia OR (cualquiera de las palabras)
             // Si alguno de los span contiene el valor del filtro, muestra el 'li'.
-            if (spanText.includes(filter)) {
+            if (arr_filter.some(word => spanText.includes(word))) {
                 matchFound = true;
                 //console.log(`[IF] - OK - el texto '${filter}' se ha encontrado en el span_buscado: `, span_buscado);
                 break; // Si se encuentra una coincidencia, no es necesario revisar más spans.

@@ -1339,6 +1339,14 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <div class="parte_fija">
                                                 <h4 class="h4_vista_previa">
                                                     <span>Vista previa:</span>
+                                                    <span class="btns_fx">
+                                                        <button class="btn" onclick="changeFontSize(-1)">A-</button>
+                                                        <button class="btn" onclick="changeFontSize(1)">A+</button>
+                                                        <button class="btn" onclick="makeColumns(1)">|</button>
+                                                        <button class="btn" onclick="makeColumns(2)">||</button>
+                                                        <button class="btn" onclick="makeColumns(3)">|||</button>
+                                                        <button class="btn" onclick="makeColumns(4)">||||</button>
+                                                    </span>
                                                 </h4>
                                             </div><!--/.parte_fija-->                                        
 
@@ -1347,7 +1355,9 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                 <div id="tema_block" class="bloques_outer tema_white">
                                                     <div class="bloques wr_vista_blocks">
                                                         <!-- aki vista previa -->
-                                                        ...
+                                                        <div class="contenedor">
+                                                            <!-- aki los fieldset -->
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div><!--/.parte_variable-->

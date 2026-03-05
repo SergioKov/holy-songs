@@ -149,139 +149,209 @@ function pintSongActiveSoloDatos(){
     const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');//busco las palabras del input
     console.log('regex: ', regex);
 
-    let vista_html = '';
-
-    if(objSong.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objSong.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Título Canción:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-    }
-
-    if(objSong.title2){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo2_text_red = objSong.title2.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Coro u otro título:</p>
-            <p class="texto_norm t_big">${titulo2_text_red}</p>
-        `;
-    }
-
-    if(objSong.title_note){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_note_text_red = objSong.title_note.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        vista_html += `
-            <p class="p_titulo">Nota al título:</p>
-            <p class="texto_norm t_big">${titulo_note_text_red}</p>
-        `;
-    }
-
+    let cl_campo_title = 'd-none';
+    let cl_campo_title2 = 'd-none';
+    let cl_campo_title_note = 'd-none';
+    
+    let content_id_song = '';
+    let content_title = '';
+    let content_title2 = '';
+    let content_title_note = '';
+    
     if(objSong.id_song){
         //Marco en rojo las palabras encontradas en title 
         let id_song_text_red = objSong.id_song.toString().replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-
-        vista_html += `
-            <p class="p_titulo">Id:</p>
-            <p class="texto_norm t_big">${id_song_text_red}</p>
-        `;
+        content_id_song = id_song_text_red;
     }
 
+    if(objSong.title){
+        cl_campo_title = '';//muestro
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_text_red = objSong.title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        content_title = titulo_text_red;
+    }
+
+    if(objSong.title2){
+        cl_campo_title2 = '';//muestro
+        //Marco en rojo las palabras encontradas en title 
+        let titulo2_text_red = objSong.title2.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        content_title2 = titulo2_text_red;
+    }
+
+    if(objSong.title_note){
+        cl_campo_title_note = '';//muestro
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_note_text_red = objSong.title_note.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        content_title_note = titulo_note_text_red;
+    }
+
+    const titulo_detalles = document.createElement('div');
+    titulo_detalles.className = 's_detalles';
+    titulo_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('s_titulo_detalles');">
+            Canción <span class="f_r">${content_id_song}</span>
+        </p>    
+        <p id="s_titulo_detalles" class="texto_norm t_big" style="display: block;">
+            <span class="detalles_inner">
+                <span class="linea_fx ${cl_campo_title}">
+                    <span class="cl_campo">Título:</span>
+                    <span>${content_title}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_title2}">
+                    <span class="cl_campo">Título2:</span>
+                    <span>${content_title2}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_title_note}">
+                    <span class="cl_campo">T. nota:</span>
+                    <span>${content_title_note}</span>
+                </span>
+            </span><!--/.detalles_inner-->
+        </p>
+    `;
+
+    let cl_campo_song_number = 'd-none';
+    let cl_campo_category_name = 'd-none';
+    let cl_campo_songbook_title = 'd-none';
+    
+    let content_song_number = '';
+    let content_category_name = '';
+    let content_songbook_title = '';
+
     if(objSong.song_number){
+        cl_campo_song_number = '';//muestro
         //Marco en rojo las palabras encontradas en title 
         let song_number_text_red = objSong.song_number.toString().replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-
-        vista_html += `
-            <p class="p_titulo">Número:</p>
-            <p class="texto_norm t_big">${song_number_text_red}</p>
-        `;
+        content_song_number = song_number_text_red;
     }
 
     if(objSong.category_name){
+        cl_campo_category_name = '';//muestro
         //Marco en rojo las palabras encontradas en title 
         let category_name_text_red = objSong.category_name.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-        vista_html += `
-            <p class="p_titulo">Categoría:</p>
-            <p class="texto_norm t_big">${objSong.category + '. ' + category_name_text_red}</p>
-        `;
+        content_category_name = objSong.category + '. ' + category_name_text_red;
     }
 
     if(objSong.songbook_title){
+        cl_campo_songbook_title = '';//muestro
         //Marco en rojo las palabras encontradas en title 
         let songbook_title_text_red = objSong.songbook_title.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-        vista_html += `
-            <p class="p_titulo">Songbook:</p>
-            <p class="texto_norm t_big">${objSong.songbook + '. ' + songbook_title_text_red}</p>
-        `;
+        content_songbook_title = objSong.songbook + '. ' + songbook_title_text_red;
     }
 
+    const otros_detalles = document.createElement('div');
+    otros_detalles.className = 's_detalles';
+    otros_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('s_otros_detalles');">Detalles</p>
+        <p id="s_otros_detalles" class="texto_norm t_big" style="display: block;">
+            <span class="detalles_inner">            
+                <!-- aki van los otros datos -->
+                <span class="linea_fx ${cl_campo_song_number}">
+                    <span class="cl_campo">Número:</span>
+                    <span>${content_song_number}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_category_name}">
+                <span class="cl_campo">Categoría:</span>
+                    <span>${content_category_name}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_songbook_title}">
+                    <span class="cl_campo">Songbook:</span>
+                    <span>${content_songbook_title}</span>
+                </span>
+            </span><!--/.detalles_inner-->
+        </p>
+    `;
+
+    let cl_campo_song_text = 'd-none';    
+    let content_song_text = '';
+
     if(objSong.song_text){
+        cl_campo_song_text = '';//muestro
         //Marco en rojo las palabras encontradas en song_text 
         let song_text_red = objSong.song_text.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-        vista_html += `
-            <p class="p_titulo">Texto:</p>
-            <div class="texto_pre">${song_text_red}</div>
-        `;
+        content_song_text = song_text_red;
     }
 
-    //añado contenedor para d_esquema
-    vista_html += `
-        <div class="d_esquema_titulos"></div>
+    const texto_detalles = document.createElement('div');
+    texto_detalles.className = 's_detalles';
+    texto_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('s_texto_detalles');">Texto</p>
+        <div id="s_texto_detalles" style="display: block;">
+            <div class="texto_pre">${content_song_text}</div>
+        </div>
     `;
 
+
+    const d_esquema_titulos = document.createElement('div');
+    d_esquema_titulos.className = 'd_esquema_titulos';
+
+    let cl_campo_notes = 'd-none';
+    let cl_campo_url_recurso = 'd-none';
+    
+    let content_notes = '';
+    let content_url_recurso = '';
+
     if(objSong.notes){
+        cl_campo_notes = '';//muestro
         //Marco en rojo las palabras encontradas en notes 
         let notas_text_red = objSong.notes.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-        vista_html += `
-            <p class="p_titulo">Notas:</p>
-            <p class="texto_norm">${notas_text_red}</p>
-        `;
+        content_notes = notas_text_red;
     }
 
+    if(objSong.url_recurso){
+        cl_campo_url_recurso = '';//muestro
+        //Marco en rojo las palabras encontradas en notes 
+        let url_recurso_text_red = objSong.url_recurso.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        content_url_recurso = url_recurso_text_red;
+    }
 
-    // if(objSong.arr_esquema.length > 0){
-    //     vista_html += `
-    //         <p class="p_titulo">Esquema:</p>
-    //     `;
-    //     objSong.arr_esquema.forEach( (item, i)=>{
-    //         if(i != 0){
-    //             vista_html += `
-    //                 <p class="texto_norm linea">
-    //                     <span class="titulo">(${item.nombre})</span> 
-    //                     ${ (item.veces > 1) ?  '<span class="puntos"></span> <span class="veces">(x' + item.veces + ')</span>' : '' }
-    //                 </p>
-    //             `;
-    //         }
-    //     });
-    // }else{
-    //     vista_html += `
-    //         <p class="p_titulo">Esquema:</p>
-    //         <p class="texto_norm">No</p>
-    //     `;
-    // }
+    const notes_detalles = document.createElement('div');
+    notes_detalles.className = 's_detalles';
+    notes_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('s_notes_detalles');">Notas</p>
+        <p id="s_notes_detalles" class="texto_norm t_big" style="display: block;">
+            <span class="detalles_inner">            
+                <!-- aki van los notes datos -->
+                <span class="linea_fx ${cl_campo_notes}">
+                    <span class="cl_campo">Apuntes:</span>
+                    <span>${content_notes}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_url_recurso}">
+                    <span class="cl_campo">Recurso:</span>
+                    <span>${content_url_recurso}</span>
+                </span>
+            </span><!--/.detalles_inner-->
+        </p>
+    `;
 
-    buscar_vista_song_content.innerHTML = vista_html;
 
-    //Construllo titulos de esquema después de añadir vista_html al DOM
+    //añado al DOM
+    buscar_vista_song_content.append(titulo_detalles);
+    buscar_vista_song_content.append(otros_detalles);
+    buscar_vista_song_content.append(texto_detalles);
+    buscar_vista_song_content.append(d_esquema_titulos);
+    buscar_vista_song_content.append(notes_detalles);
+
+    //Construyo titulos de esquema después de añadir d_esquema_titulos al DOM
     buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 }
 
@@ -391,21 +461,13 @@ function pintListaActiveSoloDatos(){
     const regex = new RegExp(`(${arr_normalized.join('|')})`, 'gi');
     console.log('regex: ', regex);
 
-    //Titulo lista
-    if(objLista.title){
-        //Marco en rojo las palabras encontradas en title 
-        let titulo_text_red = objLista.title.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
 
-        const d_titulo = document.createElement('div');
-        d_titulo.className = 'parte_lista';
-        d_titulo.innerHTML = `
-            <p class="p_titulo">Título Lista:</p>
-            <p class="texto_norm t_big">${titulo_text_red}</p>
-        `;
-        lista_vista_lista_content.append(d_titulo);
-    }
+    let cl_campo_title = 'd-none';
+    
+    let content_id_lista = '';
+    let content_title = '';
+    let content_fecha = '';
+    let content_grupo = '';
 
     //id lista
     if(objLista.id_lista){
@@ -413,18 +475,36 @@ function pintListaActiveSoloDatos(){
         let id_lista_text_red = objLista.id_lista.toString().replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-
         const d_id_lista = document.createElement('div');
         d_id_lista.className = 'parte_lista';
         d_id_lista.innerHTML = `
             <p class="p_titulo">Id:</p>
             <p class="texto_norm t_big">${id_lista_text_red}</p>
         `;
-        lista_vista_lista_content.append(d_id_lista);
+        //lista_vista_lista_content.append(d_id_lista);
+        content_id_lista = id_lista_text_red;
+    }
+
+    //Titulo lista
+    if(objLista.title){
+        cl_campo_title = '';//muestro
+        //Marco en rojo las palabras encontradas en title 
+        let titulo_text_red = objLista.title.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        const d_titulo = document.createElement('div');
+        d_titulo.className = 'parte_lista';
+        d_titulo.innerHTML = `
+            <p class="p_titulo">Título Lista:</p>
+            <p class="texto_norm t_big">${titulo_text_red}</p>
+        `;
+        //lista_vista_lista_content.append(d_titulo);
+        content_title = titulo_text_red;
     }    
 
     //Fecha
     if(objLista.fecha && objLista.fecha != '0000-00-00'){
+        cl_campo_fecha = '';//muestro
         //Marco en rojo las palabras encontradas en title 
         //En BD busco '2025-08-03' 
         //pero como el formato para mostrar es '03/08/2025'
@@ -446,29 +526,62 @@ function pintListaActiveSoloDatos(){
             <p class="p_titulo">Fecha:</p>
             <p class="texto_norm t_big">${fecha_text_red}</p>
         `;
-        lista_vista_lista_content.append(d_fecha);
+        //lista_vista_lista_content.append(d_fecha);
+        const fecha_html = `
+            <span class="wr_dia_y_fecha">
+                <span class="cl_dia_semana cl_title_note">${diaSemana(objLista.fecha)}</span>
+                <span class="cl_fecha cl_title_note">${fecha_text_red}</span>
+            </span>`;
+        // content_fecha = diaSemana(objLista.fecha) + ' ' + fecha_text_red;
+        content_fecha = fecha_html;
     }
 
     //Grupo lista
     if(objLista.id_grupo){
+        cl_campo_grupo = '';//muestro
         //Marco en rojo las palabras encontradas en title 
         let grupo_nombre_text_red = objLista.grupo_nombre.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
         });
-
         const d_titulo = document.createElement('div');
         d_titulo.className = 'parte_lista';
         d_titulo.innerHTML = `
             <p class="p_titulo">Grupo que realiza el evento:</p>
             <p class="texto_norm t_big">${grupo_nombre_text_red}</p>
         `;
-        lista_vista_lista_content.append(d_titulo);
-    }    
+        //lista_vista_lista_content.append(d_titulo);
+        content_grupo = grupo_nombre_text_red;
+    }
+    
+    
+    const titulo_detalles = document.createElement('div');
+    titulo_detalles.className = 's_detalles';
+    titulo_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('l_titulo_detalles');">
+            Lista <span class="f_r">${content_id_lista}</span>
+        </p>    
+        <p id="l_titulo_detalles" class="texto_norm t_big" style="display: block;">
+            <span class="detalles_inner">
+                <span class="linea_fx ${cl_campo_title}">
+                    <span class="cl_campo">Título:</span>
+                    <span>${content_title}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_fecha}">
+                    <span class="cl_campo">Fecha:</span>
+                    <span>${content_fecha}</span>
+                </span>
+                <span class="linea_fx ${cl_campo_grupo}">
+                    <span class="cl_campo">Grupo:</span>
+                    <span>${content_grupo}</span>
+                </span>
+            </span><!--/.detalles_inner-->
+        </p>
+    `;
 
     //Canciones
     const d_canciones_lista = document.createElement('div');
     d_canciones_lista.className = 'd_canciones_lista parte_lista';
-    lista_vista_lista_content.append(d_canciones_lista);    
+    //lista_vista_lista_content.append(d_canciones_lista);    
     
     arr_lista = objLista.arr_lista;//importante. reasigno desde bd
     console.log('arr_lista: ', arr_lista);
@@ -478,7 +591,14 @@ function pintListaActiveSoloDatos(){
 
     buildListaSoloSongs(d_canciones_lista, arr_lista_bd);
 
+
+
+
+    let cl_campo_notes = 'd-none';
+    let content_notes = '';
+
     if(objLista.notes){
+        cl_campo_notes = '';//muestro
         //Marco en rojo las palabras encontradas en notes 
         let notas_text_red = objLista.notes.replace(regex, (x) => {
             return `<b class="c_red">${x}</b>`;
@@ -489,8 +609,28 @@ function pintListaActiveSoloDatos(){
             <p class="p_titulo">Notas:</p>
             <p class="texto_norm">${notas_text_red}</p>
         `;
-        lista_vista_lista_content.append(d_notas);
+        //lista_vista_lista_content.append(d_notas);
+        content_notes = notas_text_red;
     }
+
+    const notes_detalles = document.createElement('div');
+    notes_detalles.className = `s_detalles ${cl_campo_notes}`;
+    notes_detalles.innerHTML = `
+        <p class="p_titulo" onclick="hideShowBlock('l_notes_detalles');">Notas</p>
+        <p id="l_notes_detalles" class="texto_norm t_big" style="display: block;">
+            <span class="detalles_inner">            
+                <span class="linea_fx ${cl_campo_notes}">
+                    <span class="cl_campo">Apuntes:</span>
+                    <span>${content_notes}</span>
+                </span>
+            </span><!--/.detalles_inner-->
+        </p>
+    `;
+
+    //añado al DOM
+    lista_vista_lista_content.append(titulo_detalles);
+    lista_vista_lista_content.append(d_canciones_lista);
+    lista_vista_lista_content.append(notes_detalles);
 }
 
 
@@ -2964,4 +3104,23 @@ function normalizeSearchText(text) {
         // 8) normalizar espacios
         .replace(/\s+/g, ' ')
         .trim();
+}
+
+
+function makeColumns(num){
+    if(num > 4) return;
+    eid_block_cancion.querySelector('.contenedor').style.columnCount = num;
+}
+
+
+function changeFontSize(step) {
+    step = parseInt(step, 10);
+    const elementSelectors = '#cancion_song_bloques, .wr_vista_blocks .contenedor';
+    const elementsAll = document.querySelectorAll(elementSelectors);
+    elementsAll.forEach(el => {
+        console.log('el: ', el);
+        let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
+        el.style.fontSize = (curFont + step) + 'px';
+        console.log('fin el: ', el);
+    });
 }

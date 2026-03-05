@@ -2552,7 +2552,8 @@ function resetBlockCancion(){
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
 
     cancion_song_bloques.innerHTML = '...';//muestro '...'
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    // cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset  
 }
 
@@ -3797,11 +3798,12 @@ async function findWordsLista(){
         // const selector_items = '.tr_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const selector_items = '.p_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const arr_spans = [
-            '.l_id_lista',    
+            '.l_id_lista.solo_en_mobile',//para que busque solo en 1 y no 2 que son iguales
             '.cl_dia_semana',    
             '.cl_fecha',    
             '.cl_title',    
-            '.cl_grupo_nombre'
+            '.cl_grupo_nombre',
+            '.cl_notes'
             // '.td_id_lista',    
             // '.td_titulo',    
             // '.td_dia_semana',    
@@ -4047,7 +4049,8 @@ async function nueva_song(){
     ocultarElementosEditablesEn(cancion_option_inner);
     mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
 
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    // cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
@@ -4111,7 +4114,8 @@ function ver_song(){
     eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');    
 
 
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    //cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
@@ -4179,29 +4183,40 @@ function editar_song(){
     eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
 
 
-    cancion_wr_vista_blocks.innerHTML = '...';//reset
+    // cancion_wr_vista_blocks.innerHTML = '...';//reset
+    cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '';//reset
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
-    const wr_dbtn_fullscreen = document.createElement('div');
-    wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen';
-    wr_dbtn_fullscreen.innerHTML = `
-        <div class="dbtn_fullscreen">
-            <img src="/song/images/fullscreen.png">
-        </div>
-    `;
-    wr_dbtn_fullscreen.onclick = (e)=> {
-        //e.stopPropagation();
-        if(e.target.closest('.dbtn_fullscreen')){
-            btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
-            console.log('2. btnFullscreenActive: ', btnFullscreenActive);
-            toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
+    const elemento_fullscreen = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen');
+    //si no hay boton de fullscreen, lo creo
+    if(!elemento_fullscreen){
+        const wr_dbtn_fullscreen = document.createElement('div');
+        wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen';
+        wr_dbtn_fullscreen.innerHTML = `
+            <div class="dbtn_fullscreen">
+                <img src="/song/images/fullscreen.png">
+            </div>
+        `;
+        wr_dbtn_fullscreen.onclick = (e)=> {
+            //e.stopPropagation();
+            if(e.target.closest('.dbtn_fullscreen')){
+                btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
+                console.log('2. btnFullscreenActive: ', btnFullscreenActive);
+                toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
+            }
         }
+        // cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
+        cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
+    }else{
+        //ya está creado elemento fullscreen, no hago nada...
     }
 
-    cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
+    
+
+    
 
     cancion_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
@@ -4558,8 +4573,17 @@ async function editSongOfLista(e, lista_id_song) {
     resetBlockEsquema();
     resetBlockCancion();
 
-    resetPListaActive(lista_vista_lista_content);
-    e.currentTarget.classList.add('active');
+    if(e instanceof Event) {
+        console.log("Recibí un evento. e.type: ", e.type);
+        resetPListaActive(lista_vista_lista_content);
+        e.target.closest('.p_lista').classList.add('active');
+    }
+
+    if(e instanceof HTMLElement) {
+        console.log("Recibí un element. e.type: ", e.type);
+        resetPListaActive(lista_vista_lista_content);
+        e.classList.add('active');
+    }
 
     id_song = lista_id_song;
     console.log('lista_id_song: ', lista_id_song);

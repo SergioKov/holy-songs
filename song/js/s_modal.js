@@ -1175,7 +1175,7 @@ function buildLista(lista_action = null){
 
 
 
-function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
+function buildListaSoloSongs(contenedor, arr_lista_bucle){
     console.log('=== function buildListaSoloSongs() ===');
 
     contenedor.innerHTML = '';//reset - SIEMPRE
@@ -1189,32 +1189,37 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span class="sp_canciones">Canciones:</span>
+            <span>Canciones</span>
+            <div class="btns_fx">
+                <button class="btn btn_action_ordenar">Ordenar</button>
+                <button class="btn btn_action_editar">Editar</button>
+            </div>
         `;
+        d_canciones_head.onclick = (e) => {
+            e.preventDefault();
+            console.log('click en d_canciones_head');
+    
+            if(e.target.closest('.btn_action_ordenar')){
+                openModal('full','Ordenar lista',null,'buildLista',true, 'sort');
+            }
+            else if(e.target.closest('.btn_action_editar')){
+                openModal('full','Editar lista',null,'buildLista',true, 'editar');
+            }else{
+                hideShowBlock('l_canciones_detalles');
+            }
+        }
         wr_p_lista.append(d_canciones_head);
 
-        if(!sort){
-            const btn_action_ordenar = document.createElement('button');
-            btn_action_ordenar.className = 'btn btn_action_ordenar';
-            btn_action_ordenar.textContent = 'Ordenar';
-            btn_action_ordenar.onclick = () => {
-                openModal('full','Ordenar lista',null,'buildLista',true, 'sort');
-            }        
-            d_canciones_head.append(btn_action_ordenar);
 
-            const btn_action_editar = document.createElement('button');
-            btn_action_editar.className = 'btn btn_action_editar';
-            btn_action_editar.textContent = 'Editar';
-            btn_action_editar.onclick = () => {
-                openModal('full','Editar lista',null,'buildLista',true, 'editar');
-            }        
-            d_canciones_head.append(btn_action_editar);
-        }
+        //Body - Detalles
+        const l_canciones_detalles = document.createElement('div');
+        l_canciones_detalles.id = 'l_canciones_detalles';
+        wr_p_lista.append(l_canciones_detalles);
 
         //Body
         const d_canciones_body = document.createElement('div');
         d_canciones_body.className = 'canciones_body';
-        wr_p_lista.append(d_canciones_body);
+        l_canciones_detalles.append(d_canciones_body);
 
 
         //Recorrer array
@@ -1258,6 +1263,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
             
             p_lista.onclick = (e) => {
                 lista_id_song = e.currentTarget.dataset.id_song;
+                const element_clicked = e.currentTarget;// guardar referencia real del evento (aki e.currentTarget es p_lista)
                 console.log('lista_id_song: ', lista_id_song);
 
                 if(e.target.classList.contains('btn_song_x')){
@@ -1294,8 +1300,8 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
                     
                     //llamo async autoejecutable ya que en editSongOfLista() hay awaits a la bd
                     (async () => {
-                        await editSongOfLista(e, lista_id_song);
-                    })(e);
+                        await editSongOfLista(element_clicked, lista_id_song);
+                    })();
 
                 }else{
                     
@@ -1310,9 +1316,35 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle, sort = false){
 
                     console.log('Editar canción de la lista. id_song: ', lista_id_song);
                     e.stopPropagation();//evita que se dispare el onclick del padre
+
+                    if(window.innerWidth < pantallaTabletMinPx){//mobile
+                        const element_this = eid_block_cancion.querySelector('.v_lcr_r');//btn vista derecha
+                        clickLCR(element_this,'r','block_cancion');
+                    }
+                    
+                    // //funcion anónima autoejecutable para esperar un tiempo antes de ejecutar editSongOfLista() y así evitar errores de carga de datos al ir a vista mobile (slide_select) y luego editar canción
+                    // (async (e) =>{
+                    //     await sleep(5000);
+                    // })(e);
+
                     //llamo async autoejecutable ya que en editSongOfLista() hay awaits a la bd
-                    (async () => {
-                        await editSongOfLista(e, lista_id_song);
+                    (async (e) => {
+                        //await sleep(5000);                        
+                        
+                        await editSongOfLista(element_clicked, lista_id_song);
+                        
+                        //await sleep(5000);  
+
+                        // if(window.innerWidth < pantallaTabletMinPx){//mobile
+                        //     const element_this = eid_block_cancion.querySelector('.v_lcr_r');//btn vista derecha
+                        //     clickLCR(element_this,'r','block_cancion');
+                        // }
+                        
+                        //alert('1. ahra click en fullscreen para ver los cambios al instante');
+                        
+                        //await sleep(5000);
+                        //alert('2. ahra click en fullscreen para ver los cambios al instante');
+
                         eid_block_cancion_body.querySelector('.wr_vista_blocks .dbtn_fullscreen').click();//para ir a fullscreen
                     })(e);
                 }
@@ -1385,8 +1417,8 @@ function buildEsquemaSoloTitulos(contenedor, arr_esquema_bucle){
     const d_esquema_head = document.createElement('div');
     d_esquema_head.className = 'esquema_head';
     d_esquema_head.innerHTML = `
-        <span>Esquema:</span>
-        <div>
+        <span>Esquema</span>
+        <div class="btns_fx">
             <button class="btn btn_ver_esquema">Ver</button>
             <button class="btn btn_crear_esquema">Editar</button>
         </div>
@@ -1399,19 +1431,25 @@ function buildEsquemaSoloTitulos(contenedor, arr_esquema_bucle){
             showEdit('esquema');
             showVklad(e.currentTarget,'ver_esquema');
         }
-        
-        if(e.target.closest('.btn_crear_esquema')){
+        else if(e.target.closest('.btn_crear_esquema')){
             showEdit('esquema');
             showVklad(e.currentTarget,'crear_esquema');
+        }else{
+            hideShowBlock('s_esquema_detalles');
         }
     }
     wr_p_esquema.append(d_esquema_head);
 
 
+    //Body - Detalles
+    const s_esquema_detalles = document.createElement('div');
+    s_esquema_detalles.id = 's_esquema_detalles';
+    wr_p_esquema.append(s_esquema_detalles);
+    
     //Body
     const d_esquema_body = document.createElement('div');
     d_esquema_body.className = 'canciones_body';
-    wr_p_esquema.append(d_esquema_body);
+    s_esquema_detalles.append(d_esquema_body);
 
     if(Array.isArray(arr_esquema_bucle) && arr_esquema_bucle.length > 0){
 
@@ -1497,31 +1535,39 @@ function buildListaSort(contenedor, arr_lista_bucle){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span class="sp_canciones">Canciones:</span>
+            <span>Canciones</span>
+            <div class="btns_fx">
+                <button class="btn btn_action_ver">Ver</button>
+                <button class="btn btn_action_editar">Editar</button>
+            </div>
         `;
-        wr_p_lista.append(d_canciones_head);
-        
-        const btn_action_ver = document.createElement('button');
-        btn_action_ver.className = 'btn btn_action_ver';
-        btn_action_ver.textContent = 'Ver';
-        btn_action_ver.onclick = () => {
-            openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');
-        }        
-        d_canciones_head.append(btn_action_ver);
+        d_canciones_head.onclick = (e) => {
+            e.preventDefault();
+            console.log('click en d_canciones_head');
+    
+            if(e.target.closest('.btn_action_ver')){
+                openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');
+            }
+            else if(e.target.closest('.btn_action_editar')){
+                openModal('full','Editar lista',null,'buildLista',true, 'editar');
+            }else{
+                hideShowBlock('ls_canciones_detalles');
+            }
+        }
+        wr_p_lista.append(d_canciones_head);       
 
-        const btn_action_editar = document.createElement('button');
-        btn_action_editar.className = 'btn btn_action_editar';
-        btn_action_editar.textContent = 'Editar';
-        btn_action_editar.onclick = () => {
-            openModal('full','Editar lista',null,'buildLista',true, 'editar');
-        }        
-        d_canciones_head.append(btn_action_editar);
+
+
+        //Body - Detalles
+        const ls_canciones_detalles = document.createElement('div');
+        ls_canciones_detalles.id = 'ls_canciones_detalles';
+        wr_p_lista.append(ls_canciones_detalles);
 
         //Body
         const d_canciones_body = document.createElement('div');
         d_canciones_body.id = 'd_canciones_body_drag';
         d_canciones_body.className = 'canciones_body';
-        wr_p_lista.append(d_canciones_body);
+        ls_canciones_detalles.append(d_canciones_body);
 
 
         //Recorrer array
