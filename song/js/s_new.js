@@ -3125,6 +3125,6 @@ function changeFontSize(step) {
             let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
             el.style.fontSize = (curFont + step) + 'px';
         }
-        console.log('fin el: ', el);
+        //console.log('fin el: ', el);
     });
 }
