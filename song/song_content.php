@@ -1339,7 +1339,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <div class="parte_fija">
                                                 <h4 class="h4_vista_previa">
                                                     <span>Vista previa:</span>
-                                                    <span class="btns_fx">
+                                                    <span class="btns_fx" style="display:none;">
                                                         <span>
                                                             <button class="btn" onclick="changeFontSize(-1)">A-</button>
                                                             <button class="btn" onclick="changeFontSize(0)">A</button>

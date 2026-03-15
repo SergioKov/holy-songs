@@ -1119,6 +1119,12 @@ function buildLista(lista_action = null){
                     <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
                     <label for="title">Título de la lista</label>
                 </div>                
+                <div class="form_group">
+                    <span>Недільне служіння</span>
+                    <span>Молитва</span>
+                    <span>Молодіжне служіння</span>
+                    <span>Розбір слова</span>
+                </div>                
                 
                 <!-- Grupos -->
                 <div class="form_group wr_id_grupo">

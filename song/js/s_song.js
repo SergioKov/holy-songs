@@ -4194,8 +4194,29 @@ function editar_song(){
     //si no hay boton de fullscreen, lo creo
     if(!elemento_fullscreen){
         const wr_dbtn_fullscreen = document.createElement('div');
-        wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen';
+        wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen vista_menu';
         wr_dbtn_fullscreen.innerHTML = `
+            <div id="btn_menu_font_size" class="shown" onclick="hideShowFontMenu();">
+                <img src="/song/images/menu32x32_3_black.png">
+            </div>
+
+            <div class="outer_wr">
+                <div class="wr_btns_f_inner">
+                    <div class="d_cat">            
+                        <button class="btn" onclick="changeFontSize(-1)">A-</button>
+                        <button class="btn" onclick="changeFontSize(0)">A</button>
+                        <button class="btn" onclick="changeFontSize(1)">A+</button>
+                    </div>
+                    <div class="d_cat">
+                        <button class="btn" onclick="makeColumns(1)">|</button>
+                        <button class="btn" onclick="makeColumns(2)">||</button>
+                        <button class="btn" onclick="makeColumns(3)">|||</button>
+                        <button class="btn" onclick="makeColumns(4)">||||</button>  
+                    </div>
+                </div>
+            </div>
+        
+        
             <div class="dbtn_fullscreen">
                 <img src="/song/images/fullscreen.png">
             </div>
@@ -4258,6 +4279,17 @@ function editar_song(){
     console.log('fin');    
 }
 
+
+function hideShowFontMenu(){
+    const menu_font_size = cancion_wr_vista_blocks.querySelector('#btn_menu_font_size');
+    const wr_btns_f_inner = cancion_wr_vista_blocks.querySelector('.wr_btns_f_inner');
+
+    if(wr_btns_f_inner.classList.contains('shown')){
+        wr_btns_f_inner.classList.remove('shown');
+    }else{
+        wr_btns_f_inner.classList.add('shown');
+    }
+}
 
 
 

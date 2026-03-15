@@ -3115,7 +3115,10 @@ function makeColumns(num){
 
 function changeFontSize(step) {
     step = parseInt(step, 10);
-    const elementSelectors = '#cancion_song_bloques, .wr_vista_blocks .contenedor';
+    const elementSelectors = `
+        #cancion_song_bloques, #block_cancion .wr_vista_blocks .contenedor
+    `;
+
     const elementsAll = document.querySelectorAll(elementSelectors);
     elementsAll.forEach(el => {
         console.log('el: ', el);
