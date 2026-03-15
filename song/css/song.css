@@ -3670,7 +3670,7 @@ span.sp_number {
     gap: 35px;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: stretch;
     /* left: 0; */
     left: -25%;
     transition: 0.3s ease;

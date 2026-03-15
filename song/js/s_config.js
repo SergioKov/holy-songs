@@ -677,3 +677,5 @@ let miVentanaRemota = null;
 
 let variable = 555;
 
+let acordesVisible = true;//se ven acordes por defecto
+let textoVisible = true;//se ve el texto por defecto

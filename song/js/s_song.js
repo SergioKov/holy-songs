@@ -4213,6 +4213,14 @@ function editar_song(){
                         <button class="btn" onclick="makeColumns(3)">|||</button>
                         <button class="btn" onclick="makeColumns(4)">||||</button>  
                     </div>
+                    <div class="d_cat">
+                        <button id="btn_state_acordes" class="btn" onclick="toggleAcordes()">
+                            <img src="/song/images/music_note_on32x32.png">
+                        </button>
+                        <button id="btn_state_texto" class="btn" onclick="toggleTexto()">
+                            <img src="/song/images/text_on32x32.png">
+                        </button>
+                    </div>
                 </div>
             </div>
         
@@ -4291,6 +4299,34 @@ function hideShowFontMenu(){
     }
 }
 
+
+function toggleAcordes() {
+    const btn_state_acordes = cancion_wr_vista_blocks.querySelector('#btn_state_acordes');
+
+    if (acordesVisible) {
+        ocultarAcordes('#tema_block');
+        btn_state_acordes.querySelector('img').src = "/song/images/music_note_off32x32.png";
+    } else {
+        mostrarAcordes('#tema_block');
+        btn_state_acordes.querySelector('img').src = "/song/images/music_note_on32x32.png";
+    }
+
+    acordesVisible = !acordesVisible;
+}
+
+function toggleTexto() {
+    const btn_state_text = cancion_wr_vista_blocks.querySelector('#btn_state_texto');
+
+    if (textoVisible) {
+        ocultarTexto('#tema_block');
+        btn_state_text.querySelector('img').src = "/song/images/text_off32x32.png";
+    } else {
+        mostrarTexto('#tema_block');
+        btn_state_text.querySelector('img').src = "/song/images/text_on32x32.png";
+    }
+
+    textoVisible = !textoVisible;
+}
 
 
 function eliminar_song(){
