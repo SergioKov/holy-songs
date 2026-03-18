@@ -188,26 +188,40 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                         
                         <!--.bl_head-->
                         <div class="bl_head">
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar" title="Buscar">
-                                <!--Buscar-->
-                                <img class="btn_img" src="./images/search_zoom_icon_white.svg">
-                            </div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
-                                <!--Esquema-->
-                                <img class="btn_img" src="./images/esquema_512x512_white.png">
-                            </div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
-                                <!--Canción-->
-                                <img class="btn_img" src="./images/song_512x512_white.png">
-                            </div>
-                            <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo" title="Ejemplo">
-                                <!--Ejemplo-->
-                                <img class="btn_img" src="./images/help_512x512_white.png">
-                            </div>
-                            <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
-                                <!--Lista-->
-                                <img class="btn_img" src="./images/playlist3_512x512_white.png">
-                            </div>
+                            
+                            <!--.bl_head_l-->
+                            <div class="bl_head_l">
+                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar" title="Buscar">
+                                    <!--Buscar-->
+                                    <img class="btn_img" src="./images/search_zoom_icon_white.svg">
+                                </div>
+                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
+                                    <!--Esquema-->
+                                    <img class="btn_img" src="./images/esquema_512x512_white.png">
+                                </div>
+                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
+                                    <!--Canción-->
+                                    <img class="btn_img" src="./images/song_512x512_white.png">
+                                </div>
+                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo" title="Ejemplo">
+                                    <!--Ejemplo-->
+                                    <img class="btn_img" src="./images/help_512x512_white.png">
+                                </div>
+                                <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
+                                    <!--Lista-->
+                                    <img class="btn_img" src="./images/playlist3_512x512_white.png">
+                                </div>
+                            </div><!--/.bl_head_l-->
+
+                            <!--.bl_head_r-->
+                            <div class="bl_head_r">
+                                <div class="dbtn dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="login" title="Login">
+                                    <!--Lista-->
+                                    <img class="btn_img" src="./images/login2_white.svg">
+                                </div>
+                            </div><!--/.bl_head_r-->
+
+
                         </div><!--/.bl_head-->
                         
                         <!--.bl_body-->

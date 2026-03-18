@@ -850,8 +850,19 @@ legend span {
 
 .bl_head {
     display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+.bl_head_l {
+    display: flex;
     gap: 3px;
     justify-content: flex-start;
+    overflow-x: auto;
+}
+.bl_head_r {
+    display: flex;
+    gap: 3px;
+    justify-content: flex-end;
     overflow-x: auto;
 }
 .bl_body {
@@ -3655,28 +3666,32 @@ span.sp_number {
 .outer_wr {
     display: flex;
     justify-content: flex-start;
-    width: 100%;
+    /* width: 100%; */
     position: absolute;
-    top: 10px;
-    left: 0;
-}
-.wr_btns_f_inner {
-    background: #93939361;
-    padding: 5px;
-    top: 20px;
-    position: relative;
-    opacity: 0.3;
-    display: flex;
-    gap: 35px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
+    top: 40px;
     /* left: 0; */
     left: -25%;
     transition: 0.3s ease;
-    /* font-size: 22px; */
 }
-.wr_btns_f_inner.shown {
+.wr_btns_f_inner {
+    background: #00000054;
+    padding: 5px;
+    top: 0px;
+    position: relative;
+    /* opacity: 0.53; */
+    display: flex;
+    gap: 35px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    left: 0;
+    /* left: -25%; */
+    transition: 0.3s ease;
+    overflow: auto;
+    height: 50vh;
+}
+
+.outer_wr.shown {
     /* opacity: 1; */
     left: 0;
 }
@@ -3689,4 +3704,9 @@ span.sp_number {
 
 .d_cat .btn {
     padding: 15px;
+}
+
+#btn_state_acordes img,
+#btn_state_texto img{
+    filter: invert(100%);
 }

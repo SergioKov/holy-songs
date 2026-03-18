@@ -4290,12 +4290,18 @@ function editar_song(){
 
 function hideShowFontMenu(){
     const menu_font_size = cancion_wr_vista_blocks.querySelector('#btn_menu_font_size');
-    const wr_btns_f_inner = cancion_wr_vista_blocks.querySelector('.wr_btns_f_inner');
+    //const wr_btns_f_inner = cancion_wr_vista_blocks.querySelector('.wr_btns_f_inner');
+    const outer_wr = cancion_wr_vista_blocks.querySelector('.outer_wr');
 
-    if(wr_btns_f_inner.classList.contains('shown')){
-        wr_btns_f_inner.classList.remove('shown');
+    // if(wr_btns_f_inner.classList.contains('shown')){
+    //     wr_btns_f_inner.classList.remove('shown');
+    // }else{
+    //     wr_btns_f_inner.classList.add('shown');
+    // }
+    if(outer_wr.classList.contains('shown')){
+        outer_wr.classList.remove('shown');
     }else{
-        wr_btns_f_inner.classList.add('shown');
+        outer_wr.classList.add('shown');
     }
 }
 
