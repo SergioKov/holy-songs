@@ -3116,7 +3116,7 @@ function makeColumns(num){
 function changeFontSize(step) {
     step = parseInt(step, 10);
     const elementSelectors = `
-        #cancion_song_bloques, #block_cancion .wr_vista_blocks .contenedor
+        /*#cancion_song_bloques, #block_cancion*/ .wr_vista_blocks .contenedor
     `;
 
     const elementsAll = document.querySelectorAll(elementSelectors);

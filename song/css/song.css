@@ -3451,14 +3451,15 @@ span.sp_number {
 
 
 .wr_dbtn_fullscreen {
-    /* background: red; */
+    /* background: #ff00007d; */
     position: sticky;
-    top: 10px;
+    top: 0;
     right: 10px;
     display: flex;
     justify-content: flex-end;
     width: 100%;
     z-index: 9;
+    padding: 5px;
 }
 .vista_menu {
     display: flex;
@@ -3477,7 +3478,7 @@ span.sp_number {
 .dbtn_fullscreen {
     position: sticky;
     top: 10px;
-    right: 10px;
+    right: 5px;
     background: white;
     padding: 5px;
     opacity: 0.2;
@@ -3485,6 +3486,7 @@ span.sp_number {
     border: 1px solid grey;
     height: 32px;
     width: 32px;
+    cursor: pointer;
 }
 .dbtn_fullscreen img {
     width: 20px;
@@ -3645,15 +3647,22 @@ span.sp_number {
 
 
 #btn_menu_font_size {
+    /* background: grey; */
     position: relative;
-    top: -5px;
-    left: -4px;
-    padding: 5px;
+    top: 0px;
+    left: 0px;
+    /* padding: 5px 10px 7px; */
     transition: left 0.3s ease;
     cursor: pointer;
-    /* background: grey; */
     opacity: 0.3;
     z-index: 10;
+    /* border: 1px solid #e6e6e6; */
+    width: 32px;
+    height: 32px;
+    display: flex;
+    /* padding: 2px; */
+    align-items: center;
+    justify-content: center;
 }
 #btn_menu_font_size .hamburger span {
     background-color: #989898;
@@ -3663,15 +3672,27 @@ span.sp_number {
     height: 22px;
 }
 
+#btn_menu_font_size .hamburger {
+    /* background: #000000; */
+    cursor: pointer;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    /* opacity: 0.6; */
+    transition: 0.3s ease;
+}
+
 .outer_wr {
     display: flex;
     justify-content: flex-start;
-    /* width: 100%; */
     position: absolute;
-    top: 40px;
-    /* left: 0; */
-    left: -25%;
+    top: 42px;
+    left: -100%;
     transition: 0.3s ease;
+    width: 100%;
+    height: 100vh;
+    /* height: calc(100vh - 42px); */
+    /* top: 0; */
 }
 .wr_btns_f_inner {
     background: #00000054;
@@ -3694,6 +3715,7 @@ span.sp_number {
 .outer_wr.shown {
     /* opacity: 1; */
     left: 0;
+    /* background: #80808078; */
 }
 
 .d_cat {
@@ -3709,4 +3731,80 @@ span.sp_number {
 #btn_state_acordes img,
 #btn_state_texto img{
     filter: invert(100%);
+}
+
+
+
+
+
+.wr_di_bem {
+    background: #dddddd;
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    align-content: stretch;
+    flex-direction: row;
+    gap: 5px;
+    border-radius: 5px;
+    color: black;
+}
+.wr_di_bem .dbtn {
+    background: #dddddd;
+    padding: 3px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #666666;
+}
+.wr_di_bem .dbtn.active{
+    background: #ff1100;
+    color:white;
+}
+.lab_di_bem {
+    position: absolute;
+    top: -27%;
+    font-size: 12px;
+    color: #4CAF50;
+}
+
+.outer_wr_fast_words {
+    background: #dddddd;
+    /* overflow: hidden; */
+    display: flex;
+    /* gap: 5px; */
+    align-items: center;
+    justify-content: space-between;
+}
+.wr_fast_words {
+    display: flex;
+    gap: 10px;
+    /* background: #dddddd; */
+    padding: 5px;
+    overflow-y: auto;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.wr_fast_words span {
+    background: #000000;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: #c0c0c0;
+    cursor: pointer;
+}
+.back_word {
+    padding: 2px 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#tema_block .bloques {
+    padding: 0;
 }

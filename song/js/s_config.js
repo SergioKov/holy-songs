@@ -185,6 +185,7 @@ const form = eid_block_cancion.querySelector('form');
 
 //bl_parte_r
 const cancion_wr_vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');
+const cancion_tema_block = eid_block_cancion.querySelector('#tema_block');
 //========================================================//
 //end - block_cancion
 //========================================================//
@@ -332,6 +333,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Solo',
     'Pre-Bridge',
     'Pre Bridge',
+    'Instrumantal',
     'Bridge',
     'Outro',
     'Ending',
@@ -351,6 +353,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Solo',
     'Pre-Puente',
     'Pre Puente',
+    'Instrumental',
     'Puente',
     'Outro',
     'Final',
@@ -369,6 +372,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Програш',
     'Перед Брідж',
     'Брідж',
+    'Інструментал',
     'Міст',
     'Кінцівка',
     'Кода',
@@ -386,6 +390,7 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Проигрыш',
     'Пред Бридж',
     'Бридж',
+    'Инструментал',
     'Мост',
     'Концовка',
     'Кода',

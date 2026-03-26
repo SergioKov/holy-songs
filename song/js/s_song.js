@@ -4197,7 +4197,12 @@ function editar_song(){
         wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen vista_menu';
         wr_dbtn_fullscreen.innerHTML = `
             <div id="btn_menu_font_size" class="shown" onclick="hideShowFontMenu();">
-                <img src="/song/images/menu32x32_3_black.png">
+                <img class="d-none" src="/song/images/menu32x32_3_black.png">
+                <div id="hamburger2" class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
 
             <div class="outer_wr">
@@ -4235,6 +4240,11 @@ function editar_song(){
                 btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
                 console.log('2. btnFullscreenActive: ', btnFullscreenActive);
                 toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
+            }
+
+            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner')){
+                console.log('outer_wr clicked');
+                hideShowFontMenu();                
             }
         }
         // cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
@@ -4292,16 +4302,24 @@ function hideShowFontMenu(){
     const menu_font_size = cancion_wr_vista_blocks.querySelector('#btn_menu_font_size');
     //const wr_btns_f_inner = cancion_wr_vista_blocks.querySelector('.wr_btns_f_inner');
     const outer_wr = cancion_wr_vista_blocks.querySelector('.outer_wr');
+    const hamburger2 = document.getElementById('hamburger2');
+    
+    let head_h = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen').offsetHeight;
+    let block_h = cancion_tema_block.offsetHeight;
+    //outer_wr.style.height = block_h - head_h + 'px';
 
     // if(wr_btns_f_inner.classList.contains('shown')){
     //     wr_btns_f_inner.classList.remove('shown');
     // }else{
     //     wr_btns_f_inner.classList.add('shown');
     // }
+
     if(outer_wr.classList.contains('shown')){
-        outer_wr.classList.remove('shown');
+        outer_wr.classList.remove('shown');//oculto
+        hamburger2.classList.remove('active'); // Cambiar flecha a hamburguesa
     }else{
-        outer_wr.classList.add('shown');
+        outer_wr.classList.add('shown');//muestro
+        hamburger2.classList.add('active'); // Cambiar hamburguesa a flecha
     }
 }
 

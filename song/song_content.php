@@ -1353,19 +1353,6 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <div class="parte_fija">
                                                 <h4 class="h4_vista_previa">
                                                     <span>Vista previa:</span>
-                                                    <span class="btns_fx" style="display:none;">
-                                                        <span>
-                                                            <button class="btn" onclick="changeFontSize(-1)">A-</button>
-                                                            <button class="btn" onclick="changeFontSize(0)">A</button>
-                                                            <button class="btn" onclick="changeFontSize(1)">A+</button>
-                                                        </span>
-                                                        <span>
-                                                            <button class="btn" onclick="makeColumns(1)">|</button>
-                                                            <button class="btn" onclick="makeColumns(2)">||</button>
-                                                            <button class="btn" onclick="makeColumns(3)">|||</button>
-                                                            <button class="btn" onclick="makeColumns(4)">||||</button>
-                                                        </span>
-                                                    </span>
                                                 </h4>
                                             </div><!--/.parte_fija-->                                        
 
@@ -1532,7 +1519,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <p class="prim opt_prim">
+                                                <p class="prim opt_prim d-none">
                                                     Búsca la lista o crea una nueva.
                                                 </p>
 

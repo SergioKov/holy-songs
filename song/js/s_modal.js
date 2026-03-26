@@ -435,7 +435,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <div id="title_detalles" class="wr_detalles_body" style="display: ${display_title_detalles};">
                         
                         <div class="form_group wr_title">
-                            <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" ">
+                            <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" " value="Nueva canción...">
                             <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
                         </div>
 
@@ -617,15 +617,26 @@ function buildFormCancion(contenedor, cancion_action = null){
                                 </select>
                                 <label for="${id_vstavka}tune">Tonalidad</label>
                             </div>
-
-                            <div class="form_group wr_tipo_acorde">
+                            
+                            <!--
+                            <div class="form_group wr_tipo_acorde d-none">
                                 <select id="${id_vstavka}tipo_acorde" name="tipo_acorde" class="sel_opt" required="">
                                     <option value="" disabled selected hidden></option>
                                     <option selected>#</option>
                                     <option>b</option>
                                 </select>
                                 <label for="${id_vstavka}tipo_acorde">Tipo Acorde</label>
-                            </div>                    
+                            </div> 
+                            -->
+                            
+                            <div class="form_group wr_tipo_acorde" style="display: block;">
+                                <label class="${id_vstavka} lab_di_bem">Tipo Acorde</label>
+                                <div class="wr_di_bem">
+                                    <div class="dbtn" data-value="#" on-click="meterTipoAcorde('#')">#</div>
+                                    <div class="dbtn" data-value="b" on-click="meterTipoAcorde('b')">b</div>
+                                </div>
+                                <input id="tipo_acorde_hidden" type="hidden" name="tipo_acorde" value=""> 
+                            </div>
 
                             <div class="form_group wr_tune_transpose select_container">
                                 <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt" required="">
@@ -738,10 +749,25 @@ function buildFormCancion(contenedor, cancion_action = null){
             }
 
             //4. añado escuchador de change al 'tipo_acorde' 
-            form.elements['tipo_acorde'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
+            // form.elements['tipo_acorde'].onchange = (e) => {
+            //     console.log('e.currentTarget.value: ', e.currentTarget.value);
                 
-                const tipo_acorde_val = e.currentTarget.value;
+            //     const tipo_acorde_val = e.currentTarget.value;
+            //     handleFormTipoAcorde(tipo_acorde_val);
+            // }
+
+            form.querySelector('.wr_di_bem').onclick = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                console.log('e.target.value: ', e.target.value);
+                let tipo_acorde_val;
+
+                if(e.target.dataset.value == '#'){
+                    tipo_acorde_val = '#';
+                }
+                if(e.target.dataset.value == 'b'){
+                    tipo_acorde_val = 'b';
+                }
+                meterTipoAcorde(tipo_acorde_val);
                 handleFormTipoAcorde(tipo_acorde_val);
             }
 
@@ -799,6 +825,8 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormTranspose(Number(objSong.tune_transpose));//para transponer al cargar el form
             handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
             handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
+            
+            
 
             //2. escucho al cambiar el texto...
             form.elements['song_text'].oninput = (e) => {
@@ -814,10 +842,26 @@ function buildFormCancion(contenedor, cancion_action = null){
             }
 
             //4. añado escuchador de change al 'tipo_acorde' 
-            form.elements['tipo_acorde'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
+            // form.elements['tipo_acorde'].onchange = (e) => {
+            //     console.log('e.currentTarget.value: ', e.currentTarget.value);
                 
-                const tipo_acorde_val = e.currentTarget.value;
+            //     const tipo_acorde_val = e.currentTarget.value;
+            //     handleFormTipoAcorde(tipo_acorde_val);
+            // }
+
+            form.querySelector('.wr_di_bem').onclick = (e) => {
+                console.log('e.currentTarget.value: ', e.currentTarget.value);
+                console.log('e.target.value: ', e.target.value);
+                let tipo_acorde_val;
+
+                if(e.target.dataset.value == '#'){
+                    tipo_acorde_val = '#';
+                }
+                if(e.target.dataset.value == 'b'){
+                    tipo_acorde_val = 'b';
+                }
+                meterTipoAcorde(tipo_acorde_val);
+
                 handleFormTipoAcorde(tipo_acorde_val);
             }
 
@@ -852,7 +896,29 @@ function buildFormCancion(contenedor, cancion_action = null){
     // eid_bl_modalFullInner.append(form_cancion);
     contenedor.append(form_cancion);
 
+    meterTipoAcorde(objSong.tipo_acorde);//test
+
     console.log('fin func --- buildFormCancion');
+}
+
+function meterTipoAcorde(valor){
+    console.log('=== function meterTipoAcorde() ===');
+    console.log('valor: ', valor);
+
+    const dbtnAll = document.querySelectorAll('.wr_di_bem .dbtn');
+    dbtnAll.forEach(dbtn => {
+        if(dbtn.dataset.value == valor){
+            dbtn.classList.add('active');
+        } else {
+            dbtn.classList.remove('active');
+        }
+    });
+
+    const tipo_acorde_input = document.querySelector('#tipo_acorde_hidden');
+    if(tipo_acorde_input){
+        tipo_acorde_input.value = valor;
+        handleFormTipoAcorde(valor);
+    }
 }
 
 
@@ -1119,11 +1185,18 @@ function buildLista(lista_action = null){
                     <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
                     <label for="title">Título de la lista</label>
                 </div>                
-                <div class="form_group">
-                    <span>Недільне служіння</span>
-                    <span>Молитва</span>
-                    <span>Молодіжне служіння</span>
-                    <span>Розбір слова</span>
+                <div class="form_group outer_wr_fast_words">                    
+                    <div class="wr_fast_words">
+                        <span onclick="meter_title_fast(this.innerText)">Недільне служіння</span>
+                        <span onclick="meter_title_fast(this.innerText)">Спомин</span>
+                        <span onclick="meter_title_fast(this.innerText)">Молодіжне служіння</span>
+                        <span onclick="meter_title_fast(this.innerText)">Молитва</span>
+                        <span onclick="meter_title_fast(this.innerText)">Розбір слова</span>
+                        <span onclick="meter_title_fast(this.innerText)">Євангелізація</span>
+                    </div> 
+                    <div class="back_word">
+                        <img src="./images/backspace_black.png" alt="back_word" onclick="reset_title_fast()">
+                    </div>               
                 </div>                
                 
                 <!-- Grupos -->
@@ -1179,6 +1252,37 @@ function buildLista(lista_action = null){
     console.log('fin func');
 }
 
+
+function meter_title_fast(text) {
+    const input_title = document.querySelector('#form_lista .form_container #title');
+    if(!input_title) return;
+
+    let title_text_actual = input_title.value;
+    let probel = (title_text_actual.length > 1) ? " " : "";
+    input_title.value = title_text_actual + probel + text + ';';//вставляю coment в инпут
+}
+
+function reset_title_fast() {
+    const input_title = document.querySelector('#form_lista .form_container #title');
+    if (!input_title) return;
+
+    let title_text_actual = input_title.value;
+
+
+    let arr = title_text_actual.split(";");//превращаю из строки в аррай
+    //alert('arr: '+arr);
+    let title_text_last = arr[arr.length - 2];// отнимаю -2 , так как последний ел массива пустой , ведь строка заканчивается ";"
+    let title_text_new = arr.slice(0, -2);//slice(start,end) // -2 значит, что отрезаю 2 елемента с конца.
+
+
+    let text = '';//iniciar variable
+    for (let i = 0; i < (arr.length - 2); i++) {
+        text = text + title_text_new[i] + ";";
+        //alert(i+' text[i]: ' + text);
+    }
+
+    input_title.value = text;//вставляю coment в инпут
+}
 
 
 function buildListaSoloSongs(contenedor, arr_lista_bucle){
