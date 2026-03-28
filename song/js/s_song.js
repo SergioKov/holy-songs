@@ -4198,15 +4198,15 @@ function editar_song(){
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
-    const elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
-    if(!elemento_id_song_fullscreen){
-        const div_id_song_fullscreen = document.createElement('div');
-        div_id_song_fullscreen.className = 'id_song_fullscreen';
-        div_id_song_fullscreen.innerHTML = objSong.id_song;
-        cancion_wr_vista_blocks.prepend(div_id_song_fullscreen);
-    }else{
-        elemento_id_song_fullscreen.innerHTML = objSong.id_song;
-    }
+    // const elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
+    // if(!elemento_id_song_fullscreen){
+    //     const div_id_song_fullscreen = document.createElement('div');
+    //     div_id_song_fullscreen.className = 'id_song_fullscreen';
+    //     div_id_song_fullscreen.innerHTML = objSong.id_song;
+    //     cancion_wr_vista_blocks.prepend(div_id_song_fullscreen);
+    // }else{
+    //     elemento_id_song_fullscreen.innerHTML = objSong.id_song;
+    // }
 
 
     const elemento_fullscreen = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen');
@@ -4250,6 +4250,7 @@ function editar_song(){
         
         
             <div class="dbtn_fullscreen">
+                <div class="id_song_fullscreen">${objSong.id_song}</div>
                 <img src="/song/images/fullscreen.png">
             </div>
         `;

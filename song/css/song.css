@@ -3812,13 +3812,14 @@ span.sp_number {
 .id_song_fullscreen {
     /* background: green; */
     position: absolute;
-    top: 14px;
+    /* top: 14px; */
     right: calc(50% - 25px);
     padding: 0px 5px;
     border-radius: 5px;
     border: 2px solid grey;
-    opacity: 0.3;
+    /* opacity: 0.3; */
     font-size: 16px;
     width: 50px;
     text-align: center;
+    right: 50px;
 }
