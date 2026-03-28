@@ -3732,8 +3732,16 @@ async function findWordsSong(){
         // `;
 
         //new
+
+        let link_google = `https://www.google.com/search?q=${words_input_trimed}`;
+        let link_holychords = `https://holychords.pro/search?_token=1&name=${words_input_trimed}&is_page=1`;
+
         eid_bl_songs_finded.innerHTML = `
             <p class="prim">No se encontraron canciones con la frase: "<b>${words_input_trimed}</b>"</p>
+            <p class="disp_flex">
+                <button class="btn" onclick="window.open('${link_google}', '_blank')">Buscar en Google</button>
+                <button class="btn" onclick="window.open('${link_holychords}', '_blank')">Buscar en HolyChords</button>
+            </p>
         `;
     }
 
@@ -4189,6 +4197,17 @@ function editar_song(){
     cancion_song_bloques.classList.add('solo_ver');
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
+
+    const elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
+    if(!elemento_id_song_fullscreen){
+        const div_id_song_fullscreen = document.createElement('div');
+        div_id_song_fullscreen.className = 'id_song_fullscreen';
+        div_id_song_fullscreen.innerHTML = objSong.id_song;
+        cancion_wr_vista_blocks.prepend(div_id_song_fullscreen);
+    }else{
+        elemento_id_song_fullscreen.innerHTML = objSong.id_song;
+    }
+
 
     const elemento_fullscreen = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen');
     //si no hay boton de fullscreen, lo creo
