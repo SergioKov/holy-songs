@@ -1,10 +1,7 @@
 <?php
-session_start();//importante para ver al usuario logueado
-
-//header("Access-Control-Allow-Origin: *");//? no sé si hace falta...
-
-include('functions.php');
 include('includes/config.php');
+session_start();//importante para ver al usuario logueado
+include('functions.php');
 
 /*
 //HACER PRUEBAS...

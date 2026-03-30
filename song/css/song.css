@@ -2952,7 +2952,7 @@ p.p_sm b {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    gap: 0 10px;
+    gap: 5px 10px;
     align-items: center;
     flex-direction: row-reverse;
 }
@@ -3625,6 +3625,7 @@ span.sp_number {
     /* border: 2px solid #737373; */
     /* column-width: 236px !important; */
     /* position: relative; */
+    margin-top: -20px;
 }
 
 .contenedor > fieldset {
@@ -3710,6 +3711,7 @@ span.sp_number {
     transition: 0.3s ease;
     overflow: auto;
     height: 50vh;
+    top: 57px;
 }
 
 .outer_wr.shown {
@@ -3807,19 +3809,59 @@ span.sp_number {
 
 #tema_block .bloques {
     padding: 0;
+    gap: 0;
 }
 
 .id_song_fullscreen {
     /* background: green; */
     position: absolute;
-    /* top: 14px; */
-    right: calc(50% - 25px);
+    top: 6px;
+    font-size: 14px;
+    text-align: center;
+    opacity: 0.3;
+}
+
+#id_song_num{
     padding: 0px 5px;
     border-radius: 5px;
     border: 2px solid grey;
-    /* opacity: 0.3; */
-    font-size: 16px;
-    width: 50px;
-    text-align: center;
-    right: 50px;
 }
+#id_song_pos {
+    position: absolute;
+    right: -50px;
+    top: 2px;
+}
+
+
+.wr_btns_next_prev {
+    background: #8e8e8e5e;
+    padding: 5px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.wr_btns_next_prev .btn {
+    padding: 15px;
+    width: 80px;
+}
+
+#aviso_lista_song {
+    background: #FF9800;
+    padding: 5px 10px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    display: none;
+}
+#aviso_lista_song.shown {
+    display: block;
+}
+

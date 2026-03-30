@@ -1,8 +1,8 @@
 <?php
-session_start();//importante para ver al usuario logueado
-
-include('functions.php');
 include('includes/config.php');
+session_start();//importante para ver al usuario logueado
+include('functions.php');
+
 
 /*
 //HACER PRUEBAS...

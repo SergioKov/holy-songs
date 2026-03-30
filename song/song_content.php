@@ -65,7 +65,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
         </div><!--/#btn_menu-->
         
         <!-- Boton L de Lista a la Derechaa -->
-        <div id="btn_lista_fix" class="shown" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">
+        <div id="btn_lista_fix" class="shown" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">
             <span>L</span>
         </div><!--/#btn_lista_fix-->
 
@@ -1523,9 +1523,9 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                     Búsca la lista o crea una nueva.
                                                 </p>
 
-                                                <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');">Ver (SM)</button>
+                                                <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</button>
                                                 <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
-                                                <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</button>
+                                                <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver');">Ver</button>
                                                 <button id="btn_lista_editar" class="btn opt_edit" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</button>
                                                 <button id="btn_lista_eliminar" class="btn opt_edit" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</button>
 

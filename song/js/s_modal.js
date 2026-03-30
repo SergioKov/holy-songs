@@ -1184,7 +1184,7 @@ function buildLista(lista_action = null){
                 <div class="form_group wr_title">
                     <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
                     <label for="title">Título de la lista</label>
-                </div>                
+                </div>
                 <div class="form_group outer_wr_fast_words">                    
                     <div class="wr_fast_words">
                         <span onclick="meter_title_fast(this.innerText)">Недільне служіння</span>
@@ -1656,7 +1656,7 @@ function buildListaSort(contenedor, arr_lista_bucle){
             console.log('click en d_canciones_head');
     
             if(e.target.closest('.btn_action_ver')){
-                openModal('full','Ver lista',null,'buildLista',true, 'ver_sm');
+                openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');
             }
             else if(e.target.closest('.btn_action_editar')){
                 openModal('full','Editar lista',null,'buildLista',true, 'editar');
@@ -2018,11 +2018,12 @@ async function getDataListasFromBdByFind(objFindListaParams){
             return;
         }
                
-        const response = await fetch('obtener_lista_by_find.php', {
+        const response = await fetch('./obtener_lista_by_find.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
             },
+            credentials: 'include', // importante para Safari (cookies/sesión)
             body: JSON.stringify({
                 words_input,
                 modo,

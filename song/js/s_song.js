@@ -2926,7 +2926,7 @@ async function deleteSong(event, id_contenedor){
 
 
 
-async function guardarLista(event){
+async function guardarLista(event, modo_guardar = 'normal'){//modo_guardar: 'normal' o 'fast' (para guardar rápido sin pasar por el formulario, solo con los datos actuales de objLista y arr_lista)
     console.log('=== function guardarLista() ===');
     
     if(event){
@@ -2944,14 +2944,21 @@ async function guardarLista(event){
         // }
 
         const form_lista = document.getElementById('form_lista');
-        const form_mensaje_lista = form_lista.querySelector('form .mensaje');
+        const form_mensaje_lista = form_lista?.querySelector('form .mensaje');
 
-        let title = form_lista.querySelector('#title').value.trim();
-        let id_grupo = form_lista.querySelector('#id_grupo').value.trim();
-        let fecha = form_lista.querySelector('#fecha').value;
-        let notes = form_lista.querySelector('#notes').value.trim();
+        let title = form_lista?.querySelector('#title').value.trim();
+        let id_grupo = form_lista?.querySelector('#id_grupo').value.trim();
+        let fecha = form_lista?.querySelector('#fecha').value;
+        let notes = form_lista?.querySelector('#notes').value.trim();
     
         let errors = [];
+
+        if(modo_guardar === 'fast'){
+            title = objLista.title;
+            id_grupo = objLista.id_grupo;
+            fecha = objLista.fecha;
+            notes = objLista.notes;    
+        }
 
         if(title == ''){
             errors.push('Título de la lista');
@@ -3046,26 +3053,34 @@ async function guardarLista(event){
                     text_show = '2. Aquí texto de resultado de guardar...';
                     break;
             }
-            console.log(text_show);
+            console.log('text_show:', text_show);
+
+            if(form_mensaje_lista) {
+                form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+                //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            }
     
-            form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-            //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+
             
             if(hayElementosModalesAbiertos()){
                 showToast('ok', text_show, 5000);
             }
 
-            setTimeout(()=>{
-                form_mensaje_lista.innerHTML = `
-                    <span class="sp_id">
-                        <span>Id: <b class="c_green">${data.id_lista}</b></span>
-                        <span><b class="guardado">GUARDADO</b></span>
-                    </span>
-                `;
-            }, 2000);
-            setTimeout(()=>{
-                form_mensaje_lista.querySelector('.guardado')?.remove();
-            }, 4000);
+            if(form_mensaje_lista){
+                setTimeout(()=>{
+                    form_mensaje_lista.innerHTML = `
+                        <span class="sp_id">
+                            <span>Id: <b class="c_green">${data.id_lista}</b></span>
+                            <span><b class="guardado">GUARDADO</b></span>
+                        </span>
+                    `;
+                }, 2000);
+                setTimeout(()=>{
+                    form_mensaje_lista.querySelector('.guardado')?.remove();
+                }, 4000);
+            }
+
+
 
             if(data.id_lista){
                 console.log('id_lista: ', data.id_lista);
@@ -3086,15 +3101,22 @@ async function guardarLista(event){
                 //Actualizo tr_lista 
                 pintListaActiveSoloDatos();
 
-                form_lista.querySelector('#btn_ResetForm').removeAttribute('type');
-                form_lista.querySelector('#btn_ResetForm').onclick = (e) => {
-                    e.preventDefault();
-                    
-                    //pinto datos de bd
-                    form_lista.querySelector('#title').value = objLista.title;
-                    form_lista.querySelector('#id_grupo').value = objLista.id_grupo;
-                    form_lista.querySelector('#fecha').value = objLista.fecha;
-                    form_lista.querySelector('#notes').value = objLista.notes;
+                if(form_lista){
+                    form_lista.querySelector('#btn_ResetForm').removeAttribute('type');
+                    form_lista.querySelector('#btn_ResetForm').onclick = (e) => {
+                        e.preventDefault();
+                        
+                        //pinto datos de bd
+                        form_lista.querySelector('#title').value = objLista.title;
+                        form_lista.querySelector('#id_grupo').value = objLista.id_grupo;
+                        form_lista.querySelector('#fecha').value = objLista.fecha;
+                        form_lista.querySelector('#notes').value = objLista.notes;
+                    }
+                }
+
+                if(modo_guardar === 'fast'){
+                    closeModal(null,true);
+                    closeDiv(document.querySelector(`#bl_actions_buscar`));
                 }
             }
            
@@ -3105,9 +3127,11 @@ async function guardarLista(event){
             console.error('data.error: ', data.error);
 
             let text_show = 'Error al añadir la lista.';
-    
-            form_mensaje_lista.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
-            //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            
+            if(form_mensaje_lista){
+                form_mensaje_lista.innerHTML = `<span class="add_result add_error">${text_show}</span>`;
+                //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            }    
 
             if(hayElementosModalesAbiertos()){
                 showToast('error', text_show, 5000);
@@ -3885,6 +3909,13 @@ async function findWordsLista(){
 
             const p_lista = document.createElement('p');
             p_lista.className = 'p_lista lista_finded';
+            
+            // if(el.id_lista == id_lista){
+            //     p_lista.className = 'p_lista lista_finded active';
+            // }else{
+            //     p_lista.className = 'p_lista lista_finded';
+            // }
+
             p_lista.dataset.id = el.id_lista;
 
             let hay_lista_texto;
@@ -4198,14 +4229,23 @@ function editar_song(){
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
+    let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
+    let song_pos = (currentIndexOfSong != -1) ? `${currentIndexOfSong + 1}/${objLista.arr_lista.length}` : '';
+
     const elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
     if(!elemento_id_song_fullscreen){
         const div_id_song_fullscreen = document.createElement('div');
         div_id_song_fullscreen.className = 'id_song_fullscreen';
-        div_id_song_fullscreen.innerHTML = objSong.id_song;
+        div_id_song_fullscreen.innerHTML = `
+            <div id="id_song_num">${objSong.id_song}</div>
+            <div id="id_song_pos">${song_pos}</div>
+        `;
         cancion_wr_vista_blocks.prepend(div_id_song_fullscreen);
     }else{
-        elemento_id_song_fullscreen.innerHTML = objSong.id_song;
+        elemento_id_song_fullscreen.innerHTML = `
+            <div id="id_song_num">${objSong.id_song}</div>
+            <div id="id_song_pos">${song_pos}</div>
+        `;
     }
 
 
@@ -4225,6 +4265,14 @@ function editar_song(){
             </div>
 
             <div class="outer_wr">
+
+                <div class="wr_btns_next_prev">
+                    <button class="btn" onclick="listaSongGo('prev')">Prev</button>
+                    <div id="aviso_lista_song"></div>
+                    <button class="btn" onclick="listaSongGo('next')">Next</button>
+                </div>
+
+
                 <div class="wr_btns_f_inner">
                     <div class="d_cat">            
                         <button class="btn" onclick="changeFontSize(-1)">A-</button>
@@ -4250,7 +4298,6 @@ function editar_song(){
         
         
             <div class="dbtn_fullscreen">
-                <div class="id_song_fullscreen d-none">${objSong.id_song}</div>
                 <img src="/song/images/fullscreen.png">
             </div>
         `;
@@ -4262,7 +4309,7 @@ function editar_song(){
                 toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
             }
 
-            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner')){
+            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner') && !e.target.closest('.wr_btns_next_prev')){
                 console.log('outer_wr clicked');
                 hideShowFontMenu();                
             }
@@ -4316,6 +4363,54 @@ function editar_song(){
 
     console.log('fin');    
 }
+
+
+
+async function listaSongGo(dirrection){
+    console.log('ir a la siguiente canción de la lista');
+
+    let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
+    let prevIndexOfSong = currentIndexOfSong - 1;
+    let nextIndexOfSong = currentIndexOfSong + 1;  
+    
+    eid_aviso_lista_song = cancion_wr_vista_blocks.querySelector('#aviso_lista_song');
+    eid_aviso_lista_song.textContent = ''; //reset aviso
+    eid_aviso_lista_song.classList.remove('shown'); //oculto
+
+    
+
+    if(dirrection === 'prev'){
+        console.log('ir a la canción anterior');
+        let prev_id_song = objLista.arr_lista[prevIndexOfSong]?.id_song;
+
+        if(prev_id_song === undefined){
+            eid_aviso_lista_song.textContent = 'Has llegado a la primera canción.';
+            eid_aviso_lista_song.classList.add('shown'); //muestro aviso
+            return;
+        }
+        
+        const element_clicked = eid_block_lista.querySelector(`.vista_lista_content .p_lista[data-id_song="${prev_id_song}"]`);
+
+        await editSongOfLista(element_clicked, prev_id_song);
+    }
+
+    if(dirrection === 'next'){
+        console.log('ir a la canción siguiente');
+
+        let next_id_song = objLista.arr_lista[nextIndexOfSong]?.id_song;
+        if(next_id_song === undefined){
+            eid_aviso_lista_song.textContent = 'Has llegado a la última canción.';
+            eid_aviso_lista_song.classList.add('shown'); //muestro aviso
+            return;
+        }
+        
+        const element_clicked = eid_block_lista.querySelector(`.vista_lista_content .p_lista[data-id_song="${next_id_song}"]`);
+
+        await editSongOfLista(element_clicked, next_id_song);
+    }
+    
+}
+
 
 
 function hideShowFontMenu(){
@@ -4503,7 +4598,7 @@ function addToLista(){
 
         arr_lista.push(objSongSmall);
 
-        aviso_text = `La canción se ha añadido con éxito a la lista ${ (id_lista) ? '<b>ACTUAL</b>' : '<b>NUEVA</b>' } de canciones.`;
+        aviso_text = `La canción se ha añadido con éxito a la lista ${ (id_lista) ? '<b>ACTUAL</b>' : '<b>NUEVA</b>' } de canciones. Guarda la lista.`;
     }
 
     //para VER - SM
@@ -4527,12 +4622,13 @@ function addToLista(){
     btn_guardar.className = 'btn btn_big';
 
     if(id_lista){
-        btn_guardar.textContent = 'Editar lista';
+        btn_guardar.textContent = 'Guardar lista actual';
         btn_guardar.onclick = () => {
-            openModal('full','Guardar lista editada',null,'buildLista',true, 'editar');
+            //openModal('full','Guardar lista editada',null,'buildLista',true, 'editar');
+            guardarLista(null, 'fast');
         }
     }else{
-        btn_guardar.textContent = 'Guardar Nueva Lista';
+        btn_guardar.textContent = 'Guardar Nueva lista';
         btn_guardar.onclick = () => {
             openModal('full','Guardar Nueva Lista',null,'buildLista',true, 'nueva');
         }

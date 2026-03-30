@@ -442,7 +442,7 @@ function pintListaActiveSoloDatos(){
     lista_vista_lista_content.innerHTML = '';//reset
 
     lista_ul_action.innerHTML = `
-        <li class="li_action" onclick="openModal('full','Ver lista (SM)',null,'buildLista',true, 'ver_sm');">Ver (SM)</li>
+        <li class="li_action" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</li>
         <li class="li_action" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</li>
         <li class="li_action" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</li>
         <li class="li_action" onclick="openModal('full','Eliminar lista',null,'buildLista',true, 'eliminar');">Eliminar</li>
@@ -1730,10 +1730,14 @@ function hideShowDiv(id_div){
     
     switch (id_div) {
         case 'bl_actions_buscar':
-            buscar_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            if(buscar_ul_action.querySelector('.btn_add_lista')){
+                buscar_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            }
             
         case 'bl_actions_cancion':
-            cancion_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            if(cancion_ul_action.querySelector('.btn_add_lista')){
+                cancion_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+            }
             break;
     
         default:
