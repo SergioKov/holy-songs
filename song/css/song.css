@@ -3834,7 +3834,7 @@ span.sp_number {
 
 
 .wr_btns_next_prev {
-    background: #8e8e8e5e;
+    /* background: #8e8e8e5e; */
     padding: 5px;
     position: absolute;
     top: 0px;

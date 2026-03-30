@@ -4309,7 +4309,7 @@ function editar_song(){
                 toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
             }
 
-            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner') && !e.target.closest('.wr_btns_next_prev')){
+            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner') && !e.target.closest('.wr_btns_next_prev .btn')){
                 console.log('outer_wr clicked');
                 hideShowFontMenu();                
             }
