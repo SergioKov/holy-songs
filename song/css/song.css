@@ -3711,7 +3711,7 @@ span.sp_number {
     transition: 0.3s ease;
     overflow: auto;
     height: 50vh;
-    top: 57px;
+    top: 66px;
 }
 
 .outer_wr.shown {
@@ -3843,10 +3843,12 @@ span.sp_number {
     gap: 10px;
     justify-content: space-between;
     align-items: center;
+    /* bottom: 10px; */
+    left: 0;
 }
 .wr_btns_next_prev .btn {
     padding: 15px;
-    width: 80px;
+    width: 65px;
 }
 
 #aviso_lista_song {

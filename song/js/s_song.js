@@ -4267,9 +4267,13 @@ function editar_song(){
             <div class="outer_wr">
 
                 <div class="wr_btns_next_prev">
-                    <button class="btn" onclick="listaSongGo('prev')">Prev</button>
+                    <button class="btn" onclick="listaSongGo('prev')">
+                        <img src="images/arrow_chevron_left_white.svg">
+                    </button>
                     <div id="aviso_lista_song"></div>
-                    <button class="btn" onclick="listaSongGo('next')">Next</button>
+                    <button class="btn" onclick="listaSongGo('next')">
+                        <img src="images/arrow_chevron_right_white.svg">
+                    </button>
                 </div>
 
 
