@@ -2588,7 +2588,17 @@ function resetBlockLista(){
 
 async function guardarSong(event, id_contenedor, cancion_action){
     console.log('=== function guardarSong() ===');
-    event.preventDefault();
+
+    if(event instanceof Event) {
+        console.log("Recibí un evento:", event.type);
+        console.log('guardarSong() se ha llamado desde un evento de formulario.');
+        event.preventDefault();
+    }else if(event instanceof HTMLElement) {
+        console.log("Recibí un elemento HTML:", event.tagName);
+        //no hago nada
+    } else{
+        console.log("Parámetro desconocido. event: ", event);
+    }
 
     const contenedor = document.getElementById(id_contenedor);
 
@@ -2819,6 +2829,31 @@ async function guardarSong(event, id_contenedor, cancion_action){
 
 }
 
+function promtConClaveSecreta() {//temporal
+    const CLAVE_SECRETA = "eliminar"; // Tu clave definida
+    
+    // Lanzamos el cuadro de entrada
+    let passwordInput = prompt("⚠️ Acción crítica: Introduce la clave secreta para eliminar:");
+
+    // 1. Si el usuario cancela, passwordInput será null
+    if (passwordInput === null) {
+        alert("❌ Eliminación cancelada por el usuario.");
+        return; 
+    }
+
+    // 2. Validamos la clave
+    if (passwordInput === CLAVE_SECRETA) {
+        // Aquí ejecutas la lógica de eliminación real
+        alert("✅ Clave correcta. Procedo a eliminar.");
+        return true;
+        // ejecutarEliminacion(); 
+    } else {
+        // Si falla, avisamos
+        alert("❌ Clave incorrecta. Acceso denegado.");
+        return false;
+    }
+}
+
 async function deleteSong(event, id_contenedor){
     console.log('=== function deleteSong() ===');
     event.preventDefault();
@@ -2842,6 +2877,11 @@ async function deleteSong(event, id_contenedor){
         const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la canción con los siguientes datos? \nID: ${id_song} \ntítulo: '${objSong.title}' \n\nEsta acción no se podrá deshacer.`);
         if(respuesta){
             console.log('sigo adelante para eliminar la canción...'); //clic en "Aceptar"
+            if(promtConClaveSecreta()){
+                console.log('Clave secreta correcta. Procedo a eliminar la canción.');
+            }else{
+                return;
+            }
         } else {
             //console.log("7755. Cancelar..."); //clic en "Cancelar"
             return;
@@ -3166,6 +3206,11 @@ async function deleteLista(){
         const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE la lista con los siguientes datos? \nID: ${id_lista} \ntítulo: '${objLista.title}' \n\nEsta acción no se podrá deshacer.`);
         if(respuesta){
             console.log('sigo adelante para eliminar la lista...'); //clic en "Aceptar"
+            if(promtConClaveSecreta()){
+                console.log('Clave secreta correcta. Procedo a eliminar la lista.');
+            }else{
+                return;
+            }
         } else {
             //console.log("7755. Cancelar..."); //clic en "Cancelar"
             return;
@@ -4135,6 +4180,10 @@ async function nueva_song(){
 
 function ver_song(){
     console.log('=== function ver_song() ===');
+    console.log('redirect a editar_song() tmp');
+
+    editar_song();
+    return;
 
     if(!hay_id_song('ver_song()')){
         return; // <- se detiene aquí si no hay id_song
@@ -4216,7 +4265,24 @@ function editar_song(){
     mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
 
     //Partes left-right
-    eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Editar canción:';
+    eid_block_cancion.querySelector('.bl_parte_l .h4_vista_previa').innerHTML = `
+        <span>Canción</span>
+
+        <button class="btn btn_vista btn_v_lista" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');"">
+            <img src="./images/playlist3_512x512_white.png">
+            <span>Lista</span>
+        </button>
+        
+        <button class="btn btn_vista" onclick="guardarSong(this,'cancion_song_bloques','editar');">
+            <img src="./images/guardar.png">
+            <span>Guardar</span>
+        </button>
+
+        <button class="btn btn_vista btn_v_guardar" onclick="mostrarVista(document.querySelector('#block_cancion_body'));">
+            <img src="./images/ojo24x24_2.png">
+            <span>Vista</span>
+        </button>
+    `;
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
     eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
@@ -4230,23 +4296,22 @@ function editar_song(){
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
     let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
-    let song_pos = (currentIndexOfSong != -1) ? `${currentIndexOfSong + 1}/${objLista.arr_lista.length}` : '';
+    let song_pos = (currentIndexOfSong != -1) ? `${currentIndexOfSong + 1} / ${objLista.arr_lista.length}` : '';
 
-    const elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
+
+
+    let elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
+
     if(!elemento_id_song_fullscreen){
-        const div_id_song_fullscreen = document.createElement('div');
-        div_id_song_fullscreen.className = 'id_song_fullscreen';
-        div_id_song_fullscreen.innerHTML = `
-            <div id="id_song_num">${objSong.id_song}</div>
-            <div id="id_song_pos">${song_pos}</div>
-        `;
-        cancion_wr_vista_blocks.prepend(div_id_song_fullscreen);
-    }else{
-        elemento_id_song_fullscreen.innerHTML = `
-            <div id="id_song_num">${objSong.id_song}</div>
-            <div id="id_song_pos">${song_pos}</div>
-        `;
+        elemento_id_song_fullscreen = document.createElement('div');
+        elemento_id_song_fullscreen.className = 'id_song_fullscreen';
+        cancion_wr_vista_blocks.prepend(elemento_id_song_fullscreen);
     }
+
+    elemento_id_song_fullscreen.innerHTML = `
+        <div id="id_song_num">${objSong.id_song}</div>
+        <div id="id_song_pos">${song_pos}</div>
+    `;
 
 
     const elemento_fullscreen = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen');
@@ -4256,7 +4321,6 @@ function editar_song(){
         wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen vista_menu';
         wr_dbtn_fullscreen.innerHTML = `
             <div id="btn_menu_font_size" class="shown" onclick="hideShowFontMenu();">
-                <img class="d-none" src="/song/images/menu32x32_3_black.png">
                 <div id="hamburger2" class="hamburger">
                     <span></span>
                     <span></span>
@@ -4264,7 +4328,19 @@ function editar_song(){
                 </div>
             </div>
 
+            
+
             <div class="outer_wr">
+
+                <button class="btn btn_vista btn_vista_atras" onclick="ocultarTodasVistas()">
+                    <img src="images/arrow_atras.png"> 
+                    <span>Vista</span>
+                </button>
+
+                <button class="btn btn_vista btn_refresh" onclick="refreshSong()">
+                    <img src="images/refresh.png"> 
+                    <span>Actualizar</span>
+                </button>
 
                 <div class="wr_btns_next_prev">
                     <button class="btn" onclick="listaSongGo('prev')">
@@ -4313,7 +4389,12 @@ function editar_song(){
                 toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
             }
 
-            if(e.target.closest('.outer_wr') && !e.target.closest('.wr_btns_f_inner') && !e.target.closest('.wr_btns_next_prev .btn')){
+            if(  e.target.closest('.outer_wr') && 
+                !e.target.closest('.wr_btns_f_inner') && 
+                !e.target.closest('.wr_btns_next_prev .btn') && 
+                !e.target.closest('.btn_vista_atras') &&
+                !e.target.closest('.btn_refresh') 
+            ){
                 console.log('outer_wr clicked');
                 hideShowFontMenu();                
             }

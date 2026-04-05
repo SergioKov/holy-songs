@@ -14,6 +14,8 @@ function pintSongActive(){//click en tr de la tabla de canciones
     resetPSongActive(eid_bl_songs_finded);//new
     eid_bl_songs_finded.querySelector(`.p_song[data-id="${id_song}"]`).classList.add('active');//new
 
+    mostrarVista(eid_block_buscar_body);
+
     mostrarPrim = false;
     ocultarElementosPrimEn(buscar_option_inner);
     mostrarElementosEditablesEn(buscar_option_inner);
@@ -355,7 +357,41 @@ function pintSongActiveSoloDatos(){
     buildEsquemaSoloTitulos(buscar_vista_song_content.querySelector('.d_esquema_titulos'), objSong.arr_esquema);
 }
 
+function ocultarTodasVistas(){
+    console.log('=== function resetShowVista() === ');
 
+    document.querySelectorAll('.vista_r.shown').forEach( vista_r => {
+        vista_r.classList.remove('shown');
+        vista_r.querySelector('.vista_head')?.classList.remove('shown');
+    });//reseteo parte derecha de vista
+}
+
+function mostrarVista(contenedor){
+    console.log('=== function mostrarVista(contenedor) === ');
+
+    if(!contenedor) return;
+
+    ocultarTodasVistas();
+    contenedor.querySelector('.vista_r')?.classList.add('shown');//muestro parte derecha de vista
+
+    setTimeout(()=>{
+        contenedor.querySelector('.vista_head')?.classList.add('shown');
+    },10);//transition 0.5s = 500mc.
+}
+
+async function refreshSong(){
+    console.log('=== function refreshSong() === ');
+
+    //actualizo objSong desde bd por si se han hecho cambios
+    objSong = objSong = await getDataSongFromBd();
+    console.log('despues --- objSong: ', objSong);
+
+    editar_song();
+
+    pintSongActiveSoloDatos();
+
+    eid_block_cancion.querySelector('.btn_refresh img').classList.toggle('rotate');//animación refresh
+}
 
 function pintListaActive(){
     console.log('=== function pintListaActive(e) === ');
@@ -367,6 +403,8 @@ function pintListaActive(){
 
     resetPListaActive(eid_bl_listas_finded);//new
     eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`).classList.add('active');//new
+
+    mostrarVista(eid_block_lista_body);
 
     
     mostrarPrim = false;

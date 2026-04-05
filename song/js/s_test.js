@@ -75,6 +75,8 @@ function clickLCR(e, param, id_contenedor, cols_number = 2, esquema_vklad = null
     let contenedorBtns ;//'#block_buscar_head .wr_lcr'
     let contenedorBlocks;
     
+    if(!contenedor) return;
+    
     if(id_contenedor == 'block_esquema' && esquema_vklad){
         switch (esquema_vklad) {
             default:
@@ -161,11 +163,13 @@ function resetBlActiveEn(contenedor){
 
 function resetLcrActiveEn(contenedor){
     console.log('contenedor:' , contenedor);
+
+    if(!contenedor) return;
     
     //Botones grandes arriba de seleccionar: 'bl_parte_l', 'bl_parte_c', 'bl_parte_r'
     contenedor.querySelectorAll('.v_lcr').forEach(v_lcr => {
         console.log('v_lcr:' , v_lcr);
-        v_lcr.classList.remove('lcr_active');
+        v_lcr.classList?.remove('lcr_active');
     });
 }
 
@@ -198,13 +202,13 @@ function ocultarElemento(elemento){
 
 function mostrarElementosPrimEn(elemento){
     if(!elemento) return;
-    elemento.querySelector('.opt_prim').classList.remove('d-none');
-    elemento.querySelector('.opt_prim').classList.add('d-block');
+    elemento.querySelector('.opt_prim')?.classList.remove('d-none');
+    elemento.querySelector('.opt_prim')?.classList.add('d-block');
 }
 function ocultarElementosPrimEn(elemento){
     if(!elemento) return;
-    elemento.querySelector('.opt_prim').classList.remove('d-block');
-    elemento.querySelector('.opt_prim').classList.add('d-none');
+    elemento.querySelector('.opt_prim')?.classList.remove('d-block');
+    elemento.querySelector('.opt_prim')?.classList.add('d-none');
 }
 
 

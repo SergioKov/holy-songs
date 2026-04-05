@@ -35,7 +35,10 @@
         left: -9999px;
     }
 
-    
+    .btn_v_guardar,
+    .btn_vista_atras {
+        display: none !important;
+    }
 
 }
 
@@ -46,6 +49,43 @@
     .solo_en_mobile
     {
         display: none;
+    }
+
+
+}
+
+
+/* Mobilka y Tablet para vista previa */
+@media screen and (min-width: 1px) and (max-width: 1023px){
+
+    .vista_r {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        padding: 0;
+        height: 100vh;
+    }
+    
+    
+    .vista_r.shown {
+        left: 0;
+        padding: 0;
+        height: 100vh;
+        z-index: 9;
+    }
+    .vista_r.shown .parte_variable {
+        height: 100% !important;
+    }
+    
+    .vista_r .parte_fija {
+        display: none;
+    }
+    .vista_r .bloques_outer {
+        height: 100vh;
+    }
+
+    .partes.vista_r {
+        display: block !important;
     }
 
 

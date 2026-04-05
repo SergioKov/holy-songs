@@ -170,7 +170,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
     <div id="edit_contenido" class="elementos_modales shown">
         <div id="edit_contenido_inner">
 
-            <div class="edit_head">
+            <div class="edit_head" style="display: none;">
                 <div class="inner">
                     <h4>
                         <span class="bl_titulo">Editar</span>
@@ -240,12 +240,15 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                 <p class="prim opt_prim">
                                                     Búsca la canción o crea una nueva.
                                                 </p>
+                                                
+                                                <div style="display: none;">
+                                                    <button class="btn opt_edit" onclick="crearPages(); closeAll();">crearPages()</button>
+                                                    <button class="btn opt_edit">2.Ver algo...</button>
+                                                    <button class="btn opt_edit">3.Ver algo...</button>
+                                                    <div class="separador opt_edit"></div>
+                                                </div>
 
-                                                <button class="btn opt_edit" onclick="crearPages(); closeAll();">crearPages()</button>
-                                                <button class="btn opt_edit">2.Ver algo...</button>
-                                                <button class="btn opt_edit">3.Ver algo...</button>
 
-                                                <div class="separador opt_edit"></div>
                                                 <button class="btn opt_nueva" onclick="showBlockName('cancion'); nueva_song();">Nueva Canción</button>
                                             </div><!--/.wr_block_option_inner-->
                                         </div><!--/.wr_block_option-->
@@ -296,7 +299,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                     </div><!--/.block_option_y_action-->
 
 
-                                    <div class="wr_lcr btns2">
+                                    <!-- <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_buscar')">
                                                 <div>Datos</div>
@@ -308,7 +311,8 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_lcr_line">
                                             <div class="lcr_line lines2 line_2l"></div>
                                         </div>
-                                    </div><!--/.wr_lcr-->
+                                    </div> -->
+                                    <!--/.wr_lcr-->
 
                                 </div><!--/#block_buscar_head-->
     
@@ -520,7 +524,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         </div><!--/.bl_parte_l-->
 
 
-                                        <div class="partes bl_parte_r">
+                                        <div class="partes bl_parte_r vista_r">
 
                                             <!--/parte_fija-->
                                             <div class="parte_fija">
@@ -532,13 +536,25 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <!--/parte_variable-->
                                             <div class="parte_variable">
                                                 <div class="bloques_outer">
-                                                    <div class="bloques wr_vista_song">
+                                                    <div class="bloques wr_vista_song"> 
+                                                        
+                                                        <div class="vista_head">
+                                                            <button class="btn btn_vista_atras_head" onclick="ocultarTodasVistas();">
+                                                                <img src="images/arrow_left2_white.svg">
+                                                            </button>
+                                                            <div class="vp_titulo">Vista (<b>Canción</b>)</div>
+                                                            <button class="btn btn_vista_close_head" onclick="ocultarTodasVistas();">
+                                                                <img src="images/x_white.png">
+                                                            </button>
+                                                        </div><!--/.vista_head-->
+                                                    
                                                         <div class="vista_song_content">
                                                             <div class="d_info">
                                                                 <p class="prim">Busca una canción introduciendo el texto en el campo '<b>Buscar</b>'...</p>
                                                                 <p class="prim">(Aquí se mostrará el texto de la canción...)</p>
                                                             </div>
-                                                        </div>
+                                                        </div><!--/.vista_song_content-->
+
                                                     </div>
                                                 </div>
 
@@ -1246,11 +1262,8 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                <p class="prim opt_prim">
-                                                    Búsca la canción <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button> o crea una nueva.
-                                                </p>
-
-                                                <button id="btn_song_ver" class="btn opt_edit" onclick="ver_song()">Ver</button>
+                                                
+                                                <button id="btn_song_ver" class="btn opt_edit" onclick="ver_song()" style="display: none !important;">Ver</button>
                                                 <button id="btn_song_editar" class="btn opt_edit" onclick="editar_song()">Editar</button>
                                                 <button id="btn_song_eliminar" class="btn opt_edit" onclick="eliminar_song();">Eliminar</button>
                                                 
@@ -1306,7 +1319,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                     </div><!--/.block_option_y_action-->
 
                                 
-                                    <div class="wr_lcr btns2">
+                                    <!-- <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_cancion')">
                                                 <div>Datos</div>
@@ -1318,7 +1331,8 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_lcr_line">
                                             <div class="lcr_line lines2 line_2l"></div>
                                         </div>
-                                    </div><!--/.wr_lcr-->
+                                    </div> -->
+                                    <!--/.wr_lcr-->
 
                                 </div><!--/#block_cancion_head-->
 
@@ -1330,7 +1344,10 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             
                                             <!--/parte_fija-->
                                             <div class="parte_fija">
-                                                <H4>Datos de la canción</H4>
+                                                <h4 class="h4_vista_previa">
+                                                        <span>Canción</span>
+                                                        <!-- los botones guardar y vista previa -->
+                                                    </h4>
                                             </div><!--/.parte_fija-->
 
                                             <!--/parte_variable-->
@@ -1339,6 +1356,9 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                 <div class="bloques_outer">
                                                     <div id="cancion_song_bloques" class="bloques song_bloques">
                                                         <!-- aki antes form -->
+                                                        <p class="prim opt_prim">
+                                                            Búsca la canción <button class="btn inline" onclick="showBlockName('buscar')">Buscar</button> o crea una nueva.
+                                                        </p>
                                                     </div>
                                                 </div>
 
@@ -1347,7 +1367,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         </div><!--/.bl_parte_l-->
 
 
-                                        <div class="partes bl_parte_r">
+                                        <div class="partes bl_parte_r vista_r">
 
                                             <!--/parte_fija-->
                                             <div class="parte_fija">
@@ -1579,7 +1599,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                     </div><!--/.block_option_y_action-->
 
-                                    <div class="wr_lcr btns2">
+                                    <!-- <div class="wr_lcr btns2">
                                         <div class="wr_lcr_inner">
                                             <div class="v_lcr v_lcr_l lcr_active" onclick="clickLCR(this,'l','block_lista')">
                                                 <div>Datos</div>
@@ -1591,7 +1611,8 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                         <div class="wr_lcr_line">
                                             <div class="lcr_line lines2 line_2l"></div>
                                         </div>
-                                    </div><!--/.wr_lcr-->
+                                    </div> -->
+                                    <!--/.wr_lcr-->
 
                                 </div><!--/#block_lista_head-->
 
@@ -1747,7 +1768,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
 
                                         </div><!--/.bl_parte_l-->
 
-                                        <div class="partes bl_parte_r">
+                                        <div class="partes bl_parte_r vista_r">
 
                                             <!--/parte_fija-->
                                             <div class="parte_fija">
@@ -1760,12 +1781,24 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <div class="parte_variable">
                                                     <div class="bloques_outer">
                                                         <div class="bloques wr_vista_lista">
+                                                            
+                                                            <div class="vista_head">
+                                                                <button class="btn btn_vista_atras_head" onclick="ocultarTodasVistas();">
+                                                                    <img src="images/arrow_left2_white.svg">
+                                                                </button>
+                                                                <div class="vp_titulo">Vista (<b>Lista</b>)</div>
+                                                                <button class="btn btn_vista_close_head" onclick="ocultarTodasVistas();">
+                                                                    <img src="images/x_white.png">
+                                                                </button>
+                                                            </div><!--/.vista_head-->
+
                                                             <div class="vista_lista_content">
                                                                 <div class="d_info">
                                                                     <p class="prim">Busca una lista de canciones introduciendo el texto en el campo '<b>Buscar</b>'...</p>
                                                                     <p class="prim">(Aquí se mostrarán el título de la lista y sus canciones...)</p>
                                                                 </div>
-                                                            </div>
+                                                            </div><!--/.vista_lista_content-->
+
                                                         </div>
                                                     </div>                                            
                                             </div><!--/.parte_variable-->

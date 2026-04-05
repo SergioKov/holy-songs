@@ -1360,6 +1360,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
                     </span>
 
                     <span class="sp_flex_n_title">
+                        <span class="l_kvadrat">.</span>
                         <span class="l_n">${i + 1}.</span>
                         <span class="l_title">
                             <span class="cl_title">${item.title}</span>
@@ -1427,10 +1428,10 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
                     console.log('Editar canción de la lista. id_song: ', lista_id_song);
                     e.stopPropagation();//evita que se dispare el onclick del padre
 
-                    if(window.innerWidth < pantallaTabletMinPx){//mobile
-                        const element_this = eid_block_cancion.querySelector('.v_lcr_r');//btn vista derecha
-                        clickLCR(element_this,'r','block_cancion');
-                    }
+                    // if(window.innerWidth < pantallaTabletMinPx){//mobile
+                    //     const element_this = eid_block_cancion.querySelector('.v_lcr_r');//btn vista derecha
+                    //     clickLCR(element_this,'r','block_cancion');
+                    // }
                     
                     // //funcion anónima autoejecutable para esperar un tiempo antes de ejecutar editSongOfLista() y así evitar errores de carga de datos al ir a vista mobile (slide_select) y luego editar canción
                     // (async (e) =>{
@@ -1698,6 +1699,7 @@ function buildListaSort(contenedor, arr_lista_bucle){
 
             p.dataset.id_song = item.id_song;
             p.innerHTML = `
+                <span class="l_kvadrat">.</span>
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">
                     <span class="cl_title">${item.title}</span>
