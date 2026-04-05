@@ -1360,7 +1360,9 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
                     </span>
 
                     <span class="sp_flex_n_title">
-                        <span class="l_kvadrat">.</span>
+                        <span class="l_kvadrat">
+                            <img src="./images/icon_ok_white.svg">
+                        </span>
                         <span class="l_n">${i + 1}.</span>
                         <span class="l_title">
                             <span class="cl_title">${item.title}</span>
@@ -1699,7 +1701,9 @@ function buildListaSort(contenedor, arr_lista_bucle){
 
             p.dataset.id_song = item.id_song;
             p.innerHTML = `
-                <span class="l_kvadrat">.</span>
+                <span class="l_kvadrat">
+                    <img src="./images/icon_ok_white.svg">
+                </span>
                 <span class="l_n">${i + 1}.</span>
                 <span class="l_title">
                     <span class="cl_title">${item.title}</span>
