@@ -1315,7 +1315,10 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
             else if(e.target.closest('.btn_action_editar')){
                 openModal('full','Editar lista',null,'buildLista',true, 'editar');
             }else{
-                hideShowBlock('l_canciones_detalles');
+                // hideShowBlock('l_canciones_detalles');
+                const element = e.target.closest('.wr_p_lista').querySelector('#l_canciones_detalles');
+                console.log('element: ', element);
+                hideShowBlock(element);
             }
         }
         wr_p_lista.append(d_canciones_head);
@@ -1375,6 +1378,8 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
             `;
             
             p_lista.onclick = (e) => {
+                showToast('info', '2. p_lista clicked en 1378', 1500);//test
+
                 lista_id_song = e.currentTarget.dataset.id_song;
                 const element_clicked = e.currentTarget;// guardar referencia real del evento (aki e.currentTarget es p_lista)
                 console.log('lista_id_song: ', lista_id_song);

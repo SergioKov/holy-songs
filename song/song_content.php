@@ -209,13 +209,13 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                 </div>
                                 <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
                                     <!--Lista-->
-                                    <img class="btn_img" src="./images/playlist3_512x512_white.png">
+                                    <img class="btn_img" src="./images/checklist2_24x24.png">
                                 </div>
                             </div><!--/.bl_head_l-->
 
                             <!--.bl_head_r-->
                             <div class="bl_head_r">
-                                <div class="dbtn dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="login" title="Login">
+                                <div class="dbtn dbtn" style="display: none;" onclick="showBlockName(this.dataset.block_name)" data-block_name="login" title="Login">
                                     <!--Lista-->
                                     <img class="btn_img" src="./images/login2_white.svg">
                                 </div>
@@ -1345,7 +1345,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                             <!--/parte_fija-->
                                             <div class="parte_fija">
                                                 <h4 class="h4_vista_previa">
-                                                        <span>Canción</span>
+                                                        <span>Canción:</span>
                                                         <!-- los botones guardar y vista previa -->
                                                     </h4>
                                             </div><!--/.parte_fija-->
@@ -1542,7 +1542,10 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                 <p class="prim opt_prim d-none">
                                                     Búsca la lista o crea una nueva.
                                                 </p>
-
+                                                <button id="btn_lista_refresh" class="btn btn_refresh" onclick="refreshLista()">
+                                                    <img src="images/refresh.png" class="">
+                                                    <span>Actualizar</span>
+                                                </button>
                                                 <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</button>
                                                 <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
                                                 <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver');">Ver</button>

@@ -3752,6 +3752,8 @@ async function findWordsSong(){
             `;
 
             p_song.onclick = async (e) => {
+                showToast('info', '3. p_song clicked en 3755', 1500);//test
+
                 console.log('e.currentTarget: ', e.currentTarget);
 
                 id_song = e.currentTarget.dataset.id;
@@ -4036,6 +4038,8 @@ async function findWordsLista(){
             `;
 
             p_lista.onclick = (e) => {                
+                showToast('info', '1. p_lista clicked en 4039', 1500);//test
+                
                 console.log('e.currentTarget: ', e.currentTarget);
     
                 id_lista = e.currentTarget.dataset.id;
@@ -4266,19 +4270,19 @@ function editar_song(){
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l .h4_vista_previa').innerHTML = `
-        <span>Canción</span>
+        <span>Canción:</span>
 
         <button class="btn btn_vista btn_v_lista" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');"">
-            <img src="./images/playlist3_512x512_white.png">
+            <img src="./images/checklist2_24x24.png">
             <span>Lista</span>
         </button>
         
-        <button class="btn btn_vista" onclick="guardarSong(this,'cancion_song_bloques','editar');">
+        <button class="btn btn_vista btn_v_guardar" onclick="guardarSong(this,'cancion_song_bloques','editar');">
             <img src="./images/guardar.png">
             <span>Guardar</span>
         </button>
 
-        <button class="btn btn_vista btn_v_guardar" onclick="mostrarVista(document.querySelector('#block_cancion_body'));">
+        <button class="btn btn_vista btn_v_vista" onclick="mostrarVista(document.querySelector('#block_cancion_body'));">
             <img src="./images/ojo24x24_2.png">
             <span>Vista</span>
         </button>
@@ -4337,7 +4341,7 @@ function editar_song(){
                     <span>Vista</span>
                 </button>
 
-                <button class="btn btn_vista btn_refresh" onclick="refreshSong()">
+                <button class="btn btn_vista btn_song_refresh btn_refresh" onclick="refreshSong()">
                     <img src="images/refresh.png"> 
                     <span>Actualizar</span>
                 </button>

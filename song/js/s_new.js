@@ -371,6 +371,11 @@ function mostrarVista(contenedor){
 
     if(!contenedor) return;
 
+    if(window.innerWidth > pantallaTabletMaxPx){// pantallaTabletMaxPx = 1023px es portatil small
+        //no muestro vista en desktop porque ya se muestra al lado derecho.
+        return;
+    }
+
     ocultarTodasVistas();
     contenedor.querySelector('.vista_r')?.classList.add('shown');//muestro parte derecha de vista
 
@@ -383,14 +388,32 @@ async function refreshSong(){
     console.log('=== function refreshSong() === ');
 
     //actualizo objSong desde bd por si se han hecho cambios
-    objSong = objSong = await getDataSongFromBd();
+    objSong = await getDataSongFromBd();
     console.log('despues --- objSong: ', objSong);
 
     editar_song();
 
     pintSongActiveSoloDatos();
 
-    eid_block_cancion.querySelector('.btn_refresh img').classList.toggle('rotate');//animación refresh
+    eid_block_cancion.querySelector('.btn_song_refresh img').classList.toggle('rotate');//animación refresh
+}
+
+async function refreshLista(){
+    console.log('=== function refreshLista() === ');
+
+    if(!id_lista){
+        return;
+    }
+
+    //actualizo objLista desde bd por si se han hecho cambios
+    objLista = await getDataListaFromBd();
+    console.log('despues --- objLista: ', objLista);
+
+    //editar_song();
+
+    pintListaActiveSoloDatos();
+
+    eid_block_lista.querySelector('.btn_refresh img').classList.toggle('rotate');//animación refresh
 }
 
 function pintListaActive(){
@@ -480,6 +503,7 @@ function pintListaActiveSoloDatos(){
     lista_vista_lista_content.innerHTML = '';//reset
 
     lista_ul_action.innerHTML = `
+        <li class="li_action" onclick="refreshLista();">Actualizar Lista actual</li>
         <li class="li_action" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</li>
         <li class="li_action" onclick="openModal('full','Ver lista',null,'buildLista',true, 'ver');">Ver</li>
         <li class="li_action" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar</li>
@@ -1706,7 +1730,20 @@ function hideShowBlock(id_div){
     console.log('=== function hideShowBlock() ===');
     console.log('id_div: ',id_div);
 
-    const divElement = document.getElementById(id_div);
+    let divElement;
+
+    if (typeof id_div === "string") {
+        console.log("Es un string");
+        divElement = document.getElementById(id_div);
+    } else if (id_div instanceof HTMLElement) {
+        console.log("Es un elemento HTML");
+        divElement = id_div;
+    } else {
+        console.log("Otro tipo");
+        alert('Error: el parámetro debe ser un string o un elemento HTML');
+        return;
+    }
+
     const block_css = window.getComputedStyle(divElement);
     const block_display = block_css.display;
 

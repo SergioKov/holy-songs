@@ -35,7 +35,7 @@
         left: -9999px;
     }
 
-    .btn_v_guardar,
+    .btn_v_vista,
     .btn_vista_atras {
         display: none !important;
     }
@@ -156,7 +156,7 @@
     }
 
     .btns_fx {
-        flex-direction: column;
+        /* flex-direction: column; */
     }
 
 }
@@ -184,6 +184,10 @@
 
     .barra_estado::-webkit-scrollbar {
         height: 3px;
+    }
+
+    .btn_vista span {
+        display: none;
     }
 
 }
