@@ -409,8 +409,15 @@ async function refreshLista(){
     objLista = await getDataListaFromBd();
     console.log('despues --- objLista: ', objLista);
 
-    //editar_song();
+    const itemListaUpdate = objDataListas.arr_data?.find(item => item.id_lista == id_lista);
+    if (itemListaUpdate) {
+        Object.assign(itemListaUpdate, objLista);
+        // el objeto dentro de arr_data ya está actualizado
+    } else {
+        console.warn('No encontrado objlista.id_lista en objDatalistas.arr_data');
+    }
 
+    //Actualizo p_lista 
     pintListaActiveSoloDatos();
 
     eid_block_lista.querySelector('.btn_refresh img').classList.toggle('rotate');//animación refresh
