@@ -1378,7 +1378,7 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
             `;
             
             p_lista.onclick = (e) => {
-                showToast('info', '2. p_lista clicked en 1378', 1500);//test
+                // showToast('info', '2. p_lista clicked en 1378', 1500);//test
 
                 lista_id_song = e.currentTarget.dataset.id_song;
                 const element_clicked = e.currentTarget;// guardar referencia real del evento (aki e.currentTarget es p_lista)

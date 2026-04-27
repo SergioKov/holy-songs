@@ -3752,7 +3752,7 @@ async function findWordsSong(){
             `;
 
             p_song.onclick = async (e) => {
-                showToast('info', '3. p_song clicked en 3755', 1500);//test
+                // showToast('info', '3. p_song clicked en 3755', 1500);//test
 
                 console.log('e.currentTarget: ', e.currentTarget);
 
@@ -4038,7 +4038,7 @@ async function findWordsLista(){
             `;
 
             p_lista.onclick = (e) => {                
-                showToast('info', '1. p_lista clicked en 4039', 1500);//test
+                // showToast('info', '1. p_lista clicked en 4039', 1500);//test
                 
                 console.log('e.currentTarget: ', e.currentTarget);
     
