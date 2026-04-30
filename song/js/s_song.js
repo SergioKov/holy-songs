@@ -4390,6 +4390,9 @@ function editar_song(){
                         <button id="btn_state_texto" class="btn" onclick="toggleTexto()">
                             <img src="/song/images/text_on32x32.png">
                         </button>
+                        <button id="btn_state_contenido_width" class="btn" onclick="toggleContenidoWidth()">
+                            <img src="/song/images/auto_width_off.png">
+                        </button>
                     </div>
                 </div>
             </div>
@@ -4568,6 +4571,20 @@ function toggleTexto() {
     }
 
     textoVisible = !textoVisible;
+}
+
+function toggleContenidoWidth() {
+    const btn_state_contenido_width = cancion_wr_vista_blocks.querySelector('#btn_state_contenido_width');
+
+    if (contenidoWidth) {
+        quitarContenidoWidth('#tema_block');
+        btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_off.png";
+    } else {
+        aplicarContenidoWidth('#tema_block');
+        btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_on.png";
+    }
+
+    contenidoWidth = !contenidoWidth;
 }
 
 

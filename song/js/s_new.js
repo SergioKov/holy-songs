@@ -2942,6 +2942,24 @@ function mostrarTexto(selectorContenedor){//'#tema_block'
 
 
 
+function aplicarContenidoWidth(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('contenido_width_off');
+    contenedor.classList.add('contenido_width_on');
+}
+
+function quitarContenidoWidth(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+    //const clone = contenedor.cloneNode(true);//clono para luego insertar el contenido original
+
+    contenedor.classList.remove('contenido_width_on');
+    contenedor.classList.add('contenido_width_off');
+}
+
+
+
 
 function reemplazarEspacios(texto) {
     return texto.replace(/ /g, '&nbsp;');
