@@ -612,7 +612,7 @@ let objPantallaToSendToBd = {
 let objPantallaToSendToBd_str = '';
 
 
-// objPantallaParams se inicializa en 'pantalla_config.js' en 2 ficheros 'pantalla.php' (localStorage) y 'pantalla_bd.php' (BD)
+// objPantallaParams se inicializa en 's_pantalla.js' en 2 ficheros 'pantalla.php' (localStorage) y 'pantalla_bd.php' (BD)
 
 let objPantallaParams = {
     pantalla_show,

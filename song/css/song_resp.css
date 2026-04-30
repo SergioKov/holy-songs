@@ -103,6 +103,7 @@
         width: 100% !important;
         flex-direction: column;
     }
+    
     .wr_lcr,
     .solo_en_mobile
     {
@@ -111,10 +112,12 @@
 
     .partes ,
     .wr_dbtns_panels,
-    .solo_en_desktop
+    .solo_en_desktop,
+    .vkl_name
     {
         display: none !important;
     }
+
     .partes.bl_active {
         display: block !important;
     }

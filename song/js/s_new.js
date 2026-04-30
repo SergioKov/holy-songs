@@ -483,8 +483,16 @@ function pintListaActiveSoloDatos(){
         p_lista.querySelector('.cl_grupo_nombre ').textContent = `${objLista.grupo_nombre}` || '';
         p_lista.querySelector('.cl_dia_semana').textContent = diaSemana(objLista.fecha) || '';
         p_lista.querySelector('.cl_fecha').textContent = objLista.fecha_ver || '';
-        p_lista.querySelector('.l_num_canciones').textContent = (objLista.arr_lista.length > 0) ? objLista.arr_lista.length :  '';
         p_lista.querySelector('.cl_notes').textContent = objLista.notes || '';
+
+        //si hay canciones, muestro el numero quitando d_none
+        if(objLista.arr_lista.length > 0){
+            p_lista.querySelector('.l_num_canciones').textContent = objLista.arr_lista.length;
+            p_lista.querySelector('.l_num_canciones').classList.remove('d-none');
+        }else{
+            p_lista.querySelector('.l_num_canciones').textContent = '';
+            p_lista.querySelector('.l_num_canciones').classList.add('d-none');//oculto el numero de canciones
+        }
 
         if(objLista.notes != ''){//muestro
             p_lista.querySelector('.cl_notes').classList.remove('d-none');//quito clase para mostrar nota si la hay
@@ -1321,7 +1329,7 @@ async function showTipoContent(btn, param){
 
         case 'c'://chords => acordes
             if(show_acordes == 1){
-                show_acordes = 0;//hext action
+                show_acordes = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
                 show_acordes = 1;//hext action
@@ -1369,6 +1377,7 @@ async function showTipoContent(btn, param){
             show_legend,
             show_acordes,
             show_next_slide,
+            tipo_fuente
         };
         console.log('objPantallaParams: ',objPantallaParams);
         
@@ -1388,6 +1397,7 @@ async function showTipoContent(btn, param){
             show_legend,
             show_acordes,
             show_next_slide,
+            tipo_fuente
         };
         console.log('objPantallaParamsToSendToBd: ',objPantallaParamsToSendToBd);        
         
@@ -3216,4 +3226,46 @@ function changeFontSize(step) {
         }
         //console.log('fin el: ', el);
     });
+}
+
+
+function contarLineasVisuales(elemento) {
+    const estilos = window.getComputedStyle(elemento);
+
+    let lineHeight = estilos.lineHeight;
+
+    // Si line-height es "normal", lo estimamos
+    if (lineHeight === "normal") {
+        lineHeight = parseFloat(estilos.fontSize) * 1.2;
+    } else {
+        lineHeight = parseFloat(lineHeight);
+    }
+
+    const altura = elemento.getBoundingClientRect().height;
+
+    return Math.round(altura / lineHeight);
+}
+
+function contarLineasReales(elemento) {
+    const range = document.createRange();
+    range.selectNodeContents(elemento);
+
+    const rects = Array.from(range.getClientRects())
+        .filter(r => r.height > 0); // ignorar rects raros
+
+    const tops = rects
+        .map(r => r.top)
+        .sort((a, b) => a - b);
+
+    const tolerancia = 2; // píxeles (clave)
+    const lineas = [];
+
+    tops.forEach(top => {
+        const existe = lineas.some(t => Math.abs(t - top) < tolerancia);
+        if (!existe) {
+            lineas.push(top);
+        }
+    });
+
+    return lineas.length;
 }

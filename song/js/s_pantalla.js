@@ -272,8 +272,14 @@ function aplicarVista(){
         //User control
         if(show_acordes){
             eid_contenedor.classList.add('show_acordes');
+            if(tipo_fuente == 'm'){
+                eid_contenedor.classList.add('monospace_font');//siempre asi si hay show_acordes
+            }else{
+                eid_contenedor.classList.remove('monospace_font');
+            } 
         }else{
             eid_contenedor.classList.remove('show_acordes');
+            eid_contenedor.classList.remove('monospace_font');//siempre quito monospace aki
         }
 
         if(show_legend){
@@ -288,11 +294,11 @@ function aplicarVista(){
             eid_contenedor.classList.remove('show_next_slide');
         }
 
-        if(tipo_fuente == 'm'){
-            eid_contenedor.classList.add('monospace_font');
-        }else{
-            eid_contenedor.classList.remove('monospace_font');
-        }        
+        // if(tipo_fuente == 'm'){
+        //     eid_contenedor.classList.add('monospace_font');
+        // }else{
+        //     eid_contenedor.classList.remove('monospace_font');
+        // }        
     }
 
     //si está permitido para el usuario controlar la vista, ...

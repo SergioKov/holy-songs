@@ -3729,7 +3729,9 @@ async function findWordsSong(){
                 <span class="wn_2_flex">
                 
                     <span class="sp_flex_btns">
-                        <span class="l_id solo_en_mobile">${el.id_song}</span>            
+                        <span class="solo_en_mobile">
+                            <span class="l_id">${el.id_song}</span>
+                        </span>            
                         <span class="wr_parte_noid">  
                             <span class="l_idioma">${lang_name_text}</span>
                             <span class="l_tune">${el.tune}</span>
@@ -3740,7 +3742,9 @@ async function findWordsSong(){
                     </span>            
             
                     <span class="sp_flex_n_title"> 
-                        <span class="l_id solo_en_desktop">${el.id_song}</span>            
+                        <span class="solo_en_desktop">
+                            <span class="l_id">${el.id_song}</span>
+                        </span>            
                         <span class="l_title">
                             <span class="cl_title ${cl_title}">${el.title || ''}</span>
                             <span class="cl_title2 ${cl_title2}">${el.title2 || ''}</span>
@@ -3877,7 +3881,7 @@ async function findWordsLista(){
         // const selector_items = '.tr_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const selector_items = '.p_lista';//CLASES JUNTOS!. los elementos que se ocultarán, si no cumplen con el filtro
         const arr_spans = [
-            '.l_id_lista.solo_en_mobile',//para que busque solo en 1 y no 2 que son iguales
+            '.solo_en_mobile .l_id_lista',//para que busque solo en 1 y no 2 que son iguales
             '.cl_dia_semana',    
             '.cl_fecha',    
             '.cl_title',    
@@ -4005,22 +4009,32 @@ async function findWordsLista(){
 
             let cl_title = (el.title) ? '' : 'd-none';//si no hay título, lo oculto 
             let cl_grupo_nombre = (el.id_grupo > 0 && el.grupo_nombre != '') ? '' : 'd-none';//si no hay grupo, lo oculto 
-            let cl_notes = (el.notes) ? '' : 'd-none';//si no hay título, lo oculto 
-
+            let cl_notes = (el.notes) ? '' : 'd-none';//si no hay título, lo oculto
 
 
             p_lista.innerHTML = `
+                <span class="solo_en_desktop">
+                    <img class="btn_img" src="./images/checklist2_24x24.png">
+                </span>
+                
                 <span class="wn_2_flex">
                     
                     <span class="sp_flex_btns">
-                        <span class="l_id_lista solo_en_mobile">${el.id_lista}</span>            
+                        <span class="solo_en_mobile">
+                            <img class="btn_img" src="./images/checklist2_24x24.png">
+                        </span>
+                        <span class="solo_en_mobile">
+                            <span class="l_id_lista">${el.id_lista}</span>
+                        </span>
                         <span class="wr_parte_noid">  
                             <span class="l_num_canciones ${cl_num_canciones}">${hay_lista_texto}</span>
                         </span>
                     </span>            
             
-                    <span class="sp_flex_n_title"> 
-                        <span class="l_id_lista solo_en_desktop">${el.id_lista}</span>            
+                    <span class="sp_flex_n_title">
+                        <span class="solo_en_desktop"> 
+                            <span class="l_id_lista">${el.id_lista}</span>
+                        </span>            
                         <span class="l_title">
 
                             <span class="wr_dia_y_fecha">

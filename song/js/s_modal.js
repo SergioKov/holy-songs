@@ -181,7 +181,13 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
                     break;
 
                 case 'buildLista':
-                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
+                    // eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
+                    eid_h4_text.innerHTML = `
+                        <span class="dbtn_fx">
+                            <img class="btn_img" src="./images/checklist2_24x24.png">
+                            <span>${headerTitle}</span> 
+                        </span>
+                    `;
                     eid_modcont_body.style.overflow = 'auto';//habilita scroll
                     eid_modcont_body.classList.add('theme_grey');   
                     console.log('aki llamar buildLista()');
@@ -1049,9 +1055,17 @@ function buildLista(lista_action = null){
     let arr_lista_bucle = [];
     let cl_id_lista = 'd-none';//oculto
     let texto_ordenar = '';
-    let contenedor;//general. se asigna luego
+    let contenedor;//general. se asigna luego  
+    
+    if(lista_action == 'nueva'){//si es nueva
+        
+        mostrarPrim = false;    
+        ocultarElementosPrimEn(lista_option_inner);
+        ocultarElementosEditablesEn(lista_option_inner);
+        mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
 
-    if(lista_action !== 'nueva'){//si es: ver_sm ver, editar, eliminar
+    }else{//si es: ver_sm ver, editar, eliminar
+        
         if(!hay_id_lista('buildLista()')){
             const aviso_outer = document.createElement('div');
             aviso_outer.className = 'aviso_outer';
@@ -1072,13 +1086,6 @@ function buildLista(lista_action = null){
         fecha_val = objLista.fecha_ver;//formato ya desde bd '03/08/2025'
         notes_val = objLista.notes;
         arr_lista_bucle = objLista.arr_lista;
-
-    }else{//si es nueva
-        
-        mostrarPrim = false;    
-        ocultarElementosPrimEn(lista_option_inner);
-        ocultarElementosEditablesEn(lista_option_inner);
-        mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
     }
 
     switch (lista_action) {
@@ -1086,9 +1093,11 @@ function buildLista(lista_action = null){
             mensaje_html = `
                 <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
             `;
+            id_lista = null;//reset
+            arr_lista = [];//reset
+            objLista = {};//reset
             arr_lista_bucle = arr_lista;
             console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);            
-            id_lista = null;
             resetBlockLista();        
             break;
 
@@ -1194,8 +1203,8 @@ function buildLista(lista_action = null){
                         <span onclick="meter_title_fast(this.innerText)">Розбір слова</span>
                         <span onclick="meter_title_fast(this.innerText)">Євангелізація</span>
                     </div> 
-                    <div class="back_word">
-                        <img src="./images/backspace_black.png" alt="back_word" onclick="reset_title_fast()">
+                    <div class="back_word" onclick="reset_title_fast()">
+                        <img src="./images/backspace_black.png" alt="back_word">
                     </div>               
                 </div>                
                 
@@ -1299,7 +1308,10 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span>Canciones</span>
+            <div class="dbtn_fx">
+                <span>Canciones</span> 
+                <span class="n_songs">(${arr_lista.length})</span>
+            </div>
             <div class="btns_fx">
                 <button class="btn btn_action_ordenar">Ordenar</button>
                 <button class="btn btn_action_editar">Editar</button>
@@ -1653,7 +1665,10 @@ function buildListaSort(contenedor, arr_lista_bucle){
         const d_canciones_head = document.createElement('div');
         d_canciones_head.className = 'canciones_head';
         d_canciones_head.innerHTML = `
-            <span>Canciones</span>
+            <div class="dbtn_fx">
+                <span>Canciones</span> 
+                <span class="n_songs">(${arr_lista.length})</span>
+            </div>
             <div class="btns_fx">
                 <button class="btn btn_action_ver">Ver</button>
                 <button class="btn btn_action_editar">Editar</button>

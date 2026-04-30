@@ -457,6 +457,7 @@ fieldset.kuplet {
     justify-content: center;
     width: 100%;
     position: relative;
+    font-size: clamp(16px, 100%, 70px);
 }
 
 

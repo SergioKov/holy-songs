@@ -191,25 +191,30 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                             
                             <!--.bl_head_l-->
                             <div class="bl_head_l">
-                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar" title="Buscar">
+                                <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="buscar" title="Buscar">
                                     <!--Buscar-->
                                     <img class="btn_img" src="./images/search_zoom_icon_white.svg">
+                                    <span class="vkl_name">Buscar</span>
                                 </div>
-                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
+                                <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
                                     <!--Esquema-->
                                     <img class="btn_img" src="./images/esquema_512x512_white.png">
+                                    <span class="vkl_name">Esquema</span>
                                 </div>
-                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
+                                <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
                                     <!--Canción-->
                                     <img class="btn_img" src="./images/song_512x512_white.png">
+                                    <span class="vkl_name">Canción</span>
                                 </div>
-                                <div class="dbtn" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo" title="Ejemplo">
+                                <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="ejemplo" title="Ejemplo">
                                     <!--Ejemplo-->
                                     <img class="btn_img" src="./images/help_512x512_white.png">
+                                    <span class="vkl_name">Ejemplo</span>
                                 </div>
-                                <div class="dbtn dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
+                                <div class="dbtn dbtn_fx dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
                                     <!--Lista-->
                                     <img class="btn_img" src="./images/checklist2_24x24.png">
+                                    <span class="vkl_name">Lista</span>
                                 </div>
                             </div><!--/.bl_head_l-->
 
@@ -542,7 +547,11 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                             <button class="btn btn_vista_atras_head" onclick="ocultarTodasVistas();">
                                                                 <img src="images/arrow_left2_white.svg">
                                                             </button>
-                                                            <div class="vp_titulo">Vista (<b>Canción</b>)</div>
+                                                            <button class="btn_actions no_visible">&nbsp;</button>
+                                                            <div class="vp_titulo">Vista (<b>Canción</b>)</div>                                                           
+                                                            <button class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_buscar');">
+                                                                <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                            </button>
                                                             <button class="btn btn_vista_close_head" onclick="ocultarTodasVistas();">
                                                                 <img src="images/x_white.png">
                                                             </button>
@@ -1546,6 +1555,7 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                     <img src="images/refresh.png" class="">
                                                     <span>Actualizar</span>
                                                 </button>
+                                                <div class="separador"></div>
                                                 <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</button>
                                                 <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
                                                 <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver');">Ver</button>
@@ -1789,7 +1799,11 @@ if($_SERVER['HTTP_HOST'] == 'holy-songs.com'){//HOSTALIA
                                                                 <button class="btn btn_vista_atras_head" onclick="ocultarTodasVistas();">
                                                                     <img src="images/arrow_left2_white.svg">
                                                                 </button>
+                                                                <button class="btn_actions no_visible">&nbsp;</button>
                                                                 <div class="vp_titulo">Vista (<b>Lista</b>)</div>
+                                                                <button class="btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');">
+                                                                    <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                                </button>
                                                                 <button class="btn btn_vista_close_head" onclick="ocultarTodasVistas();">
                                                                     <img src="images/x_white.png">
                                                                 </button>

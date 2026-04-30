@@ -679,7 +679,7 @@ span.barra {
 
 fieldset {
     /* background: green; */
-    /* border-radius: 10px; */
+    border-radius: 10px;
     /* border-color: transparent; */
     margin-inline: 8px;
     padding: 10px;
@@ -687,7 +687,9 @@ fieldset {
 }
 fieldset.preview_next {
     border-bottom: none !important;
-    /* border-radius: 10px 10px 0 0; */
+    border-left: none!important;
+    border-right: none !important;
+    /* border-radius: 0; */
 }
 
 fieldset:not(.song_bloques fieldset, .wr_vista_blocks fieldset)
@@ -721,9 +723,16 @@ span.repryza {
     color: #909090;
 }
 
-fieldset.kuplet{
+fieldset{
+    /* border: none; */
+    /* border-top: 3px solid #909090; */
+    border: 3px solid #909090;
+}
+
+.slide_container fieldset{
     border: none;
     border-top: 3px solid #909090;
+    border-radius: 0;
 }
 
 legend {
@@ -1634,11 +1643,13 @@ input, textarea, select {
 }
 
 input, select {
-    font-size: 80%;
+    font-size: 16px;
+    /* font-size: 80%; */
 }
 textarea {
     min-height: auto; /* Esto deja que el atributo rows controle la altura mÃ­nima */
-    font-size: 100%;
+    font-size: 18px;
+    /* font-size: 100%; */
 }
 
 label {
@@ -3528,6 +3539,15 @@ span.sp_number {
     display: none !important;
 }
 
+.ocultar_acordes p.t {
+    font-family: Arial;
+    white-space: pre-line;
+}
+/* si el bloque no tiene texto, lo oculto */
+.ocultar_acordes fieldset:not(:has(.t)) {
+    display: none;
+}
+
 .mostrar_acordes p.c,
 .mostrar_acordes p.n,
 .mostrar_acordes p.b
@@ -3539,6 +3559,9 @@ span.sp_number {
 .ocultar_texto p.t
 {
     display: none !important;
+}
+.ocultar_texto fieldset p {
+    white-space: pre-line;
 }
 
 .mostrar_texto p.t
@@ -3573,6 +3596,7 @@ span.sp_number {
 .sp_add_a_lista {
     padding-bottom: 5px;
     border-bottom: 1px solid #737373;
+    color: #ffffff;
 }
 .n_lista{
     float:right;
@@ -3806,14 +3830,23 @@ span.sp_number {
     border-radius: 15px;
     color: #c0c0c0;
     cursor: pointer;
+    opacity: 1;
+    transition: 0.3s ease;
 }
 .back_word {
     padding: 2px 7px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: 0.3s ease;
 }
 
+.wr_fast_words span:hover,
+.back_word:hover {
+    opacity: 0.5;
+}
 
 #tema_block .bloques {
     padding: 0;
@@ -4035,4 +4068,19 @@ span.sp_number {
 .l_kvadrat img {
     width: 18px;
     height: 18px;
+}
+
+.dbtn_fx {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.n_songs {
+    color: #FF9800;
+}
+
+.no_visible {
+    visibility: hidden;
 }
