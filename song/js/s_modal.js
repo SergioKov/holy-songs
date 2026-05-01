@@ -1094,8 +1094,8 @@ function buildLista(lista_action = null){
                 <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
             `;
             id_lista = null;//reset
-            arr_lista = [];//reset
-            objLista = {};//reset
+            //arr_lista = [];//reset
+            //objLista = {};//reset
             arr_lista_bucle = arr_lista;
             console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);            
             resetBlockLista();        
