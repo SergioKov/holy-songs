@@ -164,5 +164,10 @@
 .scrollbar_drag_over .contenedor
 {
     padding-right: 0px;
-    /* margin-right: -10px; */
 } 
+
+.scrollbar_menu_over .d_contenedor, 
+.scrollbar_drag_over .d_contenedor
+{
+    overflow-y: scroll;
+}

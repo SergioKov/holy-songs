@@ -4292,6 +4292,7 @@ span.sp_number {
 .d_contenedor {
     background: #ffffff;
     overflow: auto;
+    overflow-y: scroll;
     width: 100%;
     /* height: calc(100% - 40px); */
     padding: 0px;
@@ -4309,7 +4310,7 @@ span.sp_number {
 /* #d_state_drag_song:hover,  */
 #d_state_fullscreen:hover 
 {
-    opacity: 1;
+    opacity: 0.5;
 }
 
 #d_state_drag_song.active{
