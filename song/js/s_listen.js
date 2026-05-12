@@ -282,14 +282,14 @@ function endGesture(x, y){
 
         // mover dedo hacia abajo
         if (diffY > threshold) {
-            console.log('=== SWIPE dedo hacia abajo ===');
-            content.scrollTop += pageStep;
+            console.log('=== SWIPE dedo hacia abajo. contenido arriba ===');
+            content.scrollTop -= pageStep;
         }
         
         // mover dedo hacia arriba
         else if (diffY < -threshold) {
-            console.log('=== SWIPE dedo hacia arriba ===');
-            content.scrollTop -= pageStep;
+            console.log('=== SWIPE dedo hacia arriba. contenido abajo ===');
+            content.scrollTop += pageStep;
         }
 
     }

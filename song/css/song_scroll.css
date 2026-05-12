@@ -12,6 +12,12 @@
     height: 5px;
 }
 
+/* altura de barra de scroll horizontal en d_contenedor */
+.d_contenedor::-webkit-scrollbar
+{
+    height: 10px;
+}
+
   
 /* Track - recorrido donde se desplaza la barra de scroll */
 .barra_estado::-webkit-scrollbar-track,
@@ -41,3 +47,98 @@
 /* ========================================= */
 /* HORIZONTAL END                            */
 /* ========================================= */
+
+
+
+
+
+
+
+
+
+
+/* =================================================== */
+/* VERTICAL START                                      */
+/* =================================================== */
+
+/* --- start ejemplo --- */
+/* width - ancho de la barra vertical */
+.d_contenedor::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track - el recorrido de la barra de scroll */
+.d_contenedor::-webkit-scrollbar-track {
+    background: #a8a8a8;
+}
+
+/* Handle - es la misma barra la cual hay que mover con el ratón */
+.d_contenedor::-webkit-scrollbar-thumb {
+    background: #2b88d2;
+    cursor: pointer;
+}
+  
+/* Handle on hover - es la misma barra la cual hay que mover con el ratón */
+.d_contenedor::-webkit-scrollbar-thumb:hover {
+    background: #d80586; 
+}
+/* --- fin ejemplo --- */
+
+
+/* width */
+.d_contenedor::-webkit-scrollbar 
+{
+    width: 10px !important;
+}
+
+
+
+/* Track */
+.d_contenedor::-webkit-scrollbar-track 
+{
+    /* background: #d6e8f6; */
+    background: #ddd;
+}
+
+
+/* Handle */
+.d_contenedor::-webkit-scrollbar-thumb 
+{
+    /* background: #2b88d2;
+    cursor: pointer;
+    transition: background-color 0.3s ease; */
+
+    position: absolute;
+    right: 20px;
+
+    background: #666;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+}
+
+
+.d_contenedor::-webkit-scrollbar-thumb
+{
+    /* background: red; */
+    background: #820101;
+}
+  
+
+/* Handle on hover */
+.d_contenedor::-webkit-scrollbar-thumb:hover 
+{
+    /* background: pink;  */
+    background: #444; 
+}
+
+
+.d_contenedor::-webkit-scrollbar-thumb:hover 
+{
+    /* background: #981010; */
+    background: #333;
+}
+
+/* =================================================== */
+/* VERTICAL END                                        */
+/* =================================================== */
