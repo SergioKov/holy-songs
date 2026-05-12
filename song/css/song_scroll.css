@@ -13,7 +13,8 @@
 }
 
 /* altura de barra de scroll horizontal en d_contenedor */
-.d_contenedor::-webkit-scrollbar
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar,
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar
 {
     height: 10px;
 }
@@ -63,30 +64,34 @@
 
 /* --- start ejemplo --- */
 /* width - ancho de la barra vertical */
-.d_contenedor::-webkit-scrollbar {
-    width: 10px;
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar {
+    /* width: 10px; */
 }
 
 /* Track - el recorrido de la barra de scroll */
-.d_contenedor::-webkit-scrollbar-track {
-    background: #a8a8a8;
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-track {
+    /* background: #a8a8a8; */
 }
 
 /* Handle - es la misma barra la cual hay que mover con el ratón */
-.d_contenedor::-webkit-scrollbar-thumb {
-    background: #2b88d2;
-    cursor: pointer;
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb {
+    /* background: #2b88d2; */
+    /* cursor: pointer; */
 }
   
 /* Handle on hover - es la misma barra la cual hay que mover con el ratón */
-.d_contenedor::-webkit-scrollbar-thumb:hover {
-    background: #d80586; 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb:hover {
+    /* background: #d80586;  */
 }
 /* --- fin ejemplo --- */
 
 
+
+
+
 /* width */
-.d_contenedor::-webkit-scrollbar 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar, 
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar 
 {
     width: 10px !important;
 }
@@ -94,15 +99,18 @@
 
 
 /* Track */
-.d_contenedor::-webkit-scrollbar-track 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-track, 
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar-track 
 {
     /* background: #d6e8f6; */
     background: #ddd;
+    background: transparent;
 }
 
 
 /* Handle */
-.d_contenedor::-webkit-scrollbar-thumb 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb, 
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar-thumb 
 {
     /* background: #2b88d2;
     cursor: pointer;
@@ -114,26 +122,31 @@
     background: #666;
     cursor: pointer;
     transition: background-color 0.3s ease;
-
 }
 
 
-.d_contenedor::-webkit-scrollbar-thumb
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb,
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar-thumb
 {
     /* background: red; */
-    background: #820101;
+    /* background: #820101; */
+    background: #000000;
+    border:2px solid #ffffff;
+    border-radius: 5px;
 }
   
 
 /* Handle on hover */
-.d_contenedor::-webkit-scrollbar-thumb:hover 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb:hover,
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar-thumb:hover
 {
     /* background: pink;  */
     background: #444; 
 }
 
 
-.d_contenedor::-webkit-scrollbar-thumb:hover 
+.scrollbar_menu_over.d_contenedor::-webkit-scrollbar-thumb:hover, 
+.scrollbar_drag_over.d_contenedor::-webkit-scrollbar-thumb:hover 
 {
     /* background: #981010; */
     background: #333;
@@ -142,3 +155,14 @@
 /* =================================================== */
 /* VERTICAL END                                        */
 /* =================================================== */
+
+
+
+
+/* ya que al mostrar scrollbar se ocupa el espacio del contenedor, para restarlo le quito padding-right al .contenedor */
+.scrollbar_menu_over .contenedor, 
+.scrollbar_drag_over .contenedor
+{
+    padding-right: 0px;
+    /* margin-right: -10px; */
+} 

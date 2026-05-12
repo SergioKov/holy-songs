@@ -439,9 +439,11 @@ function mostrarMenuOver(){
     console.log('=== function mostrarMenuOver === ');
     const d_menu_over = document.querySelector('.d_menu_over');
     const hamburger3 = document.getElementById('hamburger3');
+    const d_contenedor = document.querySelector('.vista_fixed .d_contenedor');
 
     d_menu_over?.classList.add('shown');//muestro menu que cubre todo el body de vista_fixed
-    hamburger3.classList.add('active'); // Cambiar hamburguesa a 'x'
+    hamburger3.classList.add('active'); // Cambiar hamburguesa a flecha o 'x'
+    d_contenedor.classList.add('scrollbar_menu_over');//activo vista de scrollbar en contenedor para poder ver donde estoy
 
     ocultarDragOver();
 }
@@ -450,9 +452,11 @@ function ocultarMenuOver(){
     console.log('=== function ocultarMenuOver() === ');
     const d_menu_over = document.querySelector('.d_menu_over');
     const hamburger3 = document.getElementById('hamburger3');
+    const d_contenedor = document.querySelector('.vista_fixed .d_contenedor');
 
     d_menu_over?.classList.remove('shown');
-    hamburger3.classList.remove('active'); // Cambiar 'x' a hamburguesa
+    hamburger3.classList.remove('active'); // Cambiar flecha o 'x' a hamburguesa
+    d_contenedor.classList.remove('scrollbar_menu_over');//desactivo vista de scrollbar en contenedor. que sea por defecto
 }
 
 function toggleMenuOver() {
@@ -472,10 +476,12 @@ function mostrarDragOver(){
     console.log('=== function mostrarDragOver === ');
     const d_drag_over = document.querySelector('.d_drag_over');
     const d_state_drag_song = document.querySelector('#d_state_drag_song');
+    const d_contenedor = document.querySelector('.vista_fixed .d_contenedor');
 
     dragSong = true;
     d_drag_over?.classList.add('shown');//muestro div drag_overu que cubre todo el body de vista_fixed
     d_state_drag_song.classList.add('active');
+    d_contenedor.classList.add('scrollbar_drag_over');//activo vista de scrollbar en contenedor para poder ver donde estoy
 
     ocultarMenuOver();
 }
@@ -483,15 +489,17 @@ function mostrarDragOver(){
 function ocultarDragOver(){
     console.log('=== function ocultarDragOver() === ');
     const d_drag_over = document.querySelector('.d_drag_over');
+    const d_state_drag_song = document.querySelector('#d_state_drag_song');
+    const d_contenedor = document.querySelector('.vista_fixed .d_contenedor');
 
     dragSong = false;
     d_drag_over?.classList.remove('shown');
     d_state_drag_song.classList.remove('active');
+    d_contenedor.classList.remove('scrollbar_drag_over');//desactivo vista de scrollbar en contenedor. que sea por defecto
 }
 
 function toggleDragSong() {
     console.log('=== function toggleDragSong() ===');    
-    const d_state_drag_song = document.querySelector('#d_state_drag_song');
 
     if (dragSong) {
         ocultarDragOver();//sig action
