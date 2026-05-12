@@ -377,12 +377,131 @@ function mostrarVista(contenedor){
     }
 
     ocultarTodasVistas();
-    contenedor.querySelector('.vista_r')?.classList.add('shown');//muestro parte derecha de vista
+
+    //setTimeout(()=>{
+        contenedor.querySelector('.vista_r')?.classList.add('shown');//muestro parte derecha de vista
+    //},5);
+
 
     setTimeout(()=>{
         contenedor.querySelector('.vista_head')?.classList.add('shown');
     },10);//transition 0.5s = 500mc.
 }
+
+
+function mostrarVistaFixed(){
+    console.log('=== function mostrarVistaFixed === ');
+
+    //if(!contenedor) return;
+
+    // if(window.innerWidth > pantallaTabletMaxPx){// pantallaTabletMaxPx = 1023px es portatil small
+    //     //no muestro vista en desktop porque ya se muestra al lado derecho.
+    //     return;
+    // }
+
+    //ocultarTodasVistas();
+    //contenedor.querySelector('.vista_r')?.classList.add('shown');//muestro parte derecha de vista
+    document.querySelector('.vista_fixed')?.classList.add('shown');//muestro parte derecha de vista
+
+    // setTimeout(()=>{
+    //     contenedor.querySelector('.vista_head')?.classList.add('shown');
+    // },10);//transition 0.5s = 500mc.
+}
+
+function ocultarVistaFixed(){
+    console.log('=== function ocultarVistaFixed() === ');
+    document.querySelector('.vista_fixed')?.classList.remove('shown');
+
+    const d_state_fullscreen = document.querySelector('#d_state_fullscreen');
+
+    if(is_fullscreen && d_state_fullscreen){
+        toggleFullscreen('.vista_fixed', d_state_fullscreen);
+    }
+}
+
+function toggleVistaFixed() {
+    const vista_fixed = document.querySelector('.vista_fixed');
+
+    if (vista_fixed.classList.contains('shown')) {//es mostrado
+        ocultarVistaFixed();//oculto
+    } else {
+        mostrarVistaFixed();//muestro
+    }
+}
+
+
+
+
+
+
+
+function mostrarMenuOver(){
+    console.log('=== function mostrarMenuOver === ');
+    const d_menu_over = document.querySelector('.d_menu_over');
+    const hamburger3 = document.getElementById('hamburger3');
+
+    d_menu_over?.classList.add('shown');//muestro menu que cubre todo el body de vista_fixed
+    hamburger3.classList.add('active'); // Cambiar hamburguesa a 'x'
+
+    ocultarDragOver();
+}
+
+function ocultarMenuOver(){
+    console.log('=== function ocultarMenuOver() === ');
+    const d_menu_over = document.querySelector('.d_menu_over');
+    const hamburger3 = document.getElementById('hamburger3');
+
+    d_menu_over?.classList.remove('shown');
+    hamburger3.classList.remove('active'); // Cambiar 'x' a hamburguesa
+}
+
+function toggleMenuOver() {
+    const d_menu_over = document.querySelector('.d_menu_over');
+
+    if (d_menu_over.classList.contains('shown')) {//es mostrado
+        ocultarMenuOver();//oculto
+    } else {
+        mostrarMenuOver();//muestro
+    }
+}
+
+
+
+
+function mostrarDragOver(){
+    console.log('=== function mostrarDragOver === ');
+    const d_drag_over = document.querySelector('.d_drag_over');
+    const d_state_drag_song = document.querySelector('#d_state_drag_song');
+
+    dragSong = true;
+    d_drag_over?.classList.add('shown');//muestro div drag_overu que cubre todo el body de vista_fixed
+    d_state_drag_song.classList.add('active');
+
+    ocultarMenuOver();
+}
+
+function ocultarDragOver(){
+    console.log('=== function ocultarDragOver() === ');
+    const d_drag_over = document.querySelector('.d_drag_over');
+
+    dragSong = false;
+    d_drag_over?.classList.remove('shown');
+    d_state_drag_song.classList.remove('active');
+}
+
+function toggleDragSong() {
+    console.log('=== function toggleDragSong() ===');    
+    const d_state_drag_song = document.querySelector('#d_state_drag_song');
+
+    if (dragSong) {
+        ocultarDragOver();//sig action
+    } else {
+        mostrarDragOver();//sig action
+    }
+}
+
+
+
 
 async function refreshSong(){
     console.log('=== function refreshSong() === ');
@@ -432,7 +551,7 @@ function pintListaActive(){
     //tbody_lista.querySelector(`.tr_lista[data-id="${id_lista}"]`).classList.add('selected');
 
     resetPListaActive(eid_bl_listas_finded);//new
-    eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`).classList.add('active');//new
+    eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`)?.classList.add('active');//new
 
     mostrarVista(eid_block_lista_body);
 
@@ -1805,6 +1924,18 @@ function hideShowDiv(id_div){
         openDiv(divElement);//muestro
     }
 
+    //creo tambien el li para añadir a la lista nueva
+    const li_action_btn_add_lista_new = document.createElement('li');
+    li_action_btn_add_lista_new.className = 'li_action btn_add_lista_new';
+    li_action_btn_add_lista_new.innerHTML = `
+        <span>Añadir a una Lista nueva</span>
+    `;
+    li_action_btn_add_lista_new.onclick = () =>{ 
+        addToLista('new')
+    };
+
+
+
     let btn_add_lista_inner_html;
 
     if(Object.keys(objLista).length === 0){//no hay lista activa
@@ -1813,22 +1944,51 @@ function hideShowDiv(id_div){
         `;
     }else{//hay lista activa
         btn_add_lista_inner_html = `
-            <span class="sp_add_a_lista">Añadir a la Lista: <b class="n_lista">${objLista.id_lista}</b></span>
+            <span class="sp_add_a_lista">
+                <span>Añadir a la Lista ACTUAL: </span>
+                <b class="n_lista">${objLista.id_lista}</b>
+            </span>
             <span class="fecha_lista">${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}</span>
             <span class="title_lista">${objLista.title}</span>
             <span class="grupo_lista">${objLista.grupo_nombre}</span>
-        `;
+            <span class="wr_canciones">
+                <span>Canciones: </span>
+                <b class="n_canciones">${objLista.arr_lista.length}</b>
+            </span>
+        `;        
     }
     
     switch (id_div) {
         case 'bl_actions_buscar':
             if(buscar_ul_action.querySelector('.btn_add_lista')){
                 buscar_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+
+                const elemento_btn_add_lista_new = buscar_ul_action.querySelector('.btn_add_lista_new');
+                if(id_lista){//si hay lista activa 
+                    if(!elemento_btn_add_lista_new){//y si no existe el btn para crear lista nueva, lo añado
+                        buscar_ul_action.querySelector('.btn_add_lista').after(li_action_btn_add_lista_new);//añado nuevo btn para crear lista nueva
+                    }
+                }else{
+                    if(elemento_btn_add_lista_new){
+                        elemento_btn_add_lista_new.remove();//si no hay lista activa y existe el btn para crear lista nueva, lo quito
+                    }
+                }
             }
             
         case 'bl_actions_cancion':
             if(cancion_ul_action.querySelector('.btn_add_lista')){
                 cancion_ul_action.querySelector('.btn_add_lista').innerHTML = btn_add_lista_inner_html;
+
+                const elemento_btn_add_lista_new = cancion_ul_action.querySelector('.btn_add_lista_new');
+                if(id_lista){//si hay lista activa 
+                    if(!elemento_btn_add_lista_new){//y si no existe el btn para crear lista nueva, lo añado
+                        cancion_ul_action.querySelector('.btn_add_lista').after(li_action_btn_add_lista_new);//añado nuevo btn para crear lista nueva
+                    }
+                }else{
+                    if(elemento_btn_add_lista_new){
+                        elemento_btn_add_lista_new.remove();//si no hay lista activa y existe el btn para crear lista nueva, lo quito
+                    }
+                }
             }
             break;
     
@@ -3013,7 +3173,7 @@ function toggleFullscreen(selectorElementContenedor, btnElement) {
     btnFullscreenActive = btnElement;
     console.log('ttt. btnFullscreenActive: ', btnFullscreenActive);
 
-    if (!document.fullscreenElement) {
+    if (!document.fullscreenElement) {//si no hay ningún elemento en pantalla completa, entro en pantalla completa
         
         // Entrar en pantalla completa
         if (contenedor.requestFullscreen) {
@@ -3028,7 +3188,7 @@ function toggleFullscreen(selectorElementContenedor, btnElement) {
         is_fullscreen = true;
         //btnElement.querySelector('img').src = './images/fullscreen_adentro.png';//sig. action es minimizar
 
-    } else {
+    } else {//algun elemento está en pantalla completa, salgo de pantalla completa
         
         // Salir del modo pantalla completa
         if (document.exitFullscreen) {
@@ -3056,14 +3216,31 @@ function pintBtnFullscreen(btnElement) {
     //si existe boton de fullscreen en wr_vista_blocks
     if(btnElement){
         if(is_fullscreen){
-            btnElement.querySelector('img').src = '/song/images/fullscreen_adentro.png';
+            btnElement.querySelector('img').src = 'images/fullscreen_adentro.png';
             //sig. action -> minimizar
         }else{
-            btnElement.querySelector('img').src = '/song/images/fullscreen.png';
+            btnElement.querySelector('img').src = 'images/fullscreen.png';
             //sig. action -> agrandar
         }
     }
 }
+
+function pintFlechasFullscreen(divElement) {
+    console.log('=== function pintFlechasFullscreen() ===');
+    console.log('pintFlechasFullscreen --- is_fullscreen: ', is_fullscreen);
+
+    //si existe div element de fullscreen en vista_fixed
+    if(divElement){
+        if(is_fullscreen){
+            divElement.querySelector('img').src = 'images/icon_size_min.svg';
+            //sig. action -> minimizar
+        }else{
+            divElement.querySelector('img').src = 'images/icon_size_max.svg';
+            //sig. action -> agrandar
+        }
+    }
+}
+
 
 function cambiarTema(selectorElement) {// '.block_cancion .bloques_outer'
     const elem = document.querySelector(selectorElement);
@@ -3230,7 +3407,7 @@ function makeColumns(num){
 function changeFontSize(step) {
     step = parseInt(step, 10);
     const elementSelectors = `
-        /*#cancion_song_bloques, #block_cancion*/ .wr_vista_blocks .contenedor
+        /*#cancion_song_bloques, #block_cancion*/ .wr_vista_blocks .contenedor, .vista_fixed .contenedor
     `;
 
     const elementsAll = document.querySelectorAll(elementSelectors);

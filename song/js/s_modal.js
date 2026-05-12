@@ -1093,8 +1093,14 @@ function buildLista(lista_action = null){
             mensaje_html = `
                 <span>Rellena los campos del formulario con los datos de la lista <b class="c_blue">NUEVA</b>.</span>
             `;
-            id_lista = null;//reset
-            arr_lista = [];//reset
+            // si antes fue seleccionada una lista, entonces reseteo id_lista
+            if(id_lista){
+                id_lista = null;//reset ya que se va a crear un id_lista nuevo
+                arr_lista = [];//reset para no duplicar la lista de canciones.
+            }else{
+                //id_lista es null, no hago nada.
+                // no reseteo arr_lista ya que hace falta crear una lista nueva con las canciones ya seleccionadas (añadidas a arr_lista) y no quiero perderlas.
+            }
             objLista = {};//reset
             arr_lista_bucle = arr_lista;
             console.log('(nueva) --- arr_lista_bucle: ', arr_lista_bucle);            

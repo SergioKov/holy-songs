@@ -4296,7 +4296,7 @@ function editar_song(){
             <span>Guardar</span>
         </button>
 
-        <button class="btn btn_vista btn_v_vista" onclick="mostrarVista(document.querySelector('#block_cancion_body'));">
+        <button class="btn btn_vista btn_v_vista" onclick="mostrarVistaFixed();">
             <img src="./images/ojo24x24_2.png">
             <span>Vista</span>
         </button>
@@ -4308,15 +4308,36 @@ function editar_song(){
 
     // cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '';//reset
+    document.querySelector('.vista_fixed .d_contenedor .contenedor').innerHTML = '';//reset new
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
-    let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
-    let song_pos = (currentIndexOfSong != -1) ? `${currentIndexOfSong + 1} / ${objLista.arr_lista.length}` : '';
+    let currentIndexOfSong = -1;//por defecto (significa no hay)
+    if(Object.keys(objLista).length > 0){
+        currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
+    }
+
+    if(currentIndexOfSong != -1){//si hay cancion en la lista. muestro id_song CON posición
+        let song_pos = `${currentIndexOfSong + 1} / ${objLista.arr_lista.length}`; 
+        document.querySelector('.vista_fixed .vista_fixed_head .vp_titulo').innerHTML = `
+            <div id="id_song_num">${objSong.id_song}</div>
+            <div id="id_song_pos">${song_pos}</div>
+        `;
+        //muestro botones de sig/prev song ya que hay cancion en la lista
+        document.querySelector('.vista_fixed .d_menu_over .wr_btns_next_prev').classList.remove('d-none');
+
+    }else{//no hay cancion en la lista. solo muestro id_song sin posición
+        document.querySelector('.vista_fixed .vista_fixed_head .vp_titulo').innerHTML = `
+            <div id="id_song_num">${objSong.id_song}</div>
+        `;
+        //oculto botones de sig/prev song ya que no hay cancion en la lista
+        document.querySelector('.vista_fixed .d_menu_over .wr_btns_next_prev').classList.add('d-none');//oculto botones next-prev porque no hay lista o la canción no está en la lista
+    }
 
 
+    /*
 
     let elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
 
@@ -4426,6 +4447,8 @@ function editar_song(){
         //ya está creado elemento fullscreen, no hago nada...
     }
 
+    */
+
     
 
     
@@ -4477,11 +4500,18 @@ async function listaSongGo(dirrection){
 
     let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
     let prevIndexOfSong = currentIndexOfSong - 1;
-    let nextIndexOfSong = currentIndexOfSong + 1;  
+    let nextIndexOfSong = currentIndexOfSong + 1;
+    let delay_ocultar_aviso = 2000;  
+    let aviso_text = '';  
     
-    eid_aviso_lista_song = cancion_wr_vista_blocks.querySelector('#aviso_lista_song');
+    // eid_aviso_lista_song = cancion_wr_vista_blocks.querySelector('#aviso_lista_song');
+    eid_aviso_lista_song = eid_block_cancion.querySelector('.vista_fixed #aviso_lista_song');
     eid_aviso_lista_song.textContent = ''; //reset aviso
     eid_aviso_lista_song.classList.remove('shown'); //oculto
+
+    eid_aviso_drag_lista_song = eid_block_cancion.querySelector('.vista_fixed #aviso_drag_lista_song');
+    eid_aviso_drag_lista_song.textContent = ''; //reset aviso
+    eid_aviso_drag_lista_song.classList.remove('shown'); //oculto
 
     
 
@@ -4490,8 +4520,18 @@ async function listaSongGo(dirrection){
         let prev_id_song = objLista.arr_lista[prevIndexOfSong]?.id_song;
 
         if(prev_id_song === undefined){
-            eid_aviso_lista_song.textContent = 'Has llegado a la primera canción.';
+            aviso_text = 'Has llegado a la primera canción.';
+
+            eid_aviso_lista_song.textContent = aviso_text;
+            eid_aviso_drag_lista_song.textContent = aviso_text;
             eid_aviso_lista_song.classList.add('shown'); //muestro aviso
+            eid_aviso_drag_lista_song.classList.add('shown'); //muestro aviso
+            
+            setTimeout(()=>{
+                eid_aviso_lista_song.classList.remove('shown'); //oculto aviso
+                eid_aviso_drag_lista_song.classList.remove('shown'); //oculto aviso
+            },delay_ocultar_aviso);
+
             return;
         }
         
@@ -4505,8 +4545,18 @@ async function listaSongGo(dirrection){
 
         let next_id_song = objLista.arr_lista[nextIndexOfSong]?.id_song;
         if(next_id_song === undefined){
-            eid_aviso_lista_song.textContent = 'Has llegado a la última canción.';
+            aviso_text = 'Has llegado a la última canción.';
+
+            eid_aviso_lista_song.textContent = aviso_text;
+            eid_aviso_drag_lista_song.textContent = aviso_text;
             eid_aviso_lista_song.classList.add('shown'); //muestro aviso
+            eid_aviso_drag_lista_song.classList.add('shown'); //muestro aviso
+            
+            setTimeout(()=>{
+                eid_aviso_lista_song.classList.remove('shown'); //oculto aviso
+                eid_aviso_drag_lista_song.classList.remove('shown'); //oculto aviso
+            },delay_ocultar_aviso);
+
             return;
         }
         
@@ -4514,7 +4564,6 @@ async function listaSongGo(dirrection){
 
         await editSongOfLista(element_clicked, next_id_song);
     }
-    
 }
 
 
@@ -4546,7 +4595,8 @@ function hideShowFontMenu(){
 
 
 function toggleAcordes() {
-    const btn_state_acordes = cancion_wr_vista_blocks.querySelector('#btn_state_acordes');
+    // const btn_state_acordes = cancion_wr_vista_blocks.querySelector('#btn_state_acordes');
+    const btn_state_acordes = eid_block_cancion.querySelector('.d_menu_over #btn_state_acordes');
 
     if (acordesVisible) {
         ocultarAcordes('#tema_block');
@@ -4560,7 +4610,8 @@ function toggleAcordes() {
 }
 
 function toggleTexto() {
-    const btn_state_text = cancion_wr_vista_blocks.querySelector('#btn_state_texto');
+    // const btn_state_text = cancion_wr_vista_blocks.querySelector('#btn_state_texto');
+    const btn_state_text = eid_block_cancion.querySelector('.d_menu_over #btn_state_texto');
 
     if (textoVisible) {
         ocultarTexto('#tema_block');
@@ -4574,7 +4625,8 @@ function toggleTexto() {
 }
 
 function toggleContenidoWidth() {
-    const btn_state_contenido_width = cancion_wr_vista_blocks.querySelector('#btn_state_contenido_width');
+    // const btn_state_contenido_width = cancion_wr_vista_blocks.querySelector('#btn_state_contenido_width');
+    const btn_state_contenido_width = eid_block_cancion.querySelector('.d_menu_over #btn_state_contenido_width');
 
     if (contenidoWidth) {
         quitarContenidoWidth('#tema_block');
@@ -4586,6 +4638,10 @@ function toggleContenidoWidth() {
 
     contenidoWidth = !contenidoWidth;
 }
+
+
+
+
 
 
 function eliminar_song(){
@@ -4666,11 +4722,16 @@ function showEjemplo(lang){
 }
 
 
-function addToLista(){
+function addToLista(new_lista = null){
     console.log('=== function addToLista() ===');
 
     if(!hay_id_song('addToLista()')){
         return; // <- se detiene aquí si no hay id_song
+    }
+
+    if(new_lista == 'new'){
+        id_lista = null;//reset id_lista para crear una nueva lista desde cero
+        arr_lista = [];//reset arr_lista para crear una nueva lista desde cero
     }
 
     //compruebo si ya está id_song enla lista
@@ -4682,7 +4743,12 @@ function addToLista(){
     if(id_lista){
         datos_lista_html = `
             <div class="wr_datos_lista">
-                <span class="sp_add_a_lista">Lista: <b class="n_lista">${objLista.id_lista}</b></span>
+                <span class="sp_add_a_lista">
+                    <span>Lista: <b class="n_lista">${objLista.id_lista}</b></span>
+                    <span class="sp_guardar_sm" onclick="guardarLista(null, 'fast');">
+                        <img src="./images/guardar.png">
+                    </span>
+                </span>
                 <span class="fecha_lista">${diaSemana(objLista.fecha)} &nbsp; ${objLista.fecha_ver}</span>
                 <span class="title_lista">${objLista.title}</span>
                 <span class="grupo_lista">${objLista.grupo_nombre}</span>
@@ -4718,7 +4784,12 @@ function addToLista(){
 
         arr_lista.push(objSongSmall);
 
-        aviso_text = `La canción se ha añadido con éxito a la lista ${ (id_lista) ? '<b>ACTUAL</b>' : '<b>NUEVA</b>' } de canciones. Guarda la lista.`;
+        aviso_text = `La canción se ha añadido con éxito a la lista ${ (id_lista) ? '<b>ACTUAL (temporal)</b>' : '<b>NUEVA (temporal)</b>' } de canciones.`;
+    }
+
+    //si no está guardada la lista, muestro el mensaje
+    if(Object.keys(objLista).length === 0){
+        aviso_text += `<span class="blink_text">Guarda la lista</span>`;
     }
 
     //para VER - SM
@@ -4741,16 +4812,17 @@ function addToLista(){
     btn_guardar.id = 'btn_guardar';
     btn_guardar.className = 'btn btn_big';
 
-    if(id_lista){
+    if(id_lista && new_lista == null){//se guarda en la lista ACTUAL
         btn_guardar.textContent = 'Guardar lista actual';
         btn_guardar.onclick = () => {
             //openModal('full','Guardar lista editada',null,'buildLista',true, 'editar');
             guardarLista(null, 'fast');
         }
-    }else{
+    }else{//se guarda en una lista NUEVA
         btn_guardar.textContent = 'Guardar Nueva lista';
         btn_guardar.onclick = () => {
             openModal('full','Guardar Nueva Lista',null,'buildLista',true, 'nueva');
+            closeDiv(document.querySelector(`#bl_actions_buscar`));
         }
     }
 

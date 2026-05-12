@@ -122,6 +122,184 @@ carousel.addEventListener('click', async (e) => {
 });
 
 
+
+const dragOver = document.querySelector('.d_drag_over');
+const content = document.querySelector('.vista_fixed .d_contenedor');
+
+//click en la mitad derecha o izquierda de la pantalla para avanzar o retroceder
+// dragOver.addEventListener('click', (e) => {
+//     console.log('=== event click ===');
+
+//     const rect = dragOver.getBoundingClientRect();
+
+//     // Posición X dentro del contenedor
+//     const x = e.clientX - rect.left;
+
+//     // Mitad del contenedor
+//     const half = rect.width / 2;
+
+//     if (x > half) {
+//         listaSongGo('next');
+//         console.log('NEXT');
+//     } else {
+//         listaSongGo('prev');
+//         console.log('PREV');
+//     }
+
+// });
+
+
+//================================================================================//
+// start --- swipe táctil para avanzar/retroceder slides o subir/bajar texto en vista_fixed
+//================================================================================//
+
+let startX = 0;
+let startY = 0;
+let startTime = 0;
+let mouseDown = false;
+
+// ======================
+// TOUCH
+// ======================
+
+dragOver.addEventListener('touchstart', (e) => {
+    console.log('=== event touchstart ===');
+
+    startGesture(
+        e.touches[0].clientX,
+        e.touches[0].clientY
+    );
+
+}, { passive: true });
+
+
+dragOver.addEventListener('touchend', (e) => {
+    console.log('=== event touchend ===');
+
+    endGesture(
+        e.changedTouches[0].clientX,
+        e.changedTouches[0].clientY
+    );
+
+}, { passive: true });
+
+
+// ======================
+// MOUSE
+// ======================
+
+dragOver.addEventListener('mousedown', (e) => {
+    console.log('=== event mousedown ===');
+
+    mouseDown = true;
+
+    startGesture(
+        e.clientX,
+        e.clientY
+    );
+
+});
+
+
+document.addEventListener('mouseup', (e) => {
+    console.log('=== event mouseup ===');
+
+    if (!mouseDown) return;
+
+    mouseDown = false;
+
+    endGesture(
+        e.clientX,
+        e.clientY
+    );
+
+});
+
+
+// ======================
+// FUNCIONES
+// ======================
+
+function startGesture(x, y){
+    console.log('=== function startGesture() ===');
+
+    startX = x;
+    startY = y;
+
+    startTime = Date.now();
+
+}
+
+
+function endGesture(x, y){
+    console.log('=== function endGesture() ===');
+    
+    const diffX = x - startX;
+    const diffY = y - startY;
+
+    const elapsed = Date.now() - startTime;
+
+    const threshold = 60;
+    const maxTime = 500;
+
+    // gesto demasiado lento
+    if (elapsed > maxTime) {
+        console.log('Gesto demasiado lento. elapsed: ', elapsed);
+        //return;
+    }
+
+    // =========================
+    // SWIPE HORIZONTAL
+    // =========================
+
+    if (Math.abs(diffX) > Math.abs(diffY) * 1.3) {
+        console.log('=== SWIPE HORIZONTAL ===');
+
+        if (diffX > threshold) {
+            listaSongGo('prev');
+        } else if (diffX < -threshold) {
+            listaSongGo('next');
+        }
+
+        return;
+    }
+
+    // =========================
+    // SWIPE VERTICAL
+    // =========================
+
+    if (Math.abs(diffY) > Math.abs(diffX) * 1.3) {
+        console.log('=== SWIPE VERTICAL ===');
+
+        const pageStep = content.clientHeight * 0.9;
+
+        console.log(content.scrollHeight);
+        console.log(content.clientHeight);
+
+        //content.scrollTop = 233;//test
+        //document.querySelector('.vista_fixed .d_contenedor').scrollTop = 550;//test
+        //return;
+
+        // mover dedo hacia abajo
+        if (diffY > threshold) {
+            console.log('=== SWIPE dedo hacia abajo ===');
+            content.scrollTop += pageStep;
+        }
+        
+        // mover dedo hacia arriba
+        else if (diffY < -threshold) {
+            console.log('=== SWIPE dedo hacia arriba ===');
+            content.scrollTop -= pageStep;
+        }
+
+    }
+
+}
+//================================================================================//
+// end --- swipe táctil para avanzar/retroceder slides o subir/bajar texto en vista_fixed
+//================================================================================//
+
+
 document.addEventListener('keydown', checkKey);
 
 
@@ -191,14 +369,19 @@ document.addEventListener('fullscreenchange', () => {
         console.log('Se ha salido de pantalla completa');
         //onSalirFullscreen();
         is_fullscreen = false;
+        //hago novisible 'x' en vista_fixed por que en descto con 2 ventanas no hace falta
+        document.querySelector('.vista_fixed').classList.remove('fullscreen_active');
     } else {
         console.log('Ahora en pantalla completa:', document.fullscreenElement);
         is_fullscreen = true;
+        //hago visible 'x' en vista_fixed para poder cerrar el fullscreen + vista
+        document.querySelector('.vista_fixed').classList.add('fullscreen_active');
     }
 
     //solo aki. en toggleFullscreen() !no hace falta!!!
     pintBtnFullscreen(document.querySelector('#tema_block .dbtn_fullscreen'));
     pintBtnFullscreen(document.querySelector('#block_cancion .bl_parte_l .dbtn_fullscreen'));
+    pintFlechasFullscreen(document.querySelector('.vista_fixed #d_state_fullscreen'));//new
 
     console.log('1. is_fullscreen: ', is_fullscreen);
 });
@@ -258,6 +441,18 @@ eid_edit_contenido.addEventListener('click', (e) => {
         closeDiv(document.querySelector('#bl_find_lista_settings'));
         closeDiv(document.querySelector('#bl_actions_lista'));
     }
+
+    //click dentro de block de menu .vista_fixed .d_menu_over y
+    //click fuera de botones de .vista_fixed .d_menu_over para cerrar d_menu_over
+    if(  e.target.closest('.d_menu_over') && 
+        !e.target.closest('.wr_btns_actualizar .btn') && 
+        !e.target.closest('.wr_btns_next_prev .btn') && 
+        !e.target.closest('.wr_btns_f_inner .btn')  
+    ){
+        console.log('d_menu_over clicked');
+        toggleMenuOver();//aki siempre será ocultarMenuOver()                
+    }
+
 
     if (!eid_edit_contenido_inner.contains(e.target)) {
         // Click fue dentro de eid_edit_contenido pero fuera de eid_edit_contenido_inner
@@ -522,9 +717,10 @@ function handleFormInput(e, container_block){
     // const vista_blocks = container_block.querySelector('.wr_vista_blocks');
     let vista_blocks;
     
-    if(container_block == eid_block_cancion){//en cancion hay posibilidad mostraren varia columnas
+    if(container_block == eid_block_cancion){//en cancion hay posibilidad mostrar en varia columnas
         console.log('es este bloque');
-        vista_blocks = container_block.querySelector('.wr_vista_blocks .contenedor');
+        //vista_blocks = container_block.querySelector('.wr_vista_blocks .contenedor');
+        vista_blocks = container_block.querySelector('.vista_fixed .d_contenedor .contenedor');
     }else{//otros
         vista_blocks = container_block.querySelector('.wr_vista_blocks');
     }

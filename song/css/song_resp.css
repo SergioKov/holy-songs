@@ -40,6 +40,19 @@
         display: none !important;
     }
 
+
+
+    .vista_fixed {
+        position: relative;
+        left: 0;
+    }
+    .btn_vista_fixed_close {
+        visibility: hidden;
+    }
+    .fullscreen_active .btn_vista_fixed_close {
+        visibility: visible;
+    }
+
 }
 
 
