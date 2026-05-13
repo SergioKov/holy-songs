@@ -123,8 +123,41 @@ carousel.addEventListener('click', async (e) => {
 
 
 
-const dragOver = document.querySelector('.d_drag_over');
-const content = document.querySelector('.vista_fixed .d_contenedor');
+
+
+function listenClickLeftRight(contenedor, funcionGo){
+    console.log('=== function listenClickLeftRight(e) ===');
+    console.log('contenedor: ', contenedor);
+    console.log('funcionGo: ', funcionGo);
+
+    if(!contenedor){
+        console.log('No se encontró el contenedor para listenClickLeftRight con selector: ', selectorContenedor);
+        return;
+    }
+
+    contenedor.addEventListener('click', (e) => {
+        console.log('=== listenClickLeftRight --- event click ===');
+
+        const rect = contenedor.getBoundingClientRect();
+
+        // Posición X dentro del contenedor
+        const x = e.clientX - rect.left;
+
+        // Mitad del contenedor
+        const half = rect.width / 2;
+
+        if (x > half) {
+            //listaSongGo('next');
+            funcionGo('next');
+            console.log('funcionGo NEXT');
+        } else {
+            //listaSongGo('prev');
+            funcionGo('prev');
+            console.log('funcionGo PREV');
+        }
+
+    });
+}
 
 //click en la mitad derecha o izquierda de la pantalla para avanzar o retroceder
 // dragOver.addEventListener('click', (e) => {
@@ -152,6 +185,8 @@ const content = document.querySelector('.vista_fixed .d_contenedor');
 //================================================================================//
 // start --- swipe táctil para avanzar/retroceder slides o subir/bajar texto en vista_fixed
 //================================================================================//
+const dragOver = document.querySelector('.d_drag_over');
+const content = document.querySelector('.vista_fixed .d_contenedor');
 
 let startX = 0;
 let startY = 0;
@@ -361,7 +396,7 @@ async function checkKey(e) {//funciona .codigo mas limpio aunque .keyCode is dep
 
 let is_fullscreen = false;
 
-// Escuchar cambio de fullscreen (entrar / salir)
+// Escuchar cambio de fullscreen (entrar / salir) en togglefullscreen()
 document.addEventListener('fullscreenchange', () => {
     console.log('listener --- fullscreenchange');
 
@@ -369,7 +404,7 @@ document.addEventListener('fullscreenchange', () => {
         console.log('Se ha salido de pantalla completa');
         //onSalirFullscreen();
         is_fullscreen = false;
-        //hago novisible 'x' en vista_fixed por que en descto con 2 ventanas no hace falta
+        //hago novisible 'x' en vista_fixed por que en desktop con 2 ventanas no hace falta
         document.querySelector('.vista_fixed').classList.remove('fullscreen_active');
     } else {
         console.log('Ahora en pantalla completa:', document.fullscreenElement);
@@ -381,7 +416,8 @@ document.addEventListener('fullscreenchange', () => {
     //solo aki. en toggleFullscreen() !no hace falta!!!
     pintBtnFullscreen(document.querySelector('#tema_block .dbtn_fullscreen'));
     pintBtnFullscreen(document.querySelector('#block_cancion .bl_parte_l .dbtn_fullscreen'));
-    pintFlechasFullscreen(document.querySelector('.vista_fixed #d_state_fullscreen'));//new
+    pintFlechasFullscreen(document.querySelector('.vista_fixed #d_state_fullscreen'));//new (flechas diagonales)
+    pintFlechasFullscreen(document.querySelector('#d_esq_state_fullscreen'));//new (flechas diagonales)
 
     console.log('1. is_fullscreen: ', is_fullscreen);
 });

@@ -40,7 +40,7 @@ body.black_en_fondo {
     background-size: cover;
     background-position: center;    
     overflow: hidden;
-    z-index: 1;
+    /* z-index: 1; */
     position: fixed;
     opacity: 0;
 }

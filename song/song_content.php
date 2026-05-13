@@ -1296,7 +1296,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
 
                                             </div><!--/.wr_panels-->
 
-                                            <button id="" class="btn btn_tmp" onclick="toggleVistaFixed()">
+                                            <button class="btn btn_tmp d-none" onclick="toggleVistaFixed()">
                                                 toggleVista
                                             </button>
 
@@ -1665,11 +1665,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                                 <p class="prim opt_prim d-none">
                                                     Búsca la lista o crea una nueva.
                                                 </p>
-                                                <button id="btn_lista_refresh" class="btn btn_refresh" onclick="refreshLista()">
-                                                    <img src="images/refresh.png" class="">
-                                                    <span>Actualizar</span>
-                                                </button>
-                                                <div class="separador"></div>
+                                                
                                                 <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</button>
                                                 <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
                                                 <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver');">Ver</button>
@@ -1697,7 +1693,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
 
                                             </div><!--/.wr_panels-->
 
-                                            <button id="" class="btn btn_tmp" onclick="toggleVistaFixed()">
+                                            <button class="btn btn_tmp d-none" onclick="toggleVistaFixed()">
                                                 toggleVista
                                             </button>
 

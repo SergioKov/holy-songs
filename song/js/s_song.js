@@ -2551,6 +2551,9 @@ function resetBlockCancion(){
 
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
 
+    eid_block_cancion_head.querySelector('#btn_cancion_refresh')?.remove();
+    eid_block_cancion_head.querySelector('.separador.for_btn_cancion_refresh')?.remove();
+
     cancion_song_bloques.innerHTML = '...';//muestro '...'
     // cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
@@ -2571,6 +2574,9 @@ function resetBlockLista(){
     console.log('=== function resetBlockLista() ===');
 
     resetBtnActive(eid_block_lista_head);//reseteo btn_active de botones en el contenedor
+
+    eid_block_lista_head.querySelector('#btn_lista_refresh')?.remove();
+    eid_block_lista_head.querySelector('.separador.for_btn_lista_refresh')?.remove();
 
     lista_ul_action.innerHTML = '...';//reset  
     lista_vista_lista_content.innerHTML = '...';//reset  
@@ -3469,7 +3475,8 @@ function showBlockName(blockName){
                 mostrarElementosEditablesEn(cancion_option_inner);
             }
             if(id_song && !pageActiveCancion){
-                ver_song();
+                // ver_song();//antes
+                editar_song();
             }
             mySizeCancion();
             break;
@@ -4146,15 +4153,29 @@ async function nueva_song(){
     resetBlockEsquema();
     resetLineasXinBlock(eid_block_cancion);
 
+    eid_block_cancion_head.querySelector('#btn_cancion_refresh')?.remove();
+    eid_block_cancion_head.querySelector('.separador.for_btn_cancion_refresh')?.remove();
+
+    const id_song_num = document.querySelector('.vista_fixed_head #id_song_num');//reset new
+    if(id_song_num){
+        id_song_num.textContent = '...'
+    }
+    const id_song_pos = document.querySelector('.vista_fixed_head #id_song_pos');//reset new
+    if(id_song_pos){
+        id_song_pos.textContent = '.. / ..'
+    }    
+
     mostrarPrim = false;    
     ocultarElementosPrimEn(cancion_option_inner);
     ocultarElementosEditablesEn(cancion_option_inner);
-    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit 
+
 
     // cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
+    document.querySelector('.vista_fixed .d_contenedor .contenedor').innerHTML = '';//reset new
     cancion_ul_action.innerHTML = '...';//reset 
-    cancion_song_bloques.classList.add('solo_ver');
+    cancion_song_bloques.classList.add('solo_ver');    
+    
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
 
@@ -4189,7 +4210,8 @@ async function nueva_song(){
 
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
-    
+
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit    
     console.log('fin');
 }
 
@@ -4280,7 +4302,7 @@ function editar_song(){
 
     mostrarPrim = false;
     mostrarElementosEditablesEn(cancion_option_inner);
-    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
+
 
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l .h4_vista_previa').innerHTML = `
@@ -4305,6 +4327,34 @@ function editar_song(){
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
     eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
 
+
+    //creo btn actualizar song
+    const element_btn_cancion_refresh = eid_block_cancion.querySelector('#btn_cancion_refresh');
+    if(!element_btn_cancion_refresh){
+        const ejemplo_btn_cancion_refresh = `
+            <button id="btn_cancion_refresh" class="btn btn_refresh" onclick="refreshSong()">
+                <img src="images/refresh.png" class="">
+                <span>Actualizar</span>
+            </button>        
+        `;
+        const btn_cancion_refresh = document.createElement('button');
+        btn_cancion_refresh.id = 'btn_cancion_refresh';
+        btn_cancion_refresh.className = 'btn btn_refresh';
+        btn_cancion_refresh.innerHTML = `
+            <img src="images/refresh.png" class="">
+            <span>Actualizar</span>
+        `;
+        btn_cancion_refresh.onclick = () => refreshSong();
+
+        const separador = document.createElement('div');
+        separador.className = 'separador for_btn_cancion_refresh';
+
+        //añado al DOM
+        eid_block_cancion_head.querySelector('.wr_block_option_inner').prepend(separador);
+        eid_block_cancion_head.querySelector('.wr_block_option_inner').prepend(btn_cancion_refresh);
+    }
+    
+    
 
     // cancion_wr_vista_blocks.innerHTML = '...';//reset
     cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '';//reset
@@ -4336,122 +4386,6 @@ function editar_song(){
         document.querySelector('.vista_fixed .d_menu_over .wr_btns_next_prev').classList.add('d-none');//oculto botones next-prev porque no hay lista o la canción no está en la lista
     }
 
-
-    /*
-
-    let elemento_id_song_fullscreen = cancion_wr_vista_blocks.querySelector('.id_song_fullscreen');
-
-    if(!elemento_id_song_fullscreen){
-        elemento_id_song_fullscreen = document.createElement('div');
-        elemento_id_song_fullscreen.className = 'id_song_fullscreen';
-        cancion_wr_vista_blocks.prepend(elemento_id_song_fullscreen);
-    }
-
-    elemento_id_song_fullscreen.innerHTML = `
-        <div id="id_song_num">${objSong.id_song}</div>
-        <div id="id_song_pos">${song_pos}</div>
-    `;
-
-
-    const elemento_fullscreen = cancion_wr_vista_blocks.querySelector('.wr_dbtn_fullscreen');
-    //si no hay boton de fullscreen, lo creo
-    if(!elemento_fullscreen){
-        const wr_dbtn_fullscreen = document.createElement('div');
-        wr_dbtn_fullscreen.className = 'wr_dbtn_fullscreen vista_menu';
-        wr_dbtn_fullscreen.innerHTML = `
-            <div id="btn_menu_font_size" class="shown" onclick="hideShowFontMenu();">
-                <div id="hamburger2" class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-            
-
-            <div class="outer_wr">
-
-                <button class="btn btn_vista btn_vista_atras" onclick="ocultarTodasVistas()">
-                    <img src="images/arrow_atras.png"> 
-                    <span>Vista</span>
-                </button>
-
-                <button class="btn btn_vista btn_song_refresh btn_refresh" onclick="refreshSong()">
-                    <img src="images/refresh.png"> 
-                    <span>Actualizar</span>
-                </button>
-
-                <div class="wr_btns_next_prev">
-                    <button class="btn" onclick="listaSongGo('prev')">
-                        <img src="images/arrow_chevron_left_white.svg">
-                    </button>
-                    <div id="aviso_lista_song"></div>
-                    <button class="btn" onclick="listaSongGo('next')">
-                        <img src="images/arrow_chevron_right_white.svg">
-                    </button>
-                </div>
-
-
-                <div class="wr_btns_f_inner">
-                    <div class="d_cat">            
-                        <button class="btn" onclick="changeFontSize(-1)">A-</button>
-                        <button class="btn" onclick="changeFontSize(0)">A</button>
-                        <button class="btn" onclick="changeFontSize(1)">A+</button>
-                    </div>
-                    <div class="d_cat">
-                        <button class="btn" onclick="makeColumns(1)">|</button>
-                        <button class="btn" onclick="makeColumns(2)">||</button>
-                        <button class="btn" onclick="makeColumns(3)">|||</button>
-                        <button class="btn" onclick="makeColumns(4)">||||</button>  
-                    </div>
-                    <div class="d_cat">
-                        <button id="btn_state_acordes" class="btn" onclick="toggleAcordes()">
-                            <img src="/song/images/music_note_on32x32.png">
-                        </button>
-                        <button id="btn_state_texto" class="btn" onclick="toggleTexto()">
-                            <img src="/song/images/text_on32x32.png">
-                        </button>
-                        <button id="btn_state_contenido_width" class="btn" onclick="toggleContenidoWidth()">
-                            <img src="/song/images/auto_width_off.png">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        
-        
-            <div class="dbtn_fullscreen">
-                <img src="/song/images/fullscreen.png">
-            </div>
-        `;
-        wr_dbtn_fullscreen.onclick = (e)=> {
-            //e.stopPropagation();
-            if(e.target.closest('.dbtn_fullscreen')){
-                btnFullscreenActive = e.target.closest('.dbtn_fullscreen');
-                console.log('2. btnFullscreenActive: ', btnFullscreenActive);
-                toggleFullscreen('#block_cancion #tema_block', btnFullscreenActive);
-            }
-
-            if(  e.target.closest('.outer_wr') && 
-                !e.target.closest('.wr_btns_f_inner') && 
-                !e.target.closest('.wr_btns_next_prev .btn') && 
-                !e.target.closest('.btn_vista_atras') &&
-                !e.target.closest('.btn_refresh') 
-            ){
-                console.log('outer_wr clicked');
-                hideShowFontMenu();                
-            }
-        }
-        // cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
-        cancion_wr_vista_blocks.prepend(wr_dbtn_fullscreen);
-    }else{
-        //ya está creado elemento fullscreen, no hago nada...
-    }
-
-    */
-
-    
-
-    
 
     cancion_ul_action.innerHTML = `
         <div class="razdel">Lista:</div>
@@ -4490,6 +4424,7 @@ function editar_song(){
     `;
     cancion_ul_action.onclick = e => close_ul_action(e);
 
+    mySizeCancion();//importante después de quitar opt_prim y mostrar opt_edit
     console.log('fin');    
 }
 

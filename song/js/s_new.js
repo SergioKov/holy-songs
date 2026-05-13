@@ -36,8 +36,7 @@ function pintSongActive(){//click en tr de la tabla de canciones
         <li class="li_action" onclick="showBlockName('esquema'); select_slide();">Select slide</li>
         
         <div class="razdel">Canción:</div>
-        <li class="li_action" onclick="showBlockName('cancion'); ver_song();">Ver canción</li>
-        <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Editar canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Ver/Editar canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
         
         <div class="razdel">Modal:</div>
@@ -511,6 +510,42 @@ function toggleDragSong() {
 
 
 
+
+
+
+function mostrarTapSlide(){
+    console.log('=== function mostrarTapSlide === ');
+    const d_tap_over = document.querySelector('.d_tap_over');
+    const d_state_tap_slide = document.querySelector('#d_esq_state_tap_slide');
+
+    tapSlide = true;
+    d_tap_over?.classList.add('shown');//muestro div d_tap_over que cubre todo el body de contenedor_prev
+    d_state_tap_slide.classList.add('active');
+}
+
+function ocultarTapSlide(){
+    console.log('=== function ocultarTapOver() === ');
+    const d_tap_over = document.querySelector('.d_tap_over');
+    const d_state_tap_slide = document.querySelector('#d_esq_state_tap_slide');
+
+    tapSlide = false;
+    d_tap_over?.classList.remove('shown');
+    d_state_tap_slide.classList.remove('active');
+}
+
+function toggleTapSlide() {
+    console.log('=== function toggleTapSlide() ===');    
+
+    if (tapSlide) {
+        ocultarTapSlide();//sig action
+    } else {
+        mostrarTapSlide();//sig action
+    }
+}
+
+
+
+
 async function refreshSong(){
     console.log('=== function refreshSong() === ');
 
@@ -561,9 +596,35 @@ function pintListaActive(){
     resetPListaActive(eid_bl_listas_finded);//new
     eid_bl_listas_finded.querySelector(`.p_lista[data-id="${id_lista}"]`)?.classList.add('active');//new
 
+    //creo btn actualizar lista
+    const element_btn_lista_refresh = eid_block_lista.querySelector('#btn_lista_refresh');
+    if(!element_btn_lista_refresh){
+        const ejemplo_btn_lista_refresh = `
+            <button id="btn_lista_refresh" class="btn btn_refresh" onclick="refreshLista()">
+                <img src="images/refresh.png" class="">
+                <span>Actualizar</span>
+            </button>        
+        `;
+        const btn_lista_refresh = document.createElement('button');
+        btn_lista_refresh.id = 'btn_lista_refresh';
+        btn_lista_refresh.className = 'btn btn_refresh';
+        btn_lista_refresh.innerHTML = `
+            <img src="images/refresh.png" class="">
+            <span>Actualizar</span>
+        `;
+        btn_lista_refresh.onclick = () => refreshLista();
+
+        const separador = document.createElement('div');
+        separador.className = 'separador for_btn_lista_refresh';
+
+        //añado al DOM
+        eid_block_lista_head.querySelector('.wr_block_option_inner').prepend(separador);
+        eid_block_lista_head.querySelector('.wr_block_option_inner').prepend(btn_lista_refresh);
+
+    }     
+
     mostrarVista(eid_block_lista_body);
 
-    
     mostrarPrim = false;
     ocultarElementosPrimEn(lista_option_inner);
     mostrarElementosEditablesEn(lista_option_inner);
@@ -1204,6 +1265,105 @@ async function make_arr_pantalla(currentSlide){
         slide_divs += next_wr_d_line.outerHTML;
     }
 
+    let slide_num_text = currentIndexOfArrLista + 1;
+    let slide_pos_text = `${currentSlide + 1} / ${arr_fieldsets.length}`;
+
+    const ejemplo_contenedor_prev_head = `
+        <div class="contenedor_prev_head">
+
+            <div id="d_esq_state_tap_slide" class="btn_actions" onclick="toggleTapSlide()">
+                <img src="images/tap_up_24.png">
+            </div>
+
+            <div class="vp_titulo">
+                <div id="id_slide_num">8050</div>
+                <div id="id_slide_pos">6 / 6</div>
+            </div>
+
+            <div id="d_esq_state_fullscreen" class="btn_actions" onclick="toggleFullscreen('#contenedor_prev_inner', this)">
+                <img src="images/icon_size_max.svg">
+            </div>
+
+        </div>
+    `;    
+    
+    const element_contenedor_prev_head = document.querySelector('.contenedor_prev_head');
+    if(!element_contenedor_prev_head){
+        const contenedor_prev_head = document.createElement('div');
+        contenedor_prev_head.className = 'contenedor_prev_head';
+        contenedor_prev_head.innerHTML = `
+            <div id="d_esq_state_tap_slide" class="btn_actions">
+                <img src="images/tap_up_24.png">
+            </div>
+            <div id="d_esq_state_fullscreen" class="btn_actions">
+                <img src="images/icon_size_max.svg">
+            </div>
+        `;
+        contenedor_prev_head.onclick = (e) => {
+            console.log('contenedor_prev_head clicked');
+
+            if(e.target.closest('#d_esq_state_tap_slide')){
+                toggleTapSlide();
+            }
+            else if(e.target.closest('#d_esq_state_fullscreen')){
+                toggleFullscreen('#contenedor_prev', e.target);
+            }else{
+                console.log('clicked ninguno de los botones');
+            }
+        }
+
+        //añado al DOM 
+        eid_contenedor_prev.append(contenedor_prev_head);
+    }
+
+    const ejemplo_contenedor_prev_foot = `
+        <div class="contenedor_prev_foot">
+            <div id="id_slide_num">8050</div>
+            <div id="id_slide_pos">6 / 6</div>
+        </div>
+    `;
+
+    const element_contenedor_prev_foot = document.querySelector('.contenedor_prev_foot');
+    if(!element_contenedor_prev_foot){
+        const contenedor_prev_foot = document.createElement('div');
+        contenedor_prev_foot.className = 'contenedor_prev_foot';
+        contenedor_prev_foot.innerHTML = `
+            <div id="id_slide_num">${slide_num_text}</div>
+            <div id="id_slide_pos">${slide_pos_text}</div>
+        `;
+        //añado al DOM 
+        eid_contenedor_prev.append(contenedor_prev_foot);
+    }else{//ya existe, solo actualizo datos de slide        
+        element_contenedor_prev_foot.querySelector('#id_slide_num').textContent = slide_num_text;
+        element_contenedor_prev_foot.querySelector('#id_slide_pos').textContent = slide_pos_text;
+    }
+
+
+    //debe estar aparte
+    const ejemplo_d_tap_over = `
+        <div class="d_tap_over"></div>
+    `;
+    const element_d_tap_over = document.querySelector('.d_tap_over');
+    
+    if(!element_d_tap_over){
+        const d_tap_over = document.createElement('div');
+        d_tap_over.className = 'd_tap_over';
+        d_tap_over.onclick = () => {
+            console.log('d_tap_over clicked');
+        }
+        //añado al DOM 
+        eid_contenedor_prev.append(d_tap_over);
+        
+        //añado escuchador de click
+        listenClickLeftRight(d_tap_over, slideGo);
+    }
+    
+
+
+
+
+
+
 
     //===================================================//
     //start - experiment
@@ -1234,6 +1394,7 @@ async function make_arr_pantalla(currentSlide){
     // 5. Insertarlo en un div existente (suponiendo que su id es 'contenedor')
     eid_contenedor_prev_inner.append(miIframe);
     mySizeIframe(eid_contenedor_prev);
+
     //===================================================//
     //start - experiment
     //===================================================//

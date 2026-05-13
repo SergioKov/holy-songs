@@ -2510,7 +2510,8 @@ p.p_sm b {
     /* border: 1px solid yellow; */
     display: flex;
     align-items: center;
-    padding: 20px;
+    /* padding: 20px; */
+    padding: 0px;
     flex-direction: column;
     gap: 20px;
     position: relative;
@@ -3913,11 +3914,20 @@ span.sp_number {
     opacity: 0.3;
 }
 
-#id_song_num {
+#id_slide_num, #id_song_num {
     padding: 2px 5px;
     border-radius: 5px;
     border: 2px solid grey;
 }
+
+#id_slide_pos {
+    /* background: #9C27B0; */
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-size: 80%;
+}
+
 #id_song_pos {
     /* position: absolute;
     right: -50px;
@@ -4085,7 +4095,9 @@ span.sp_number {
 }
 
 
-#btn_lista_refresh {
+#btn_cancion_refresh,
+#btn_lista_refresh 
+{
     border-radius: 15px;
     padding: 3px 10px;
     display: flex;
@@ -4093,7 +4105,9 @@ span.sp_number {
     justify-content: center;
     align-items: center;
 }
-#btn_lista_refresh img{
+#btn_cancion_refresh img,
+#btn_lista_refresh img
+{
     width: 15px;
     height: 15px;
 }
@@ -4336,4 +4350,77 @@ span.sp_number {
     margin-top: 10px;
     animation: 1s blink step-end infinite;
     padding: 10px;
+}
+
+
+
+
+
+
+.contenedor_prev_head {
+    /* background: #673AB7; */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    padding: 5px;
+    transition: 0.5s ease;
+}
+
+.contenedor_prev_foot {
+    /* background: orange; */
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    z-index: 1;
+    padding: 5px;
+    transition: 0.5s ease;
+    opacity: 0.3;
+}
+
+
+
+
+
+
+
+
+
+#d_esq_state_tap_slide {
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+#d_esq_state_tap_slide.active {
+    opacity: 1;
+}
+
+#d_esq_state_fullscreen {
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.d_tap_over {
+    /* background: #ff00006b; */
+    /* background: transparent; */
+    position: absolute;
+    left: 0;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transition: top 0.3s ease;
+    cursor: pointer;
+}
+.d_tap_over.shown {
+    top: 0;
 }

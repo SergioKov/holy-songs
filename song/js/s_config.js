@@ -15,6 +15,7 @@ const calculando = document.getElementById('calculando');
 
 let totalSlides = slides.length;
 let currentSlide = parseInt(localStorage.getItem('currentSlide')) || 0;
+let currentSlide_shown = currentSlide + 1;//currentSlide es el index del array, por eso sumo 1 para mostrar
 
 //'-1' significa que no se encuentra el index en arr_lita. 
 // esto es para luego buscar index de objSong por su id_song de la canción actual en la lista
@@ -690,3 +691,4 @@ let acordesVisible = true;//se ven acordes por defecto
 let textoVisible = true;//se ve el texto por defecto
 let contenidoWidth = false;//a lo ancho. por defecto no ajustado
 let dragSong = false;//false/true => mover y asi pasar a la sig/prev cancion de la lista en vista
+let tapSlide = false;//false/true => mover y asi pasar a la sig/prev slide en esquema al click /tap

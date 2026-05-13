@@ -1481,7 +1481,8 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
                         //await sleep(5000);
                         //alert('2. ahra click en fullscreen para ver los cambios al instante');
 
-                        eid_block_cancion_body.querySelector('.wr_vista_blocks .dbtn_fullscreen').click();//para ir a fullscreen
+                        //eid_block_cancion_body.querySelector('.wr_vista_blocks .dbtn_fullscreen').click();//para ir a fullscreen
+                        eid_block_cancion_body.querySelector('.vista_fixed #d_state_fullscreen').click();//para ir a fullscreen de vista_fixed
                     })(e);
                 }
             }
