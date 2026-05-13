@@ -1270,7 +1270,6 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
 
-                                                <button id="btn_song_ver" class="btn opt_edit" onclick="ver_song()" style="display: none !important;">Ver</button>
                                                 <button id="btn_song_editar" class="btn opt_edit" onclick="editar_song()">Editar</button>
                                                 <button id="btn_song_eliminar" class="btn opt_edit" onclick="eliminar_song();">Eliminar</button>
 
