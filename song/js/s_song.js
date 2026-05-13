@@ -4455,7 +4455,7 @@ async function listaSongGo(dirrection){
         let prev_id_song = objLista.arr_lista[prevIndexOfSong]?.id_song;
 
         if(prev_id_song === undefined){
-            aviso_text = 'Has llegado a la primera canción de la lista actual.';
+            aviso_text = 'Has llegado a la primera canción.';
 
             eid_aviso_lista_song.textContent = aviso_text;
             eid_aviso_drag_lista_song.textContent = aviso_text;
@@ -4480,7 +4480,7 @@ async function listaSongGo(dirrection){
 
         let next_id_song = objLista.arr_lista[nextIndexOfSong]?.id_song;
         if(next_id_song === undefined){
-            aviso_text = 'Has llegado a la última canción de la lista actual.';
+            aviso_text = 'Has llegado a la última canción.';
 
             eid_aviso_lista_song.textContent = aviso_text;
             eid_aviso_drag_lista_song.textContent = aviso_text;
