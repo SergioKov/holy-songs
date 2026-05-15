@@ -4177,8 +4177,10 @@ async function nueva_song(){
     cancion_wr_vista_blocks.querySelector('.contenedor').innerHTML = '...';//reset
     document.querySelector('.vista_fixed .d_contenedor .contenedor').innerHTML = '';//reset new
     cancion_ul_action.innerHTML = '...';//reset 
-    cancion_song_bloques.classList.add('solo_ver');    
+    cancion_song_bloques.classList.add('solo_ver'); 
     
+    document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
+
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
 
@@ -4364,6 +4366,9 @@ function editar_song(){
     document.querySelector('.vista_fixed .d_contenedor .contenedor').innerHTML = '';//reset new
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
+
+    document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
+    
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
