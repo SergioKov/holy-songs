@@ -16,6 +16,7 @@ window.addEventListener('resize',(e) => {
     console.log('resize - window.innerWidth: ', window.innerWidth);
     ajustarTexto();
     scrollToSlide(currentSlide);
+    refreshSwipeLayout();//para actualizar layout de swipe táctil al cambiar tamaño de ventana
     mySizeEdit();//en test. luego quitar!!!
 });
 
@@ -186,12 +187,13 @@ function listenClickLeftRight(contenedor, funcionGo){
 // start --- swipe táctil para avanzar/retroceder slides o subir/bajar texto en vista_fixed
 //================================================================================//
 const dragOver = document.querySelector('.d_drag_over');
-const content = document.querySelector('.vista_fixed .d_contenedor');
+const d_contenedor = document.querySelector('.vista_fixed .d_contenedor');
 
 let startX = 0;
 let startY = 0;
 let startTime = 0;
 let mouseDown = false;
+let swipeHistory = [];
 
 // ======================
 // TOUCH
@@ -227,6 +229,7 @@ dragOver.addEventListener('mousedown', (e) => {
     console.log('=== event mousedown ===');
 
     mouseDown = true;
+    dragOver.classList.add('grabbing');
 
     startGesture(
         e.clientX,
@@ -242,6 +245,7 @@ document.addEventListener('mouseup', (e) => {
     if (!mouseDown) return;
 
     mouseDown = false;
+    dragOver.classList.remove('grabbing');
 
     endGesture(
         e.clientX,
@@ -303,36 +307,257 @@ function endGesture(x, y){
     // SWIPE VERTICAL
     // =========================
 
+    
+
     if (Math.abs(diffY) > Math.abs(diffX) * 1.3) {
         console.log('=== SWIPE VERTICAL ===');
+                                
+                                //--------------------------------- old --------------------------------//
+                                //const pageStep = d_contenedor.clientHeight * 0.9;
+                                //const pageStep = d_contenedor.clientHeight * 1;
 
-        const pageStep = content.clientHeight * 0.9;
+                                // altura real de línea
+                                // const lineHeight = parseFloat(
+                                //     getComputedStyle(d_contenedor.querySelector('p')).lineHeight
+                                // );
 
-        console.log(content.scrollHeight);
-        console.log(content.clientHeight);
+                                // avanzar dejando visibles 2 líneas anteriores
+                                //const pageStep = d_contenedor.clientHeight - (lineHeight * 2);
 
-        //content.scrollTop = 233;//test
-        //document.querySelector('.vista_fixed .d_contenedor').scrollTop = 550;//test
-        //return;
+                                //console.log(d_contenedor.scrollHeight);
+                                //console.log(d_contenedor.clientHeight);
 
-        // mover dedo hacia abajo
-        if (diffY > threshold) {
-            console.log('=== SWIPE dedo hacia abajo. contenido arriba ===');
-            content.scrollTop -= pageStep;
-        }
-        
-        // mover dedo hacia arriba
-        else if (diffY < -threshold) {
-            console.log('=== SWIPE dedo hacia arriba. contenido abajo ===');
-            content.scrollTop += pageStep;
-        }
+                                //d_contenedor.scrollTop = 233;//test
+                                //document.querySelector('.vista_fixed .d_contenedor').scrollTop = 550;//test
+                                //return;
 
+                                // // mover dedo hacia abajo
+                                // if (diffY > threshold) {
+                                //     console.log('=== SWIPE dedo hacia abajo. contenido arriba ===');
+                                //     d_contenedor.scrollTop -= pageStep;
+                                // }
+                                
+                                // // mover dedo hacia arriba
+                                // else if (diffY < -threshold) {
+                                //     console.log('=== SWIPE dedo hacia arriba. contenido abajo ===');
+                                //     d_contenedor.scrollTop += pageStep;
+                                // }
+                                //--------------------------------- old --------------------------------//
+
+
+                                //--------------------------------- new --------------------------------//
+                                
+                                
+                                const fieldsets = [
+                                    ...d_contenedor.querySelectorAll('fieldset.kuplet')
+                                ];
+                            
+                                const containerTop = d_contenedor.scrollTop;
+                                const containerBottom =
+                                    containerTop + d_contenedor.clientHeight;
+                            
+                                // ====================================
+                                // DEDO SUBE = AVANZAR
+                                // ====================================
+                            
+                                if (diffY < -threshold) {
+                            
+                                    console.log('=== avanzar ===');
+                                    let moved = false;
+                                    
+                                    // ====================================
+                                    // 1. parcialmente visible abajo
+                                    // ====================================
+                                    for (const fs of fieldsets) {
+                            
+                                        const fsTop = fs.offsetTop;
+                                        const fsBottom = fsTop + fs.offsetHeight;
+                            
+                                        // parcialmente visible abajo
+                                        if (
+                                            fsTop < containerBottom &&
+                                            fsBottom > containerBottom
+                                        ) {
+                            
+                                            // guardar posición REAL actual
+                                            swipeHistory.push(d_contenedor.scrollTop);
+                                            console.log('swipeHistory: ', swipeHistory);
+                            
+                                            // mover al siguiente bloque
+                                            d_contenedor.scrollTop = fsTop - 10;//'-10' para que quede un poco visible 
+
+                                            updatePartialFieldsets(); 
+                                            moved = true;
+                                            break;
+                                        }
+                            
+                                    }
+                            
+
+                                    // ====================================
+                                    // 2. siguiente bloque completo
+                                    // ====================================
+    
+                                    if (!moved) {
+    
+                                        for (const fs of fieldsets) {
+    
+                                            const fsTop = fs.offsetTop;
+    
+                                            // completamente debajo
+                                            if (fsTop > containerBottom) {
+    
+                                                swipeHistory.push(
+                                                    d_contenedor.scrollTop
+                                                );
+    
+                                                console.log(
+                                                    'swipeHistory:',
+                                                    swipeHistory
+                                                );
+    
+                                                d_contenedor.scrollTop = fsTop;
+    
+                                                updatePartialFieldsets();
+    
+                                                break;
+                                            }
+    
+                                        }
+    
+                                    }
+                                
+                                }
+
+
+                                
+                            
+                                // ====================================
+                                // DEDO BAJA = RETROCEDER
+                                // ====================================
+                            
+                                else if (diffY > threshold) {
+                            
+                                    console.log('=== retroceder ===');
+                                    console.log('swipeHistory: ', swipeHistory);
+                            
+                                    if (swipeHistory.length > 0) {
+                            
+                                        const prevScrollTop = swipeHistory.pop();
+                                        console.log('prevScrollTop:', prevScrollTop);
+                            
+                                        d_contenedor.scrollTop = prevScrollTop;
+
+                                        updatePartialFieldsets();
+                                    }
+                                        
+                            
+                                }
+
+    
     }
 
 }
+
+// ====================================
+// OPACITY BLOQUES PARCIALES
+// ====================================
+
+function updatePartialFieldsets(){
+
+    const fieldsets = [...d_contenedor.querySelectorAll('fieldset.kuplet')];
+
+    const containerRect = d_contenedor.getBoundingClientRect();
+
+    fieldsets.forEach(fs => {
+
+        const rect = fs.getBoundingClientRect();
+
+        const fullyVisible =
+            rect.top >= containerRect.top &&
+            rect.bottom <= containerRect.bottom &&
+            rect.left >= containerRect.left &&
+            rect.right <= containerRect.right;
+
+        fs.classList.toggle('partial', !fullyVisible);
+
+    });
+
+}
+
+
+
+// ====================================
+// PADDING INFERIOR
+// permite subir el último bloque arriba
+// ====================================
+
+function old_updateBottomPadding(){
+
+    const fieldsets = [...d_contenedor.querySelectorAll('fieldset.kuplet')];
+
+    const last = fieldsets.at(-1);
+
+    if (!last) return;
+
+                        // const needed =
+                        //     d_contenedor.clientHeight - last.offsetHeight;
+
+                        // d_contenedor.style.paddingBottom =
+                        //     Math.max(needed, 0) + 'px';
+
+                        // espacio necesario para poder
+    // subir el último fieldset arriba
+    // const needed =
+    // (last.offsetTop + last.offsetHeight)
+    // - d_contenedor.clientHeight;
+
+    // scroll máximo actual
+    const currentMaxScroll =
+        d_contenedor.scrollHeight - d_contenedor.clientHeight;
+
+    // padding faltante
+    const extra =
+        last.offsetTop - currentMaxScroll;
+
+    d_contenedor.style.paddingBottom =
+        Math.max(extra, 0) + 'px';
+}
+
+function updateBottomPadding(){
+    //alert(updateBottomPadding.name);
+    console.warn('=== function updateBottomPadding() === ', updateBottomPadding.name);
+
+    d_contenedor.querySelector('.contenedor').style.paddingBottom = d_contenedor.clientHeight + 'px';
+}
+
 //================================================================================//
 // end --- swipe táctil para avanzar/retroceder slides o subir/bajar texto en vista_fixed
 //================================================================================//
+
+
+function resetPartialFieldsets(){
+    const fieldsets = [
+        ...d_contenedor.querySelectorAll('fieldset.kuplet')
+    ];
+
+    fieldsets.forEach(fs => {
+        fs.classList.remove('partial');
+    });
+}
+
+
+function resetBottomPadding(){
+    d_contenedor.querySelector('.contenedor').style.paddingBottom = 0;
+}
+
+
+function refreshSwipeLayout(){
+    if (!dragSong) return;
+
+    updatePartialFieldsets();
+    updateBottomPadding();
+}
 
 
 document.addEventListener('keydown', checkKey);
@@ -418,6 +643,8 @@ document.addEventListener('fullscreenchange', () => {
     pintBtnFullscreen(document.querySelector('#block_cancion .bl_parte_l .dbtn_fullscreen'));
     pintFlechasFullscreen(document.querySelector('.vista_fixed #d_state_fullscreen'));//new (flechas diagonales)
     pintFlechasFullscreen(document.querySelector('#d_esq_state_fullscreen'));//new (flechas diagonales)
+    
+    refreshSwipeLayout();
 
     console.log('1. is_fullscreen: ', is_fullscreen);
 });

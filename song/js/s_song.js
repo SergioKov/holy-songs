@@ -3017,12 +3017,15 @@ async function guardarLista(event, modo_guardar = 'normal'){//modo_guardar: 'nor
         }
        
         if(errors.length > 0){
+            
             let error_text = '';
             errors.forEach(error => {
-                error_text += ' - ' + error + '<br>';
-            });            
-            form_mensaje_lista.innerHTML = `<span class="add_result add_error">Por favor, rellena los siguientes datos: <br> ${error_text}</span>`;
-            form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+                error_text += `<p> - ${error}</p>`;
+            });
+            
+            let aviso_text = `<p>Por favor, rellena los siguientes datos: </p> <br> ${error_text}`;
+            
+            showToast('error', aviso_text, 50, 'center', true, 'Error en los campos introducidos');
             return;
         }
 
@@ -3102,7 +3105,7 @@ async function guardarLista(event, modo_guardar = 'normal'){//modo_guardar: 'nor
             console.log('text_show:', text_show);
 
             if(form_mensaje_lista) {
-                form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
+                //form_mensaje_lista.innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
                 //form_lista.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             }
     
@@ -3115,7 +3118,7 @@ async function guardarLista(event, modo_guardar = 'normal'){//modo_guardar: 'nor
             if(form_mensaje_lista){
                 setTimeout(()=>{
                     form_mensaje_lista.innerHTML = `
-                        <span class="sp_id">
+                        <span class="sp _id">
                             <span>Id: <b class="c_green">${data.id_lista}</b></span>
                             <span><b class="guardado">GUARDADO</b></span>
                         </span>
@@ -4532,46 +4535,67 @@ function hideShowFontMenu(){
 function toggleAcordes() {
     // const btn_state_acordes = cancion_wr_vista_blocks.querySelector('#btn_state_acordes');
     const btn_state_acordes = eid_block_cancion.querySelector('.d_menu_over #btn_state_acordes');
+    let text_estado = '';
 
     if (acordesVisible) {
         ocultarAcordes('#tema_block');
         btn_state_acordes.querySelector('img').src = "/song/images/music_note_off32x32.png";
+        text_estado = 'Acordes ocultados (si hay)';
     } else {
         mostrarAcordes('#tema_block');
         btn_state_acordes.querySelector('img').src = "/song/images/music_note_on32x32.png";
+        text_estado = 'Acordes mostrados (si hay)';
     }
 
     acordesVisible = !acordesVisible;
+
+    showToast('info', text_estado, 2000);
+
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 function toggleTexto() {
     // const btn_state_text = cancion_wr_vista_blocks.querySelector('#btn_state_texto');
     const btn_state_text = eid_block_cancion.querySelector('.d_menu_over #btn_state_texto');
+    let text_estado = '';
 
     if (textoVisible) {
         ocultarTexto('#tema_block');
         btn_state_text.querySelector('img').src = "/song/images/text_off32x32.png";
+        text_estado = 'Texto ocultado';
     } else {
         mostrarTexto('#tema_block');
         btn_state_text.querySelector('img').src = "/song/images/text_on32x32.png";
+        text_estado = 'Texto mostrado';
     }
 
     textoVisible = !textoVisible;
+
+    showToast('info', text_estado, 2000);
+
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 function toggleContenidoWidth() {
     // const btn_state_contenido_width = cancion_wr_vista_blocks.querySelector('#btn_state_contenido_width');
     const btn_state_contenido_width = eid_block_cancion.querySelector('.d_menu_over #btn_state_contenido_width');
+    let text_estado = '';
 
     if (contenidoWidth) {
         quitarContenidoWidth('#tema_block');
         btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_off.png";
+        text_estado = 'Contenido no ajustado a lo ancho y puede sobresalir de la vista. Ajusta la fuente para que quepa bien.';
     } else {
         aplicarContenidoWidth('#tema_block');
         btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_on.png";
+        text_estado = 'Contenido ajustado a lo ancho disponible. Los acordes se ven desplazados de sus posiciones originales.';
     }
 
     contenidoWidth = !contenidoWidth;
+
+    showToast('info', text_estado, 5000);
+
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 

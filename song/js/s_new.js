@@ -444,7 +444,7 @@ function mostrarMenuOver(){
     hamburger3.classList.add('active'); // Cambiar hamburguesa a flecha o 'x'
     d_contenedor.classList.add('scrollbar_menu_over');//activo vista de scrollbar en contenedor para poder ver donde estoy
 
-    ocultarDragOver();
+    //ocultarDragOver();
 }
 
 function ocultarMenuOver(){
@@ -482,7 +482,8 @@ function mostrarDragOver(){
     d_state_drag_song.classList.add('active');
     d_contenedor.classList.add('scrollbar_drag_over');//activo vista de scrollbar en contenedor para poder ver donde estoy
 
-    ocultarMenuOver();
+    //ocultarMenuOver();//revisar ! hace falta?..
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 function ocultarDragOver(){
@@ -495,6 +496,9 @@ function ocultarDragOver(){
     d_drag_over?.classList.remove('shown');
     d_state_drag_song.classList.remove('active');
     d_contenedor.classList.remove('scrollbar_drag_over');//desactivo vista de scrollbar en contenedor. que sea por defecto
+
+    resetPartialFieldsets();
+    resetBottomPadding();
 }
 
 function toggleDragSong() {
@@ -2245,34 +2249,90 @@ function parteCentral(param){
 
 
 
-function showToast(tipo = 'info', mensaje, duration = null) {
-    
+function showToast(tipo = 'info', mensaje, duration = null, position = 'default', with_head = false, text_head = 'Info') {//default -> abajo derecha
+    //position = 'default'// => abajo derecha
+    //position = 'center'// => center y center
+   
+
     eid_toast_container.innerHTML = '';//reset
+
+    // Crear div outer para cubrir toda la pantalla
+    const ecl_toast_container_inner = document.createElement('div');
+    ecl_toast_container_inner.className = `toast_container_inner ${position}`;
+    ecl_toast_container_inner.onclick = (e) => {
+        console.log('toast_close ecl_toast_container_inner. e.currentTarget: ', e.currentTarget);
+        console.log('toast_close ecl_toast_container_inner. e.target: ', e.target);
+        e.stopPropagation();
+
+        //click en ecl_toast_container_inner pero fuera del toast, para cerrar el toast
+        if(!e.target.closest('.toast')){//si el click es fuera del toast
+            closeToastWithFade();
+        }
+    };
+
+    function closeToastWithFade(duration = 10){//por defecto cerrar inmediatamente (10ms)
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => ecl_toast_container_inner.remove(), 1000);
+        }, duration);
+    }
+
 
     // Crear toast
     const toast = document.createElement('div');
-    toast.className = `toast ${tipo}`;
-    toast.innerHTML = `
-      <div class="toast_mensaje">${mensaje}</div>
-      <!-- aki btn de cerrar toast -->
-    `;
+    toast.className = `toast`;
+
+    if(with_head){
+        
+        toast.innerHTML = `
+            <div class="toast_inner">
+                <div class="toast_head">
+                    <div>${text_head}</div>
+                    <!-- aki btn de cerrar toast -->
+                </div>
+                <div class="toast_body ${tipo}">
+                    <div class="toast_mensaje">${mensaje}</div>
+                </div>
+            </div>
+        `;
+    
+    }else{//default simple
+
+        toast.innerHTML = `
+            <div class="toast_body simple ${tipo}">
+                <div class="toast_mensaje">${mensaje}</div>
+                <!-- aki btn de cerrar toast -->
+            </div>
+        `;
+    }
+
 
     //si no hay duration, muestro btn de cerrar
     if(!duration || duration  <= 1000){
-        let ejemplo_btn = '<button class="toast_close" onclick="this.parentElement.remove()">×</button>';
+        const ejemplo_btn = '<button class="toast_close" onclick="this.parentElement.remove()">×</button>';
 
         const toast_close = document.createElement('button');
         toast_close.className = 'toast_close';
         toast_close.textContent = '×';
-        toast_close.onclick = (e) =>{
-            e.currentTarget.parentElement.remove();
+        toast_close.onclick = (e) => {
+            console.log('toast_close clicked. e.currentTarget: ', e.currentTarget);
+            closeToastWithFade();
         }
+
         //añado al toast
-        toast.append(toast_close);
+        if(with_head){
+            toast.querySelector('.toast_head').append(toast_close);
+        }else{
+            toast.querySelector('.toast_body').append(toast_close);
+        }
     }
 
     //Añado al DOM
-    eid_toast_container.appendChild(toast);
+    // eid_toast_container.appendChild(toast);
+    eid_toast_container.appendChild(ecl_toast_container_inner);
+    ecl_toast_container_inner.appendChild(toast);
+
+    ecl_toast_container_inner.classList.add('show');
 
     // Forzar reflow para activar transición
     setTimeout(() => {
@@ -2282,10 +2342,7 @@ function showToast(tipo = 'info', mensaje, duration = null) {
     if(duration > 1000){
        console.log('hay duration: ', duration);
         // Auto eliminar
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 1000);
-        }, duration);
+        closeToastWithFade(duration);
     }
 }
 
@@ -3374,6 +3431,8 @@ function toggleFullscreen(selectorElementContenedor, btnElement) {
 
     }
 
+    refreshSwipeLayout();
+
     // NO HACE FALTA: pintBtnFullscreen();    
     console.log('toggle(Fullscreen) --- is_fullscreen: ', is_fullscreen);
 }
@@ -3570,26 +3629,39 @@ function normalizeSearchText(text) {
 function makeColumns(num){
     if(num > 4) return;
     eid_block_cancion.querySelector('.contenedor').style.columnCount = num;
+    
+    showToast('info', `Columnas: ${num}`, 2000);
+
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 
 function changeFontSize(step) {
     step = parseInt(step, 10);
+
     const elementSelectors = `
         /*#cancion_song_bloques, #block_cancion*/ .wr_vista_blocks .contenedor, .vista_fixed .contenedor
     `;
+
+    let curFont_show = '';
 
     const elementsAll = document.querySelectorAll(elementSelectors);
     elementsAll.forEach(el => {
         console.log('el: ', el);
         if(step == 0){
             el.style.fontSize = '';//vuelvo al tamaño original quitando el style
+            curFont_show = parseInt(window.getComputedStyle(document.querySelector('.vista_fixed .contenedor')).fontSize, 10) + 'px';
         }else{
             let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
-            el.style.fontSize = (curFont + step) + 'px';
+            curFont_show = (curFont + step) + 'px';
+            el.style.fontSize = curFont_show;
         }
         //console.log('fin el: ', el);
     });
+
+    showToast('info', `Fuente: ${curFont_show}`, 2000);
+
+    refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
 
 
