@@ -692,3 +692,5 @@ let textoVisible = true;//se ve el texto por defecto
 let contenidoWidth = false;//a lo ancho. por defecto no ajustado
 let dragSong = false;//false/true => mover y asi pasar a la sig/prev cancion de la lista en vista
 let tapSlide = false;//false/true => mover y asi pasar a la sig/prev slide en esquema al click /tap
+
+let fontSizeDef = 22;//tamaño de fuente por defecto para la canción en pantalla. 

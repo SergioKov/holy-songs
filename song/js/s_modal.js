@@ -831,6 +831,31 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormTranspose(Number(objSong.tune_transpose));//para transponer al cargar el form
             handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
             handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
+
+            if(objSong.font_size){
+                console.log('hay font_size en objSong, la aplico al cargar el form...');
+                //alert('hay font-size en objSong, la aplico al cargar el form...');
+                aplicarFontSize(objSong.font_size);
+            }else{
+                console.log('no hay font_size en objSong, aplico valor por defecto...');
+                aplicarFontSize(fontSizeDef);
+            }
+
+
+
+            //cojo ajustes de song
+            if(objSong.ajustes){
+                
+                aplicarNumColumns(objSong.ajustes.num_columns);
+                aplicarAcordesVisibles(objSong.ajustes.acordes_visibles);
+                aplicarTextoVisible(objSong.ajustes.texto_visible);
+                aplicarContenidoWidthBd(objSong.ajustes.contenido_width);
+            }
+
+
+
+            document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
+            refreshSwipeLayout();
             
             
 

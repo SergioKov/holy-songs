@@ -99,9 +99,15 @@ $sql_init = "SELECT
                 s.lang,
                 s.notes, 
                 s.count, 
+
+                sa.font_size,
+                sa.num_columns,
+
                 s.created_at, 
                 s.updated_at
             FROM songs s
+            LEFT JOIN songs_ajustes sa 
+                ON sa.id_song = s.id_song
             LEFT JOIN category_translations ct 
                 ON ct.id_category = s.category AND ct.lang = s.lang
             LEFT JOIN songbooks sb 
@@ -151,6 +157,10 @@ if($result->num_rows > 0){
         'lang' => $row['lang'],
         'notes' => $row['notes'],
         'count' => $row['count'],
+
+        'font_size' => $row['font_size'],
+        'num_columns' => $row['num_columns'],
+        
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],
         'valorData' => 'hay_datos'

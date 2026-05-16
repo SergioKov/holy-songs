@@ -2765,6 +2765,8 @@ p.p_sm b {
 
 .toast_container_inner {
     /* background: #03a9f46e; */
+    position: absolute;
+    /* z-index: 10; */
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -2774,21 +2776,41 @@ p.p_sm b {
     transform: translateY(100%);
     transition: opacity 0.5s, transform 0.5s;
 }
-.toast_container_inner.default{
-    position: relative;
+
+.toast_container_inner.default, 
+.toast_container_inner.bottom 
+{
     transform: translateY(0px);
+    width: auto;
+    height: auto;
+    bottom: 20px;
+    right: 20px;
+}
+.toast_container_inner.default.inner_absolute, 
+.toast_container_inner.bottom.inner_absolute 
+{
+    bottom: 0;
+    right: 0;
+
 }
 
 .toast_container_inner.center{
     padding: 15px;
 }
+.inner_fixed {
+    position: fixed;
+}
+.inner_absolute {
+    position: absolute;
+}
 
 .toast_container_inner.center.show{
-    position: fixed;
     top: 0;
     left: 0;
     transform: translateY(0px);
 }
+
+
 .toast_container_inner.shown {
     transform: translateY(0);
 }
@@ -2802,7 +2824,7 @@ p.p_sm b {
     justify-content: space-between;
     gap: 10px;
     /* min-width: 220px; */
-    /* max-width: 300px; */
+    max-width: 300px;
     /* padding: 12px 12px; */
     border-radius: 8px;
     color: #fff;
@@ -4041,17 +4063,23 @@ span.sp_number {
     border-radius: 10px;
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
+    /* transform: translate(-50%, -50%); */
     font-size: 30px;
     display: none;
     top: 50%;
     width: 50%;
     text-align: center;
     color: #000000;
+    transform: translate(-50%, -0%);
+    opacity: 0.2;
+    transition: 0.5s ease;
 }
 .aviso_tmp.shown {
     display: block;
+    transform: translate(-50%, -50%);
+    opacity: 1;
 }
+
 
 .l_kvadrat {
     background: #52ab55;
@@ -4505,4 +4533,15 @@ fieldset.kuplet{
 
 fieldset.kuplet.partial{
     opacity: 0.3;
+}
+
+
+.aviso_contenedor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #ff0000a8;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
 }

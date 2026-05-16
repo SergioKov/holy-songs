@@ -36,7 +36,7 @@ function pintSongActive(){//click en tr de la tabla de canciones
         <li class="li_action" onclick="showBlockName('esquema'); select_slide();">Select slide</li>
         
         <div class="razdel">Canción:</div>
-        <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Ver/Editar canción</li>
+        <li class="li_action" onclick="showBlockName('cancion'); editar_song();">Ver / Editar canción</li>
         <li class="li_action" onclick="showBlockName('cancion'); eliminar_song();">Eliminar canción</li>
         
         <div class="razdel">Modal:</div>
@@ -481,6 +481,8 @@ function mostrarDragOver(){
     d_drag_over?.classList.add('shown');//muestro div drag_overu que cubre todo el body de vista_fixed
     d_state_drag_song.classList.add('active');
     d_contenedor.classList.add('scrollbar_drag_over');//activo vista de scrollbar en contenedor para poder ver donde estoy
+    
+    showToast('info', `Deslizamiento activado`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
 
     //ocultarMenuOver();//revisar ! hace falta?..
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
@@ -496,6 +498,8 @@ function ocultarDragOver(){
     d_drag_over?.classList.remove('shown');
     d_state_drag_song.classList.remove('active');
     d_contenedor.classList.remove('scrollbar_drag_over');//desactivo vista de scrollbar en contenedor. que sea por defecto
+    
+    showToast('info', `Deslizamiento desactivado`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
 
     resetPartialFieldsets();
     resetBottomPadding();
@@ -2249,16 +2253,29 @@ function parteCentral(param){
 
 
 
-function showToast(tipo = 'info', mensaje, duration = null, position = 'default', with_head = false, text_head = 'Info') {//default -> abajo derecha
+function showToast(tipo = 'info', mensaje, duration = null, position = 'default', with_head = false, text_head = 'Info', contenedor = null) {//default -> abajo derecha
     //position = 'default'// => abajo derecha
     //position = 'center'// => center y center
+
+    let toast_container;
+    let inner_position;
+
+    if(!contenedor){//si no se indica el contenedor, cojo el por defecto
+        toast_container = eid_toast_container;
+        toast_container.innerHTML = '';//reset
+        inner_position = 'inner_fixed';
+    }else{
+        toast_container = contenedor;
+        contenedor.querySelector('.toast_container_inner')?.remove();
+        inner_position = 'inner_absolute';
+    }
    
 
-    eid_toast_container.innerHTML = '';//reset
+    // eid_toast_container.innerHTML = '';//reset
 
     // Crear div outer para cubrir toda la pantalla
     const ecl_toast_container_inner = document.createElement('div');
-    ecl_toast_container_inner.className = `toast_container_inner ${position}`;
+    ecl_toast_container_inner.className = `toast_container_inner ${position} ${inner_position}`;
     ecl_toast_container_inner.onclick = (e) => {
         console.log('toast_close ecl_toast_container_inner. e.currentTarget: ', e.currentTarget);
         console.log('toast_close ecl_toast_container_inner. e.target: ', e.target);
@@ -2269,6 +2286,7 @@ function showToast(tipo = 'info', mensaje, duration = null, position = 'default'
             closeToastWithFade();
         }
     };
+
 
     function closeToastWithFade(duration = 10){//por defecto cerrar inmediatamente (10ms)
         setTimeout(() => {
@@ -2329,8 +2347,9 @@ function showToast(tipo = 'info', mensaje, duration = null, position = 'default'
 
     //Añado al DOM
     // eid_toast_container.appendChild(toast);
-    eid_toast_container.appendChild(ecl_toast_container_inner);
+    toast_container.appendChild(ecl_toast_container_inner);
     ecl_toast_container_inner.appendChild(toast);
+    
 
     ecl_toast_container_inner.classList.add('show');
 
@@ -3630,9 +3649,51 @@ function makeColumns(num){
     if(num > 4) return;
     eid_block_cancion.querySelector('.contenedor').style.columnCount = num;
     
-    showToast('info', `Columnas: ${num}`, 2000);
+    showToast('info', `Columnas: ${num}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
+}
+
+function aplicarFontSize(val){
+    if(!val) return;
+
+    eid_block_cancion.querySelector('.vista_fixed .contenedor').style.fontSize = val + 'px';
+    
+    showToast('info', `Fuente aplicado: ${val}px`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
+
+    //setTimeout(()=>{
+        refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
+    //},10);
+}
+
+function aplicarNumColumns(val){
+    if(!val) return;
+
+    makeColumns(val);
+    
+    showToast('info', `Numero columnas aplicado: ${val}`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
+
+    //setTimeout(()=>{
+        refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
+    //},10);
+}
+
+function aplicarAcordesVisibles(val){
+    
+    acordesVisible = !val;//hago esto para luego aplicar toggleAcordes
+    toggleAcordes();//hace siguiente accion -> ocultar o mostrar acordes
+}
+
+function aplicarTextoVisible(val){
+    
+    textoVisible = !val;//hago esto para luego aplicar toggleAcordes
+    toggleTexto();//hace siguiente accion -> ocultar o mostrar acordes
+}
+
+function aplicarContenidoWidthBd(val){
+    
+    contenidoWidth = !val;//hago esto para luego aplicar toggleAcordes
+    toggleContenidoWidth();//hace siguiente accion -> ocultar o mostrar acordes
 }
 
 
@@ -3659,7 +3720,7 @@ function changeFontSize(step) {
         //console.log('fin el: ', el);
     });
 
-    showToast('info', `Fuente: ${curFont_show}`, 2000);
+    showToast('info', `Fuente: ${curFont_show}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }

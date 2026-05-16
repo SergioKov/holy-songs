@@ -4179,8 +4179,6 @@ async function nueva_song(){
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver'); 
     
-    document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
-
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'nueva');
 
@@ -4366,9 +4364,7 @@ function editar_song(){
     document.querySelector('.vista_fixed .d_contenedor .contenedor').innerHTML = '';//reset new
     cancion_ul_action.innerHTML = '...';//reset 
     cancion_song_bloques.classList.add('solo_ver');
-
-    document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
-    
+   
 
     buildFormCancion(cancion_song_bloques, cancion_action = 'editar');//'ver', 'editar'
 
@@ -4444,19 +4440,8 @@ async function listaSongGo(dirrection){
     let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
     let prevIndexOfSong = currentIndexOfSong - 1;
     let nextIndexOfSong = currentIndexOfSong + 1;
-    let delay_ocultar_aviso = 2000;  
-    let aviso_text = '';  
-    
-    // eid_aviso_lista_song = cancion_wr_vista_blocks.querySelector('#aviso_lista_song');
-    eid_aviso_lista_song = eid_block_cancion.querySelector('.vista_fixed #aviso_lista_song');
-    eid_aviso_lista_song.textContent = ''; //reset aviso
-    eid_aviso_lista_song.classList.remove('shown'); //oculto
-
-    eid_aviso_drag_lista_song = eid_block_cancion.querySelector('.vista_fixed #aviso_drag_lista_song');
-    eid_aviso_drag_lista_song.textContent = ''; //reset aviso
-    eid_aviso_drag_lista_song.classList.remove('shown'); //oculto
-
-    
+    let aviso_text = '';      
+   
 
     if(dirrection === 'prev'){
         console.log('ir a la canción anterior');
@@ -4465,16 +4450,7 @@ async function listaSongGo(dirrection){
         if(prev_id_song === undefined){
             aviso_text = 'Has llegado a la primera canción.';
 
-            eid_aviso_lista_song.textContent = aviso_text;
-            eid_aviso_drag_lista_song.textContent = aviso_text;
-            eid_aviso_lista_song.classList.add('shown'); //muestro aviso
-            eid_aviso_drag_lista_song.classList.add('shown'); //muestro aviso
-            
-            setTimeout(()=>{
-                eid_aviso_lista_song.classList.remove('shown'); //oculto aviso
-                eid_aviso_drag_lista_song.classList.remove('shown'); //oculto aviso
-            },delay_ocultar_aviso);
-
+            showToast('info', aviso_text, 1500, 'center', false,'', document.querySelector('.vista_fixed_body'));
             return;
         }
         
@@ -4490,16 +4466,7 @@ async function listaSongGo(dirrection){
         if(next_id_song === undefined){
             aviso_text = 'Has llegado a la última canción.';
 
-            eid_aviso_lista_song.textContent = aviso_text;
-            eid_aviso_drag_lista_song.textContent = aviso_text;
-            eid_aviso_lista_song.classList.add('shown'); //muestro aviso
-            eid_aviso_drag_lista_song.classList.add('shown'); //muestro aviso
-            
-            setTimeout(()=>{
-                eid_aviso_lista_song.classList.remove('shown'); //oculto aviso
-                eid_aviso_drag_lista_song.classList.remove('shown'); //oculto aviso
-            },delay_ocultar_aviso);
-
+            showToast('info', aviso_text, 1500, 'center', false,'', document.querySelector('.vista_fixed_body'));
             return;
         }
         
@@ -4554,7 +4521,7 @@ function toggleAcordes() {
 
     acordesVisible = !acordesVisible;
 
-    showToast('info', text_estado, 2000);
+    showToast('info', text_estado, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
@@ -4576,7 +4543,7 @@ function toggleTexto() {
 
     textoVisible = !textoVisible;
 
-    showToast('info', text_estado, 2000);
+    showToast('info', text_estado, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
@@ -4589,16 +4556,26 @@ function toggleContenidoWidth() {
     if (contenidoWidth) {
         quitarContenidoWidth('#tema_block');
         btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_off.png";
-        text_estado = 'Contenido no ajustado a lo ancho y puede sobresalir de la vista. Ajusta la fuente para que quepa bien.';
+        
+        if(acordesVisible){
+            text_estado = 'Contenido no ajustado a lo ancho y puede sobresalir de la vista. Los acordes se ven según el tipo de fuente guardado. Ajusta la fuente para que quepa bien.';
+        }else{
+            text_estado = 'Contenido no ajustado a lo ancho disponible. Ajusta la fuente para que quepa bien.';
+        }
+
     } else {
         aplicarContenidoWidth('#tema_block');
         btn_state_contenido_width.querySelector('img').src = "/song/images/auto_width_on.png";
-        text_estado = 'Contenido ajustado a lo ancho disponible. Los acordes se ven desplazados de sus posiciones originales.';
+        if(acordesVisible){
+            text_estado = 'Contenido ajustado a lo ancho disponible. Los acordes se ven desplazados de sus posiciones originales.';
+        }else{
+            text_estado = 'Contenido ajustado a lo ancho disponible.';
+        }
     }
 
     contenidoWidth = !contenidoWidth;
 
-    showToast('info', text_estado, 5000);
+    showToast('info', text_estado, 5000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
