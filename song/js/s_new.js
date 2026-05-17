@@ -3646,10 +3646,12 @@ function normalizeSearchText(text) {
 
 
 function makeColumns(num){
-    if(num > 4) return;
-    eid_block_cancion.querySelector('.contenedor').style.columnCount = num;
+    if(num > 4 || num < 1) return;
     
-    showToast('info', `Columnas: ${num}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
+    currentNumColumns = num;//actualizo variable global para luego mostrar en el toast
+    eid_block_cancion.querySelector('.contenedor').style.columnCount = currentNumColumns;
+    
+    showToast('info', `Columnas: ${currentNumColumns}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
@@ -3657,9 +3659,11 @@ function makeColumns(num){
 function aplicarFontSize(val){
     if(!val) return;
 
-    eid_block_cancion.querySelector('.vista_fixed .contenedor').style.fontSize = val + 'px';
+    currentFontSize = Number(val);//actualizo variable global para luego mostrar en el toast
+
+    eid_block_cancion.querySelector('.vista_fixed .contenedor').style.fontSize = currentFontSize + 'px';
     
-    showToast('info', `Fuente aplicado: ${val}px`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
+    showToast('info', `Fuente aplicado: ${currentFontSize}px`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     //setTimeout(()=>{
         refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
@@ -3671,14 +3675,14 @@ function aplicarNumColumns(val){
 
     makeColumns(val);
     
-    showToast('info', `Numero columnas aplicado: ${val}`, 2000, 'center', false,'', document.querySelector('.vista_fixed_body'));
+    showToast('info', `Numero columnas aplicado: ${val}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     //setTimeout(()=>{
         refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
     //},10);
 }
 
-function aplicarAcordesVisibles(val){
+function aplicarAcordesVisible(val){
     
     acordesVisible = !val;//hago esto para luego aplicar toggleAcordes
     toggleAcordes();//hace siguiente accion -> ocultar o mostrar acordes
@@ -3701,7 +3705,7 @@ function changeFontSize(step) {
     step = parseInt(step, 10);
 
     const elementSelectors = `
-        /*#cancion_song_bloques, #block_cancion*/ .wr_vista_blocks .contenedor, .vista_fixed .contenedor
+        /*#cancion_song_bloques, #block_cancion, .wr_vista_blocks .contenedor,*/ .vista_fixed .contenedor
     `;
 
     let curFont_show = '';
@@ -3710,11 +3714,12 @@ function changeFontSize(step) {
     elementsAll.forEach(el => {
         console.log('el: ', el);
         if(step == 0){
-            el.style.fontSize = '';//vuelvo al tamaño original quitando el style
-            curFont_show = parseInt(window.getComputedStyle(document.querySelector('.vista_fixed .contenedor')).fontSize, 10) + 'px';
+            currentFontSize = fontSizeDef;
+            curFont_show = currentFontSize + 'px';
+            el.style.fontSize = curFont_show;//vuelvo al tamaño original quitando el style
         }else{
-            let curFont = parseInt(window.getComputedStyle(el).fontSize, 10);
-            curFont_show = (curFont + step) + 'px';
+            currentFontSize = (currentFontSize + step);
+            curFont_show = currentFontSize + 'px';
             el.style.fontSize = curFont_show;
         }
         //console.log('fin el: ', el);

@@ -239,6 +239,9 @@ $sql_init = "SELECT
                 
                 sa.font_size,
                 sa.num_columns,
+                sa.acordes_visible,
+                sa.texto_visible,
+                sa.contenido_width,
 
                 s.created_at, 
                 s.updated_at
@@ -339,7 +342,10 @@ if($result->num_rows > 0){
 
             'font_size' => $row['font_size'],
             'num_columns' => $row['num_columns'],
-
+            'acordes_visible' => $row['acordes_visible'],
+            'texto_visible' => $row['texto_visible'],
+            'contenido_width' => $row['contenido_width'],
+    
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
             'valorData' => 'hay_datos'

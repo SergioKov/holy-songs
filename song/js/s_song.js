@@ -2629,14 +2629,14 @@ async function guardarSong(event, id_contenedor, cancion_action){
         let title_note = form.elements["title_note"].value.trim();
         let category = form.elements["category"].value.trim();
         let songbook = form.elements["songbook"].value.trim();
-        let song_number = form.elements["song_number"].value.trim();
+        let song_number = form.elements["song_number"].value.trim() || 0;
         let tune = form.elements["tune"].value.trim();
         let tune_transpose = form.elements["tune_transpose"].value.trim();
         let tipo_acorde = form.elements["tipo_acorde"].value.trim();
         let tipo_fuente = form.elements["tipo_fuente"].value.trim();
         let url_youtube = form.elements["url_youtube"].value.trim();
         let url_recurso = form.elements["url_recurso"].value.trim();
-        let tempo_bpm = form.elements["tempo_bpm"].value.trim();
+        let tempo_bpm = form.elements["tempo_bpm"].value.trim() || 0;
         let lang = form.elements["lang"].value.trim();
         let song_text = form.elements["song_text"].value.trim();
         let notes = form.elements["notes"].value.trim();
@@ -2705,6 +2705,13 @@ async function guardarSong(event, id_contenedor, cancion_action){
             lang,
             song_text,
             notes,
+
+            font_size: currentFontSize,
+            num_columns: currentNumColumns,
+            acordes_visible: acordesVisible,
+            texto_visible: textoVisible,
+            contenido_width: contenidoWidth,
+            num_columns: currentNumColumns,
         }
         console.log('objSongToSend: ',objSongToSend);
     
@@ -4450,7 +4457,7 @@ async function listaSongGo(dirrection){
         if(prev_id_song === undefined){
             aviso_text = 'Has llegado a la primera canción.';
 
-            showToast('info', aviso_text, 1500, 'center', false,'', document.querySelector('.vista_fixed_body'));
+            showToast('info', aviso_text, 1500, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
             return;
         }
         
@@ -4466,7 +4473,7 @@ async function listaSongGo(dirrection){
         if(next_id_song === undefined){
             aviso_text = 'Has llegado a la última canción.';
 
-            showToast('info', aviso_text, 1500, 'center', false,'', document.querySelector('.vista_fixed_body'));
+            showToast('info', aviso_text, 1500, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
             return;
         }
         

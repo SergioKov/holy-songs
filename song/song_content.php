@@ -1433,10 +1433,13 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                                                         <div class="d_menu_over">
 
                                                                             <div class="wr_btns_actualizar">
-                                                                                <div id=""></div>
                                                                                 <button class="btn btn_vista btn_song_refresh btn_refresh" onclick="refreshSong()">
                                                                                     <img src="images/refresh.png" class="">
                                                                                     <span>Actualizar</span>
+                                                                                </button>
+                                                                                <button class="btn btn_vista btn_song_guardar btn_refresh" onclick="guardarSong(this,'cancion_song_bloques','editar');">
+                                                                                    <img src="./images/guardar.png" class="">
+                                                                                    <span>Guardar</span>
                                                                                 </button>
                                                                             </div>
 

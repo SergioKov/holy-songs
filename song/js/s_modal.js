@@ -832,26 +832,59 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
             handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
 
+
+            //========================================================================//
+            // start - song ajustes
+            //========================================================================//
+            //font_size
             if(objSong.font_size){
                 console.log('hay font_size en objSong, la aplico al cargar el form...');
-                //alert('hay font-size en objSong, la aplico al cargar el form...');
                 aplicarFontSize(objSong.font_size);
             }else{
                 console.log('no hay font_size en objSong, aplico valor por defecto...');
                 aplicarFontSize(fontSizeDef);
             }
 
-
-
-            //cojo ajustes de song
-            if(objSong.ajustes){
-                
-                aplicarNumColumns(objSong.ajustes.num_columns);
-                aplicarAcordesVisibles(objSong.ajustes.acordes_visibles);
-                aplicarTextoVisible(objSong.ajustes.texto_visible);
-                aplicarContenidoWidthBd(objSong.ajustes.contenido_width);
+            //num_columns
+            if(objSong.num_columns){
+                console.log('hay num_columns en objSong, la aplico al cargar el form...');
+                aplicarNumColumns(objSong.num_columns);
+            }else{
+                console.log('no hay num_columns en objSong, aplico valor por defecto...');
+                aplicarNumColumns(numColumnsDef);//1
             }
 
+            //acordes_visible
+            if(objSong.acordes_visibles){
+                console.log('hay acordes_visible en objSong, la aplico al cargar el form...');
+                aplicarAcordesVisible(objSong.acordes_visibles);
+            }else{
+                console.log('no hay acordes_visible en objSong, aplico valor por defecto...');
+                aplicarAcordesVisible(acordesVisibleDef);//true
+            }
+
+            //texto_visible
+            if(objSong.texto_visibles){
+                console.log('hay texto_visible en objSong, la aplico al cargar el form...');
+                aplicarTextoVisible(objSong.texto_visibles);
+            }else{
+                console.log('no hay texto_visible en objSong, aplico valor por defecto...');
+                aplicarTextoVisible(textoVisibleDef);//true
+            }
+
+            //contenido_width
+            if(objSong.contenido_width){
+                console.log('hay texto_visible en objSong, la aplico al cargar el form...');
+                aplicarContenidoWidthBd(objSong.contenido_width);
+            }else{
+                console.log('no hay texto_visible en objSong, aplico valor por defecto...');
+                aplicarContenidoWidthBd(contenidoWidthDef);//false
+            }
+            //========================================================================//
+            // end - song ajustes
+            //========================================================================//
+
+  
 
 
             document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
