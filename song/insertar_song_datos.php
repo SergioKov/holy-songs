@@ -458,56 +458,40 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 	//echo_json_x($result2, 'result2');
 
 
-    if($hay_id_song_en_ajustes){
-        $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
-                                    font_size = '$font_size',
-                                    num_columns = '$num_columns',
-                                    acordes_visible = '$acordes_visible',
-                                    texto_visible = '$texto_visible',
-                                    contenido_width = '$contenido_width',
-                                    updated_at = '$fechaHoraActual'
-                                WHERE id_song = '$id_song'
-                            ";
-        $result2_ajustes = $conn->query($sql2_up_init_ajustes);
-    }else{
-        $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
-                                    (
-                                        id_user,
-                                        id_song,
-                                        font_size,
-                                        num_columns,
-                                        acordes_visible,
-                                        texto_visible,
-                                        contenido_width,
-                                        created_at
-                                    ) 
-                                VALUES 
-                                    (
-                                        '1',
-                                        '$id_song',
-                                        '$font_size',
-                                        '$num_columns',
-                                        '$acordes_visible',
-                                        '$texto_visible',
-                                        '$contenido_width',
-                                        '$fechaHoraActual'
-                                    )
-                            ";
-        $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-    }
-
 
     //Update o insert datos en la tabla $tabla
-    if($result2 === TRUE && $result2_ajustes === TRUE){
+    if($result2 === TRUE){
+
         if($hay_id_song_en_tabla){
+            if($hay_id_song_en_ajustes){
+                $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
+                                            font_size = '$font_size',
+                                            num_columns = '$num_columns',
+                                            acordes_visible = '$acordes_visible',
+                                            texto_visible = '$texto_visible',
+                                            contenido_width = '$contenido_width',
+                                            updated_at = '$fechaHoraActual'
+                                        WHERE id_song = '$id_song'
+                                    ";
+                $result2_ajustes = $conn->query($sql2_up_init_ajustes);
+            }
+
+            if($result2_ajustes === TRUE){
+                $mas_ajustes_text = '(+ ajustes)';
+            }else{
+                $mas_ajustes_text = '(+ error ajustes)';
+            }
+
             $respuesta = [
                 'success' => true,
                 'id_song' => $id_song,
                 'action' => 'is_update',
                 'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos actualizados correctamente.'
+                'mensaje' => 'Datos actualizados correctamente.' . $mas_ajustes_text
             ];
+
         }else{
+            
             //consulta para saber id_song de la cancion añadida
             $sql_id_song = "SELECT id_song 
                             FROM songs
@@ -522,6 +506,40 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 $id_song_bd = $row_id_song["id_song"];//1    
             }else{
                 $id_song_bd = null;
+            }
+
+
+            if(!$hay_id_song_en_ajustes){
+                $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
+                                            (
+                                                id_user,
+                                                id_song,
+                                                font_size,
+                                                num_columns,
+                                                acordes_visible,
+                                                texto_visible,
+                                                contenido_width,
+                                                created_at
+                                            ) 
+                                        VALUES 
+                                            (
+                                                '$id_user_logged',
+                                                '$id_song_bd',
+                                                '$font_size',
+                                                '$num_columns',
+                                                '$acordes_visible',
+                                                '$texto_visible',
+                                                '$contenido_width',
+                                                '$fechaHoraActual'
+                                            )
+                                    ";
+                $result2_ajustes = $conn->query($sql2_in_init_ajustes);
+            }
+
+            if($result2_ajustes === TRUE){
+                $mas_ajustes_text = '(+ ajustes)';
+            }else{
+                $mas_ajustes_text = '(+ error ajustes)';
             }
 
             $respuesta = [
