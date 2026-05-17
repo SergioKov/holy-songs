@@ -4581,7 +4581,7 @@ function toggleContenidoWidth() {
 
     contenidoWidth = !contenidoWidth;
 
-    showToast('info', text_estado, 5000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
+    showToast('info', text_estado, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
