@@ -483,8 +483,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                     ) 
                                 VALUES 
                                     (
-                                        '$id_user_logged',
-                                        '$id_song',
+                                        $id_user_logged,
+                                        $id_song,
                                         '$font_size',
                                         '$num_columns',
                                         '$acordes_visible',
