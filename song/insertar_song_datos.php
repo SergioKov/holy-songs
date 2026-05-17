@@ -290,6 +290,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
     // Realizar la inserción o (update) en la base de datos 
     if($hay_id_song_en_tabla){
+
         //hago update
         if (is_array($arr_esquema_array) && !empty($arr_esquema_array) ) {// Es un array y tiene elementos
             $action_tipo = 'is_update_arr_esquema_ok';
@@ -402,6 +403,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     )
             ";
         }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
+            
             $action_tipo = 'is_insert_arr_esquema_vacio';
             $sql2_in_init = "INSERT INTO songs 
                     (
@@ -463,6 +465,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     if($result2 === TRUE){
 
         if($hay_id_song_en_tabla){
+
             if($hay_id_song_en_ajustes){
                 $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
                                             font_size = '$font_size',
@@ -547,7 +550,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'id_song' => $id_song_bd,
                 'action' => 'is_insert',
                 'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos insertados correctamente.'
+                'mensaje' => 'Datos insertados correctamente.' . $mas_ajustes_text
             ];
         }
 
