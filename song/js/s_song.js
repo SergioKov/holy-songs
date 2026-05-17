@@ -2708,10 +2708,9 @@ async function guardarSong(event, id_contenedor, cancion_action){
 
             font_size: currentFontSize,
             num_columns: currentNumColumns,
-            acordes_visible: acordesVisible,
-            texto_visible: textoVisible,
-            contenido_width: contenidoWidth,
-            num_columns: currentNumColumns,
+            acordes_visible: (acordesVisible) ? 1 : 0,
+            texto_visible: (textoVisible) ? 1 : 0,
+            contenido_width: (contenidoWidth) ? 1: 0,
         }
         console.log('objSongToSend: ',objSongToSend);
     
