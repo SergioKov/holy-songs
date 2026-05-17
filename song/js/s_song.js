@@ -2632,7 +2632,12 @@ async function guardarSong(event, id_contenedor, cancion_action){
         let song_number = form.elements["song_number"].value.trim() || 0;
         let tune = form.elements["tune"].value.trim();
         let tune_transpose = form.elements["tune_transpose"].value.trim();
-        let tipo_acorde = form.elements["tipo_acorde"].value.trim() || '#';//por defecto
+        
+        let tipo_acorde = form.elements["tipo_acorde"].value.trim();
+        if (!tipo_acorde || tipo_acorde === 'undefined') {
+            tipo_acorde = '#';
+        }
+
         let tipo_fuente = form.elements["tipo_fuente"].value.trim();
         let url_youtube = form.elements["url_youtube"].value.trim();
         let url_recurso = form.elements["url_recurso"].value.trim();
