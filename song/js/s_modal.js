@@ -855,27 +855,27 @@ function buildFormCancion(contenedor, cancion_action = null){
             }
 
             //acordes_visible
-            if(objSong.acordes_visibles){
+            if(Number(objSong.acordes_visibles)){//1 //true
                 console.log('hay acordes_visible en objSong, la aplico al cargar el form...');
-                aplicarAcordesVisible(objSong.acordes_visibles);
+                aplicarAcordesVisible(true);
             }else{
                 console.log('no hay acordes_visible en objSong, aplico valor por defecto...');
                 aplicarAcordesVisible(acordesVisibleDef);//true
             }
 
             //texto_visible
-            if(objSong.texto_visibles){
+            if(Number(objSong.texto_visibles)){
                 console.log('hay texto_visible en objSong, la aplico al cargar el form...');
-                aplicarTextoVisible(objSong.texto_visibles);
+                aplicarTextoVisible(true);
             }else{
                 console.log('no hay texto_visible en objSong, aplico valor por defecto...');
                 aplicarTextoVisible(textoVisibleDef);//true
             }
 
             //contenido_width
-            if(objSong.contenido_width){
+            if(Number(objSong.contenido_width)){
                 console.log('hay texto_visible en objSong, la aplico al cargar el form...');
-                aplicarContenidoWidthBd(objSong.contenido_width);
+                aplicarContenidoWidthBd(true);
             }else{
                 console.log('no hay texto_visible en objSong, aplico valor por defecto...');
                 aplicarContenidoWidthBd(contenidoWidthDef);//false
