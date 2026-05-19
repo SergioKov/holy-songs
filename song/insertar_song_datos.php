@@ -462,27 +462,63 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 
     //Update o insert datos en la tabla $tabla
-    if($result2 === TRUE){
+    if($result2 === TRUE){//todo ok
 
-        if($hay_id_song_en_tabla){
+        //aki 2 consultas (update y insert) las que se ejecutan dependiendo de si hay o no este id_song en la tabla songs_ajustes
+        //--- update songs_ajustes ---//
+        $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
+                font_size = '$font_size',
+                num_columns = '$num_columns',
+                acordes_visible = '$acordes_visible',
+                texto_visible = '$texto_visible',
+                contenido_width = '$contenido_width',
+                updated_at = '$fechaHoraActual'
+            WHERE id_song = '$id_song'
+        ";
+        //--- end - update songs_ajustes ---//
 
-            if($hay_id_song_en_ajustes){
-                $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
-                                            font_size = '$font_size',
-                                            num_columns = '$num_columns',
-                                            acordes_visible = '$acordes_visible',
-                                            texto_visible = '$texto_visible',
-                                            contenido_width = '$contenido_width',
-                                            updated_at = '$fechaHoraActual'
-                                        WHERE id_song = '$id_song'
-                                    ";
+
+        //--- insert songs_ajustes ---//
+        $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
+                                (
+                                    id_user,
+                                    id_song,
+                                    font_size,
+                                    num_columns,
+                                    acordes_visible,
+                                    texto_visible,
+                                    contenido_width,
+                                    created_at
+                                ) 
+                                VALUES 
+                                (
+                                    '$id_user_logged',
+                                    '$id_song_bd',
+                                    '$font_size',
+                                    '$num_columns',
+                                    '$acordes_visible',
+                                    '$texto_visible',
+                                    '$contenido_width',
+                                    '$fechaHoraActual'
+                                )
+        ";
+        //--- end - insert songs_ajustes ---//
+
+
+        if($hay_id_song_en_tabla){//se hace update de la tabla songs
+
+            if($hay_id_song_en_ajustes){//se hace update de la tabla songs_ajustes
                 $result2_ajustes = $conn->query($sql2_up_init_ajustes);
+            }else{//se hace insert en la tabla songs_ajustes
+                $result2_ajustes = $conn->query($sql2_in_init_ajustes);
             }
 
             if($result2_ajustes === TRUE){
-                $mas_ajustes_text = '(+ ajustes)';
+                $mas_ajustes_text = ' 1.(Ajustes ok)';
+                $mas_ajustes_error = ' 1.(no hay error en ajustes)';
             }else{
-                $mas_ajustes_text = '(+ error ajustes)';
+                $mas_ajustes_text = ' 1.(Ajustes error)';
+                $mas_ajustes_error = ' 1.(Error en ajustes: ' . $conn->error . ')';
             }
 
             $respuesta = [
@@ -490,10 +526,12 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'id_song' => $id_song,
                 'action' => 'is_update',
                 'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos actualizados correctamente.' . $mas_ajustes_text
+                'mensaje' => 'Datos actualizados correctamente.' . $mas_ajustes_text,
+                'conn_error_ajustes' => $mas_ajustes_error,
+                'conn_error' => $conn_error
             ];
 
-        }else{
+        }else{//se hace insert en tabla songs
             
             //consulta para saber id_song de la cancion añadida
             $sql_id_song = "SELECT id_song 
@@ -512,49 +550,33 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             }
 
 
-            if(!$hay_id_song_en_ajustes){
-                $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
-                                            (
-                                                id_user,
-                                                id_song,
-                                                font_size,
-                                                num_columns,
-                                                acordes_visible,
-                                                texto_visible,
-                                                contenido_width,
-                                                created_at
-                                            ) 
-                                        VALUES 
-                                            (
-                                                '$id_user_logged',
-                                                '$id_song_bd',
-                                                '$font_size',
-                                                '$num_columns',
-                                                '$acordes_visible',
-                                                '$texto_visible',
-                                                '$contenido_width',
-                                                '$fechaHoraActual'
-                                            )
-                                    ";
+            if(!$hay_id_song_en_ajustes){//se hace insert en la tabla songs_ajustes
                 $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-            }
+            }//no puede existir el caso de hacer update en ajustes porque no hay id_song en tabla songs antes, por lo tanto no hay id_song en tabla songs_ajustes
 
             if($result2_ajustes === TRUE){
-                $mas_ajustes_text = '(+ ajustes)';
+                $mas_ajustes_text = ' 2.(Ajustes ok)';
+                $mas_ajustes_error = ' 2.(no hay error en ajustes)';
             }else{
-                $mas_ajustes_text = '(+ error ajustes)';
+                $mas_ajustes_text = ' 2.(Ajustes error)';
+                $mas_ajustes_error = ' 2.(Error en ajustes: ' . $conn->error . ')';
             }
+
 
             $respuesta = [
                 'success' => true,
                 'id_song' => $id_song_bd,
                 'action' => 'is_insert',
                 'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos insertados correctamente.' . $mas_ajustes_text
+                'mensaje' => 'Datos insertados correctamente.' . $mas_ajustes_text,
+                'conn_error_ajustes' => $mas_ajustes_error,
+                'conn_error' => $conn_error
             ];
         }
 
-    }else{
+    }else{//error en insert/update en la tabla songs
+
+        $info_text = ' 3.(Solo en songs hubo error, no se ejecutó consulta en ajustes)';
 
         if($hay_id_song_en_tabla){
             //writeLog("Error al actualizar datos. Error: [" . $conn->error . "]");
@@ -562,7 +584,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $respuesta = [
                 'success' => false,
                 'error' => 'Error al actualizar datos: ',
-                'conn_error' => $conn->error
+                'conn_error' => $conn->error,
+                'info' => $info_text
             ];
         }else{
             //writeLog("Error al insertar datos. Error: [" . $conn->error . "]");
@@ -570,7 +593,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $respuesta = [
                 'success' => false,
                 'mensaje' => 'Error al insertar datos: ',
-                'conn_error' => $conn->error
+                'conn_error' => $conn->error,
+                'info' => $info_text
             ];
         }
 
