@@ -491,6 +491,39 @@ function normalizeSearchTextNoIntl(string $text): string {
 }
 
 
+//func que se usa en debugQuery()
+function reemplazarParametroSQL($value){
+
+    if($value === null){
+        return 'NULL';
+    }
+
+    if(is_numeric($value)){
+        return $value;
+    }
+
+    return "'" . addslashes($value) . "'";
+}
+
+
+
+//SOLO para ver (DEBUG) la consulta con variables que se usan en bind_param()
+function debugQuery($sql, $params = []) {
+
+    foreach($params as $param){
+
+        $sql = preg_replace( //funcion que busca '?' y reemplaza 
+            '/\?/',                         // patrón regex: buscar el carácter literal '?'
+            reemplazarParametroSQL($param), // valor que sustituirá el '?'. aki '?' => '425_portrait'
+            $sql,                           // string SQL donde buscar los '?'. aki es la consulta que tiene los '?'
+            1                               //significa: reemplazar SOLO el primer '?'
+        );
+    }
+
+    return $sql;
+}
+
+
 
 
 //=====================================================================================//

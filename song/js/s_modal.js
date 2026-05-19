@@ -1853,7 +1853,9 @@ async function getDataSongFromBd(){
         
         if(!hay_id_song('getDataSongFromBd()')){
             return; // <- se detiene aquí si no hay id_song
-        } 
+        }
+
+        const deviceKey = getDeviceKey();
                
         const response = await fetch('obtener_song_datos.php', {
             method: 'POST',
@@ -1861,7 +1863,8 @@ async function getDataSongFromBd(){
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
             },
             body: JSON.stringify({
-                id_song: id_song
+                id_song: id_song,
+                device_key: deviceKey,
             }), // Convertir los datos a formato JSON
         });
 
@@ -2056,6 +2059,8 @@ async function getDataSongsFromBdByFind(objFindParams){
             alert('No hay words_input. hago return...');//'No hay todos los parametros necesarios.'
             return;
         }
+
+        const deviceKey = getDeviceKey();
                
         const response = await fetch('obtener_song_by_find.php', {
             method: 'POST',
@@ -2066,7 +2071,8 @@ async function getDataSongsFromBdByFind(objFindParams){
                 words_input,
                 arr_songbooks_search,
                 modo,
-                buscar_en
+                buscar_en,
+                device_key: deviceKey
             }), // Convertir los datos a formato JSON
         });
 

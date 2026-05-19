@@ -3771,3 +3771,13 @@ function contarLineasReales(elemento) {
 
     return lineas.length;
 }
+
+function getDeviceKey(){
+    const viewportWidth = window.innerWidth;
+    const orientation =
+        viewportWidth > window.innerHeight
+        ? 'landscape'
+        : 'portrait';
+        
+    return `${viewportWidth}_${orientation}`;
+}

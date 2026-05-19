@@ -2691,6 +2691,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
         }
         console.log('arr_esquema_guardar: ', arr_esquema_guardar);
 
+        const deviceKey = getDeviceKey();        
+
         const objSongToSend = {
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
             song_number,
@@ -2711,6 +2713,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
             song_text,
             notes,
 
+            //ajustes
+            device_key: deviceKey,            
             font_size: currentFontSize,
             num_columns: currentNumColumns,
             acordes_visible: (acordesVisible) ? 1 : 0,

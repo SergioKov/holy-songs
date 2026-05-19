@@ -44,11 +44,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         }
 
         $id_song = $datos['id_song'];
+        $device_key = $datos['device_key'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
         // Obtener usuario y contraseña del cuerpo de la solicitud
         $id_song = isset($_GET['id_song']) ? $_GET['id_song'] : null ;
+        $device_key = isset($_GET['device_key']) ? $_GET['device_key'] : null ;
 
         if ($id_song === null /*|| $campo === null */) {
             http_response_code(400);
@@ -63,6 +65,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         
         //para que los datos sean iguales como en POST
         $datos['id_song'] = $id_song;
+        $datos['device_key'] = $device_key;
     }
 }
 
@@ -70,67 +73,139 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 include('includes/connect_db.php');
 
-$id_song = $conn->real_escape_string($datos['id_song']);//aki importante
+//$id_song = $conn->real_escape_string($datos['id_song']);//aki importante
 //echo_json_x($datos, 'datos');
 
 
 //busco si hay registro
 // Preparar y ejecutar la consulta
-$sql_init = "SELECT
-                s.id_song, 
-                s.song_number, 
-                s.title, 
-                s.title2, 
-                s.title_note, 
-                s.category,
-                ct.name AS category_name,
-                ct.lang_name AS lang_name,
-                s.songbook,
-                sb.title AS songbook_title,
-                s.song_text, 
-                s.arr_esquema, 
-                s.tune, 
-                s.tune_transpose, 
-                s.tipo_acorde, 
-                s.tipo_fuente, 
-                s.url_youtube, 
-                s.url_recurso, 
-                s.tempo_bpm, 
-                s.lang,
-                s.notes, 
-                s.count, 
+        // $sql_init = "SELECT
+        //                 s.id_song, 
+        //                 s.song_number, 
+        //                 s.title, 
+        //                 s.title2, 
+        //                 s.title_note, 
+        //                 s.category,
+        //                 ct.name AS category_name,
+        //                 ct.lang_name AS lang_name,
+        //                 s.songbook,
+        //                 sb.title AS songbook_title,
+        //                 s.song_text, 
+        //                 s.arr_esquema, 
+        //                 s.tune, 
+        //                 s.tune_transpose, 
+        //                 s.tipo_acorde, 
+        //                 s.tipo_fuente, 
+        //                 s.url_youtube, 
+        //                 s.url_recurso, 
+        //                 s.tempo_bpm, 
+        //                 s.lang,
+        //                 s.notes, 
+        //                 s.count, 
 
-                sa.font_size,
-                sa.num_columns,
-                sa.acordes_visible,
-                sa.texto_visible,
-                sa.contenido_width,
+        //                 sa.device_key,
+        //                 sa.font_size,
+        //                 sa.num_columns,
+        //                 sa.acordes_visible,
+        //                 sa.texto_visible,
+        //                 sa.contenido_width,
 
-                s.created_at, 
-                s.updated_at
-            FROM songs s
-            LEFT JOIN songs_ajustes sa 
-                ON sa.id_song = s.id_song
-            LEFT JOIN category_translations ct 
-                ON ct.id_category = s.category AND ct.lang = s.lang
-            LEFT JOIN songbooks sb 
-                ON sb.id_songbook = s.songbook
-            WHERE s.id_song = '$id_song'
+        //                 s.created_at, 
+        //                 s.updated_at
+        //             FROM songs s
+        //             LEFT JOIN songs_ajustes sa 
+        //                 ON sa.id_song = s.id_song AND sa.device_key = '$device_key'
+        //             LEFT JOIN category_translations ct 
+        //                 ON ct.id_category = s.category AND ct.lang = s.lang
+        //             LEFT JOIN songbooks sb 
+        //                 ON sb.id_songbook = s.songbook
+        //             WHERE s.id_song = '$id_song'
+        // ";
+
+        //-- AND id_song = '$id_song'
+        //$sql_prep = "SELECT $campo 
+        //            FROM $tabla 
+        //            WHERE id_user = '$id_user_logged' 
+        //";
+        //$arr_params = [$campo, $tabla, $id_user_logged];
+        //$sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
+            //$result = $conn->query($sql_init);
+        //echo_json_x($sql_init, 'sql');
+        //debug_x($sql_init, 'sql');
+
+$sql = "SELECT
+
+            s.id_song,
+            s.song_number,
+            s.title,
+            s.title2,
+            s.title_note,
+
+            s.category,
+
+            ct.name AS category_name,
+            ct.lang_name AS lang_name,
+
+            s.songbook,
+            sb.title AS songbook_title,
+
+            s.song_text,
+
+            s.arr_esquema,
+
+            s.tune,
+            s.tune_transpose,
+
+            s.tipo_acorde,
+            s.tipo_fuente,
+
+            s.url_youtube,
+            s.url_recurso,
+
+            s.tempo_bpm,
+            s.lang,
+
+            s.notes,
+            s.count,
+
+            sa.device_key,
+            sa.font_size,
+            sa.num_columns,
+            sa.acordes_visible,
+            sa.texto_visible,
+            sa.contenido_width,
+
+            s.created_at,
+            s.updated_at
+
+        FROM songs s
+
+        LEFT JOIN category_translations ct
+            ON ct.id_category = s.category
+            AND ct.lang = s.lang
+
+        LEFT JOIN songbooks sb
+            ON sb.id_songbook = s.songbook
+
+        LEFT JOIN songs_ajustes sa
+            ON sa.id_song = s.id_song
+            AND sa.device_key = ?
+
+        WHERE s.id_song = ?
 ";
-//-- AND id_song = '$id_song'
-//$sql_prep = "SELECT $campo 
-//            FROM $tabla 
-//            WHERE id_user = '$id_user_logged' 
-//";
-//$arr_params = [$campo, $tabla, $id_user_logged];
-//$sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
-$result = $conn->query($sql_init);
-//echo_json_x($sql_init, 'sql');
-//debug_x($sql_init, 'sql');
+$stmt = $conn->prepare($sql);
+$stmt->bind_param(
+    "si",
+    $device_key,
+    $id_song
+);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
 
-if($result->num_rows > 0){   
-    $row = $result->fetch_assoc();
+
+if($row){   
     //echo_json_x($row, 'row']);
     
     $id_song_bd = $row['id_song'];
@@ -161,6 +236,7 @@ if($result->num_rows > 0){
         'notes' => $row['notes'],
         'count' => $row['count'],
 
+        'device_key' => $row['device_key'],
         'font_size' => $row['font_size'],
         'num_columns' => $row['num_columns'],
         'acordes_visible' => $row['acordes_visible'],

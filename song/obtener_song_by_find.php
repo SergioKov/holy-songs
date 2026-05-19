@@ -46,6 +46,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $modo = $datos['modo'];
         $buscar_en = $datos['buscar_en'];
         $arr_songbooks_search = $datos['arr_songbooks_search'];
+        $device_key = $datos['device_key'];
     } 
 
     if($_SERVER['REQUEST_METHOD'] === 'GET'){//para hacer test...
@@ -54,6 +55,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $modo = isset($_GET['modo']) ? $_GET['modo'] : 1 ;
         $buscar_en = isset($_GET['buscar_en']) ? $_GET['buscar_en'] : 1 ;
         $arr_songbooks_search = isset($_GET['arr_songbooks_search']) ? $_GET['arr_songbooks_search'] : [] ;
+        $device_key = isset($_GET['device_key']) ? $_GET['device_key'] : null ;
 
         if ($words_input === null) {
             http_response_code(400);
@@ -79,53 +81,14 @@ $buscar_en = $conn->real_escape_string($buscar_en);
 $arr_songbooks_search_string = json_encode($arr_songbooks_search, JSON_UNESCAPED_UNICODE);//no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
 $arr_songbooks_search_array = $arr_songbooks_search;//ya viene decodificado desde: $datos = json_decode($inputJSON, true);
 
+$device_key = $conn->real_escape_string($device_key);
+
+
 //echo_json_x($datos, 'datos');
 //echo_json_x($words_input);
 //echo_json_x($modo);
 
 
-//busco si hay registro
-// Preparar y ejecutar la consulta
-//antes. no optimizado
-// $sql_init = "SELECT 
-//                 id_song, 
-//                 song_number, 
-//                 title, 
-//                 category, 
-//                 (SELECT `name` FROM category_translations ct WHERE ct.lang = s.lang AND ct.id_category = s.category LIMIT 1) as category_name,
-//                 song_text, 
-//                 arr_esquema, 
-//                 tune, 
-//                 lang, 
-//                 notes, 
-//                 count, 
-//                 created_at, 
-//                 updated_at  
-//             FROM songs s
-//             WHERE song_text like '%$words_input%'
-// ";
-
-// $sql_init = "SELECT 
-//                 s.id_song, 
-//                 s.song_number, 
-//                 s.title, 
-//                 s.category,
-//                 ct.name AS category_name,
-//                 s.song_text, 
-//                 s.arr_esquema, 
-//                 s.tune, 
-//                 s.lang,
-//                 s.notes, 
-//                 s.count, 
-//                 s.created_at, 
-//                 s.updated_at
-//             FROM songs s
-//             LEFT JOIN category_translations ct 
-//                 ON ct.id_category = s.category AND ct.lang = s.lang
-//             WHERE MATCH(s.title, s.song_text, s.notes) AGAINST('$words_input' IN NATURAL LANGUAGE MODE)
-//             ORDER BY s.title, s.song_number, s.id_song
-// ";
-// $result = $conn->query($sql_init); 
 
 
 
@@ -236,7 +199,8 @@ $sql_init = "SELECT
                 s.lang,
                 s.notes, 
                 s.count, 
-                
+
+                sa.device_key,
                 sa.font_size,
                 sa.num_columns,
                 sa.acordes_visible,
@@ -246,12 +210,16 @@ $sql_init = "SELECT
                 s.created_at, 
                 s.updated_at
             FROM songs s
-            LEFT JOIN songs_ajustes sa 
-                ON sa.id_song = s.id_song
+            
             LEFT JOIN category_translations ct 
                 ON ct.id_category = s.category AND ct.lang = s.lang
+            
             LEFT JOIN songbooks sb 
                 ON sb.id_songbook = s.songbook
+            
+            LEFT JOIN songs_ajustes sa 
+                ON sa.id_song = s.id_song AND sa.device_key = '$device_key'
+            
             WHERE $where
             ORDER BY s.title, s.title2, s.title_note, s.song_number, s.id_song DESC, s.songbook
 ";
@@ -340,6 +308,7 @@ if($result->num_rows > 0){
             'notes' => $row['notes'],
             'count' => $row['count'],
 
+            'device_key' => $row['device_key'],
             'font_size' => $row['font_size'],
             'num_columns' => $row['num_columns'],
             'acordes_visible' => $row['acordes_visible'],

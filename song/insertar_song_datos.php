@@ -34,17 +34,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     } 
     
 
-    // limpiar caracteres de control ilegales
-    //$jsonString = cleanControlChars($jsonString);
-    $jsonString = escapeControlChars($jsonString);
-	//echo_json_x($jsonString, 'jsonString');
 
-    // escapar saltos de línea
-    $jsonString = escapeNewlines($jsonString);
-	//echo_json_x($jsonString, 'jsonString');
-
-    
-    
 
 
     if (isValidJson($jsonString)) {
@@ -161,15 +151,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     include('includes/connect_db.php');
 
-    
-    $id_song = $conn->real_escape_string($datos['id_song']);//get parameter
-    $song_number = $conn->real_escape_string($datos['song_number']);//get parameter
-    $title = $conn->real_escape_string($datos['title']);//get parameter
-    $title2 = $conn->real_escape_string($datos['title2']);//get parameter
-    $title_note = $conn->real_escape_string($datos['title_note']);//get parameter
-    $category  = $conn->real_escape_string($datos['category']);//get parameter
-    $songbook  = $conn->real_escape_string($datos['songbook']);//get parameter
-    $song_text  = $conn->real_escape_string($datos['song_text']);//get parameter
+
+    $id_song = $datos['id_song'];
+    $song_number = $datos['song_number'];
+    $title = $datos['title'];
+    $title2 = $datos['title2'];
+    $title_note = $datos['title_note'];
+    $category  = $datos['category'];
+    $songbook  = $datos['songbook'];
+    $song_text  = $datos['song_text'];
 
     //variables de busqueda
     $title_search = normalizeSearchText($title ?? '');
@@ -184,43 +174,30 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $song_text_search  = normalizeSearchText($song_text);//quito puntuación, acentos, etc para mejorar búsquedas
     
 
-    /*
-    //por ahora sin intl
-    $title_search = normalizeSearchTextNoIntl($title ?? '');
-
-    if($title2){
-        $title_search .= ' __|__ ' . normalizeSearchTextNoIntl($title2 ?? '');
-    }
-    if($title_note){
-        $title_search .= ' __|__ ' . normalizeSearchTextNoIntl($title_note ?? '');
-    }
-
-    $song_text_search  = normalizeSearchTextNoIntl($song_text);//quito puntuación, acentos, etc para mejorar búsquedas
-    */
-
-    
+   
     //$arr_esquema = $datos['arr_esquema'];
     $arr_esquema_array = $datos['arr_esquema'];
     //echo_json_x($arr_esquema_array, 'arr_esquema_array');
 
-    $arr_esquema_string = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);//arrTabs //no usar $conn->real_escape_string($datos['arr']) ya que retorna NULL
+    $arr_esquema_string = json_encode($datos['arr_esquema'], JSON_UNESCAPED_UNICODE);
 
-    $tune  = $conn->real_escape_string($datos['tune']);//get parameter
-    $tune_transpose  = $conn->real_escape_string($datos['tune_transpose']);//get parameter
-    $tipo_acorde  = $conn->real_escape_string($datos['tipo_acorde']);//get parameter
-    $tipo_fuente  = $conn->real_escape_string($datos['tipo_fuente']);//get parameter
-    $url_youtube  = $conn->real_escape_string($datos['url_youtube']);//get parameter
-    $url_recurso  = $conn->real_escape_string($datos['url_recurso']);//get parameter
-    $tempo_bpm  = $conn->real_escape_string($datos['tempo_bpm']);//get parameter
-    $lang  = $conn->real_escape_string($datos['lang']);//get parameter
-    $notes  = $conn->real_escape_string($datos['notes']);//get parameter
+    $tune  = $datos['tune'];
+    $tune_transpose  = $datos['tune_transpose'];
+    $tipo_acorde  = $datos['tipo_acorde'];
+    $tipo_fuente  = $datos['tipo_fuente'];
+    $url_youtube  = $datos['url_youtube'];
+    $url_recurso  = $datos['url_recurso'];
+    $tempo_bpm  = $datos['tempo_bpm'];
+    $lang  = $datos['lang'];
+    $notes  = $datos['notes'];
 
     //ajustes de song
-    $font_size  = $conn->real_escape_string($datos['font_size']);//get parameter
-    $num_columns  = $conn->real_escape_string($datos['num_columns']);//get parameter
-    $acordes_visible  = $conn->real_escape_string($datos['acordes_visible']);//get parameter
-    $texto_visible  = $conn->real_escape_string($datos['texto_visible']);//get parameter
-    $contenido_width  = $conn->real_escape_string($datos['contenido_width']);//get parameter
+    $device_key = $datos['device_key'];
+    $font_size  = $datos['font_size'];
+    $num_columns  = $datos['num_columns'];
+    $acordes_visible  = $datos['acordes_visible'];
+    $texto_visible  = $datos['texto_visible'];
+    $contenido_width  = $datos['contenido_width'];
 
     //debug($tabla);
     //debug($campo);
@@ -231,7 +208,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     //exit('<br>hasta aki-2');
 
     // Obtener la fecha y hora actual
-    $fechaHoraActual = date("Y-m-d H:i:s");
+    //$fechaHoraActual = date("Y-m-d H:i:s");//es lo mismo que 'NOW()' en sql. lo comento
     
 
     //busco si hay registro en la tabla a donde insertar array
@@ -287,336 +264,253 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 	//echo_json_x($hay_id_song_en_tabla, 'hay_id_song_en_tabla');
 
     $sign = '__[(&)]__';//IMPORTANTE! para que ho haya errores con $arr en json
-    
-    // Realizar la inserción o (update) en la base de datos 
-    if($hay_id_song_en_tabla){
 
-        //hago update
-        if (is_array($arr_esquema_array) && !empty($arr_esquema_array) ) {// Es un array y tiene elementos
-            $action_tipo = 'is_update_arr_esquema_ok';
-            //arr_esquema = '$arr_esquema_string', es obligatorio en la consulta
-            $sql2_up_init = "UPDATE songs SET
-                    song_number = '$song_number',
-                    title = '$title',
-                    title2 = '$title2',
-                    title_note = '$title_note',
-                    title_search = '$title_search',
-                    category = '$category',
-                    songbook = '$songbook',
-                    song_text = '$song_text',
-                    song_text_search = '$song_text_search',
-                    arr_esquema = '$arr_esquema_string',
-                    tune = '$tune',
-                    tune_transpose = '$tune_transpose',
-                    tipo_acorde = '$tipo_acorde',
-                    tipo_fuente = '$tipo_fuente',
-                    url_youtube = '$url_youtube',
-                    url_recurso = '$url_recurso',
-                    tempo_bpm = '$tempo_bpm',
-                    lang = '$lang',
-                    notes = '$notes',
-                    updated_at = '$fechaHoraActual'
-                WHERE id_song = '$id_song'
-            ";
-            //echo_json_x($sql2_up_init, 'sql2_up_init');
-        }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
-            $action_tipo = 'is_update_arr_esquema_vacio';
-            $sql2_up_init = "UPDATE songs SET
-                    song_number = '$song_number',
-                    title = '$title',
-                    title2 = '$title2',
-                    title_note = '$title_note',
-                    title_search = '$title_search',
-                    category = '$category',
-                    songbook = '$songbook',
-                    song_text = '$song_text',
-                    song_text_search = '$song_text_search',
-                    arr_esquema = '',
-                    tune = '$tune',
-                    tune_transpose = '$tune_transpose',
-                    tipo_acorde = '$tipo_acorde',
-                    tipo_fuente = '$tipo_fuente',
-                    url_youtube = '$url_youtube',
-                    url_recurso = '$url_recurso',
-                    tempo_bpm = '$tempo_bpm',
-                    lang = '$lang',
-                    notes = '$notes',
-                    updated_at = '$fechaHoraActual'
-                WHERE id_song = '$id_song'
-            ";
-        }
-        $result2 = $conn->query($sql2_up_init);
-        //debug_x($sql2_up_preparada, 'sql2_up_preparada');
-        //echo_json_x($sql2_up_preparada, 'sql2_up_preparada');
-        
 
+
+
+    //---start - new---//    
+    if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
+        $action_tipo = $hay_id_song_en_tabla 
+            ? 'is_update_arr_esquema_ok' 
+            : 'is_insert_arr_esquema_ok';
+        $arr_esquema_final = $arr_esquema_string;        
     }else{
-        
-        //hago insert
-        if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
-            $action_tipo = 'is_insert_arr_esquema_ok';
-            $sql2_in_init = "INSERT INTO songs 
-                    (
-                        song_number,
-                        title,
-                        title2,
-                        title_note,
-                        title_search,
-                        category,
-                        songbook,
-                        song_text,
-                        song_text_search,
-                        arr_esquema,
-                        tune,
-                        tune_transpose,
-                        tipo_acorde,
-                        tipo_fuente,
-                        url_youtube,
-                        url_recurso,
-                        tempo_bpm,
-                        lang,
-                        notes,
-                        created_at
-                    ) 
-                VALUES 
-                    (
-                        '$song_number', 
-                        '$title', 
-                        '$title2', 
-                        '$title_note', 
-                        '$title_search', 
-                        '$category', 
-                        '$songbook', 
-                        '$song_text', 
-                        '$song_text_search', 
-                        '$arr_esquema_string', 
-                        '$tune', 
-                        '$tune_transpose', 
-                        '$tipo_acorde', 
-                        '$tipo_fuente', 
-                        '$url_youtube', 
-                        '$url_recurso', 
-                        '$tempo_bpm', 
-                        '$lang', 
-                        '$notes', 
-                        '$fechaHoraActual'
-                    )
-            ";
-        }else{//no es array o está vacío. no incluyo arr_esquema en la SQL
-            
-            $action_tipo = 'is_insert_arr_esquema_vacio';
-            $sql2_in_init = "INSERT INTO songs 
-                    (
-                        song_number,
-                        title,
-                        title2,
-                        title_note,
-                        title_search,
-                        category,
-                        songbook,
-                        song_text,
-                        song_text_search,
-                        tune,
-                        tune_transpose,
-                        tipo_acorde,
-                        tipo_fuente,
-                        url_youtube,
-                        url_recurso,
-                        tempo_bpm,
-                        lang,
-                        notes,
-                        created_at
-                    ) 
-                VALUES 
-                    (
-                        '$song_number',
-                        '$title',
-                        '$title2',
-                        '$title_note',
-                        '$title_search',
-                        '$category',
-                        '$songbook',
-                        '$song_text',
-                        '$song_text_search',
-                        '$tune',
-                        '$tune_transpose',
-                        '$tipo_acorde',
-                        '$tipo_fuente',
-                        '$url_youtube',
-                        '$url_recurso',
-                        '$tempo_bpm',
-                        '$lang',
-                        '$notes',
-                        '$fechaHoraActual'
-                    )
-            ";
-        }
-
-        $result2 = $conn->query($sql2_in_init);
-        //debug_x($sql2_in_preparada, 'sql2_in_preparada');
-
-        
+        $action_tipo = $hay_id_song_en_tabla 
+            ? 'is_update_arr_esquema_vacio' 
+            : 'is_insert_arr_esquema_vacio';
+        $arr_esquema_final = '';
     }
-	//echo_json_x($result2, 'result2');
+
+    $id_song_upsert =
+        $hay_id_song_en_tabla
+        ? $id_song
+        : null;
+
+    //consulta UPSERT
+    $sql2_upsert = "INSERT INTO songs
+                    (
+                        id_song,
+                    
+                        song_number,
+                        title,
+                        title2,
+                        title_note,
+                        title_search,
+                    
+                        category,
+                        songbook,
+                    
+                        song_text,
+                        song_text_search,
+                    
+                        arr_esquema,
+                    
+                        tune,
+                        tune_transpose,
+                    
+                        tipo_acorde,
+                        tipo_fuente,
+                    
+                        url_youtube,
+                        url_recurso,
+                    
+                        tempo_bpm,
+                        lang,
+                    
+                        notes,
+                    
+                        created_at,
+                        updated_at
+                    )        
+                    VALUES
+                    (
+                        ?,
+                    
+                        ?, ?, ?, ?, ?,
+                    
+                        ?, ?,
+                    
+                        ?, ?,
+                    
+                        ?,
+                    
+                        ?, ?,
+                    
+                        ?, ?,
+                    
+                        ?, ?,
+                    
+                        ?, ?,
+                    
+                        ?,
+                    
+                        NOW(),
+                        NOW()
+                    )
+                    
+                    ON DUPLICATE KEY UPDATE
+                    
+                        song_number = VALUES(song_number),
+                    
+                        title = VALUES(title),
+                        title2 = VALUES(title2),
+                        title_note = VALUES(title_note),
+                        title_search = VALUES(title_search),
+                    
+                        category = VALUES(category),
+                        songbook = VALUES(songbook),
+                    
+                        song_text = VALUES(song_text),
+                        song_text_search = VALUES(song_text_search),
+                    
+                        arr_esquema = VALUES(arr_esquema),
+                    
+                        tune = VALUES(tune),
+                        tune_transpose = VALUES(tune_transpose),
+                    
+                        tipo_acorde = VALUES(tipo_acorde),
+                        tipo_fuente = VALUES(tipo_fuente),
+                    
+                        url_youtube = VALUES(url_youtube),
+                        url_recurso = VALUES(url_recurso),
+                    
+                        tempo_bpm = VALUES(tempo_bpm),
+                        lang = VALUES(lang),
+                    
+                        notes = VALUES(notes),
+                    
+                        updated_at = NOW()
+    ";
+    $stmt = $conn->prepare($sql2_upsert);
+    
+    //IMPORTANTE! Normalizar Windows/Mac/Linux (debe estar con bind_param())
+    $song_text = str_replace(["\r\n", "\r"], "\n", $song_text);
+    $notes = str_replace(["\r\n", "\r"], "\n", $notes);
+
+    $stmt->bind_param(
+        "iissssssssssssssssss",
+    
+        $id_song_upsert,
+    
+        $song_number,
+        $title,
+        $title2,
+        $title_note,
+        $title_search,
+    
+        $category,
+        $songbook,
+    
+        $song_text,
+        $song_text_search,
+    
+        $arr_esquema_final,
+    
+        $tune,
+        $tune_transpose,
+    
+        $tipo_acorde,
+        $tipo_fuente,
+    
+        $url_youtube,
+        $url_recurso,
+    
+        $tempo_bpm,
+        $lang,
+    
+        $notes
+    );
+    $result2 = $stmt->execute();
+    //---end - new---//
 
 
-
-    //Update o insert datos en la tabla $tabla
-    if($result2 === TRUE){//todo ok
-
-        //aki 2 consultas (update y insert) las que se ejecutan dependiendo de si hay o no este id_song en la tabla songs_ajustes
-        //--- update songs_ajustes ---//
-        $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
-                font_size = '$font_size',
-                num_columns = '$num_columns',
-                acordes_visible = '$acordes_visible',
-                texto_visible = '$texto_visible',
-                contenido_width = '$contenido_width',
-                updated_at = '$fechaHoraActual'
-            WHERE id_song = '$id_song'
-        ";
-        //--- end - update songs_ajustes ---//
-
-
-
-
-        if($hay_id_song_en_tabla){//se hace update en la tabla songs
-
-            if($hay_id_song_en_ajustes){//se hace update de la tabla songs_ajustes
-                
-                //--- update songs_ajustes ---//
-                $consulta_info = 'update songs_ajustes';
-                $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
-                        font_size = '$font_size',
-                        num_columns = '$num_columns',
-                        acordes_visible = '$acordes_visible',
-                        texto_visible = '$texto_visible',
-                        contenido_width = '$contenido_width',
-                        updated_at = '$fechaHoraActual'
-                    WHERE id_song = '$id_song'
-                ";
-                $result2_ajustes = $conn->query($sql2_up_init_ajustes);
-                //--- end - update songs_ajustes ---//
-
-            }else{//se hace insert en la tabla songs_ajustes
-                
-                //--- insert songs_ajustes CON id_song de la canción editada ---//
-                $consulta_info = 'insert songs_ajustes CON id_song de la canción editada';
-                $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
-                                        (
-                                            id_user,
-                                            id_song,
-                                            font_size,
-                                            num_columns,
-                                            acordes_visible,
-                                            texto_visible,
-                                            contenido_width,
-                                            created_at
-                                        ) 
-                                        VALUES 
-                                        (
-                                            '$id_user_logged',
-                                            '$id_song',
-                                            '$font_size',
-                                            '$num_columns',
-                                            '$acordes_visible',
-                                            '$texto_visible',
-                                            '$contenido_width',
-                                            '$fechaHoraActual'
-                                        )
-                ";
-                $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-                //--- end - insert songs_ajustes CON id_song de la canción editada ---//
-
-            }
-
-            if($result2_ajustes === TRUE){
-                $mas_ajustes_text = ' 1.(Ajustes ok)';
-                $mas_ajustes_error = ' 1.(no hay error en ajustes)';
-            }else{
-                $mas_ajustes_text = ' 1.(Ajustes error)';
-                $mas_ajustes_error = ' 1.(Error en ajustes: ' . $conn->error . ')';
-            }
-
-            $respuesta = [
-                'success' => true,
-                'id_song' => $id_song,
-                'action' => 'is_update',
-                'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos actualizados correctamente.' . $mas_ajustes_text,
-                'conn_error_ajustes' => $mas_ajustes_error,
-                'consulta_info' => $consulta_info
-            ];
-
-        }else{//se hace insert en tabla songs
-            
-            //consulta para saber id_song de la cancion añadida
-            $sql_id_song = "SELECT id_song 
-                            FROM songs
-                            ORDER BY id_song DESC
-                            LIMIT 1 
-            ";
-            $result_id_song = $conn->query($sql_id_song);
-
-            if($result_id_song->num_rows > 0){
-                $row_id_song = $result_id_song->fetch_assoc();
-                //echo_json_x($row_id_song,'row_id_song');		
-                $id_song_bd = $row_id_song["id_song"];//1    
-            }else{
-                $id_song_bd = null;
-            }
-
-
-            // se hace insert en la tabla songs_ajustes si o si ya que no puede existir id_song en ajustes sin existir en songs, 
-            // por lo tanto si no hay id_song en ajustes es porque no hay id_song en songs, 
-            // por lo tanto se hace insert en ajustes con id_song
-            //--- insert songs_ajustes CON id_song_bd de la nueva canción insertada ---//
-            $consulta_info = 'insert songs_ajustes CON id_song_bd de la nueva canción insertada';
-            $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
-                                    (
-                                        id_user,
-                                        id_song,
-                                        font_size,
-                                        num_columns,
-                                        acordes_visible,
-                                        texto_visible,
-                                        contenido_width,
-                                        created_at
-                                    ) 
-                                    VALUES 
-                                    (
-                                        '$id_user_logged',
-                                        '$id_song_bd',
-                                        '$font_size',
-                                        '$num_columns',
-                                        '$acordes_visible',
-                                        '$texto_visible',
-                                        '$contenido_width',
-                                        '$fechaHoraActual'
-                                    )
-            ";
-            $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-            //--- end - insert songs_ajustes CON id_song_bd de la nueva canción insertada ---//
-
-            if($result2_ajustes === TRUE){
-                $mas_ajustes_text = ' 2.(Ajustes ok)';
-                $mas_ajustes_error = ' 2.(no hay error en ajustes)';
-            }else{
-                $mas_ajustes_text = ' 2.(Ajustes error)';
-                $mas_ajustes_error = ' 2.(Error en ajustes: ' . $conn->error . ')';
-            }
-
-
-            $respuesta = [
-                'success' => true,
-                'id_song' => $id_song_bd,
-                'action' => 'is_insert',
-                'action_tipo' => $action_tipo,
-                'mensaje' => 'Datos insertados correctamente.' . $mas_ajustes_text,
-                'conn_error_ajustes' => $mas_ajustes_error,
-                'consulta_info' => $consulta_info
-            ];
+    //Update o insert datos en la tabla 'songs'
+    if($result2){//todo ok
+        
+        if($hay_id_song_en_tabla){//si es update, id_song ya lo tengo
+            $id_song_ajustes = $id_song;
+            $consulta_info = 'upsert songs_ajustes -> id_song ya existe en tabla songs, por lo tanto se hace update o insert en ajustes con id_song';
+        }else{//es insert
+            $id_song_ajustes = $conn->insert_id;//es id insertado de esta $conn
+            $consulta_info = 'upsert songs_ajustes -> id_song no existe en tabla songs, por lo tanto se hace insert en ajustes con id_song_ajustes:' . $id_song_ajustes . ' que es id_song_bd de la nueva canción insertada';            
         }
+
+
+        //consulta UPSERT
+        $sql2_upsert_ajustes = "INSERT INTO songs_ajustes
+        (
+            id_user,
+            id_song,
+            device_key,
+
+            font_size,
+            num_columns,
+            acordes_visible,
+            texto_visible,
+            contenido_width,
+
+            created_at,
+            updated_at
+        )
+        VALUES
+        (
+            '$id_user_logged',
+            '$id_song_ajustes',
+            '$device_key',
+
+            '$font_size',
+            '$num_columns',
+            '$acordes_visible',
+            '$texto_visible',
+            '$contenido_width',
+
+            NOW(),
+            NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+            font_size = VALUES(font_size),
+            num_columns = VALUES(num_columns),
+            acordes_visible = VALUES(acordes_visible),
+            texto_visible = VALUES(texto_visible),
+            contenido_width = VALUES(contenido_width),
+            updated_at = NOW()
+        ";
+        $result2_ajustes = $conn->query($sql2_upsert_ajustes);
+
+
+
+        if($result2_ajustes){
+            
+            if($hay_id_song_en_tabla){
+                $mensaje_text = 'Datos actualizados correctamente.';
+            }else{
+                $mensaje_text = 'Datos insertados correctamente.';
+            }
+            $mas_ajustes_text = ' 1.(Ajustes ok)';
+            $mas_ajustes_error = ' 1.(no hay error en ajustes)';
+
+        }else{
+
+            if($hay_id_song_en_tabla){
+                $mensaje_text = 'Error al actualizar datos en ajustes.';
+            }else{
+                $mensaje_text = 'Error al insertar datos en ajustes.';
+            }
+
+            $mas_ajustes_text = ' 1.(Ajustes error)';
+            $mas_ajustes_error = ' 1.(Error en ajustes: ' . $conn->error . ')';
+        }
+
+
+        $respuesta = [
+            'success' => true,
+            'id_song' => $id_song_ajustes,
+            'action' => 'is_upsert',
+            'action_tipo' => $action_tipo,
+            'mensaje' => $mensaje_text . $mas_ajustes_text,
+            'conn_error_ajustes' => $mas_ajustes_error,
+            'consulta_info' => $consulta_info
+        ];
 
     }else{//error en insert/update en la tabla songs
 
