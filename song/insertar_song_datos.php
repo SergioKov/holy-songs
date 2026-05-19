@@ -480,11 +480,12 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 
 
-        if($hay_id_song_en_tabla){//se hace update de la tabla songs
+        if($hay_id_song_en_tabla){//se hace update en la tabla songs
 
             if($hay_id_song_en_ajustes){//se hace update de la tabla songs_ajustes
                 
                 //--- update songs_ajustes ---//
+                $consulta_info = 'update songs_ajustes';
                 $sql2_up_init_ajustes = "UPDATE songs_ajustes SET
                         font_size = '$font_size',
                         num_columns = '$num_columns',
@@ -499,10 +500,12 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
             }else{//se hace insert en la tabla songs_ajustes
                 
-                //--- insert songs_ajustes SIN id_song ---//
+                //--- insert songs_ajustes CON id_song de la canción editada ---//
+                $consulta_info = 'insert songs_ajustes CON id_song de la canción editada';
                 $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
                                         (
                                             id_user,
+                                            id_song,
                                             font_size,
                                             num_columns,
                                             acordes_visible,
@@ -513,6 +516,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                         VALUES 
                                         (
                                             '$id_user_logged',
+                                            '$id_song',
                                             '$font_size',
                                             '$num_columns',
                                             '$acordes_visible',
@@ -522,7 +526,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                         )
                 ";
                 $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-                //--- end - insert songs_ajustes SIN id_song ---//
+                //--- end - insert songs_ajustes CON id_song de la canción editada ---//
 
             }
 
@@ -540,7 +544,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'action' => 'is_update',
                 'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos actualizados correctamente.' . $mas_ajustes_text,
-                'conn_error_ajustes' => $mas_ajustes_error
+                'conn_error_ajustes' => $mas_ajustes_error,
+                'consulta_info' => $consulta_info
             ];
 
         }else{//se hace insert en tabla songs
@@ -565,7 +570,8 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             // se hace insert en la tabla songs_ajustes si o si ya que no puede existir id_song en ajustes sin existir en songs, 
             // por lo tanto si no hay id_song en ajustes es porque no hay id_song en songs, 
             // por lo tanto se hace insert en ajustes con id_song
-            //--- insert songs_ajustes con id_song ---//
+            //--- insert songs_ajustes CON id_song_bd de la nueva canción insertada ---//
+            $consulta_info = 'insert songs_ajustes CON id_song_bd de la nueva canción insertada';
             $sql2_in_init_ajustes = "INSERT INTO songs_ajustes 
                                     (
                                         id_user,
@@ -590,7 +596,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                     )
             ";
             $result2_ajustes = $conn->query($sql2_in_init_ajustes);
-            //--- end - insert songs_ajustes con id_song ---//
+            //--- end - insert songs_ajustes CON id_song_bd de la nueva canción insertada ---//
 
             if($result2_ajustes === TRUE){
                 $mas_ajustes_text = ' 2.(Ajustes ok)';
@@ -608,7 +614,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 'action_tipo' => $action_tipo,
                 'mensaje' => 'Datos insertados correctamente.' . $mas_ajustes_text,
                 'conn_error_ajustes' => $mas_ajustes_error,
-                'conn_error' => $conn_error
+                'consulta_info' => $consulta_info
             ];
         }
 
