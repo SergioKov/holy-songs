@@ -1,20 +1,35 @@
 <?php
 
-
 // Initialize all variables as empty by default
-$cl_home = $cl_song = '';
+$cl_home = '';
+$cl_song = '';
+$cl_login = '';
+
 $href_home = '/home';
 $href_song = '/song';
+$href_login = '/login';
 
-if(!isset($li_active)){
+if (!isset($li_active)) {
     $li_active = 'home';
 }
+
+if(isset($_SESSION['login'])){
+    $img_src_login = "../song/images/login2_white.svg";
+}else{
+    $img_src_login = "../song/images/login2_grey.svg";
+}
+
 
 // Set the active class based on $li_active
 switch ($li_active) {
     case 'song':
-        $cl_song = 'active';//aunque no se usa, dejo por si acaso...
+        $cl_song = 'active'; //aunque no se usa, dejo por si acaso...
         $href_song = '#';
+        break;
+
+    case 'login':
+        $cl_login = 'active'; //aunque no se usa, dejo por si acaso...
+        $href_login = '#';
         break;
 
     case 'home':
@@ -25,11 +40,27 @@ switch ($li_active) {
 }
 
 ?>
+<style>
+    .li_login {
+        float: right;
+    }
+    .a_login img {
+        width: 21px;
+        height: 21px;
+    }
+</style>
 <header>
     <nav>
         <ul>
-            <li><a class="<?=$cl_home?>" href="<?=$href_home?>" data-link="home">Home</a></li>
-            <li><a class="<?=$cl_song?>" href="<?=$href_song?>" data-link="slideshow">Song</a></li>
+            <li><a class="<?= $cl_home ?>" href="<?= $href_home ?>" data-link="home">Home</a></li>
+            <li><a class="<?= $cl_song ?>" href="<?= $href_song ?>" data-link="slideshow">Song</a></li>
+
+            <li class="li_login">
+                <a class="a_login <?= $cl_login ?>" href="<?= $href_login ?>" data-link="login">
+                    <img src="<?= $img_src_login ?>">
+                </a>
+            </li>
+
         </ul>
     </nav>
 </header>

@@ -16,7 +16,7 @@ body {
     background: black;
     background-size: cover;
     background-position: center;
-    transition: 1s;
+    transition: 1s ease;
     overflow: hidden;
 }
 
@@ -40,9 +40,10 @@ body.black_en_fondo {
     background-size: cover;
     background-position: center;    
     overflow: hidden;
-    /* z-index: 1; */
+    
     position: fixed;
     opacity: 0;
+    z-index: 1;
 }
 #fondo.shown {
     opacity: 1 !important;
@@ -52,7 +53,8 @@ body.black_en_fondo {
     background-image: url('../images/logo_iglesia.png');
 }
 .bible_en_fondo #fondo{
-    background-image: url('../images/bible_open6.jpg');
+    /* background-image: url('../images/bible_open6.jpg'); */
+    background-image: url('../images/bible_open6_1920x1080.jpg');
 }
 .black_en_fondo #fondo {
     background: black;
@@ -60,10 +62,7 @@ body.black_en_fondo {
 
 
 
-#contenedor,
-#fondo {
-    transition: 1s;
-}
+
 
 #contenedor {
     height: 100%;
@@ -74,12 +73,21 @@ body.black_en_fondo {
     justify-content: space-between;
     align-items: stretch;
     opacity: 0;
+
+    color: black;
+    position: relative;
+    z-index: 10;
 }
 
 .shown {
     opacity: 1 !important;
+    color: white !important;
 }
 
+#contenedor,
+#fondo {
+    transition: 1s ease;
+}
 
 #contenedor_prev_inner {
     /* background: #0e3138; */
@@ -165,6 +173,7 @@ S {
     width: 100%; 
 }
 
+
 .wr_d_line:not(.monospace_font .wr_d_line, .show_acordes .wr_d_line),
 .next_wr_d_line:not(.monospace_font .next_wr_d_line, .show_acordes .next_wr_d_line)
 {
@@ -188,7 +197,7 @@ S {
 
 
 
-.wr_d_puntos {
+.old__wr_d_puntos {
     font-family: monospace;
     font-size: 100px;
     color: #313131;
@@ -198,11 +207,42 @@ S {
     align-items: flex-end;
 }
 
+.wr_d_puntos {
+    font-family: monospace;
+    font-size: 100px;
+    color: #313131;
+    /* padding: 20px; */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /* background: #f44336a8; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    height: 57px;
+    padding-bottom: 13px;
+    letter-spacing: 8px;
+}
+
 .tres_estrellas {
+    /* background: #f44336a8; */
     color: #313131;
     text-align: center;
     display: block;
-    /* font-size: 100px; */
+    width: 100%;
+    font-size: 58px;
+    
+    height: 70px;
+    padding-top: 25px;
+    
+    height: 50px;
+    padding-top: 0;
+    
+    /* position: absolute; */
+    left: 0;
+    bottom: 0;
 }
 
 .wr_d_music {

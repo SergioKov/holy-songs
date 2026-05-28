@@ -308,7 +308,7 @@ async function insertarArrPantalla() {
         objPantallaToSendToBd_str = JSON.stringify(objPantallaToSendToBd);//variable global
         console.log('objPantallaToSendToBd_str: ', objPantallaToSendToBd_str);
 
-        const response = await fetch('insertar_arr_pantalla.php', {
+        const response = await fetch('../song/php/insertar_arr_pantalla.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -407,7 +407,7 @@ async function insertarPantallaParams() {
         objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);//variable global
         console.log('objPantallaParamsToSendToBd_str: ', objPantallaParamsToSendToBd_str);
 
-        const response = await fetch('insertar_pantalla_params.php', {
+        const response = await fetch('../song/php/insertar_pantalla_params.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

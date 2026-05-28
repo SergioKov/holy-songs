@@ -197,6 +197,10 @@ function lanzarIntentosConDelay(){
             if(eid_contenedor){ 
                 aplicarVista(); 
                 construirElementosYAppend();//siempre construyo
+
+                //new test
+                //construirElementosYAppend();//siempre construyo
+                //setTimeout(()=> aplicarVista(), 500); 
             }
         }
 
@@ -237,17 +241,49 @@ function aplicarVista(){
     if(eid_contenedor){
         
         //Admin control
-        if(pantalla_show){
-            eid_fondo.classList.remove('shown');
-            eid_contenedor.classList.add('shown');
-            
-            document.body.classList.remove('logo_en_fondo');
-            document.body.classList.remove('bible_en_fondo');
-            document.body.classList.remove('black_en_fondo');
+        if(pantalla_show){//muestro texto
 
-        }else{            
-            eid_fondo.classList.add('shown');
-            eid_contenedor.classList.remove('shown');
+            //se ha cambiado slide
+            if(arr_pantalla_str_old !== arr_pantalla_str_new){               
+
+                if(!eid_contenedor.classList.contains('shown')){
+                    console.log('if (pantalla_show) - muestro el texto');
+                    eid_contenedor.classList.add('shown');
+                }
+
+            }else{//no se ha cambiado slide
+                
+                if(eid_contenedor.classList.contains('shown')){
+                    console.log('if (pantalla_show) - oculto el texto');
+                    eid_contenedor.classList.remove('shown');
+                }                
+                setTimeout(()=>{
+                    if(!eid_contenedor.classList.contains('shown')){
+                        console.log('if (pantalla_show) - muestro el texto');
+                        eid_contenedor.classList.add('shown');
+                    }
+                },1000);//ya que transition es 1s 
+            }
+
+        }else{//muestro fondo            
+            //console.log('else - oculto el texto - muestro el fondo');
+            
+            if(eid_contenedor.classList.contains('shown')){
+                console.log('else (!pantalla_show) - oculto el texto');
+                eid_contenedor.classList.remove('shown');
+            }
+
+            setTimeout(()=>{
+                if(!eid_fondo.classList.contains('shown')){
+                    console.log('if (pantalla_show) - muestro el texto');
+                    eid_fondo.classList.add('shown');
+                }
+            },1000);//ya que transition es 1s
+
+
+
+
+
 
             if(show_logo_en_fondo){
                 document.body.classList.add('logo_en_fondo');
@@ -266,6 +302,7 @@ function aplicarVista(){
             }else{
                 document.body.classList.remove('black_en_fondo');
             }
+
         }
 
 

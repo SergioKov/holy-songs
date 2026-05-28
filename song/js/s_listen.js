@@ -18,6 +18,7 @@ window.addEventListener('resize',(e) => {
     scrollToSlide(currentSlide);
     refreshSwipeLayout();//para actualizar layout de swipe táctil al cambiar tamaño de ventana
     mySizeEdit();//en test. luego quitar!!!
+    aplicarSongAjustes();
 });
 
 
@@ -123,7 +124,47 @@ carousel.addEventListener('click', async (e) => {
 });
 
 
+//al teclear texto en la busqueda de cancion
+let timeoutFindSong;
 
+eid_inpt_find.addEventListener('input', (e) => {
+    console.log('=== listener --- eid_inpt_find input');
+
+    const input_val = e.currentTarget.value.trim();
+    console.log('input_val: ', input_val);
+
+    clearTimeout(timeoutFindSong);
+
+    if(input_val.length < 3){
+        return;
+    }
+
+    timeoutFindSong = setTimeout(async () => {
+        await findWordsSong();
+    }, 400);
+});
+
+
+
+//al teclear texto en la busqueda de lista
+let timeoutFindLista;
+
+eid_inpt_find_lista.addEventListener('input', (e) => {
+    console.log('=== listener --- eid_inpt_find_lista input');
+
+    const input_val = e.currentTarget.value.trim();
+    console.log('input_val: ', input_val);
+
+    clearTimeout(timeoutFindLista);
+
+    if(input_val.length < 3){
+        return;
+    }
+
+    timeoutFindLista = setTimeout(async () => {
+        await findWordsLista();
+    }, 400);
+});
 
 
 function listenClickLeftRight(contenedor, funcionGo){
@@ -995,7 +1036,7 @@ function handleFormInput(e, container_block){
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;
+        const slide_original = obj_bloques[titulo]?.slide;
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 

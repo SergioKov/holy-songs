@@ -92,9 +92,11 @@
 
     </div><!--/container-->
 
-    <footer>
-        <p>&copy; <?=date("Y");?> Holy-Songs.com. Todos los derechos reservados.</p>
-    </footer>
+
+    <?php
+        include __DIR__ . '/../includes/templates/footer.php';
+    ?>
+
 
 </body>
 </html>

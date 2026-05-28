@@ -14,7 +14,7 @@ body {
     /* height: 100vh; */
 }
 
-header {
+header:not(#myModal header) {
     width: 100%;
     position: fixed;
     left: 0;
@@ -60,6 +60,7 @@ nav ul {
 nav ul li {
     float: left;
     position: relative;
+    height: 50px;
 }
 nav ul li a {
     display: block;
@@ -143,7 +144,7 @@ button {
     background: linear-gradient(to bottom, #5580a2 0%, #054476 30%, #054476 50%, #054476 70%, #5580a2 100%);
     box-shadow: 0 0 6px 3px transparent;
 }
-button:hover {
+button:hover:not(#toast_container button, #myModal button) {
     border: 1px solid #256090;
     background: #1e73b7;
     transform: scale(1.05);

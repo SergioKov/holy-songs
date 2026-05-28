@@ -301,20 +301,11 @@ function pintSongActiveSoloDatos(){
     const d_esquema_titulos = document.createElement('div');
     d_esquema_titulos.className = 'd_esquema_titulos';
 
-    let cl_campo_notes = 'd-none';
     let cl_campo_url_recurso = 'd-none';
+    let cl_campo_notes = 'd-none';
     
-    let content_notes = '';
     let content_url_recurso = '';
-
-    if(objSong.notes){
-        cl_campo_notes = '';//muestro
-        //Marco en rojo las palabras encontradas en notes 
-        let notas_text_red = objSong.notes.replace(regex, (x) => {
-            return `<b class="c_red">${x}</b>`;
-        });
-        content_notes = notas_text_red;
-    }
+    let content_notes = '';
 
     if(objSong.url_recurso){
         cl_campo_url_recurso = '';//muestro
@@ -325,6 +316,17 @@ function pintSongActiveSoloDatos(){
         content_url_recurso = url_recurso_text_red;
     }
 
+    if(objSong.notes){
+        cl_campo_notes = '';//muestro
+        //Marco en rojo las palabras encontradas en notes 
+        let notas_text_red = objSong.notes.replace(regex, (x) => {
+            return `<b class="c_red">${x}</b>`;
+        });
+        content_notes = notas_text_red;
+    }
+
+
+
     const notes_detalles = document.createElement('div');
     notes_detalles.className = 's_detalles';
     notes_detalles.innerHTML = `
@@ -332,13 +334,13 @@ function pintSongActiveSoloDatos(){
         <p id="s_notes_detalles" class="texto_norm t_big" style="display: block;">
             <span class="detalles_inner">            
                 <!-- aki van los notes datos -->
-                <span class="linea_fx ${cl_campo_notes}">
-                    <span class="cl_campo">Apuntes:</span>
-                    <span>${content_notes}</span>
-                </span>
                 <span class="linea_fx ${cl_campo_url_recurso}">
                     <span class="cl_campo">Recurso:</span>
                     <span>${content_url_recurso}</span>
+                </span>                
+                <span class="linea_fx ${cl_campo_notes}">
+                    <span class="cl_campo">Apuntes:</span>
+                    <span>${content_notes}</span>
                 </span>
             </span><!--/.detalles_inner-->
         </p>
@@ -826,7 +828,7 @@ function pintListaActiveSoloDatos(){
         content_grupo = grupo_nombre_text_red;
     }
     
-    
+    //head de lista (titulo y detalles)
     const titulo_detalles = document.createElement('div');
     titulo_detalles.className = 's_detalles';
     titulo_detalles.innerHTML = `
@@ -1614,10 +1616,10 @@ async function showTipoContent(btn, param){
         //Control por usuario    
         case 'l'://legend => títulos
             if(show_legend == 1){
-                show_legend = 0;//hext action
+                show_legend = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_legend = 1;//hext action
+                show_legend = 1;//next action
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_legend', show_legend);
@@ -1627,9 +1629,11 @@ async function showTipoContent(btn, param){
             if(show_acordes == 1){
                 show_acordes = 0;//next action
                 btn.classList.remove('btn_active');
+                ocultarAcordes('#block_esquema_body');
             }else{
                 show_acordes = 1;//hext action
                 btn.classList.add('btn_active');
+                mostrarAcordes('#block_esquema_body');
             }
             localStorage.setItem('show_acordes', show_acordes);
             break;
@@ -1868,8 +1872,10 @@ function check_show_acordes(){
     
     if(show_acordes){
         eid_btn_show_acordes.classList.add('btn_active');
+        mostrarAcordes('#block_esquema_body');
     }else{
         eid_btn_show_acordes.classList.remove('btn_active');
+        ocultarAcordes('#block_esquema_body');
     }
 }
 function check_show_next_slide(){
@@ -3772,12 +3778,133 @@ function contarLineasReales(elemento) {
     return lineas.length;
 }
 
-function getDeviceKey(){
-    const viewportWidth = window.innerWidth;
+
+function getDeviceData(){
+
+    const min = Math.min(screen.width, screen.height);
+    const max = Math.max(screen.width, screen.height);
+
+    const deviceResolution = `${min}x${max}`;//425x900
+
     const orientation =
-        viewportWidth > window.innerHeight
+        window.innerWidth > window.innerHeight
         ? 'landscape'
         : 'portrait';
-        
-    return `${viewportWidth}_${orientation}`;
+
+    return {
+        deviceResolution,
+        orientation
+    };
+}
+
+
+function manejarLogin(){
+    console.log('=== function manejarLogin() ===');
+
+    if(hay_usuario_logueado){
+        let aviso_html = `
+            <h3>Bienvenido de nuevo, ${username}!</h3>
+            <p>${email}</p>
+            <p>Puedes crear canciones, listas y  guardar tus ajustes personales.</p>
+            <div class="wr_btns_vertical">
+                <button class="btn" onclick="window.location.href = '/';">Inicio</button>            
+                <button class="btn" onclick="window.location.href = '/logout';">Cerrar sesión</button>            
+            </div>
+        `;
+
+        showToast('ok', aviso_html, 1000, 'center', true, 'Sesión iniciada correctamente.');
+        return;
+    }else{
+        //alert('no hay_usuario_logueado');
+        window.location.href = '/login';//redirecciono a login para que se loguee y luego vuelva a la pantalla
+    }
+}
+
+function limpiarInput(selectorInput){
+    const input = document.querySelector(selectorInput);
+    if(input){
+        input.value = '';
+        input.focus();
+    }
+}
+
+function aplicarSongAjustes(){
+    console.log('=== function aplicarSongAjustes() ===');
+
+    const {
+        deviceResolution,
+        orientation
+    } = getDeviceData();
+
+    const song_ajustes = objSong.ajustes[orientation];
+    console.log('song_ajustes: ', song_ajustes);
+
+    if(!objSong.ajustes){
+        console.log('no hay objSong.ajustes, hago return...');
+        return;
+    }
+    
+    if(song_ajustes){//portrait o landscape
+        //font_size
+        if(song_ajustes.font_size){
+            console.log('hay font_size en song_ajustes, la aplico al cargar el form...');
+            aplicarFontSize(song_ajustes.font_size);
+        }else{
+            console.log('no hay font_size en song_ajustes, aplico valor por defecto...');
+            aplicarFontSize(fontSizeDef);
+        }
+
+        //num_columns
+        if(song_ajustes.num_columns){
+            console.log('hay num_columns en song_ajustes, la aplico al cargar el form...');
+            aplicarNumColumns(song_ajustes.num_columns);
+        }else{
+            console.log('no hay num_columns en song_ajustes, aplico valor por defecto...');
+            aplicarNumColumns(numColumnsDef);//1
+        }
+
+        //acordes_visible
+        if(song_ajustes.acordes_visible != null){//1 //true
+            if(Number(song_ajustes.acordes_visible)){
+                console.log('hay acordes_visible en song_ajustes y es 1, la aplico al cargar el form...');
+                aplicarAcordesVisible(true);
+            }else{
+                console.log('hay acordes_visible en song_ajustes y es 0, la aplico al cargar el form...');
+                aplicarAcordesVisible(false);
+            }
+        }else{
+            console.log('no hay acordes_visible en song_ajustes, aplico valor por defecto...');
+            aplicarAcordesVisible(acordesVisibleDef);//true
+        }
+
+        //texto_visible
+        if(song_ajustes.texto_visible != null){
+            if(Number(song_ajustes.texto_visible)){
+                console.log('hay texto_visible en song_ajustes y es 1, la aplico al cargar el form...');
+                aplicarTextoVisible(true);
+            }else{
+                console.log('hay texto_visible en song_ajustes y es 0, la aplico al cargar el form...');
+                aplicarTextoVisible(false);
+            }
+        }else{
+            console.log('no hay texto_visible en song_ajustes, aplico valor por defecto...');
+            aplicarTextoVisible(textoVisibleDef);//true
+        }
+
+        //contenido_width
+        if(song_ajustes.contenido_width != null){
+            if(Number(song_ajustes.contenido_width)){
+                console.log('hay texto_visible en song_ajustes y es 1, la aplico al cargar el form...');
+                aplicarContenidoWidthBd(true);
+            }else{
+                console.log('hay texto_visible en song_ajustes y es 0, la aplico al cargar el form...');
+                aplicarContenidoWidthBd(false);
+            }
+        }else{
+            console.log('no hay texto_visible en song_ajustes, aplico valor por defecto...');
+            aplicarContenidoWidthBd(contenidoWidthDef);//false
+        }
+
+    }
+
 }

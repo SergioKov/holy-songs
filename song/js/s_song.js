@@ -1814,7 +1814,7 @@ async function crear_esquema_btns_actual(){//para 'bloques wr_vista_btns_actual'
         console.log('titulo: ', titulo);
 
         // const slide_original = obj_bloques[titulo.nombre].slide;//as json
-        const slide_original = obj_bloques[titulo].slide;//bd
+        const slide_original = obj_bloques[titulo]?.slide;//bd
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
@@ -1887,7 +1887,7 @@ async function ver_esquema(){
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;
+        const slide_original = obj_bloques[titulo]?.slide;
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
@@ -1901,7 +1901,13 @@ async function ver_esquema(){
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;//bd
+        const slide_original = obj_bloques[titulo]?.slide;//bd
+        if(!slide_original){
+            console.error('error --- no se encuentra slide_original para titulo: ', titulo);
+            alert('hay error');
+            return;
+        }
+
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
@@ -2028,7 +2034,7 @@ async function crear_esquema(){
     arr_esquema.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;
+        const slide_original = obj_bloques[titulo]?.slide;
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
@@ -2203,7 +2209,7 @@ async function select_slide(){
     arr_esquema_bucle.forEach( (titulo, i, arr) => {
         console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo].slide;//bd
+        const slide_original = obj_bloques[titulo]?.slide;//bd
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
@@ -2691,7 +2697,11 @@ async function guardarSong(event, id_contenedor, cancion_action){
         }
         console.log('arr_esquema_guardar: ', arr_esquema_guardar);
 
-        const deviceKey = getDeviceKey();        
+        
+        const {
+            deviceResolution,
+            orientation
+        } = getDeviceData();      
 
         const objSongToSend = {
             id_song: id_song || null, //ya que se añade una nueva canción, no hay id_song
@@ -2714,7 +2724,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
             notes,
 
             //ajustes
-            device_key: deviceKey,            
+            device_resolution: deviceResolution,            
+            orientation: orientation,            
             font_size: currentFontSize,
             num_columns: currentNumColumns,
             acordes_visible: (acordesVisible) ? 1 : 0,
@@ -2751,11 +2762,8 @@ async function guardarSong(event, id_contenedor, cancion_action){
                     text_show = '1. Aquí texto de resultado de guardar...';
                     break;
             }
-            console.log(text_show);
+            console.log('text_show:',text_show);
     
-            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_ok">${text_show}</span>`;
-            //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
-
             if(hayElementosModalesAbiertos()){
                 showToast('ok', text_show, 5000);
             }
@@ -2834,12 +2842,10 @@ async function guardarSong(event, id_contenedor, cancion_action){
             console.error('data.error: ',data.error);
 
             let text_show = 'Error al guardar la canción.';
+            let text_error = data.error;
     
-            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
-            //contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
-
             if(hayElementosModalesAbiertos()){
-                showToast('error', text_show, 5000);
+                showToast('error', text_error, 500, 'center');
             }
         }
     
@@ -2969,12 +2975,13 @@ async function deleteSong(event, id_contenedor){
             console.error('data.dic_code: ',data.dic_code);
 
             let text_show = 'Error al eliminar la canción.';
+            let text_error = data.error;
 
             form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">${text_show}</span>`;
             contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             
             if(hayElementosModalesAbiertos()){
-                showToast('ok', text_show, 5000);
+                showToast('error', text_error, 500,'center');
             }
         }
 

@@ -175,6 +175,11 @@
         /* flex-direction: column; */
     }
 
+    #contenedor_nav_pantalla {
+        padding-top: 0;
+    }
+
+
 }
 
 

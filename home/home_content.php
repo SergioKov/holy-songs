@@ -1,5 +1,7 @@
 <?php 
 //es home
+session_start();
+
 //include('../includes/templates/check_auth.php');//antes (sin el enrutador en /index.php)
 include __DIR__ . '/../includes/templates/check_auth.php';
 ?>

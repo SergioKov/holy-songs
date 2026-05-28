@@ -100,6 +100,8 @@ const eid_titulo_tabla_song = document.getElementById('titulo_tabla_song');
 const tbody = eid_block_buscar.querySelector('.wr_tabla table tbody');
 const eid_bl_songs_finded = document.getElementById('bl_songs_finded');
 
+const eid_btn_ok_find = document.getElementById('btn_ok_find');
+
 //bl_parte_r
 const buscar_vista_song_content = eid_block_buscar.querySelector('.vista_song_content');
 //========================================================//

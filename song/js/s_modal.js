@@ -441,16 +441,25 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <div id="title_detalles" class="wr_detalles_body" style="display: ${display_title_detalles};">
                         
                         <div class="form_group wr_title">
+                            <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}title')">
+                                <img src="images/x_white.png">
+                            </div>
                             <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" " value="Nueva canción...">
                             <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
                         </div>
 
                         <div class="form_group wr_title2">
+                            <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}title2')">
+                                <img src="images/x_white.png">
+                            </div>
                             <input id="${id_vstavka}title2" name="title2" type="text" required="" placeholder=" ">
                             <label for="${id_vstavka}title2">Coro u otro texto de la canción</label>
                         </div>
 
                         <div class="form_group wr_title_note">
+                            <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}title_note')">
+                                <img src="images/x_white.png">
+                            </div>
                             <input id="${id_vstavka}title_note" name="title_note" type="text" required="" placeholder=" ">
                             <label for="${id_vstavka}title_note">Cantante, variante o nota al título</label>
                         </div>
@@ -590,34 +599,41 @@ function buildFormCancion(contenedor, cancion_action = null){
                                     <option>Cm</option>
                                     <option>C#</option>
                                     <option>C#m</option>
+                                        <option disabled></option>
                                     <option>Db</option>
                                     <option>Dbm</option>
                                     <option>D</option>
                                     <option>Dm</option>
                                     <option>D#</option>
                                     <option>D#m</option>
+                                        <option disabled></option>
                                     <option>Eb</option>
                                     <option>Ebm</option>
                                     <option>E</option>
                                     <option>Em</option>
+                                        <option disabled></option>
                                     <option>F</option>
                                     <option>Fm</option>
                                     <option>F#</option>
                                     <option>F#m</option>
+                                        <option disabled></option>
                                     <option>Gb</option>
                                     <option>Gbm</option>
                                     <option>G</option>
                                     <option>Gm</option>
                                     <option>G#</option>
                                     <option>G#m</option>
+                                        <option disabled></option>
                                     <option>Ab</option>
                                     <option>Abm</option>
                                     <option>A</option>
                                     <option>Am</option>
                                     <option>A#</option>
                                     <option>A#m</option>
+                                        <option disabled></option>
                                     <option>Bb</option>
                                     <option>Bbm</option>
+                                        <option disabled></option>
                                     <option>H</option>
                                     <option>Hm</option>
                                 </select>
@@ -688,6 +704,9 @@ function buildFormCancion(contenedor, cancion_action = null){
                         </div>
 
                         <div class="form_group wr_url_youtube">
+                            <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}url_youtube')">
+                                <img src="images/x_white.png">
+                            </div>
                             <input id="${id_vstavka}url_youtube" name="url_youtube" type="text" required="" placeholder=" ">
                             <label for="${id_vstavka}url_youtube">Enlace de vídeo de YouTube</label>
                         </div>
@@ -706,6 +725,9 @@ function buildFormCancion(contenedor, cancion_action = null){
                 <div class="d_esquema_titulos parte_lista"></div>
 
                 <div class="form_group wr_url_recurso">
+                    <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}url_recurso')">
+                        <img src="images/x_white.png">
+                    </div>
                     <input id="${id_vstavka}url_recurso" name="url_recurso" type="text" required="" placeholder=" ">
                     <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/17077)</label>
                 </div>
@@ -833,58 +855,8 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
 
 
-            //========================================================================//
-            // start - song ajustes
-            //========================================================================//
-            //font_size
-            if(objSong.font_size){
-                console.log('hay font_size en objSong, la aplico al cargar el form...');
-                aplicarFontSize(objSong.font_size);
-            }else{
-                console.log('no hay font_size en objSong, aplico valor por defecto...');
-                aplicarFontSize(fontSizeDef);
-            }
-
-            //num_columns
-            if(objSong.num_columns){
-                console.log('hay num_columns en objSong, la aplico al cargar el form...');
-                aplicarNumColumns(objSong.num_columns);
-            }else{
-                console.log('no hay num_columns en objSong, aplico valor por defecto...');
-                aplicarNumColumns(numColumnsDef);//1
-            }
-
-            //acordes_visible
-            if(Number(objSong.acordes_visibles)){//1 //true
-                console.log('hay acordes_visible en objSong, la aplico al cargar el form...');
-                aplicarAcordesVisible(true);
-            }else{
-                console.log('no hay acordes_visible en objSong, aplico valor por defecto...');
-                aplicarAcordesVisible(acordesVisibleDef);//true
-            }
-
-            //texto_visible
-            if(Number(objSong.texto_visibles)){
-                console.log('hay texto_visible en objSong, la aplico al cargar el form...');
-                aplicarTextoVisible(true);
-            }else{
-                console.log('no hay texto_visible en objSong, aplico valor por defecto...');
-                aplicarTextoVisible(textoVisibleDef);//true
-            }
-
-            //contenido_width
-            if(Number(objSong.contenido_width)){
-                console.log('hay texto_visible en objSong, la aplico al cargar el form...');
-                aplicarContenidoWidthBd(true);
-            }else{
-                console.log('no hay texto_visible en objSong, aplico valor por defecto...');
-                aplicarContenidoWidthBd(contenidoWidthDef);//false
-            }
-            //========================================================================//
-            // end - song ajustes
-            //========================================================================//
-
-  
+            //song ajustes
+            aplicarSongAjustes();
 
 
             document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
@@ -1204,6 +1176,24 @@ function buildLista(lista_action = null){
     //     <button class="btn btn_big" onclick="openModal('full','Editar lista',null,'buildLista',true, 'editar');">Editar lista</button>
     // `;
 
+    //Notas (apuntes) si hay - SM
+    let notes_s_detalles  = '';
+    if(notes_val){
+        notes_s_detalles  = document.createElement('div');
+        notes_s_detalles.className = 's_detalles ';
+        notes_s_detalles.innerHTML = `
+            <p class="p_titulo" onclick="hideShowBlock('l_notes_detalles_sm');">Notas</p>
+            <p id="l_notes_detalles_sm" class="texto_norm t_big" style="display: block;">
+                <span class="detalles_inner">            
+                    <span class="linea_fx ">
+                        <span class="cl_campo">Apuntes:</span>
+                        <span>${notes_val}</span>
+                    </span>
+                </span><!--/.detalles_inner-->
+            </p>
+        `;
+    }
+
     //Botones ELIMINAR - SM
     const wr_btns_eliminar = document.createElement('div');
     wr_btns_eliminar.className = 'wr_btns_eliminar';
@@ -1211,12 +1201,38 @@ function buildLista(lista_action = null){
         <button class="btn btn_big btn_eliminar" onclick="deleteLista();">Eliminar Lista DEFINITIVAMENTE</button>
     `;
 
+    
 
     //para VER - SM
-    const contenedor_lista_sm = document.createElement('div');
+    const contenedor_lista_sm = document.createElement('div'); 
     contenedor_lista_sm.id = 'contenedor_lista_sm';
     contenedor_lista_sm.innerHTML = `                    
-        <div class="parte_lista">
+        <div class="s_detalles">
+            <p class="p_titulo" onclick="hideShowBlock('l_titulo_detalles_sm');">
+                Lista <span class="f_r ${cl_id_lista}">${id_lista_val}</span>
+            </p>    
+            <p id="l_titulo_detalles_sm" class="texto_norm t_big" style="display: block;">
+                <span class="detalles_inner">
+                    <span class="linea_fx">
+                        <span class="cl_campo">Título:</span>
+                        <span>${title_val}</span>
+                    </span>
+                    <span class="linea_fx">
+                        <span class="cl_campo">Fecha:</span>
+                        <span class="wr_dia_y_fecha">
+                            <span class="cl_dia_semana cl_title_note">${diaSemana_val}</span>
+                            <span class="cl_fecha cl_title_note">${fecha_val || ''}</span>
+                        </span>
+                    </span>
+                    <span class="linea_fx">
+                        <span class="cl_campo">Grupo:</span>
+                        <span>${id_grupo_val}. ${grupo_nombre_val}</span>
+                    </span>
+                </span><!--/.detalles_inner-->
+            </p>
+        </div>
+
+        <div class="parte_lista d-none">
             <p class="p_sm ${cl_id_lista}">Id: <b>${id_lista_val}</b></p>
             <p class="p_sm">Fecha: <b>${diaSemana_val} ${fecha_val}</b></p>
             <p class="p_sm">Titulo: <b>${title_val}</b></p>
@@ -1229,8 +1245,8 @@ function buildLista(lista_action = null){
         <!-- Canciones -->
         <div class="d_canciones_lista parte_lista"></div>
 
-        ${ (notes_val) ? `<p class="p_sm ${ ((lista_action == 'eliminar') ? '' : 'parte_lista') }">Notas: <b>${notes_val}</b></p>` : '' }
-
+        ${(notes_val) ? notes_s_detalles.outerHTML : '' }
+        
         ${(lista_action == 'eliminar') ? wr_btns_eliminar.outerHTML : '' }
     `;
 
@@ -1255,7 +1271,10 @@ function buildLista(lista_action = null){
                 </p>
 
                 <div class="form_group wr_title">
-                    <input type="text" id="title" name="title" required="" placeholder=" " value="${title_val}">
+                    <div class="d_limpiar_input" onclick="limpiarInput('#title')">
+                        <img src="images/x_white.png">
+                    </div>
+                    <input id="title" type="text" name="title" required="" placeholder=" " value="${title_val}">
                     <label for="title">Título de la lista</label>
                 </div>
                 <div class="form_group outer_wr_fast_words">                    
@@ -1855,46 +1874,76 @@ async function getDataSongFromBd(){
             return; // <- se detiene aquí si no hay id_song
         }
 
-        const deviceKey = getDeviceKey();
+
+        const {
+            deviceResolution,
+            orientation
+        } = getDeviceData();
                
-        const response = await fetch('obtener_song_datos.php', {
+        const response = await fetch('../song/php/obtener_song_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
             },
             body: JSON.stringify({
                 id_song: id_song,
-                device_key: deviceKey,
+                device_resolution: deviceResolution,
+                orientation: orientation
             }), // Convertir los datos a formato JSON
         });
 
-        if (!response.ok) {
-            throw new Error('Error al obtener datos');
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
         }
 
-        const data = await response.json();
-        //const data = await response.text();//test
-        console.log(data);  
-        
-        if(data.success){
-            console.log('success is true');
+        if(debug){
+            console.log('text:', text);
+        }
 
-            let song_title = data.title; 
-            let song_text = data.song_text; 
-            // data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : data.arr_esquema ; 
-            data.arr_esquema = (esString(data.arr_esquema) && data.arr_esquema != '' && data.arr_esquema.length > 0) ? JSON.parse(data.arr_esquema) : [] ;// test arr vacio 
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error obtener_song_datos.php) ${response.status}`);
+        }
 
-            console.log(`id_song: [${id_song}] --- song_title: [${song_title}] --- song_text: [${song_text}] --- data.arr_esquema: `, data.arr_esquema);
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+                console.log('success is true');
 
-            return data;
+                let song_title = data.title; 
+                let song_text = data.song_text; 
+                // data.arr_esquema = (data.arr_esquema != '') ? JSON.parse(data.arr_esquema) : data.arr_esquema ; 
+                data.arr_esquema = (esString(data.arr_esquema) && data.arr_esquema != '' && data.arr_esquema.length > 0) ? JSON.parse(data.arr_esquema) : [] ;// test arr vacio 
 
-        }else{
-            console.log('success is false');
-            return 'no_hay_datos';
+                console.log(`id_song: [${id_song}] --- song_title: [${song_title}] --- song_text: [${song_text}] --- data.arr_esquema: `, data.arr_esquema);
+
+                return data;    
+                
+            } else {
+                console.log('success is false');
+                return 'no_hay_datos';              
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en obtener_song_datos.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en obtener_song_datos.php',
+                { cause: error }
+            );
         }
 
     } catch (error) {
-        console.error('Error en getSongById(): error.message: ', error.message);
+        console.error('Error en getDataSongFromBd(): error.message: ', error.message);
     }
 }
 
@@ -1908,7 +1957,7 @@ async function getDataListaFromBd(){
             return; // <- se detiene aquí si no hay id_lista
         } 
                
-        const response = await fetch('obtener_lista_datos.php', {
+        const response = await fetch('../song/php/obtener_lista_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -1961,7 +2010,7 @@ async function getSongbooksFromBd(){//sacar TODOS los SongBooks para rellenar el
         //     return; // <- se detiene aquí si no hay id_song
         // } 
                
-        const response = await fetch('obtener_songbooks_datos.php', {
+        const response = await fetch('../song/php/obtener_songbooks_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -2008,7 +2057,7 @@ async function getGruposFromBd(){//sacar TODOS los grupos para rellenar el <sele
         //     return; // <- se detiene aquí si no hay id_song
         // } 
                
-        const response = await fetch('obtener_grupos_datos.php', {
+        const response = await fetch('../song/php/obtener_grupos_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -2060,9 +2109,12 @@ async function getDataSongsFromBdByFind(objFindParams){
             return;
         }
 
-        const deviceKey = getDeviceKey();
+        const {
+            deviceResolution,
+            orientation
+        } = getDeviceData();
                
-        const response = await fetch('obtener_song_by_find.php', {
+        const response = await fetch('../song/php/obtener_song_by_find.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -2072,29 +2124,58 @@ async function getDataSongsFromBdByFind(objFindParams){
                 arr_songbooks_search,
                 modo,
                 buscar_en,
-                device_key: deviceKey
+                device_resolution: deviceResolution,
+                orientation: orientation
             }), // Convertir los datos a formato JSON
         });
 
-        if (!response.ok) {
-            throw new Error('Error al obtener datos');
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
         }
 
-        const data = await response.json();
-        //const data = await response.text();//test
-        console.log('data: ', data);  
-        
-        if(data.success){
-            console.log('success is true');
+        if(debug){
+            console.log('text:', text);
+        }
 
-            let arr_data = data.arr_data;
-            //console.log(`arr_data: `, arr_data);
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error obtener_song_by_find.php) ${response.status}`);
+        }
 
-            return data;
+        try {
 
-        }else{
-            console.log('success is false');
-            return 'no_hay_datos';
+            const data = JSON.parse(text);
+            console.log('data:', data);   
+    
+            if (data.success) {
+                console.log('success is true');
+
+                let arr_data = data.arr_data;
+                //console.log(`arr_data: `, arr_data);
+
+                return data;        
+                
+            } else {
+
+                console.log('success is false');
+                return 'no_hay_datos';                         
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en obtener_song_by_find.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en obtener_song_by_find.php',
+                { cause: error }
+            );
         }
 
     } catch (error) {
@@ -2115,7 +2196,7 @@ async function getDataListasFromBdByFind(objFindListaParams){
             return;
         }
                
-        const response = await fetch('./obtener_lista_by_find.php', {
+        const response = await fetch('../song/php/obtener_lista_by_find.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -2207,7 +2288,7 @@ async function insertarSongDatos(objSong) {
         const objSong_str = JSON.stringify(objSong);
         console.log('objSong_str: ', objSong_str);
 
-        const response = await fetch('insertar_song_datos.php', {
+        const response = await fetch('../song/php/insertar_song_datos.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -2265,7 +2346,7 @@ async function deleteSongFromBd(){
             return; // <- se detiene aquí si no hay id_song
         } 
                
-        const response = await fetch('eliminar_song_datos.php', {
+        const response = await fetch('../song/php/eliminar_song_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
@@ -2296,7 +2377,7 @@ async function deleteSongFromBd(){
 
         }else{
             console.log('success is false');
-            return 'no_hay_datos';
+            return data;
         }
 
     } catch (error) {
@@ -2328,7 +2409,7 @@ async function insertarListaDatos(objLista) {
         const objLista_str = JSON.stringify(objLista);
         console.log('objLista_str: ',objLista_str);
 
-        const response = await fetch('insertar_lista_datos.php', {
+        const response = await fetch('../song/php/insertar_lista_datos.php', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -2360,7 +2441,7 @@ async function deleteListaFromBd(){
             return; // <- se detiene aquí si no hay id_lista
         } 
                
-        const response = await fetch('eliminar_lista_datos.php', {
+        const response = await fetch('../song/php/eliminar_lista_datos.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Especificar el tipo de contenido como JSON
