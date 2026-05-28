@@ -2257,7 +2257,8 @@ function parteCentral(param){
 
 
 
-
+//ejemplo de uso
+//showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false, document.querySelector('.vista_fixed_body'));
 
 function showToast(tipo = 'info', mensaje, duration = null, position = 'default', with_head = false, text_head = 'Info', contenedor = null) {//default -> abajo derecha
     //position = 'default'// => abajo derecha
@@ -3735,7 +3736,7 @@ function changeFontSize(step) {
         //console.log('fin el: ', el);
     });
 
-    showToast('info', `Fuente: ${curFont_show}`, 2000, 'bottom', false,'', document.querySelector('.vista_fixed_body'));
+    showToast('info', `Fuente: ${curFont_show}`, 2000, 'bottom', false, '', document.querySelector('.vista_fixed_body'));
 
     refreshSwipeLayout();//refresco los bloques si de opacidad con gragSong => true
 }
@@ -3851,7 +3852,7 @@ function aplicarSongAjustes(){
     
     if(song_ajustes){//portrait o landscape
 
-        permitirShowToast = false;//para no mostrar toast al aplicar cada ajuste
+        //permitirShowToast = false;//para no mostrar toast al aplicar cada ajuste
 
         //font_size
         if(song_ajustes.font_size){
@@ -3916,8 +3917,8 @@ function aplicarSongAjustes(){
         setTimeout(()=>{
             permitirShowToast = true;//para mostrar toast 
             //para que no se muestre el ultimo mensaje por showToast(), muestro algo generico
-            showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false);
-        },2000);
+            showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false, '', document.querySelector('.vista_fixed_body'));
+        },10);
 
     }
 
