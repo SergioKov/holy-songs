@@ -704,3 +704,5 @@ let currentNumColumns = numColumnsDef;//por defecto siempre 1 columna
 let acordesVisible = true;//se ven acordes por defecto
 let textoVisible = true;//se ve el texto por defecto
 let contenidoWidth = false;//a lo ancho. por defecto no ajustado
+
+let permitirShowToast = true;//para evitar mostrar varios toasts seguidos. uso con song_ajustes

@@ -127,7 +127,7 @@ function openModal(...args){
             
                 case 'showLogin':
                     eid_h4_text.innerHTML = `
-                        <span data-dic="d209">${'Inicio de sesión'}</span>
+                        <span data-dic="d209">${'Login'}</span>
                     `;//headerTitle;
                     eid_modcont_body.style.overflowY = 'auto';//habilita scroll
                     eid_modcont_body.classList.add('theme_grey');  
@@ -310,7 +310,6 @@ function buildForm(id_form){
     `;
     bl_register_form.onclick = (e) => {
         //console.log('bl_register_form.onclick');
-
     }
 
     const bl_email_form = document.createElement('div');
@@ -326,7 +325,6 @@ function buildForm(id_form){
     `;
     bl_email_form.onclick = (e) => {
         //console.log('bl_email_form.onclick');
-
     }
 
     const bl_change_email_form = document.createElement('div');
@@ -349,7 +347,6 @@ function buildForm(id_form){
     `;
     bl_change_email_form.onclick = (e) => {
         //console.log('bl_change_email_form.onclick');
-
     }
 
 
@@ -369,7 +366,7 @@ function buildForm(id_form){
             </label>
             <button class="btn_wide" type="button" onclick="iniciarSesionHS()" data-dic="d184">Iniciar Sesión</button>
             <p class="message">
-                <span class="">
+                <span class="${cl_crear_cuenta}">
                     <span data-dic="d189">¿No estás registrado?</span> <a href="#" onclick="mostrarForm('bl_register_form')" data-dic="d177">Crear cuenta</a>
                 </span>
                 <br><span data-dic="d190">¿Has olvidado la contraseña?</span> <a href="#" onclick="mostrarForm('bl_email_form')" data-dic="d181">Recuperar contraseña</a>
@@ -379,7 +376,6 @@ function buildForm(id_form){
     `;
     bl_login_form.onclick = (e) => {
         //console.log('bl_login_form.onclick');
-
     }
 
 
@@ -395,6 +391,15 @@ function buildForm(id_form){
         <p class="p_cerr_ses">
             <a href="#" class="a_cerr_ses" onclick="cerrarSesion()" data-dic="d153">Cerrar sesión</a>
         </p>
+
+        <div class="${cl_crear_cuenta}" style="border-top: 1px solid grey; margin-top: 15px;">
+            <p style="margin-bottom: 0;">Puedes crear cuenta para alguien 
+                <br>(Opción temporal) 
+                <br>
+                <br>
+                <button onclick="mostrarForm('bl_register_form')">Crear cuenta para álguien</button>
+            </p>
+        </div>
     `;
     bl_sesion_iniciada.onclick = (e) => {
         //console.log('bl_sesion_iniciada.onclick');

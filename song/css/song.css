@@ -4427,4 +4427,10 @@ fieldset.kuplet.partial{
     justify-content: center;
     align-items: stretch;
     flex-direction: column;
+    padding-top: 5px;
+}
+
+.wr_btns_vertical .btn {
+    padding: 10px;
+    font-size: 14px;
 }

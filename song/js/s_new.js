@@ -2263,6 +2263,10 @@ function showToast(tipo = 'info', mensaje, duration = null, position = 'default'
     //position = 'default'// => abajo derecha
     //position = 'center'// => center y center
 
+    if(!permitirShowToast){
+        return;
+    }
+
     let toast_container;
     let inner_position;
 
@@ -3808,6 +3812,7 @@ function manejarLogin(){
             <p>Puedes crear canciones, listas y  guardar tus ajustes personales.</p>
             <div class="wr_btns_vertical">
                 <button class="btn" onclick="window.location.href = '/';">Inicio</button>            
+                <button class="btn" onclick="window.location.href = '/login';">Login</button>            
                 <button class="btn" onclick="window.location.href = '/logout';">Cerrar sesión</button>            
             </div>
         `;
@@ -3845,6 +3850,9 @@ function aplicarSongAjustes(){
     }
     
     if(song_ajustes){//portrait o landscape
+
+        permitirShowToast = false;//para no mostrar toast al aplicar cada ajuste
+
         //font_size
         if(song_ajustes.font_size){
             console.log('hay font_size en song_ajustes, la aplico al cargar el form...');
@@ -3904,6 +3912,10 @@ function aplicarSongAjustes(){
             console.log('no hay texto_visible en song_ajustes, aplico valor por defecto...');
             aplicarContenidoWidthBd(contenidoWidthDef);//false
         }
+
+        permitirShowToast = true;//para mostrar toast 
+        //para que no se muestre el ultimo mensaje por showToast(), muestro algo generico
+        showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false);
 
     }
 

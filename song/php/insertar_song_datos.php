@@ -213,16 +213,31 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     
 
     //busco si hay registro en la tabla a donde insertar array
+    // $sql_prep = "SELECT id_song 
+    //             FROM songs 
+    //             WHERE id_song = ? 
+    // ";
+    // $arr_params = [$id_song];
+    // $sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
+	// $result = $conn->query($sql_preparada);
+    // //debug_x($sql_preparada, 'sql_preparada');
+
+
     $sql_prep = "SELECT id_song 
                 FROM songs 
-                WHERE id_song = ? 
+                WHERE id_song = ?
+                LIMIT 1 
     ";
-    $arr_params = [$id_song];
-    $sql_preparada = prepararQuery($conn, $sql_prep, $arr_params);
-	$result = $conn->query($sql_preparada);
-    //debug_x($sql_preparada, 'sql_preparada');
+    $stmt = $conn->prepare($sql_prep);
+    if(!$stmt) {
+        die("Error SQL");
+    }
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if($result->num_rows > 0){
+
+    if($result->num_rows === 1){
         $row = $result->fetch_assoc();
 		//echo_json_x($row,'row');		
         $stored_id_song = $row["id_song"];//1
@@ -326,14 +341,30 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 
     //song ajustes
+    // $sql_prep_aj = "SELECT id_song 
+    //             FROM songs_ajustes 
+    //             WHERE id_song = ? 
+    // ";
+    // $arr_params_aj = [$id_song];
+    // $sql_preparada_aj = prepararQuery($conn, $sql_prep_aj, $arr_params_aj);
+	// $result_aj = $conn->query($sql_preparada_aj);
+    // //debug_x($sql_preparada, 'sql_preparada');
+
+
+
+    //song ajustes
     $sql_prep_aj = "SELECT id_song 
                 FROM songs_ajustes 
                 WHERE id_song = ? 
     ";
-    $arr_params_aj = [$id_song];
-    $sql_preparada_aj = prepararQuery($conn, $sql_prep_aj, $arr_params_aj);
-	$result_aj = $conn->query($sql_preparada_aj);
-    //debug_x($sql_preparada, 'sql_preparada');
+    $stmt_aj = $conn->prepare($sql_prep_aj);
+    if(!$stmt_aj) {
+        die("Error SQL");
+    }
+    $stmt_aj->bind_param("s", $id_song);
+    $stmt_aj->execute();
+    $result_aj = $stmt_aj->get_result();
+
 
     if($result_aj->num_rows > 0){
         $row_aj = $result_aj->fetch_assoc();

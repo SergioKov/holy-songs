@@ -124,14 +124,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 LIMIT 1
         ";
         $stmt = $conn->prepare($sql);
-
         if(!$stmt) {
             die("Error SQL");
         }
-
         $stmt->bind_param("s", $email);
         $stmt->execute();
-
         $resultado = $stmt->get_result();
 
 

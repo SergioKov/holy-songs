@@ -139,6 +139,26 @@
         //sesion iniciada correctamente
     if(isset($_SESSION['login']) && $_SESSION['login'] === true){
 
+        if(isset($_SESSION['email']) && 
+           $_SESSION['email'] === 'sergiokovalchuk@gmail.com' &&
+           isset($_GET['crear_cuenta'])
+        ){
+            //class para mostrar el enlace de crear cuenta
+            echo '
+                <script>
+                    let cl_crear_cuenta = "d-block";       
+                </script>
+            ';
+        }else{
+            //no muestro el enlace de crear cuenta
+            echo '
+                <script>
+                    let cl_crear_cuenta = "d-none";       
+                </script>
+            ';
+        }
+        
+
         echo '
             <script>
                 let hay_sesion = true;
@@ -171,12 +191,15 @@
 
     
     }else{
+        //no hay sesion
+        //no muestro el enlace de crear cuenta
         echo '
             <script>
                 let hay_sesion = false; 
                 let hay_usuario_logueado = false; 
                 let frase_bienvenida = "No estás logueado.";
-                let mensaje = "Sesión no iniciada.";       
+                let mensaje = "Sesión no iniciada.";
+                let cl_crear_cuenta = "d-none";
             </script>
         ';
     }
