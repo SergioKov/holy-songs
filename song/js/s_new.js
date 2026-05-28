@@ -3913,9 +3913,11 @@ function aplicarSongAjustes(){
             aplicarContenidoWidthBd(contenidoWidthDef);//false
         }
 
-        permitirShowToast = true;//para mostrar toast 
-        //para que no se muestre el ultimo mensaje por showToast(), muestro algo generico
-        showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false);
+        setTimeout(()=>{
+            permitirShowToast = true;//para mostrar toast 
+            //para que no se muestre el ultimo mensaje por showToast(), muestro algo generico
+            showToast('info', 'Ajustes personalizados aplicados correctamente.', 2000, 'bottom', false);
+        },2000);
 
     }
 
