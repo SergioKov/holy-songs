@@ -232,9 +232,17 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     if(!$stmt) {
         die("Error SQL");
     }
-    $stmt->bind_param("s", $email);
+    $stmt->bind_param("i", $id_song);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    // //debug
+    // echo json_encode([
+    //     'success' => false,
+    //     'error' => 'test info. $result->num_rows: ' . $result->num_rows . ' --- id_song: ' . $id_song,
+    //     'dic_code' => 'd250'
+    // ],JSON_UNESCAPED_UNICODE);
+    // exit;
 
 
     if($result->num_rows === 1){
@@ -374,20 +382,13 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }else{
         $hay_id_song_en_ajustes = false;
     }
-
-
-
-
-
-
 	//echo_json_x($hay_id_song_en_tabla, 'hay_id_song_en_tabla');
 
-    $sign = '__[(&)]__';//IMPORTANTE! para que ho haya errores con $arr en json
 
 
-
-
-    //---start - new---//    
+    //===============================================================//
+    // start - UPSERT
+    //===============================================================//
     if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
         $action_tipo = $hay_id_song_en_tabla 
             ? 'is_update_arr_esquema_ok' 
@@ -540,7 +541,242 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         $notes
     );
     $result2 = $stmt->execute();
-    //---end - new---//
+    //===============================================================//
+    // end - UPSERT
+    //===============================================================//
+
+
+
+
+
+
+    //===============================================================//
+    // start - UPDATE/INSERT si falla UPSERT
+    //===============================================================//
+    // if (is_array($arr_esquema_array) && !empty($arr_esquema_array)) {// Es un array y tiene elementos
+    //     $action_tipo = $hay_id_song_en_tabla 
+    //         ? 'is_update_arr_esquema_ok' 
+    //         : 'is_insert_arr_esquema_ok';
+    //     $arr_esquema_final = $arr_esquema_string;        
+    // }else{
+    //     $action_tipo = $hay_id_song_en_tabla 
+    //         ? 'is_update_arr_esquema_vacio' 
+    //         : 'is_insert_arr_esquema_vacio';
+    //     $arr_esquema_final = '';
+    // }
+
+    // $id_song_upsert =
+    //     $hay_id_song_en_tabla
+    //     ? $id_song
+    //     : null;
+
+    // //IMPORTANTE! Normalizar Windows/Mac/Linux (debe estar con bind_param())
+    // $song_text = str_replace(["\r\n", "\r"], "\n", $song_text);
+    // $notes = str_replace(["\r\n", "\r"], "\n", $notes);
+
+    // //debug
+    // // echo json_encode([
+    // //     'success' => false,
+    // //     'error' => 'test info. id_song_upsert: ' . $id_song_upsert . ' --- action_tipo: ' . $action_tipo,
+    // //     'dic_code' => 'd250'
+    // // ],JSON_UNESCAPED_UNICODE);
+    // // exit;
+
+
+    // //==================================================
+    // // start - UPDATE
+    // //==================================================
+    // if($id_song_upsert !== null){// existe id_song, hago update
+
+    //     $sql_update = "UPDATE songs
+    //                     SET
+    //                         song_number = ?,
+
+    //                         title = ?,
+    //                         title2 = ?,
+    //                         title_note = ?,
+    //                         title_search = ?,
+
+    //                         category = ?,
+    //                         songbook = ?,
+
+    //                         song_text = ?,
+    //                         song_text_search = ?,
+
+    //                         arr_esquema = ?,
+
+    //                         tune = ?,
+    //                         tune_transpose = ?,
+
+    //                         tipo_acorde = ?,
+    //                         tipo_fuente = ?,
+
+    //                         url_youtube = ?,
+    //                         url_recurso = ?,
+
+    //                         tempo_bpm = ?,
+    //                         lang = ?,
+
+    //                         notes = ?,
+
+    //                         updated_at = NOW()
+
+    //                     WHERE id_song = ?
+    //     ";
+    //     $stmt = $conn->prepare($sql_update);
+    //     $stmt->bind_param(
+    //         "issssiissssssssssssi",
+
+    //         $song_number,
+
+    //         $title,
+    //         $title2,
+    //         $title_note,
+    //         $title_search,
+
+    //         $category,
+    //         $songbook,
+
+    //         $song_text,
+    //         $song_text_search,
+
+    //         $arr_esquema_final,
+
+    //         $tune,
+    //         $tune_transpose,
+
+    //         $tipo_acorde,
+    //         $tipo_fuente,
+
+    //         $url_youtube,
+    //         $url_recurso,
+
+    //         $tempo_bpm,
+    //         $lang,
+
+    //         $notes,
+
+    //         $id_song_upsert
+    //     );
+
+    //     $result2 = $stmt->execute();
+
+    // }
+    // //==================================================
+    // // end - UPDATE
+    // //==================================================
+
+
+    // //==================================================
+    // // start - INSERT
+    // //==================================================
+    // if($id_song_upsert == null){// no existe id_song, hago insert
+    //     $sql_insert = "INSERT INTO songs
+    //                     (
+    //                         song_number,
+
+    //                         title,
+    //                         title2,
+    //                         title_note,
+    //                         title_search,
+
+    //                         category,
+    //                         songbook,
+
+    //                         song_text,
+    //                         song_text_search,
+
+    //                         arr_esquema,
+
+    //                         tune,
+    //                         tune_transpose,
+
+    //                         tipo_acorde,
+    //                         tipo_fuente,
+
+    //                         url_youtube,
+    //                         url_recurso,
+
+    //                         tempo_bpm,
+    //                         lang,
+
+    //                         notes,
+
+    //                         created_at,
+    //                         updated_at
+    //                     )
+    //                     VALUES
+    //                     (
+
+    //                         ?,
+
+    //                         ?, ?, ?, ?,
+
+    //                         ?, ?,
+
+    //                         ?, ?,
+
+    //                         ?,
+
+    //                         ?, ?,
+
+    //                         ?, ?,
+
+    //                         ?, ?,
+
+    //                         ?, ?,
+
+    //                         ?,
+
+    //                         NOW(),
+    //                         NOW()
+    //                     )
+    //     ";
+    //     $stmt = $conn->prepare($sql_insert);
+    //     $stmt->bind_param(
+    //         "issssiissssssssssss",
+
+    //         $song_number,
+
+    //         $title,
+    //         $title2,
+    //         $title_note,
+    //         $title_search,
+
+    //         $category,
+    //         $songbook,
+
+    //         $song_text,
+    //         $song_text_search,
+
+    //         $arr_esquema_final,
+
+    //         $tune,
+    //         $tune_transpose,
+
+    //         $tipo_acorde,
+    //         $tipo_fuente,
+
+    //         $url_youtube,
+    //         $url_recurso,
+
+    //         $tempo_bpm,
+    //         $lang,
+
+    //         $notes
+    //     );
+    //     $result2 = $stmt->execute();
+
+    // }
+    // //==================================================
+    // // end - INSERT
+    // //==================================================
+    
+    //===============================================================//
+    // end - UPDATE/INSERT si falla UPSERT
+    //===============================================================//
+
+
 
 
     //Update o insert datos en la tabla 'songs'
@@ -550,7 +786,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
             $id_song_ajustes = $id_song;
             $consulta_info = 'upsert songs_ajustes -> id_song ya existe en tabla songs, por lo tanto se hace update o insert en ajustes con id_song';
         }else{//es insert
-            $id_song_ajustes = $conn->insert_id;//es id insertado de esta $conn
+            $id_song_ajustes = $conn->insert_id;//es id insertado de la cancion nueva de esta $conn
             $consulta_info = 'upsert songs_ajustes -> id_song no existe en tabla songs, por lo tanto se hace insert en ajustes con id_song_ajustes:' . $id_song_ajustes . ' que es id_song_bd de la nueva canción insertada';            
         }
 
