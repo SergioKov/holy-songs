@@ -1756,6 +1756,11 @@ textarea:not(:placeholder-shown) + label
     flex-direction: flex-end;
 }
 
+.wr_revisar_y_guardar {
+    padding-top: 15px;
+}
+
+
 #contenedor_lista_sm .wr_btns_eliminar {
     margin-top: 10px;
     padding-top: 10px;
@@ -4450,9 +4455,8 @@ fieldset.kuplet.partial{
     border: 1px solid #ddd;
     padding: 0;
     border-radius: 5px;
-    margin: 10px 0;
-    overflow-y: auto;
-    max-height: 50vh;
+    overflow: auto;
+    max-height: calc(100vh - (44px + 20px + 10px + 10px + 40px) );
 }
 
 .wr_letras {
@@ -4470,37 +4474,40 @@ fieldset.kuplet.partial{
 }
 
 .wr_2_botones {
-    margin-top: 15px;
+    margin-top: 10px;
     display: flex;
     gap: 10px;
     justify-content: space-between;
 }
 
 .linea_texto {
-    /* margin: 2px 0; */
-    /* background: #fafafa; */
+    background: #f3f3f3;
     padding: 0px 5px;
-    /* border: 1px solid #f0f0f0; */
-    border-radius: 5px;
     position: relative;
+    white-space: pre;
+    width: fit-content;
+    margin: 1px 0;
+    transition: background-color 0.3s ease;
 }
+
 .linea_texto:hover {
-    background: #fafafa;
-    outline: 1px solid #f0f0f0;
+    background: #fffaf0;
+    outline: 1px solid #feebc8;
 }
 
 .linea_resaltada {
     background: yellow!important;
-    border: 1px solid red !important;
+    border: 1px solid #ffbf00 !important;
+    border-radius: 3px;
 }
 
 .aviso_mezcla {
     background-color: #fffaf0;
     border: 1px solid #feebc8;
-    border-left: 4px solid #dd6b20;   /* Barra naranja/roja de advertencia */
+    border-left: 4px solid #dd6b20;
     color: #7b341e;
     padding: 14px 18px;
-    margin-bottom: 10px;              /* Margen pequeño porque abajo va el aviso_info */
+    margin-bottom: 10px;
     border-radius: 4px;
     font-weight: bold;
     font-size: 14px;
@@ -4515,7 +4522,7 @@ fieldset.kuplet.partial{
     border-left: 4px solid #38a169;   /* Barra verde de éxito */
     color: #22543d;
     padding: 14px 18px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 4px;
     font-weight: bold;
     font-size: 14px;
@@ -4524,10 +4531,9 @@ fieldset.kuplet.partial{
 
 .aviso_mezcla_info {
     background-color: #f0f4f8;
-    border-left: 4px solid #2b6cb0;
     color: #2d3748;
     padding: 14px 18px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 4px;
     font-size: 14px;
     line-height: 1.5;
@@ -4547,15 +4553,15 @@ fieldset.kuplet.partial{
 }
 
 .aviso_mezcla_info .letra_cirilico {
-    background-color: #e6fffa;
-    color: #234e52;
-    border: 1px solid #b2f5ea;
+    background-color: #eafbea;
+    color: green;
+    border: 1px solid #008000;
 }
 
 .aviso_mezcla_info .letra_latino {
-    background-color: #fff5f5;
-    color: #742a2a;
-    border: 1px solid #fed7d7;
+    background-color: #ffe8e7;
+    color: red;
+    border: 1px solid red;
 }
 
 .num_linea_alerta {
@@ -4584,3 +4590,20 @@ fieldset.kuplet.partial{
     text-decoration: underline wavy #e74c3c; /* Subrayado ondulado rojo */
     text-underline-offset: 4px;
 }
+
+.wr_letras fieldset {
+    /* background: #e5e5e5; */
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    margin: 20px 0 0;
+}
+.wr_letras legend {
+    text-align: left;
+    font-size: 14px;
+    border: 1px solid #d3d3d3;
+    font-style: normal;
+    background: transparent;
+    border-radius: 5px;
+    color: grey;
+}
+

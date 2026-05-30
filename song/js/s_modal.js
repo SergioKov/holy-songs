@@ -160,7 +160,25 @@ function openModal(param = null, headerTitle = null, htmlTrans = null, action = 
             },10);
             
             switch (action) {
-            
+
+                case 'showAviso':
+                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии'; 
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    //console.log('aki llamar showAviso()');
+                    //alert('aki showAviso()');
+                    showAviso(htmlTrans, param);//es arr_p_id en este caso
+                    break;
+
+                case 'showAviso2'://se introduce objeto HTML (y no elemento.innerHTML como en 'showAviso')
+                    eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';    
+                    eid_modcont_body.style.overflow = 'auto';//habilita scroll
+                    eid_modcont_body.classList.add('theme_grey');   
+                    //console.log('aki llamar showAviso2()');
+                    //alert('aki showAviso2()');
+                    showAviso2(htmlTrans, param);//es arr_p_id en este caso
+                    break;
+
                 case 'showSong':
                     eid_h4_text.innerHTML = `${headerTitle} `;//'Избранныe модули Библии';
                     eid_modcont_body.style.overflow = 'auto';//habilita scroll
@@ -388,6 +406,13 @@ function buildFormCancion(contenedor, cancion_action = null){
     `;
 
     
+    //Boton REVISAR Y GUARDAR - FORMULARIO
+    const wr_revisar_y_guardar = document.createElement('div');
+    wr_revisar_y_guardar.className = 'wr_btns_form wr_revisar_y_guardar';
+    wr_revisar_y_guardar.innerHTML = `
+        <button id="btn_GuardarFormRevisar" class="btn btn_big w_100" onclick="guardarSong(event, '${contenedor.id}','${cancion_action}', revisar = true);">Revisar y Guardar</button>
+    `;
+
     //Botones GUARDAR - FORMULARIO
     const wr_btns_form = document.createElement('div');
     wr_btns_form.className = 'wr_btns_form';
@@ -919,6 +944,7 @@ function buildFormCancion(contenedor, cancion_action = null){
     }
     else if(['nueva','editar'].includes(cancion_action)){
         form_cancion.querySelector('form').append(wr_btns_form);
+        form_cancion.querySelector('form').append(wr_revisar_y_guardar);
         if(['nueva'].includes(cancion_action)){
             makeInputsDisabled(form_cancion, false);//habilito los inputs
         }
@@ -1249,7 +1275,6 @@ function buildLista(lista_action = null){
         
         ${(lista_action == 'eliminar') ? wr_btns_eliminar.outerHTML : '' }
     `;
-
     
     //Botones de FORMULARIO
     const wr_btns_form = document.createElement('div');

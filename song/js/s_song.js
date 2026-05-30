@@ -2648,7 +2648,7 @@ function resaltarAlfabetosHTML(texto) {
                     palabraTieneLatino = true;
                     palabraHTML += `<span class="letra_latino">${caracter}</span>`;
                 } else {
-                    // Escapamos los símbolos de apertura y cierre de etiquetas
+                    // ESCAPE DE CARACTERES ESPECIALES Y ESPACIOS INTERNOS:
                     if (caracter === '<') {
                         palabraHTML += '&lt;';
                     } else if (caracter === '>') {
@@ -2669,6 +2669,7 @@ function resaltarAlfabetosHTML(texto) {
                 lineaProcesadaHTML += palabraHTML;
             }
         });
+
 
         // CONTROL DE CLASES DINÁMICAS Y CONTEO DE LÍNEAS:
         let clasesDiv = `linea_texto linea-${numeroLinea}`;
@@ -2695,6 +2696,9 @@ function resaltarAlfabetosHTML(texto) {
     // Si el cálculo dio más de 0 líneas mezcladas, inyectamos tus avisos arriba
     if (contadorLineasMezcladas > 0) {
         htmlResultado += `  
+            <div class="aviso_mezcla_info">
+                Revisa las letras <span class="letra_cirilico">cirílico</span> / <span class="letra_latino">latino</span>:
+            </div>    
             <div class="aviso_mezcla">
                 ⚠️ Hay ${contadorLineasMezcladas} línea${contadorLineasMezcladas > 1 ? 's' : ''} con mezcla de alfabetos y ${contadorPalabrasMezcladas} palabra${contadorPalabrasMezcladas > 1 ? 's' : ''} con mezcla interna.
             </div>
@@ -2712,7 +2716,12 @@ function resaltarAlfabetosHTML(texto) {
     }
 
     // Unimos los avisos con los renglones procesados de la canción
-    htmlResultado += htmlLineas;
+    htmlResultado += `
+        <fieldset>
+            <legend>Texto de la canción:</legend>
+            ${htmlLineas}
+        </fieldset>
+    `;
     htmlResultado += '</div>';
     
     return htmlResultado;
@@ -2729,33 +2738,25 @@ function resaltarAlfabetosHTML(texto) {
 
 
 function esperarConfirmacionUsuario(textoCancion) {
-    openModal('center', 'Antes de guardar...', '', 'showAviso2');
-
+    openModal('full', 'Antes de guardar...', '', 'showAviso2');
 
     return new Promise((resolve) => {
         // Generamos el HTML con tus letras marcadas
         const htmlMarcado = resaltarAlfabetosHTML(textoCancion);
-        const contenedor = document.createElement('div'); 
-        contenedor.innerHTML = `
-            <div class="wr_texto---">
-                
-                <p class="p_revisa">
-                    Revisa las letras (<span class="letra_cirilico">cirílico</span> / <span class="letra_latino">latino</span>):
-                </p>
+        const block_revisar_texto = document.createElement('div'); 
+        block_revisar_texto.className = 'block_revisar_texto'; 
+        block_revisar_texto.innerHTML = `
+            <div class="wr_texto">
+                ${htmlMarcado}
+            </div>
 
-                <div class="wr_texto">
-                    ${htmlMarcado}
-                </div>
-
-                <div class="wr_2_botones">
-                    <button id="btn-cancelar" class="btn btn_big">Cancelar</button>
-                    <button id="btn-seguir" class="btn btn_big">Guardar</button>
-                </div>
-
+            <div class="wr_2_botones">
+                <button id="btn-cancelar" class="btn btn_big">Cancelar</button>
+                <button id="btn-seguir" class="btn btn_big">Guardar</button>
             </div>
         `;
 
-        eid_bl_modalCenterInner.append(contenedor);
+        eid_bl_modalFullInner.append(block_revisar_texto);
 
         // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
         document.getElementById('btn-cancelar').addEventListener('click', () => {
@@ -2768,12 +2769,12 @@ function esperarConfirmacionUsuario(textoCancion) {
             resolve(true); 
             closeModal(null, true); // Cierro el modal al seguir
         });
-
         
     });
 }
 
-async function guardarSong(event, id_contenedor, cancion_action){
+
+async function guardarSong(event, id_contenedor, cancion_action, revisar = false){
     console.log('=== function guardarSong() ===');
 
     if(event instanceof Event) {
@@ -2856,23 +2857,26 @@ async function guardarSong(event, id_contenedor, cancion_action){
             return;
         }
 
+        //compruebo si hay que revisar antes el texto, o guardar rápido sin revisar cirilico/latino mezclados
+        if(revisar){
+            
+            //reviso el texto si tiene letras mezcladas 
+            const htmlGenerado = resaltarAlfabetosHTML(song_text);
+            console.log("CÓDIGO HTML GENERADO:\n", htmlGenerado);
 
-        //reviso el texto si tiene letras mezcladas 
-        const htmlGenerado = resaltarAlfabetosHTML(song_text);
-        console.log("CÓDIGO HTML GENERADO:\n", htmlGenerado);
+            // 1. Aquí capturas el texto como ya lo hagas habitualmente
+            const textoCancion = song_text;
 
-        // 1. Aquí capturas el texto como ya lo hagas habitualmente
-        const textoCancion = song_text;
+            console.log("Iniciando proceso... ejecutando comprobaciones.");
 
-        console.log("Iniciando proceso... ejecutando comprobaciones.");
+            // 2. CONGELAMOS AQUÍ EL CÓDIGO: Esperamos la decisión en los botones
+            const usuarioQuiereSeguir = await esperarConfirmacionUsuario(textoCancion);
 
-        // 2. CONGELAMOS AQUÍ EL CÓDIGO: Esperamos la decisión en los botones
-        const usuarioQuiereSeguir = await esperarConfirmacionUsuario(textoCancion);
-
-        // 3. Evaluamos la respuesta del botón
-        if (!usuarioQuiereSeguir) {
-            console.log("La ejecución se detuvo: El usuario canceló.");
-            return; // Rompe la función aquí. Tu código NO sigue ejecutándose.
+            // 3. Evaluamos la respuesta del botón
+            if (!usuarioQuiereSeguir) {
+                console.log("La ejecución se detuvo: El usuario canceló.");
+                return; // Rompe la función aquí. Tu código NO sigue ejecutándose.
+            }
         }
 
         
