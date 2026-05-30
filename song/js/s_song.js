@@ -2598,6 +2598,181 @@ function resetBlockLista(){
 }
 
 
+function resaltarAlfabetosHTML(texto) {
+    const lineas = texto.split(/\r?\n/);
+    let htmlLineas = ''; // Acumulador exclusivo para los divs de las líneas
+    let contadorLineasMezcladas = 0; // Contador de líneas con mezcla
+    let contadorPalabrasMezcladas = 0; // Contador global de palabras con mezcla
+    
+    // RegEx para clasificar cada carácter
+    const esCirilico = /[\u0400-\u04FF]/;
+    const esLatino = /[a-zA-Z]/;
+
+    lineas.forEach((contenidoLinea, indice) => {
+        const numeroLinea = indice + 1;
+        
+        // Si la línea está vacía, la procesamos rápido y pasamos a la siguiente
+        if (contenidoLinea.trim() === '') {
+            htmlLineas += `  <div class="linea_texto linea-${numeroLinea}"><br></div>\n`;
+            return;
+        }
+
+        // 1. ANÁLISIS GLOBAL DE LA LÍNEA: Comprobamos si conviven ambos alfabetos en toda la línea
+        const lineaTieneCirilicoGlobal = esCirilico.test(contenidoLinea);
+        const lineaTieneLatinoGlobal = esLatino.test(contenidoLinea);
+        const lineaTieneMezclaGlobal = lineaTieneCirilicoGlobal && lineaTieneLatinoGlobal;
+
+        // Dividimos la línea en palabras (manteniendo los espacios intactos)
+        const componentesLinea = contenidoLinea.split(/(\s+)/);
+        let lineaProcesadaHTML = '';
+
+        componentesLinea.forEach(componente => {
+            // Si el componente actual es solo espacios en blanco, pasa de largo sin tocarlo
+            if (/^\s+$/.test(componente)) {
+                lineaProcesadaHTML += componente;
+                return;
+            }
+
+            // Analizamos la palabra carácter por carácter
+            let palabraHTML = '';
+            let palabraTieneCirilico = false;
+            let palabraTieneLatino = false;
+
+            for (let i = 0; i < componente.length; i++) {
+                const caracter = componente[i];
+
+                if (esCirilico.test(caracter)) {
+                    palabraTieneCirilico = true;
+                    palabraHTML += `<span class="letra_cirilico">${caracter}</span>`;
+                } else if (esLatino.test(caracter)) {
+                    palabraTieneLatino = true;
+                    palabraHTML += `<span class="letra_latino">${caracter}</span>`;
+                } else {
+                    // Escapamos los símbolos de apertura y cierre de etiquetas
+                    if (caracter === '<') {
+                        palabraHTML += '&lt;';
+                    } else if (caracter === '>') {
+                        palabraHTML += '&gt;';
+                    } else {
+                        palabraHTML += caracter;
+                    }
+                }
+            }
+
+            // 2. ANÁLISIS INDIVIDUAL DE LA PALABBRA:
+            if (palabraTieneCirilico && palabraTieneLatino) {
+                contadorPalabrasMezcladas++;
+                // Envolvemos toda la palabra afectada en su span
+                lineaProcesadaHTML += `<span class="palabra_mezclada">${palabraHTML}</span>`;
+            } else {
+                // Si la palabra está limpia internamente, se añade de forma normal
+                lineaProcesadaHTML += palabraHTML;
+            }
+        });
+
+        // CONTROL DE CLASES DINÁMICAS Y CONTEO DE LÍNEAS:
+        let clasesDiv = `linea_texto linea-${numeroLinea}`;
+        let indicadorNumeroLinea = ''; 
+
+        // Ahora la condición evalúa la mezcla GLOBAL de la línea
+        if (lineaTieneMezclaGlobal) {
+            clasesDiv += ' linea_resaltada';
+            contadorLineasMezcladas++; 
+            
+            // Creamos el número visible para las líneas que contienen mezcla de alfabetos
+            indicadorNumeroLinea = `<span class="num_linea_alerta">Línea ${numeroLinea}:</span>`;
+            
+            console.warn(`⚠️ Mezcla de alfabetos detectada en la Línea ${numeroLinea}: "${contenidoLinea.trim()}"`);
+        }
+
+        // Añadimos la línea estructurada con su indicador correspondiente
+        htmlLineas += `  <div class="${clasesDiv}">${indicadorNumeroLinea}${lineaProcesadaHTML}</div>\n`;
+    });
+
+    // CONSTRUCCIÓN DEL BLOQUE ENVOLTORIO FINAL:
+    let htmlResultado = `<div class="wr_letras">\n`;
+
+    // Si el cálculo dio más de 0 líneas mezcladas, inyectamos tus avisos arriba
+    if (contadorLineasMezcladas > 0) {
+        htmlResultado += `  
+            <div class="aviso_mezcla">
+                ⚠️ Hay ${contadorLineasMezcladas} línea${contadorLineasMezcladas > 1 ? 's' : ''} con mezcla de alfabetos y ${contadorPalabrasMezcladas} palabra${contadorPalabrasMezcladas > 1 ? 's' : ''} con mezcla interna.
+            </div>
+            <div class="aviso_mezcla_info">
+                Si hay mezcla de letras en las palabras sería imposible encontrar la canción ya que para la búsqueda una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina aunque se vean iguales. Corrige esto antes de guardar.
+            </div>
+        `;
+    } else {
+        // ¡Todo perfecto!
+        htmlResultado += `  
+            <div class="aviso_ok">
+                ¡Todo perfecto! No se han detectado mezclas de alfabetos en el texto.
+            </div>
+        `;
+    }
+
+    // Unimos los avisos con los renglones procesados de la canción
+    htmlResultado += htmlLineas;
+    htmlResultado += '</div>';
+    
+    return htmlResultado;
+}
+
+// --- EJEMPLO DE USO ---
+// const textoEjemplo = `
+// Церква Господа - Наречена для Христа (ok)
+// Цepквa Гocпoдa - Нapeчeнa для Xpиcтa  (mezclado)
+// `;
+
+// const htmlGenerado = resaltarAlfabetosHTML(textoEjemplo);
+// console.log("CÓDIGO HTML GENERADO:\n", htmlGenerado);
+
+
+function esperarConfirmacionUsuario(textoCancion) {
+    openModal('center', 'Antes de guardar...', '', 'showAviso2');
+
+
+    return new Promise((resolve) => {
+        // Generamos el HTML con tus letras marcadas
+        const htmlMarcado = resaltarAlfabetosHTML(textoCancion);
+        const contenedor = document.createElement('div'); 
+        contenedor.innerHTML = `
+            <div class="wr_texto---">
+                
+                <p class="p_revisa">
+                    Revisa las letras (<span class="letra_cirilico">cirílico</span> / <span class="letra_latino">latino</span>):
+                </p>
+
+                <div class="wr_texto">
+                    ${htmlMarcado}
+                </div>
+
+                <div class="wr_2_botones">
+                    <button id="btn-cancelar" class="btn btn_big">Cancelar</button>
+                    <button id="btn-seguir" class="btn btn_big">Guardar</button>
+                </div>
+
+            </div>
+        `;
+
+        eid_bl_modalCenterInner.append(contenedor);
+
+        // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
+        document.getElementById('btn-cancelar').addEventListener('click', () => {
+            resolve(false);
+            closeModal(null, true); // Cierro el modal al cancelar 
+        });
+
+        // Si pincha Seguir, resolvemos la promesa devolviendo 'true'
+        document.getElementById('btn-seguir').addEventListener('click', () => {
+            resolve(true); 
+            closeModal(null, true); // Cierro el modal al seguir
+        });
+
+        
+    });
+}
+
 async function guardarSong(event, id_contenedor, cancion_action){
     console.log('=== function guardarSong() ===');
 
@@ -2651,6 +2826,7 @@ async function guardarSong(event, id_contenedor, cancion_action){
         let lang = form.elements["lang"].value.trim();
         let song_text = form.elements["song_text"].value.trim();
         let notes = form.elements["notes"].value.trim();
+
     
         let errors = [];
 
@@ -2679,6 +2855,26 @@ async function guardarSong(event, id_contenedor, cancion_action){
             contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
             return;
         }
+
+
+        //reviso el texto si tiene letras mezcladas 
+        const htmlGenerado = resaltarAlfabetosHTML(song_text);
+        console.log("CÓDIGO HTML GENERADO:\n", htmlGenerado);
+
+        // 1. Aquí capturas el texto como ya lo hagas habitualmente
+        const textoCancion = song_text;
+
+        console.log("Iniciando proceso... ejecutando comprobaciones.");
+
+        // 2. CONGELAMOS AQUÍ EL CÓDIGO: Esperamos la decisión en los botones
+        const usuarioQuiereSeguir = await esperarConfirmacionUsuario(textoCancion);
+
+        // 3. Evaluamos la respuesta del botón
+        if (!usuarioQuiereSeguir) {
+            console.log("La ejecución se detuvo: El usuario canceló.");
+            return; // Rompe la función aquí. Tu código NO sigue ejecutándose.
+        }
+
         
         let arr_esquema_guardar = '';
 

@@ -67,6 +67,7 @@ function showHidePassword(el){
 }
 
 
+
 function showToastLogin(tipo = 'info', mensaje, duration = null, position = 'default', with_head = false, text_head = 'Info', contenedor = null) {//default -> abajo derecha
     //position = 'default'// => abajo derecha
     //position = 'center'// => center y center

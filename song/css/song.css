@@ -4434,3 +4434,153 @@ fieldset.kuplet.partial{
     padding: 10px;
     font-size: 14px;
 }
+
+.letra_cirilico{
+    color: green;
+}
+
+.letra_latino{
+    color: red;
+}
+
+
+
+.wr_texto {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 0;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow-y: auto;
+    max-height: 50vh;
+}
+
+.wr_letras {
+    /* background: white; */
+    font-family: monospace;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.p_revisa {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.wr_2_botones {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.linea_texto {
+    /* margin: 2px 0; */
+    /* background: #fafafa; */
+    padding: 0px 5px;
+    /* border: 1px solid #f0f0f0; */
+    border-radius: 5px;
+    position: relative;
+}
+.linea_texto:hover {
+    background: #fafafa;
+    outline: 1px solid #f0f0f0;
+}
+
+.linea_resaltada {
+    background: yellow!important;
+    border: 1px solid red !important;
+}
+
+.aviso_mezcla {
+    background-color: #fffaf0;
+    border: 1px solid #feebc8;
+    border-left: 4px solid #dd6b20;   /* Barra naranja/roja de advertencia */
+    color: #7b341e;
+    padding: 14px 18px;
+    margin-bottom: 10px;              /* Margen pequeño porque abajo va el aviso_info */
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+
+/* El cartel que se muestra cuando todo está limpio */
+.aviso_ok {
+    background-color: #f0fff4;
+    border: 1px solid #c6f6d5;
+    border-left: 4px solid #38a169;   /* Barra verde de éxito */
+    color: #22543d;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.aviso_mezcla_info {
+    background-color: #f0f4f8;
+    border-left: 4px solid #2b6cb0;
+    color: #2d3748;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: system-ui, -apple-system, sans-serif;
+    box-shadow: 0 1px 3px #0000000d;
+    border: 1px solid #a8c2da;
+    border-left: 4px solid #2b6cb0;
+}
+
+.aviso_mezcla_info .letra_cirilico,
+.aviso_mezcla_info .letra_latino {
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.aviso_mezcla_info .letra_cirilico {
+    background-color: #e6fffa;
+    color: #234e52;
+    border: 1px solid #b2f5ea;
+}
+
+.aviso_mezcla_info .letra_latino {
+    background-color: #fff5f5;
+    color: #742a2a;
+    border: 1px solid #fed7d7;
+}
+
+.num_linea_alerta {
+    font-weight: bold;
+    color: #555;
+    background-color: #e0e0e0;
+    padding: 2px 4px;
+    border-radius: 5px;
+    margin-right: 8px;
+    font-size: 0.85em;
+    position: absolute;
+    left: 0;
+    top: -20px;
+    opacity: 0;
+    transition: 0.3s ease;
+    top: 0;
+    border: 1px solid #555;
+}
+
+.linea_texto:hover .num_linea_alerta {
+    opacity: 1;
+    top: -26px;
+}
+
+.palabra_mezclada {
+    text-decoration: underline wavy #e74c3c; /* Subrayado ondulado rojo */
+    text-underline-offset: 4px;
+}
