@@ -1,0 +1,15 @@
+body {
+    opacity: 0.3 !important;
+}
+
+.trad_inner {
+    justify-content: flex-start;
+}
+
+.shown {
+    /* color: #6b6b6b !important; */
+}
+
+#fondo.shown {
+    /* opacity: 0.3 !important; */
+}
