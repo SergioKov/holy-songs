@@ -706,3 +706,134 @@ let textoVisible = true;//se ve el texto por defecto
 let contenidoWidth = false;//a lo ancho. por defecto no ajustado
 
 let permitirShowToast = true;//para evitar mostrar varios toasts seguidos. uso con song_ajustes
+
+
+const mapasDeLetras = {
+
+    ua: {//ucraniano
+        // LATINO -> UCRANIANO
+
+        // minúsculas
+        'a':'а',
+        'c':'с',
+        'e':'е',
+        'i':'і',
+        'k':'к',
+        'm':'м',
+        'o':'о',
+        'p':'р',
+        't':'т',
+        'x':'х',
+        'y':'у',
+
+        // mayúsculas
+        'A':'А',
+        'B':'В',
+        'C':'С',
+        'E':'Е',
+        'H':'Н',
+        'I':'І',
+        'K':'К',
+        'M':'М',
+        'O':'О',
+        'P':'Р',
+        'T':'Т',
+        'X':'Х',
+        'Y':'У'
+    },
+
+    ru: {//ruso
+        // LATINO -> RUSO
+
+        // minúsculas
+        'a':'а',
+        'c':'с',
+        'e':'е',
+        'k':'к',
+        'm':'м',
+        'o':'о',
+        'p':'р',
+        't':'т',
+        'x':'х',
+        'y':'у',
+
+        // mayúsculas
+        'A':'А',
+        'B':'В',
+        'C':'С',
+        'E':'Е',
+        'H':'Н',
+        'K':'К',
+        'M':'М',
+        'O':'О',
+        'P':'Р',
+        'T':'Т',
+        'X':'Х',
+        'Y':'У'
+    },
+
+    es: {//español
+        // CIRÍLICO -> LATINO
+
+        // minúsculas
+        'а':'a',
+        'с':'c',
+        'е':'e',
+        'і':'i',
+        'к':'k',
+        'м':'m',
+        'о':'o',
+        'р':'p',
+        'т':'t',
+        'х':'x',
+        'у':'y',
+
+        // mayúsculas
+        'А':'A',
+        'В':'B',
+        'С':'C',
+        'Е':'E',
+        'Н':'H',
+        'І':'I',
+        'К':'K',
+        'М':'M',
+        'О':'O',
+        'Р':'P',
+        'Т':'T',
+        'Х':'X',
+        'У':'Y'
+    },
+
+    en: {//ingles
+
+        // CIRÍLICO -> LATINO
+
+        // minúsculas
+        'а':'a',
+        'с':'c',
+        'е':'e',
+        'і':'i',
+        'к':'k',
+        'м':'m',
+        'о':'o',
+        'р':'p',
+        'т':'t',
+        'х':'x',
+        'у':'y',
+
+        // mayúsculas
+        'А':'A',
+        'В':'B',
+        'С':'C',
+        'Е':'E',
+        'Н':'H',
+        'І':'I',
+        'К':'K',
+        'М':'M',
+        'О':'O',
+        'Р':'P',
+        'Т':'T',
+        'Х':'X',
+        'У':'Y'
+    }
+};

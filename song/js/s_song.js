@@ -2598,7 +2598,69 @@ function resetBlockLista(){
 }
 
 
+function normalizarPalabra(palabra, idiomaNormalizacion = 'ucraniano') {
+
+    const mapaNormalizacion = mapasDeLetras[idiomaNormalizacion] || {};
+
+    let resultado = '';
+
+    for (let i = 0; i < palabra.length; i++) {
+        const char = palabra[i];
+
+        resultado += mapaNormalizacion[char] || char;
+    }
+
+    return resultado;
+}
+
+
+function normalizarTexto(texto) {
+
+    const idiomaNormalizacion = document.getElementById('lang').value;
+    const esCirilico = /[\u0400-\u04FF]/;
+    const esLatino = /[a-zA-Z]/;
+
+    // separa texto manteniendo espacios y saltos de línea
+    const componentes = texto.split(/(\s+)/);
+    let textoFinal = '';
+
+    componentes.forEach(componente => {
+
+        // espacios
+        if (/^\s+$/.test(componente)) {
+            textoFinal += componente;
+            return;
+        }
+
+        let tieneCirilico = false;
+        let tieneLatino = false;
+
+        // detectar mezcla
+        for (let i = 0; i < componente.length; i++) {
+            const caracter = componente[i];
+
+            if (esCirilico.test(caracter)) {
+                tieneCirilico = true;
+            } else if (esLatino.test(caracter)) {
+                tieneLatino = true;
+            }
+        }
+
+        // normalizar solo palabras mezcladas
+        if (tieneCirilico && tieneLatino) {
+            textoFinal += normalizarPalabra(componente, idiomaNormalizacion);
+        } else {
+            textoFinal += componente;
+        }
+    });
+
+    return textoFinal;
+}
+
+
 function resaltarAlfabetosHTML(texto) {
+    console.log('=== function resaltarAlfabetosHTML() ===');
+
     const lineas = texto.split(/\r?\n/);
     let htmlLineas = ''; // Acumulador exclusivo para los divs de las líneas
     let contadorLineasMezcladas = 0; // Contador de líneas con mezcla
@@ -2637,7 +2699,8 @@ function resaltarAlfabetosHTML(texto) {
             let palabraHTML = '';
             let palabraTieneCirilico = false;
             let palabraTieneLatino = false;
-
+            
+            // Analizar caracteres
             for (let i = 0; i < componente.length; i++) {
                 const caracter = componente[i];
 
@@ -2659,7 +2722,7 @@ function resaltarAlfabetosHTML(texto) {
                 }
             }
 
-            // 2. ANÁLISIS INDIVIDUAL DE LA PALABBRA:
+            // 2. ANÁLISIS INDIVIDUAL DE LA PALABBRA: // es PALABRA MEZCLADA
             if (palabraTieneCirilico && palabraTieneLatino) {
                 contadorPalabrasMezcladas++;
                 // Envolvemos toda la palabra afectada en su span
@@ -2751,23 +2814,35 @@ function esperarConfirmacionUsuario(textoCancion) {
             </div>
 
             <div class="wr_2_botones">
-                <button id="btn-cancelar" class="btn btn_big">Cancelar</button>
-                <button id="btn-seguir" class="btn btn_big">Guardar</button>
+                <button id="btn_cancelar" class="btn btn_big">Cancelar</button>
+                <button id="btn_corregir" class="btn btn_big">Corregir</button>
+                <button id="btn_seguir" class="btn btn_big">Guardar</button>
             </div>
         `;
 
         eid_bl_modalFullInner.append(block_revisar_texto);
 
         // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
-        document.getElementById('btn-cancelar').addEventListener('click', () => {
+        document.getElementById('btn_cancelar').addEventListener('click', () => {
             resolve(false);
             closeModal(null, true); // Cierro el modal al cancelar 
         });
 
         // Si pincha Seguir, resolvemos la promesa devolviendo 'true'
-        document.getElementById('btn-seguir').addEventListener('click', () => {
+        document.getElementById('btn_seguir').addEventListener('click', () => {
             resolve(true); 
             closeModal(null, true); // Cierro el modal al seguir
+        });
+        
+        // Si pincha Corregir, resolvemos la promesa devolviendo 'false'
+        document.getElementById('btn_corregir').addEventListener('click', () => {
+            resolve(false);
+            const textarea_song_text = document.querySelector('textarea[name="song_text"]');
+            const textoCancionCorregido = normalizarTexto(textoCancion);
+            console.log('textoCancionCorregido: ', textoCancionCorregido);
+
+            textarea_song_text.value = textoCancionCorregido; 
+            closeModal(null, true); // Cierro el modal al cancelar
         });
         
     });
