@@ -2836,13 +2836,19 @@ function esperarConfirmacionUsuario(textoCancion) {
         
         // Si pincha Corregir, resolvemos la promesa devolviendo 'false'
         document.getElementById('btn_corregir').addEventListener('click', () => {
-            resolve(false);
+            
             const textarea_song_text = document.querySelector('textarea[name="song_text"]');
             const textoCancionCorregido = normalizarTexto(textoCancion);
-            console.log('textoCancionCorregido: ', textoCancionCorregido);
+            console.log('textoCancionCorregido: ', textoCancionCorregido);            
 
             textarea_song_text.value = textoCancionCorregido; 
             closeModal(null, true); // Cierro el modal al cancelar
+
+            setTimeout(()=>{
+                guardarSong(document.getElementById('btn_GuardarFormRevisar'), 'cancion_song_bloques','editar', true);
+            },1000);
+
+            resolve(false);
         });
         
     });
