@@ -4596,7 +4596,9 @@ fieldset.kuplet.partial{
     border: 1px solid #d3d3d3;
     border-radius: 5px;
     margin: 20px 0 0;
+    padding-left: 28px;
 }
+
 .wr_letras legend {
     text-align: left;
     font-size: 14px;
@@ -4607,3 +4609,50 @@ fieldset.kuplet.partial{
     color: grey;
 }
 
+.wr_letras fieldset label {
+    position: static;
+    background-color: transparent;
+    font-size: inherit;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.chk_normalizar_linea {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    left: -22px;
+    top: 2px;
+}
+
+.aviso_mezcla_info p {
+    margin: 10px 0;
+}
+
+.aviso_bottom {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.aviso_bottom label {
+    /* background: red; */
+    background: transparent;
+    position: static;
+    display: block;
+    padding: 5px 0;
+    pointer-events: auto;
+    margin: 10px 0 -35px;
+    color: #000000;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+#corregir_lineas {/* checkbox */
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+}
+
+.font_bold {
+    font-weight: bold;
+}

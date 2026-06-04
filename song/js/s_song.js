@@ -2598,6 +2598,59 @@ function resetBlockLista(){
 }
 
 
+
+
+//------------------------------------------------------------------------
+function obtenerLineasSeleccionadas() {
+    const checkboxes = document.querySelectorAll('.chk_normalizar_linea:checked');
+    const lineas = [];
+
+    checkboxes.forEach(chk => {
+        lineas.push(parseInt(chk.dataset.linea));
+    });
+
+    return lineas;
+}
+
+
+function normalizarTextoLineasSeleccionadas(texto) {
+
+    const idiomaNormalizacion = document.getElementById('lang').value;
+    const lineasSeleccionadas = obtenerLineasSeleccionadas();
+    const lineas = texto.split(/\r?\n/);
+    let textoFinal = '';
+
+    lineas.forEach((linea, indice) => {
+        const numeroLinea = indice + 1;
+
+        // línea no seleccionada
+        if (!lineasSeleccionadas.includes(numeroLinea)) {
+            textoFinal += linea;
+        } else {
+            // normalizar TODA la línea
+            let lineaCorregida = '';
+
+            for (let i = 0; i < linea.length; i++) {
+                const caracter = linea[i];
+
+                lineaCorregida += normalizarPalabra(
+                    caracter,
+                    idiomaNormalizacion
+                );
+            }
+
+            textoFinal += lineaCorregida;
+        }
+
+        if (indice < lineas.length - 1) {
+            textoFinal += '\n';
+        }
+    });
+
+    return textoFinal;
+}
+
+
 function normalizarPalabra(palabra, idiomaNormalizacion = 'ucraniano') {
 
     const mapaNormalizacion = mapasDeLetras[idiomaNormalizacion] || {};
@@ -2737,6 +2790,7 @@ function resaltarAlfabetosHTML(texto) {
         // CONTROL DE CLASES DINÁMICAS Y CONTEO DE LÍNEAS:
         let clasesDiv = `linea_texto linea-${numeroLinea}`;
         let indicadorNumeroLinea = ''; 
+        let labelConCheckbox = ''; 
 
         // Ahora la condición evalúa la mezcla GLOBAL de la línea
         if (lineaTieneMezclaGlobal) {
@@ -2744,13 +2798,19 @@ function resaltarAlfabetosHTML(texto) {
             contadorLineasMezcladas++; 
             
             // Creamos el número visible para las líneas que contienen mezcla de alfabetos
+            // Checkbox para decidir si normalizar esta línea
             indicadorNumeroLinea = `<span class="num_linea_alerta">Línea ${numeroLinea}:</span>`;
+
+            // Checkbox para decidir si normalizar esta línea
+            labelConCheckbox = `<input type="checkbox" class="chk_normalizar_linea" data-linea="${numeroLinea}" checked>`;
+
+            lineaProcesadaHTML = `<label>${labelConCheckbox}${lineaProcesadaHTML}</label>`;
             
             console.warn(`⚠️ Mezcla de alfabetos detectada en la Línea ${numeroLinea}: "${contenidoLinea.trim()}"`);
         }
 
         // Añadimos la línea estructurada con su indicador correspondiente
-        htmlLineas += `  <div class="${clasesDiv}">${indicadorNumeroLinea}${lineaProcesadaHTML}</div>\n`;
+        htmlLineas += `<div class="${clasesDiv}">${indicadorNumeroLinea}${lineaProcesadaHTML}</div>`;
     });
 
     // CONSTRUCCIÓN DEL BLOQUE ENVOLTORIO FINAL:
@@ -2766,7 +2826,7 @@ function resaltarAlfabetosHTML(texto) {
                 ⚠️ Hay ${contadorLineasMezcladas} línea${contadorLineasMezcladas > 1 ? 's' : ''} con mezcla de alfabetos y ${contadorPalabrasMezcladas} palabra${contadorPalabrasMezcladas > 1 ? 's' : ''} con mezcla interna.
             </div>
             <div class="aviso_mezcla_info">
-                Si hay mezcla de letras en las palabras sería imposible encontrar la canción ya que para la búsqueda una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina aunque se vean iguales. Corrige esto antes de guardar.
+                Si hay mezcla de letras en las palabras sería imposible encontrar la canción ya que para la búsqueda una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina, aunque visualmente parezcan iguales. Corrige esto antes de guardar.
             </div>
         `;
     } else {
@@ -2784,6 +2844,32 @@ function resaltarAlfabetosHTML(texto) {
             <legend>Texto de la canción:</legend>
             ${htmlLineas}
         </fieldset>
+
+        <div class="aviso_mezcla_info aviso_bottom">
+            <label>
+                <p class="font_bold">
+                    <input id="corregir_lineas" type="checkbox"> Quiero corregir las lineas marcadas automáticamente (recomendado)
+                </p>
+            </label>
+            <p>
+                Al corregir el texto, también se pueden corregir palabras que no contienen mezcla interna de alfabetos, pero que están escritas completamente con letras del alfabeto incorrecto dentro de un contexto de otro idioma. Por ejemplo, una palabra formada únicamente por letras latinas dentro de una línea escrita en ucraniano o ruso no se detecta como palabra mezclada, aunque igualmente puede causar problemas en las búsquedas.
+            </p>
+            <p>
+                Para evitar que estas palabras pasen desapercibidas, las líneas marcadas se normalizarán según el idioma seleccionado en el menú (ucraniano, ruso, bielorruso, etc.). Durante este proceso se corregirán tanto las palabras con mezcla de alfabetos como aquellas que estén escritas íntegramente con letras del alfabeto equivocado.
+            </p>
+            
+            <p>
+                Si no deseas corregir una línea determinada, desmarca su casilla antes de hacer clic en «Corregir». Si deseas corregir todo el texto, deja todas las líneas marcadas.
+            </p>
+            
+            <p>
+                Una vez revisadas las opciones, haz clic en «Corregir» para aplicar los cambios al texto de la canción.
+            </p>
+            
+            <p>
+                Al corregir, solo se modificarán las letras homógrafas, es decir, aquellas que tienen una apariencia idéntica o muy similar, pero que en realidad pertenecen a alfabetos diferentes. Por ejemplo: una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina, aunque visualmente parezcan iguales.
+            </p>
+        </div>
     `;
     htmlResultado += '</div>';
     
@@ -2838,8 +2924,15 @@ function esperarConfirmacionUsuario(textoCancion) {
         document.getElementById('btn_corregir').addEventListener('click', () => {
             
             const textarea_song_text = document.querySelector('textarea[name="song_text"]');
-            const textoCancionCorregido = normalizarTexto(textoCancion);
+            const corregir_lineas_is_checked = document.querySelector('#corregir_lineas').checked;
+
+            let textoCancionCorregido = normalizarTexto(textoCancion);
             console.log('textoCancionCorregido: ', textoCancionCorregido);            
+
+            if(corregir_lineas_is_checked){
+                textoCancionCorregido = normalizarTextoLineasSeleccionadas(textoCancionCorregido);
+                console.log('textoCancionCorregido con líneas corregidas: ', textoCancionCorregido);
+            }
 
             textarea_song_text.value = textoCancionCorregido; 
             closeModal(null, true); // Cierro el modal al cancelar
