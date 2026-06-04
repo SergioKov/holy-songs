@@ -837,3 +837,5 @@ const mapasDeLetras = {
         'У':'Y'
     }
 };
+
+let textoCancion_is_ok = false;// para revisar_y_guardar. si el texto de la canción es correcto o no. Por defecto es false, y se pone true si el texto es correcto. Se usa en resaltarAlfabetosHTML().

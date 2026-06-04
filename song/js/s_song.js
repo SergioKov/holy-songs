@@ -2814,12 +2814,11 @@ function resaltarAlfabetosHTML(texto) {
     });
 
     // CONSTRUCCIÓN DEL BLOQUE ENVOLTORIO FINAL:
-    let htmlResultado = `<div class="wr_letras">\n`;
-    let texto_ok = false;
+    let htmlResultado = `<div class="wr_letras">\n`;    
 
     // Si el cálculo dio más de 0 líneas mezcladas, inyectamos tus avisos arriba
     if (contadorLineasMezcladas > 0) {
-        texto_ok = false;
+        textoCancion_is_ok = false;
         htmlResultado += `  
             <div class="aviso_mezcla_info">
                 Revisa las letras <span class="letra_cirilico">cirílico</span> / <span class="letra_latino">latino</span>:
@@ -2833,7 +2832,7 @@ function resaltarAlfabetosHTML(texto) {
         `;
     } else {
         // ¡Todo perfecto!
-        texto_ok = true;
+        textoCancion_is_ok = true;
         htmlResultado += `  
             <div class="aviso_ok">
                 ¡Todo perfecto! No se han detectado mezclas de alfabetos en el texto.
@@ -2843,7 +2842,7 @@ function resaltarAlfabetosHTML(texto) {
 
     let htmlAvisoBottom = '';//por defecto -nada
     //si hay alguna mezcla, añado un aviso más detallado abajo
-    if(!texto_ok){
+    if(!textoCancion_is_ok){
         htmlAvisoBottom = `
             <div class="aviso_mezcla_info aviso_bottom">
                 <label>
@@ -2902,6 +2901,8 @@ function esperarConfirmacionUsuario(textoCancion) {
     return new Promise((resolve) => {
         // Generamos el HTML con tus letras marcadas
         const htmlMarcado = resaltarAlfabetosHTML(textoCancion);
+        const htmlBtnCorregir = (textoCancion_is_ok) ? '' : `<button id="btn_corregir" class="btn btn_big">Corregir</button>`;
+
         const block_revisar_texto = document.createElement('div'); 
         block_revisar_texto.className = 'block_revisar_texto'; 
         block_revisar_texto.innerHTML = `
@@ -2911,49 +2912,51 @@ function esperarConfirmacionUsuario(textoCancion) {
 
             <div class="wr_2_botones">
                 <button id="btn_cancelar" class="btn btn_big">Cancelar</button>
-                <button id="btn_corregir" class="btn btn_big">Corregir</button>
+                ${htmlBtnCorregir}
                 <button id="btn_seguir" class="btn btn_big">Guardar</button>
             </div>
         `;
-
-        eid_bl_modalFullInner.append(block_revisar_texto);
-
-        // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
-        document.getElementById('btn_cancelar').addEventListener('click', () => {
-            resolve(false);
-            closeModal(null, true); // Cierro el modal al cancelar 
-        });
-
-        // Si pincha Seguir, resolvemos la promesa devolviendo 'true'
-        document.getElementById('btn_seguir').addEventListener('click', () => {
-            resolve(true); 
-            closeModal(null, true); // Cierro el modal al seguir
-        });
-        
-        // Si pincha Corregir, resolvemos la promesa devolviendo 'false'
-        document.getElementById('btn_corregir').addEventListener('click', () => {
+        block_revisar_texto.onclick = (e) => {
             
-            const textarea_song_text = document.querySelector('textarea[name="song_text"]');
-            const corregir_lineas_is_checked = document.querySelector('#corregir_lineas').checked;
-
-            let textoCancionCorregido = normalizarTexto(textoCancion);
-            console.log('textoCancionCorregido: ', textoCancionCorregido);            
-
-            if(corregir_lineas_is_checked){
-                textoCancionCorregido = normalizarTextoLineasSeleccionadas(textoCancionCorregido);
-                console.log('textoCancionCorregido con líneas corregidas: ', textoCancionCorregido);
+            // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
+            if(e.currentTarget.id === 'btn_cancelar'){
+                resolve(false);
+                closeModal(null, true); // Cierro el modal al cancelar 
             }
-
-            textarea_song_text.value = textoCancionCorregido; 
-            closeModal(null, true); // Cierro el modal al cancelar
-
-            setTimeout(()=>{
-                guardarSong(document.getElementById('btn_GuardarFormRevisar'), 'cancion_song_bloques','editar', true);
-            },1000);
-
-            resolve(false);
-        });
+            
+            // Si pincha Corregir, resolvemos la promesa devolviendo 'false'
+            if(e.currentTarget.id === 'btn_corregir'){
+                const textarea_song_text = document.querySelector('textarea[name="song_text"]');
+                const corregir_lineas_is_checked = document.querySelector('#corregir_lineas').checked;
+    
+                let textoCancionCorregido = normalizarTexto(textoCancion);
+                console.log('textoCancionCorregido: ', textoCancionCorregido);            
+    
+                if(corregir_lineas_is_checked){
+                    textoCancionCorregido = normalizarTextoLineasSeleccionadas(textoCancionCorregido);
+                    console.log('textoCancionCorregido con líneas corregidas: ', textoCancionCorregido);
+                }
+    
+                textarea_song_text.value = textoCancionCorregido; 
+                closeModal(null, true); // Cierro el modal al cancelar
+    
+                setTimeout(()=>{
+                    guardarSong(document.getElementById('btn_GuardarFormRevisar'), 'cancion_song_bloques','editar', true);
+                },1000);
+    
+                resolve(false);
+     
+            }
+            
+            // Si pincha Seguir, resolvemos la promesa devolviendo 'true'
+            if(e.currentTarget.id === 'btn_seguir'){
+                resolve(true); 
+                closeModal(null, true); // Cierro el modal al seguir 
+            }
+        };
         
+        //añado al DOM
+        eid_bl_modalFullInner.append(block_revisar_texto);        
     });
 }
 

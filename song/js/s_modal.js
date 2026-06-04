@@ -406,11 +406,11 @@ function buildFormCancion(contenedor, cancion_action = null){
     `;
 
     
-    //Boton REVISAR Y GUARDAR - FORMULARIO
+    //Boton REVISAR - FORMULARIO
     const wr_revisar_y_guardar = document.createElement('div');
     wr_revisar_y_guardar.className = 'wr_btns_form wr_revisar_y_guardar';
     wr_revisar_y_guardar.innerHTML = `
-        <button id="btn_GuardarFormRevisar" class="btn btn_big w_100" onclick="guardarSong(event, '${contenedor.id}','${cancion_action}', revisar = true);">Revisar y Guardar</button>
+        <button id="btn_GuardarFormRevisar" class="btn btn_big w_100" onclick="guardarSong(event, '${contenedor.id}','${cancion_action}', revisar = true);">Revisar</button>
     `;
 
     //Botones GUARDAR - FORMULARIO
