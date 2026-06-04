@@ -2920,13 +2920,13 @@ function esperarConfirmacionUsuario(textoCancion) {
         block_revisar_texto.onclick = (e) => {
             
             // Si pincha Cancelar, resolvemos la promesa devolviendo 'false'
-            if(e.currentTarget.id === 'btn_cancelar'){
+            if(e.target.closest('#btn_cancelar')){
                 resolve(false);
                 closeModal(null, true); // Cierro el modal al cancelar 
             }
             
             // Si pincha Corregir, resolvemos la promesa devolviendo 'false'
-            if(e.currentTarget.id === 'btn_corregir'){
+            if(e.target.closest('#btn_corregir')){
                 const textarea_song_text = document.querySelector('textarea[name="song_text"]');
                 const corregir_lineas_is_checked = document.querySelector('#corregir_lineas').checked;
     
@@ -2950,7 +2950,7 @@ function esperarConfirmacionUsuario(textoCancion) {
             }
             
             // Si pincha Seguir, resolvemos la promesa devolviendo 'true'
-            if(e.currentTarget.id === 'btn_seguir'){
+            if(e.target.closest('#btn_seguir')){
                 resolve(true); 
                 closeModal(null, true); // Cierro el modal al seguir 
             }
