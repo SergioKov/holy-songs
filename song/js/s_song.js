@@ -3323,8 +3323,51 @@ async function deleteSong(event, id_contenedor){
             if(data.id_song){
                 console.log('id_song: ', data.id_song);
 
-                //Elimino elemento tr de la tabla tbody con la cancion eliminada
-                tbody.querySelector(`.tr_song[data-id="${id_song}"]`).remove();
+                const totalAntes = objDataSongs.arr_data.length;
+
+                //elimino el objeto de la cancion eliminada desde objeto de todas las canciones encontradas usando filter
+                objDataSongs.arr_data = objDataSongs.arr_data.filter(
+                    item => item.id_song !== id_song
+                );
+
+                const totalDespues = objDataSongs.arr_data.length;
+                const song_is_deleted = totalDespues < totalAntes;
+
+                if(song_is_deleted){
+                    console.log('cancion eliminada de objDataSongs');
+                }else{
+                    console.log('cancion NO eliminada de objDataSongs');
+                }
+
+
+
+                //busco la lista de la cual eliminar la cancion eliminada, 
+                //y si la encuentro, elimino la canción de esa lista
+                const itemListaUpdate = objDataListas.arr_data?.find(
+                    item => item.id_lista == id_lista
+                );
+
+                if (itemListaUpdate) {
+                    const totalAntesEnLista = itemListaUpdate.arr_lista.length;
+                
+                    itemListaUpdate.arr_lista = itemListaUpdate.arr_lista.filter(
+                        item => item.id_song != id_song
+                    );
+
+                    const totalDespuesEnLista = itemListaUpdate.arr_lista.length;
+                    const song_is_deleted_from_lista = totalDespuesEnLista < totalAntesEnLista;
+                
+                    if (song_is_deleted_from_lista) {                
+                        console.log(`Canción ${id_song} eliminada de la lista ${id_lista}`);
+                        pintListaActive();
+                    } else {
+                        console.warn('No encontrado id_song en la lista');
+                    }                
+                }
+
+
+                //Elimino elemento p_song de las canciones encontradas en 'buscar'
+                eid_bl_songs_finded.querySelector(`.p_song[data-id="${id_song}"]`).remove();
 
                 form.elements['id_song'].disabled = true;//deshabilito input id_song   
                 form.elements['id_song'].value = id_song;
@@ -3344,13 +3387,15 @@ async function deleteSong(event, id_contenedor){
                 id_song = null;
                 objSong = {};//reseteo objeto song
 
+
+
                 setTimeout(()=>{
                     const aviso_outer = document.createElement('div');
                     aviso_outer.className = 'aviso_outer';
                     aviso_outer.innerHTML = `
-                    <p class="p_aviso">${text_show}</p>
-                    <p class="p_aviso">Busca una canción según tus criterios en la pestaña <b>Buscar</b>.</p>
-                    <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('buscar');">Buscar</button>
+                        <p class="p_aviso">${text_show}</p>
+                        <p class="p_aviso">Busca una canción según tus criterios en la pestaña <b>Buscar</b>.</p>
+                        <button id="btn_lista" class="btn btn_big w_100" onclick="closeModal(null,true); showEdit('buscar');">Buscar</button>
                     `;
                     openModal('center','Aviso Eliminar Canción',aviso_outer,'showAviso2');
                 }, 1000);
