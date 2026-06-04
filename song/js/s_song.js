@@ -1782,7 +1782,8 @@ function hay_id_lista(func_name = ''){
     
     if(!id_lista){
         console.warn(func_name + ' --- No hay id_lista. hago return...');
-        alert(func_name + ' --- No hay id_lista. hago return...');
+        //alert(func_name + ' --- No hay id_lista. hago return...');
+        showToast('info', 'No has seleccionado ninguna lista. Ve a la pestaña "Listas" para seleccionar o crear una lista nueva.', 1000, 'center');
         return false;
     }
     console.log(func_name + ' --- id_lista: ', id_lista);
@@ -2954,7 +2955,7 @@ function esperarConfirmacionUsuario(textoCancion) {
                 closeModal(null, true); // Cierro el modal al seguir 
             }
         };
-        
+
         //añado al DOM
         eid_bl_modalFullInner.append(block_revisar_texto);        
     });
@@ -3019,13 +3020,13 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
         let errors = [];
 
         if(title == ''){
-            errors.push('título');
+            errors.push('Título');
         }
         if(song_text == ''){
-            errors.push('texto de la canción');
+            errors.push('Texto de la canción');
         }
         if(lang == ''){
-            errors.push('idioma de la canción');
+            errors.push('Idioma de la canción');
         }
         // if(!validarEmail(email)){
         //     errors.push(obj_lang.d278);//El email no es válido.
@@ -3038,9 +3039,9 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
             errors.forEach(error => {
                 error_text += ' - ' + error + '<br>';
             });            
-            form.querySelector('.mensaje').innerHTML = `<span class="add_result add_error">Por favor, introduce: <br> ${error_text}</span>`;
-            // cancion_song_bloques.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
-            contenedor.scrollIntoView({behavior: 'smooth'});//hago scroll al top del formulario donde hay mensaje
+            
+            let aviso_text = `<p>Por favor, rellena los siguientes datos: </p> <br> ${error_text}`;
+            showToast('error', aviso_text, 50, 'center', true, 'Error en los campos introducidos');
             return;
         }
 
@@ -4594,6 +4595,31 @@ async function nueva_song(){
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Nueva Canción:';
 
+    //Partes left-right
+    eid_block_cancion.querySelector('.bl_parte_l .h4_vista_previa').innerHTML = `
+        <span>Nueva Canción:</span>
+
+        <button class="btn btn_vista btn_v_lista ${!id_lista ? 'd-none' : ''}" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">
+            <img src="./images/checklist2_24x24.png">
+            <span>Lista</span>
+        </button>
+        
+        <button class="btn btn_vista btn_v_revisar" onclick="guardarSong(this,'cancion_song_bloques','editar', true);">
+            <img src="./images/atencion.png">
+            <span>Revisar</span>
+        </button>
+        
+        <button class="btn btn_vista btn_v_guardar" onclick="guardarSong(this,'cancion_song_bloques','editar');">
+            <img src="./images/guardar.png">
+            <span>Guardar</span>
+        </button>
+
+        <button class="btn btn_vista btn_v_vista" onclick="mostrarVistaFixed();">
+            <img src="./images/ojo24x24_2.png">
+            <span>Vista</span>
+        </button>
+    `;
+
     resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
     eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active');
 
@@ -4720,9 +4746,14 @@ function editar_song(){
     eid_block_cancion.querySelector('.bl_parte_l .h4_vista_previa').innerHTML = `
         <span>Canción:</span>
 
-        <button class="btn btn_vista btn_v_lista" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');"">
+        <button class="btn btn_vista btn_v_lista ${!id_lista ? 'd-none' : ''}" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">
             <img src="./images/checklist2_24x24.png">
             <span>Lista</span>
+        </button>
+        
+        <button class="btn btn_vista btn_v_revisar" onclick="guardarSong(this,'cancion_song_bloques','editar', true);">
+            <img src="./images/atencion.png">
+            <span>Revisar</span>
         </button>
         
         <button class="btn btn_vista btn_v_guardar" onclick="guardarSong(this,'cancion_song_bloques','editar');">

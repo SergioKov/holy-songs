@@ -3842,6 +3842,11 @@ function aplicarSongAjustes(){
         orientation
     } = getDeviceData();
 
+    if(esObjeto(objSong) && Object.keys(objSong).length === 0){
+        console.log('objSong es vacio, hago return...');
+        return;
+    }
+
     const song_ajustes = objSong.ajustes[orientation];
     console.log('song_ajustes: ', song_ajustes);
 

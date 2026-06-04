@@ -256,7 +256,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                 <div class="dbtn dbtn_fx dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
                                     <!--Lista-->
                                     <img class="btn_img" src="./images/checklist2_24x24.png">
-                                    <span class="vkl_name">Lista</span>
+                                    <span class="vkl_name">Listas</span>
                                 </div>
                             </div><!--/.bl_head_l-->
 
