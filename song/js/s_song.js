@@ -2815,9 +2815,11 @@ function resaltarAlfabetosHTML(texto) {
 
     // CONSTRUCCIÓN DEL BLOQUE ENVOLTORIO FINAL:
     let htmlResultado = `<div class="wr_letras">\n`;
+    let texto_ok = false;
 
     // Si el cálculo dio más de 0 líneas mezcladas, inyectamos tus avisos arriba
     if (contadorLineasMezcladas > 0) {
+        texto_ok = false;
         htmlResultado += `  
             <div class="aviso_mezcla_info">
                 Revisa las letras <span class="letra_cirilico">cirílico</span> / <span class="letra_latino">latino</span>:
@@ -2831,9 +2833,42 @@ function resaltarAlfabetosHTML(texto) {
         `;
     } else {
         // ¡Todo perfecto!
+        texto_ok = true;
         htmlResultado += `  
             <div class="aviso_ok">
                 ¡Todo perfecto! No se han detectado mezclas de alfabetos en el texto.
+            </div>
+        `;
+    }
+
+    let htmlAvisoBottom = '';//por defecto -nada
+    //si hay alguna mezcla, añado un aviso más detallado abajo
+    if(!texto_ok){
+        htmlAvisoBottom = `
+            <div class="aviso_mezcla_info aviso_bottom">
+                <label>
+                    <p class="font_bold">
+                        <input id="corregir_lineas" type="checkbox"> Quiero corregir las lineas marcadas automáticamente (recomendado)
+                    </p>
+                </label>
+                <p>
+                    Al corregir el texto, también se pueden corregir palabras que no contienen mezcla interna de alfabetos, pero que están escritas completamente con letras del alfabeto incorrecto dentro de un contexto de otro idioma. Por ejemplo, una palabra formada únicamente por letras latinas dentro de una línea escrita en ucraniano o ruso no se detecta como palabra mezclada, aunque igualmente puede causar problemas en las búsquedas.
+                </p>
+                <p>
+                    Para evitar que estas palabras pasen desapercibidas, las líneas marcadas se normalizarán según el idioma seleccionado en el menú (ucraniano, ruso, bielorruso, etc.). Durante este proceso se corregirán tanto las palabras con mezcla de alfabetos como aquellas que estén escritas íntegramente con letras del alfabeto equivocado.
+                </p>
+                
+                <p>
+                    Si no deseas corregir una línea determinada, desmarca su casilla antes de hacer clic en «Corregir». Si deseas corregir todo el texto, deja todas las líneas marcadas.
+                </p>
+                
+                <p>
+                    Una vez revisadas las opciones, haz clic en «Corregir» para aplicar los cambios al texto de la canción.
+                </p>
+                
+                <p>
+                    Al corregir, solo se modificarán las letras homógrafas, es decir, aquellas que tienen una apariencia idéntica o muy similar, pero que en realidad pertenecen a alfabetos diferentes. Por ejemplo: una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina, aunque visualmente parezcan iguales.
+                </p>
             </div>
         `;
     }
@@ -2844,32 +2879,7 @@ function resaltarAlfabetosHTML(texto) {
             <legend>Texto de la canción:</legend>
             ${htmlLineas}
         </fieldset>
-
-        <div class="aviso_mezcla_info aviso_bottom">
-            <label>
-                <p class="font_bold">
-                    <input id="corregir_lineas" type="checkbox"> Quiero corregir las lineas marcadas automáticamente (recomendado)
-                </p>
-            </label>
-            <p>
-                Al corregir el texto, también se pueden corregir palabras que no contienen mezcla interna de alfabetos, pero que están escritas completamente con letras del alfabeto incorrecto dentro de un contexto de otro idioma. Por ejemplo, una palabra formada únicamente por letras latinas dentro de una línea escrita en ucraniano o ruso no se detecta como palabra mezclada, aunque igualmente puede causar problemas en las búsquedas.
-            </p>
-            <p>
-                Para evitar que estas palabras pasen desapercibidas, las líneas marcadas se normalizarán según el idioma seleccionado en el menú (ucraniano, ruso, bielorruso, etc.). Durante este proceso se corregirán tanto las palabras con mezcla de alfabetos como aquellas que estén escritas íntegramente con letras del alfabeto equivocado.
-            </p>
-            
-            <p>
-                Si no deseas corregir una línea determinada, desmarca su casilla antes de hacer clic en «Corregir». Si deseas corregir todo el texto, deja todas las líneas marcadas.
-            </p>
-            
-            <p>
-                Una vez revisadas las opciones, haz clic en «Corregir» para aplicar los cambios al texto de la canción.
-            </p>
-            
-            <p>
-                Al corregir, solo se modificarán las letras homógrafas, es decir, aquellas que tienen una apariencia idéntica o muy similar, pero que en realidad pertenecen a alfabetos diferentes. Por ejemplo: una <span class="letra_cirilico">a</span> cirílica no es lo mismo que una <span class="letra_latino">a</span> latina, aunque visualmente parezcan iguales.
-            </p>
-        </div>
+        ${htmlAvisoBottom}
     `;
     htmlResultado += '</div>';
     
