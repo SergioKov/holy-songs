@@ -515,3 +515,11 @@ fieldset.kuplet {
 }
 
 
+.show_en_top .trad_inner {
+    justify-content: flex-start !important;
+}
+
+.show_en_center .trad_inner {
+    justify-content: center !important;
+}
+

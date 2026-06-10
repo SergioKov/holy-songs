@@ -399,7 +399,19 @@ async function insertarPantallaParams() {
         //     return;
         // }
 
-        if(!id_song || isNaN(pantalla_show) || isNaN(show_logo_en_fondo) || isNaN(user_view_control) || isNaN(show_legend) || isNaN(show_acordes) || isNaN(show_next_slide) ){
+        if(
+            !id_song || 
+            isNaN(pantalla_show) || 
+            isNaN(show_logo_en_fondo) || 
+            isNaN(show_imagen_en_fondo) || 
+            isNaN(user_view_control) || 
+            isNaN(show_legend) || 
+            isNaN(show_acordes) || 
+            isNaN(show_next_slide) || 
+            isNaN(show_en_top) || 
+            isNaN(show_en_center)
+        
+        ){
             alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
             return;
         }

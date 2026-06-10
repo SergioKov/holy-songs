@@ -2405,6 +2405,10 @@ p.p_sm b {
     margin: 10px 0 0;
 }
 
+.wr_opt_fondo {
+    flex-direction: column;
+}
+
 #vklad_btn_pantallaShow img{
     width: 22px !important;
     height: 22px !important;
@@ -2467,10 +2471,9 @@ p.p_sm b {
 }
 
 #pantalla_body {
-    background: brown;
+    background: #5d006c;
     width: 100%;
     height: 100%;
-    /* padding: 15px; */
 }
 
 #fondo_body {
@@ -4655,4 +4658,75 @@ fieldset.kuplet.partial{
 
 .font_bold {
     font-weight: bold;
+}
+
+
+.wr_imagen {
+    margin-top: 10px;
+}
+
+.wr_imagen_inner {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+#previewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#previewImage{
+    max-width: 100%;
+}
+
+#backgroundImage{
+    background: #9E9E9E;
+}
+
+#imagenesContainer {
+    /* background: green; */
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.imagen_item {
+    padding: 5px;
+    background: #bababa;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-right: 10px;
+    position: relative;
+}
+.imagen_item:hover{
+    opacity: 0.7;
+}
+
+.imagen_item.active {
+    padding: 5px;
+    background: #ad0000;
+}
+
+.imagen_item_img {
+    width: 100%;
+    /* max-width: 300px; */
+    border-radius: 5px;
+}
+
+.d_delete {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 10px;
+    background: #0000008c;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

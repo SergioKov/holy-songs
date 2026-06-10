@@ -147,6 +147,11 @@ const select_slide_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_sel
 const eid_contenedor_nav_pantalla = document.getElementById('contenedor_nav_pantalla');//aki se coloca div 'wr_btns_pantalla'
 const eid_pantalla_body = document.getElementById('pantalla_body');//para slide en select_slide()
 const eid_fondo_body = document.getElementById('fondo_body');//para slide en select_slide()
+
+const eid_previewContainer = document.getElementById('previewContainer');
+const eid_wr_imagen_personalizada = document.getElementById('wr_imagen_personalizada');
+const eid_imagenesContainer = document.getElementById('imagenesContainer');
+
 const eid_contenedor_prev = document.getElementById('contenedor_prev');//para slide en select_slide()
 const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');//para slide en select_slide()
 const eid_vklad_btn_pantallaShow = document.getElementById('vklad_btn_pantallaShow');
@@ -154,6 +159,7 @@ const eid_titulo_shown = document.getElementById('titulo_shown');
 
 //botones - Fondo
 const eid_btn_show_logo_en_fondo = document.getElementById('btn_show_logo_en_fondo');
+const eid_btn_show_imagen_en_fondo = document.getElementById('btn_show_imagen_en_fondo');
 const eid_btn_show_bible_en_fondo = document.getElementById('btn_show_bible_en_fondo');
 const eid_btn_show_black_en_fondo = document.getElementById('btn_show_black_en_fondo');
 
@@ -164,6 +170,8 @@ const eid_btn_user_view_control = document.getElementById('btn_user_view_control
 const eid_btn_show_legend = document.getElementById('btn_show_legend');
 const eid_btn_show_acordes = document.getElementById('btn_show_acordes');
 const eid_btn_show_next_slide = document.getElementById('btn_show_next_slide');
+const eid_btn_show_en_top = document.getElementById('btn_show_en_top');
+const eid_btn_show_en_center = document.getElementById('btn_show_en_center');
 
 //========================================================//
 //end - block_esquema
@@ -557,6 +565,8 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
+let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');//def false
+let bg_ruta = localStorage.getItem('bg_ruta') ?? '';//def false
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
 let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
@@ -575,6 +585,8 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
+let show_en_top = JSON.parse(localStorage.getItem('show_en_top') ?? '0');// def false;
+let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
 
 
 let display_title_detalles = localStorage.getItem('display_title_detalles') || 'none';// def 'none';
@@ -589,12 +601,16 @@ let objPantalla = {
     arr_pantalla, //los datos en html con '__||__' en vez de comillas dobles (")
     pantalla_show,
     show_logo_en_fondo,
+    show_imagen_en_fondo,
+    bg_ruta,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control, 
     show_legend,
     show_acordes,
     show_next_slide,
+    show_en_top,
+    show_en_center,
 }
 let objPantalla_str = '';
 
@@ -605,12 +621,16 @@ let objPantallaToSendToBd = {
     arr_pantalla,//aki se añadirá 'arr_pantalla_safe'
     pantalla_show,
     show_logo_en_fondo,
+    show_imagen_en_fondo,
+    bg_ruta,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control, 
     show_legend,
     show_acordes,
     show_next_slide,
+    show_en_top,
+    show_en_center,
 };
 let objPantallaToSendToBd_str = '';
 
@@ -620,12 +640,16 @@ let objPantallaToSendToBd_str = '';
 let objPantallaParams = {
     pantalla_show,
     show_logo_en_fondo,
+    show_imagen_en_fondo,
+    bg_ruta,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
     show_legend,
     show_acordes,
     show_next_slide,
+    show_en_top,
+    show_en_center,
 }
 //localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 
@@ -635,12 +659,16 @@ let objPantallaParamsToSendToBd = {
     id_song,
     pantalla_show,
     show_logo_en_fondo,
+    show_imagen_en_fondo,
+    bg_ruta,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
     show_legend,
     show_acordes,
     show_next_slide,
+    show_en_top,
+    show_en_center,
 };
 let objPantallaParamsToSendToBd_str = '';
 

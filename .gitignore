@@ -6,4 +6,5 @@
 #no subo el fichero app_prod.log para no reescribirlo ya que se llena con datos en prod
 logs/
 song/logs/
+song/uploads/
 

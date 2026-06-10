@@ -44,6 +44,7 @@
             echo '<link rel="stylesheet" href="./css/song_pantalla_brillo_bajo.css">';
         }
     ?>
+    <style id="style_imagen_en_fondo"></style>
 </head>
 <body>
 

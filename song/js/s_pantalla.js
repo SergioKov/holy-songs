@@ -1,3 +1,4 @@
+const eid_style_imagen_en_fondo = document.getElementById('style_imagen_en_fondo');
 const eid_fondo = document.getElementById('fondo');
 const eid_contenedor = document.getElementById('contenedor');
 
@@ -14,6 +15,8 @@ let debug = false;
 //Admin control
 // let pantalla_show = 0;
 // let show_logo_en_fondo = 0;
+// let show_imagen_en_fondo = 0;
+// let bg_ruta = '';
 // let show_bible_en_fondo = 0;
 // let show_black_en_fondo = 0;
 // let user_view_control = 0;
@@ -21,6 +24,8 @@ let debug = false;
 // let show_legend = 0;
 // let show_acordes = 0;
 // let show_next_slide = 0;
+// let show_en_top = 0;
+// let show_en_center = 0;
 
 
 //Vars para formar tipo de contenido por defecto en Pantalla
@@ -31,6 +36,8 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
+let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');// def false;
+let bg_ruta = localStorage.getItem('bg_ruta') ?? '';// def false;
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
 let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
@@ -49,6 +56,8 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
+let show_en_top = JSON.parse(localStorage.getItem('show_en_top') ?? '0');// def false;
+let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
 
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let tipo_fuente = localStorage.getItem('tipo_fuente') ?? 'm';// def m = monospace;
@@ -60,12 +69,16 @@ let arr_pantalla_str_new = '';
 let objPantallaParams_def = {
     pantalla_show,
     show_logo_en_fondo,
+    show_imagen_en_fondo,
+    bg_ruta,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
     show_legend,
     show_acordes,
     show_next_slide,
+    show_en_top,
+    show_en_center,
     tipo_fuente,
 }
 // localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
@@ -162,10 +175,6 @@ function lanzarIntentosConDelay(){
         objPantallaParams_str_new = localStorage.getItem('objPantallaParams');
         //console.log('objPantallaParams_str_new: ', objPantallaParams_str_new);
         
-            //arr_pantalla_str_new = arr_pantalla_str_new.replaceAll('<br>','');
-            //console.log('<br> quitados --- arr_pantalla_str_new: ', arr_pantalla_str_new);
-
-
         //1. Params de Slide
         objPantallaParams = JSON.parse(objPantallaParams_str_new);
         //console.log('nuevo objPantallaParams: ', objPantallaParams);
@@ -197,10 +206,6 @@ function lanzarIntentosConDelay(){
             if(eid_contenedor){ 
                 aplicarVista(); 
                 construirElementosYAppend();//siempre construyo
-
-                //new test
-                //construirElementosYAppend();//siempre construyo
-                //setTimeout(()=> aplicarVista(), 500); 
             }
         }
 
@@ -227,6 +232,8 @@ function aplicarVista(){
     //Admin control
     pantalla_show = (objPantallaParams.pantalla_show == '1') ? 1 : 0;
     show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
+    show_imagen_en_fondo = (objPantallaParams.show_imagen_en_fondo == '1') ? 1 : 0;
+    bg_ruta = (objPantallaParams.bg_ruta != '') ? objPantallaParams.bg_ruta : '';
     show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? 1 : 0;
     show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? 1 : 0;
     user_view_control = (objPantallaParams.user_view_control == '1') ? 1 : 0;
@@ -235,6 +242,8 @@ function aplicarVista(){
     show_legend = (objPantallaParams.show_legend == '1') ? 1 : 0;
     show_acordes = (objPantallaParams.show_acordes == '1') ? 1 : 0;
     show_next_slide = (objPantallaParams.show_next_slide == '1') ? 1 : 0;
+    show_en_top = (objPantallaParams.show_en_top == '1') ? 1 : 0;
+    show_en_center = (objPantallaParams.show_en_center == '1') ? 1 : 0;
     tipo_fuente = (objPantallaParams.tipo_fuente == 'm') ? 'm' : 'a';
 
     // si hay contenedor...
@@ -291,6 +300,26 @@ function aplicarVista(){
                 document.body.classList.remove('logo_en_fondo');
             }
 
+            if(show_imagen_en_fondo){
+                document.body.classList.add('imagen_en_fondo');
+                //aki pongo la ruta de imagen de fondo
+                if(bg_ruta != ''){
+                    //eid_fondo.style.backgroundImage = bg_ruta;
+                    eid_style_imagen_en_fondo.innerHTML = `
+                        .imagen_en_fondo #fondo {
+                            background-image: ${bg_ruta};
+                        }
+                    `;
+                }else{
+                    //eid_fondo.style = '';//quito la ruta de imagen de fondo
+                    eid_style_imagen_en_fondo.innerHTML = '';
+                }
+
+            }else{
+                document.body.classList.remove('imagen_en_fondo');
+                eid_fondo.style = '';//quito la ruta de imagen de fondo
+            }
+
             if(show_bible_en_fondo){
                 document.body.classList.add('bible_en_fondo');
             }else{
@@ -329,6 +358,18 @@ function aplicarVista(){
             eid_contenedor.classList.add('show_next_slide');
         }else{
             eid_contenedor.classList.remove('show_next_slide');
+        }
+
+        if(show_en_top){
+            eid_contenedor.classList.add('show_en_top');
+        }else{
+            eid_contenedor.classList.remove('show_en_top');
+        }
+
+        if(show_en_center){
+            eid_contenedor.classList.add('show_en_center');
+        }else{
+            eid_contenedor.classList.remove('show_en_center');
         }
 
         // if(tipo_fuente == 'm'){
@@ -384,6 +425,18 @@ function aplicarVistaUsuario(){
         }else{
             show_acordes = 0;
             eid_contenedor.classList.remove('show_next_slide');
+        }
+
+        if(t.includes('t')){
+            eid_contenedor.classList.add('show_en_top');
+        }else{
+            eid_contenedor.classList.remove('show_en_top');
+        }
+
+        if(t.includes('z')){
+            eid_contenedor.classList.add('show_en_center');
+        }else{
+            eid_contenedor.classList.remove('show_en_center');
         }
 
         //tipo_fuente.  monospace/arial

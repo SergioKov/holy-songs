@@ -85,6 +85,7 @@ $sql_init = "SELECT
 
                 pantalla_show, 
                 show_logo_en_fondo,
+                show_imagen_en_fondo,
                 show_bible_en_fondo,
                 show_black_en_fondo,
                 user_view_control,
@@ -92,6 +93,8 @@ $sql_init = "SELECT
                 show_legend,
                 show_acordes,
                 show_next_slide,
+                show_en_top,
+                show_en_center,
 
                 created_at, 
                 updated_at
@@ -132,6 +135,7 @@ if($result->num_rows > 0){
 
         'pantalla_show' => $row['pantalla_show'],
         'show_logo_en_fondo' => $row['show_logo_en_fondo'],
+        'show_imagen_en_fondo' => $row['show_imagen_en_fondo'],
         'show_bible_en_fondo' => $row['show_bible_en_fondo'],
         'show_black_en_fondo' => $row['show_black_en_fondo'],
         'user_view_control' => $row['user_view_control'],
@@ -139,6 +143,8 @@ if($result->num_rows > 0){
         'show_legend' => $row['show_legend'],
         'show_acordes' => $row['show_acordes'],
         'show_next_slide' => $row['show_next_slide'],
+        'show_en_top' => $row['show_en_top'],
+        'show_en_center' => $row['show_en_center'],
 
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],

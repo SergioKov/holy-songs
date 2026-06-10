@@ -167,12 +167,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     $pantalla_show = $conn->real_escape_string($datos['pantalla_show']);//get parameter
     $show_logo_en_fondo = $conn->real_escape_string($datos['show_logo_en_fondo']);//get parameter
+    $show_imagen_en_fondo = $conn->real_escape_string($datos['show_imagen_en_fondo']);//get parameter
     $show_bible_en_fondo = $conn->real_escape_string($datos['show_bible_en_fondo']);//get parameter
     $show_black_en_fondo = $conn->real_escape_string($datos['show_black_en_fondo']);//get parameter
     $user_view_control = $conn->real_escape_string($datos['user_view_control']);//get parameter
     $show_legend = $conn->real_escape_string($datos['show_legend']);//get parameter
     $show_acordes = $conn->real_escape_string($datos['show_acordes']);//get parameter
     $show_next_slide = $conn->real_escape_string($datos['show_next_slide']);//get parameter
+    $show_en_top = $conn->real_escape_string($datos['show_en_top']);//get parameter
+    $show_en_center = $conn->real_escape_string($datos['show_en_center']);//get parameter
 
     //debug($arr, 'arr');
     //echo_json_x($arr_esquema_array, 'arr_esquema_array');
@@ -261,12 +264,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 ip_user = '$ip_user',
                 pantalla_show = '$pantalla_show',
                 show_logo_en_fondo = '$show_logo_en_fondo',
+                show_imagen_en_fondo = '$show_imagen_en_fondo',
                 show_bible_en_fondo = '$show_bible_en_fondo',
                 show_black_en_fondo = '$show_black_en_fondo',
                 user_view_control = '$user_view_control',
                 show_legend = '$show_legend',
                 show_acordes = '$show_acordes',
                 show_next_slide = '$show_next_slide',
+                show_en_top = '$show_en_top',
+                show_en_center = '$show_en_center',
                 updated_at = '$fechaHoraActual'
             WHERE id_user = '$id_user_logged'
         ";
@@ -286,12 +292,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     ip_user,
                     pantalla_show,
                     show_logo_en_fondo,
+                    show_imagen_en_fondo,
                     show_bible_en_fondo,
                     show_black_en_fondo,
                     show_legend,
                     user_view_control,
                     show_acordes,
                     show_next_slide,
+                    show_en_top,
+                    show_en_center,
                     created_at
                 ) 
             VALUES 
@@ -300,12 +309,15 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     '$ip_user',
                     '$pantalla_show',
                     '$show_logo_en_fondo',
+                    '$show_imagen_en_fondo',
                     '$show_bible_en_fondo',
                     '$show_black_en_fondo',
                     '$show_legend',
                     '$user_view_control',
                     '$show_acordes',
                     '$show_next_slide',
+                    '$show_en_top',
+                    '$show_en_center',
                     '$fechaHoraActual'
                 )
         ";

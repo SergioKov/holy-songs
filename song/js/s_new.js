@@ -1423,12 +1423,16 @@ async function make_arr_pantalla(currentSlide){
         arr_pantalla,
         pantalla_show,
         show_logo_en_fondo,
+        show_imagen_en_fondo,
+        bg_ruta,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
         show_legend,
         show_acordes,
         show_next_slide,
+        show_en_top,
+        show_en_center,
         tipo_fuente,
         tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
     };
@@ -1438,12 +1442,16 @@ async function make_arr_pantalla(currentSlide){
     objPantallaParams = {
         pantalla_show,
         show_logo_en_fondo,
+        show_imagen_en_fondo,
+        bg_ruta,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
         show_legend,
         show_acordes,
         show_next_slide,
+        show_en_top,
+        show_en_center,
         tipo_fuente,
         tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
     };
@@ -1487,12 +1495,16 @@ async function make_arr_pantalla(currentSlide){
         arr_pantalla: arr_pantalla_safe,
         pantalla_show,
         show_logo_en_fondo,
+        show_imagen_en_fondo,
+        bg_ruta,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
         show_legend,
         show_acordes,
         show_next_slide,
+        show_en_top,
+        show_en_center,
         tiempo_ms,//solo meter en la bd, no en local!
     };
     console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
@@ -1517,6 +1529,7 @@ async function make_arr_pantalla(currentSlide){
 async function showTipoContent(btn, param){
     console.log('=== function showTipoContent() ===');
     
+    
     if(!param || !btn) return;
 
     if(btn.classList.contains('opt_fondo')){
@@ -1524,13 +1537,20 @@ async function showTipoContent(btn, param){
         if(contenedor){
             resetBtnActive(contenedor);
             show_logo_en_fondo = 0;//reset
+            show_imagen_en_fondo = 0;//reset
+            bg_ruta = '';//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
 
             eid_fondo_body.className = '';//reset
+            eid_fondo_body.style = '';//reset
+            eid_wr_imagen_personalizada.classList.remove('d-block');
+            eid_wr_imagen_personalizada.classList.add('d-none');//oculto
             
             //guardo en local
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
+            localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
+            localStorage.setItem('bg_ruta', bg_ruta);
             localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
             localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
         }
@@ -1548,6 +1568,26 @@ async function showTipoContent(btn, param){
             eid_fondo_body.className = '';//reset
             eid_fondo_body.classList.add('logo_en_fondo');
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
+            break;
+
+        case 'g'://imagen de letra 'g' => mostrar imagen personalizada en el fondo (cuando no se ve el slide)
+            if(show_imagen_en_fondo == 1){
+                show_imagen_en_fondo = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_imagen_en_fondo = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            eid_fondo_body.className = '';//reset
+            eid_fondo_body.classList.add('imagen_en_fondo');
+            localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
+
+            eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
+            eid_wr_imagen_personalizada.classList.add('d-block');//muestro
+            await pintImagenActiveEnFondo();//tiene guardado de bg_ruta en localStorage
+
+            //pinto las imagenes personalizadas disponibles para elegir
+            await pintImagenesSubidas();
             break;
 
         case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
@@ -1613,7 +1653,6 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_acordes', show_acordes);
             break;
 
-
         case 'n'://next slide => mostrar 2 lineas de sig slide
             if(show_next_slide == 1){
                 show_next_slide = 0;//hext action
@@ -1624,14 +1663,57 @@ async function showTipoContent(btn, param){
             }
             localStorage.setItem('show_next_slide', show_next_slide);
             break;
+
+
+
+        //new    
+        case 't'://top => mostrar en el top
+            if(show_en_top == 1){
+                show_en_top = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_en_top = 1;//hext action
+                btn.classList.add('btn_active');
+
+                show_en_center = 0;//deshabilito
+                eid_btn_show_en_center.classList.remove('btn_active');
+                localStorage.setItem('show_en_center', show_en_center);
+            }
+            localStorage.setItem('show_en_top', show_en_top);
+            break;
+
+
+        case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'e
+            if(show_en_center == 1){
+                show_en_center = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_en_center = 1;//hext action
+                btn.classList.add('btn_active');
+
+                show_en_top = 0;//deshabilito
+                eid_btn_show_en_top.classList.remove('btn_active');
+                localStorage.setItem('show_en_top', show_en_top);
+            }
+            localStorage.setItem('show_en_center', show_en_center);
+            break;            
     
         default:
             break;
     }
 
+    await guardarEnLocalAndBd(param);
+}
+
+
+async function guardarEnLocalAndBd(param){
+    console.log('=== function guardarEnLocalAndBd() ===');
+    console.log('param:', param);
+
     //Admin control
     //p -> (pantalla) -> pantalla_show
     //i -> (iglesia)  -> show_logo_en_fondo
+    //g -> (imagen)  -> show_imagen_en_fondo
     //b -> (bible)    -> show_bible_en_fondo
     //f -> (fondo)    -> show_black_en_fondo
     //u -> (user)     -> user_viev_control
@@ -1640,18 +1722,25 @@ async function showTipoContent(btn, param){
     //l -> (legend)   -> user_viev_control
     //c -> (chords)   -> show_acordes
     //n -> (next)     -> show_next_slide
-    if(['p','i','b','f','u',   'l','c','n'].includes(param)){
+    //t -> (top)      -> show_en_top
+    //z -> (center)   -> show_en_center
+
+    if(['p','i','g','b','f','u',   'l','c','n',  't','z'].includes(param)){
         
         //1. asigno la variable global para localStorage
         objPantallaParams = {
             pantalla_show,
             show_logo_en_fondo,
+            show_imagen_en_fondo,
+            bg_ruta,
             show_bible_en_fondo,
             show_black_en_fondo,
             user_view_control,
             show_legend,
             show_acordes,
             show_next_slide,
+            show_en_top,
+            show_en_center,
             tipo_fuente
         };
         console.log('objPantallaParams: ',objPantallaParams);
@@ -1666,12 +1755,16 @@ async function showTipoContent(btn, param){
             id_song,
             pantalla_show,
             show_logo_en_fondo,
+            show_imagen_en_fondo,
+            bg_ruta,
             show_bible_en_fondo,
             show_black_en_fondo,
             user_view_control,
             show_legend,
             show_acordes,
             show_next_slide,
+            show_en_top,
+            show_en_center,
             tipo_fuente
         };
         console.log('objPantallaParamsToSendToBd: ',objPantallaParamsToSendToBd);        
@@ -1685,6 +1778,7 @@ async function showTipoContent(btn, param){
         localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
     }
 }
+
 
 /*
 //no se usan en hs.
@@ -1776,6 +1870,8 @@ function check_fondo_body(){
 
     if(show_logo_en_fondo == 1){
         eid_fondo_body.classList.add('logo_en_fondo');
+    }else if(show_imagen_en_fondo == 1){
+        eid_fondo_body.classList.add('imagen_en_fondo');
     } else if(show_bible_en_fondo == 1){
         eid_fondo_body.classList.add('bible_en_fondo');
     } else if(show_black_en_fondo == 1){
@@ -1793,6 +1889,19 @@ function check_show_logo_en_fondo(){
         eid_btn_show_logo_en_fondo.classList.add('btn_active');
     }else{
         eid_btn_show_logo_en_fondo.classList.remove('btn_active');
+    }
+}
+
+
+async function check_show_imagen_en_fondo(){
+    console.log('=== function check_show_imagen_en_fondo() ===');
+    console.log('show_imagen_en_fondo: ', show_imagen_en_fondo);
+    
+    if(show_imagen_en_fondo){
+        eid_btn_show_imagen_en_fondo.classList.add('btn_active');
+        await pintImagenActiveEnFondo();//tiene guardado de bg_ruta en localStorage
+    }else{
+        eid_btn_show_imagen_en_fondo.classList.remove('btn_active');
     }
 }
 
@@ -1861,6 +1970,28 @@ function check_show_next_slide(){
         eid_btn_show_next_slide.classList.add('btn_active');
     }else{
         eid_btn_show_next_slide.classList.remove('btn_active');
+    }
+}
+
+function check_show_en_top(){
+    console.log('=== function check_show_en_top() ===');
+    console.log('show_en_top: ', show_en_top);
+    
+    if(show_en_top){
+        eid_btn_show_en_top.classList.add('btn_active');
+    }else{
+        eid_btn_show_en_top.classList.remove('btn_active');
+    }
+}
+
+function check_show_en_center(){
+    console.log('=== function check_show_en_center() ===');
+    console.log('show_en_center: ', show_en_center);
+    
+    if(show_en_center){
+        eid_btn_show_en_center.classList.add('btn_active');
+    }else{
+        eid_btn_show_en_center.classList.remove('btn_active');
     }
 }
 
@@ -2147,6 +2278,14 @@ function hideShowDiv(id_div){
                         elemento_btn_add_lista_new.remove();//si no hay lista activa y existe el btn para crear lista nueva, lo quito
                     }
                 }
+            }
+            break;
+            
+        case 'bl_select_slide_settings':
+            if(show_imagen_en_fondo == 1){
+                eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
+                eid_wr_imagen_personalizada.classList.add('d-block');//muestro
+                pintImagenesSubidas();
             }
             break;
     
@@ -3906,3 +4045,597 @@ function aplicarSongAjustes(){
 
 
 
+
+
+
+
+
+const inputBackground = document.getElementById('backgroundImage');
+const btnUploadBackground = document.getElementById('btnUploadBackground');
+const previewImage = document.getElementById('previewImage');
+
+let selectedFile = null;
+
+// Vista previa
+inputBackground.addEventListener('change', () => {
+
+    selectedFile = inputBackground.files[0];
+
+    if (!selectedFile) return;
+    eid_previewContainer.innerHTML = '';//reset
+    btnUploadBackground.classList.remove('d-none');
+
+    const imageUrl = URL.createObjectURL(selectedFile);
+
+    const previewImage = document.createElement('img');
+    previewImage.id = 'previewImage';
+    previewImage.src = imageUrl;
+
+    //añado al DOM
+    eid_previewContainer.append(previewImage);
+
+});
+
+
+btnUploadBackground.addEventListener('click', async () => {
+    subirImagen();
+});
+
+
+// Subir imagen
+async function subirImagen(){
+    console.log(' === function subirImagen() === ');    
+    
+    if (!selectedFile) {
+        alert('Seleccione una imagen.');
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('image', selectedFile);
+
+    try {
+
+        const response = await fetch('../song/php/upload_imagen.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error upload_imagen.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //desactivo boton y preview
+                btnUploadBackground.classList.add('d-none');
+                eid_previewContainer.innerHTML = '';//reset
+                
+                //actualizo HTML DOM
+                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
+                pintImagenesSubidas();//pinto todas las imagenes disponibles
+                pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+
+
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );   
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en upload_imagen.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en upload_imagen.php',
+                { cause: error }
+            );
+        }       
+
+    }
+    catch (error) {
+
+        console.error('iniciarSesion. error: ',error);
+
+    }
+
+}
+
+
+async function pintImagenActiveEnFondo(){
+    
+    try {
+        
+        const data = await getImagenActive();
+        console.log('2. data:', data);
+
+        if (data.success) {
+            //saco la ruta del fondo
+            bg_ruta = `url(.${data.image.filepath})`;
+            console.log('bg_ruta: ', bg_ruta);
+            localStorage.setItem('bg_ruta', bg_ruta);
+            
+            // Aplicar inmediatamente el fondo
+            eid_fondo_body.style.backgroundImage = bg_ruta;
+            await guardarEnLocalAndBd('g');//g = guardar fondo
+
+            showToast(
+                'ok',
+                'imagen personalizada cargada correctamente',
+                2000
+            );
+            return true;  
+            
+        } else {
+
+            showToast(
+                'error',
+                data.error,
+                null,
+                'center',
+                true,
+                'Error'
+            );
+            return false;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar la imagen de fondo:',error);
+
+        showToast(
+            'error',
+            `Error al cargar la imagen de fondo: ${error}`,
+            null,
+            'center',
+            true,
+            'Error'
+        );
+        return false;
+    } 
+
+}
+
+
+async function pintImagenesSubidas(){
+    console.log('=== function pintImagenesSubidas() ===');
+
+    try {
+
+        const data = await getImagenAll();
+        console.log('3. data:', data);
+
+        eid_imagenesContainer.innerHTML = '';//reset
+
+        if (data.success) {
+
+            if(data.images.length > 0){
+
+                data.images.forEach(item => {
+                    
+                    const imagen_item = document.createElement('div');
+                    imagen_item.className = (item.is_active == 1) ? 'imagen_item active' : 'imagen_item' ;
+                    imagen_item.dataset.id_image = item.id_image;
+                    imagen_item.innerHTML = `
+                        <div class="d_delete">
+                            <img class="d_delete_img" src="images/delete.png">
+                        </div>
+                        <img class="imagen_item_img" src=".${item.filepath}" alt="Imagen de fondo">
+                    `;
+                    imagen_item.onclick = async (e) => {
+                        
+                        if(e.target.closest('.d_delete')){
+                            await deleteImagen(item.id_image);
+                        }else{
+                            eid_fondo_body.style.backgroundImage = `url(.${item.filepath})`; 
+                            console.log('item.id_image: ', item.id_image);
+    
+                            await updateImagenActive(item.id_image);
+                        }
+                        
+                    }
+                    //añado al DOM
+                    eid_imagenesContainer.append(imagen_item);
+                });
+
+            }else{
+                const div = document.createElement('div');
+                div.className = 'no_imagen';
+                div.innerHTML = `
+                    <p>No hay imágenes subidas.</p>
+                `;
+                eid_imagenesContainer.append(div);
+            }                  
+            
+        } else {
+
+            const div = document.createElement('div');
+            div.className = 'no_imagen';
+            div.innerHTML = `
+                <p class="prim">No hay imágenes subidas.</p>
+            `;
+            eid_imagenesContainer.append(div);
+
+            return;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar las imágenes de fondo:',error);
+
+        showToast(
+            'error',
+            data.error,
+            null,
+            'center',
+            true,
+            'Error'
+        );
+        return false;
+    } 
+}
+
+
+async function updateImagenActive(id_image){
+    console.log('=== function updateImagenActive() ===');
+
+    if(!id_image){
+        console.error('id_image no válido:', id_image);
+        return;
+    }
+
+    try {
+
+        const response = await fetch('../song/php/update_imagen_active.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_image: id_image
+                })
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error update_imagen_active.php) ${response.status}`);
+        }
+
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //actualizo HTML DOM
+                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
+                pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );                  
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en update_imagen_active.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en update_imagen_active.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al actualizar la imagen de fondo:',
+            error
+        );
+
+    }
+}
+
+
+async function deleteImagen(id_image){
+    console.log('=== function deleteImagen() ===');
+
+    if(!id_image){
+        console.error('id_image no válido:', id_image);
+        return;
+    }
+
+    try {
+
+        const response = await fetch('../song/php/delete_imagen.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_image: id_image
+                })
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error delete_imagen.php) ${response.status}`);
+        }
+
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //elimino del DOM la imagen eliminada
+                eid_imagenesContainer.querySelector(`.imagen_item[data-id_image="${id_image}"]`).remove();
+                eid_fondo_body.style = '';//quito el fondo para evitar que quede la imagen rota 
+                bg_ruta = '';//quito la ruta del fondo 
+
+                localStorage.setItem('bg_ruta', '');//quito la ruta del fondo del localStorage
+                await guardarEnLocalAndBd('g');//g = guardar fondo
+
+                //si hay nueva imagen activa la aplico en el fondo
+                if(data.new_id_image_active){
+                    //actualizo HTML DOM
+                    marcarImagenActiveEnDOM(data.new_id_image_active);//marcar en rojo la imagen en el modal
+                    pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                }
+
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );                  
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en delete_imagen.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en delete_imagen.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al actualizar la imagen de fondo:',
+            error
+        );
+
+    }
+}
+
+
+function marcarImagenActiveEnDOM(id_image){
+    
+    Array.from(eid_imagenesContainer.querySelectorAll('.imagen_item')).forEach(item => {
+        if(item.dataset.id_image == id_image){
+            item.classList.add('active');
+        }else{
+            item.classList.remove('active');
+        }
+    });
+}
+
+
+async function getImagenActive(){
+    console.log('=== function getImagenActive() ===');
+
+    try {
+
+        const response = await fetch('../song/php/get_imagen_active.php',
+            {
+                method: 'POST'
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error get_imagen_active.php) ${response.status}`);
+        }
+
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en get_imagen_active.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en get_imagen_active.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error('Error al cargar la imagen de fondo:', error);
+
+    }
+}
+
+
+async function getImagenAll(){
+    console.log('=== function getImagenAll() ===');
+
+    try {
+
+        const response = await fetch('../song/php/get_imagen_all.php',
+            {
+                method: 'POST'
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error get_imagen_all.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+            
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en get_imagen_all.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en get_imagen_all.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al cargar las imágenes de fondo:',
+            error
+        );
+
+    }
+}

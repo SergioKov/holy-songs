@@ -173,9 +173,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
     $pantalla_show = $conn->real_escape_string($datos['pantalla_show']);//get parameter
     $show_logo_en_fondo = $conn->real_escape_string($datos['show_logo_en_fondo']);//get parameter
+    $show_imagen_en_fondo = $conn->real_escape_string($datos['show_imagen_en_fondo']);//get parameter
+    $show_bible_en_fondo = $conn->real_escape_string($datos['show_bible_en_fondo']);//get parameter
+    $show_black_en_fondo = $conn->real_escape_string($datos['show_black_en_fondo']);//get parameter
     $show_legend = $conn->real_escape_string($datos['show_legend']);//get parameter
     $show_acordes = $conn->real_escape_string($datos['show_acordes']);//get parameter
     $show_next_slide = $conn->real_escape_string($datos['show_next_slide']);//get parameter
+    $show_en_top = $conn->real_escape_string($datos['show_en_top']);//get parameter
+    $show_en_center = $conn->real_escape_string($datos['show_en_center']);//get parameter
     $tiempo_ms = $conn->real_escape_string($datos['tiempo_ms']);//get parameter
 
 
@@ -311,9 +316,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     arr_pantalla,
                     pantalla_show,
                     show_logo_en_fondo,
+                    show_imagen_en_fondo,
+                    show_bible_en_fondo,
+                    show_black_en_fondo,
                     show_legend,
                     show_acordes,
                     show_next_slide,
+                    show_en_top,                    
+                    show_en_center,                    
                     tiempo_ms,
                     created_at
                 ) 
@@ -328,9 +338,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     '$arr_pantalla_valor',
                     '$pantalla_show',
                     '$show_logo_en_fondo',
+                    '$show_imagen_en_fondo',
+                    '$show_bible_en_fondo',
+                    '$show_black_en_fondo',
                     '$show_legend',
                     '$show_acordes',
                     '$show_next_slide',
+                    '$show_en_top',
+                    '$show_en_center',
                     '$tiempo_ms',
                     '$fechaHoraActual_ms'
                 )
@@ -355,9 +370,14 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 arr_pantalla = '$arr_pantalla_valor',
                 pantalla_show = '$pantalla_show',
                 show_logo_en_fondo = '$show_logo_en_fondo',
+                show_imagen_en_fondo = '$show_imagen_en_fondo',
+                show_bible_en_fondo = '$show_bible_en_fondo',
+                show_black_en_fondo = '$show_black_en_fondo',
                 show_legend = '$show_legend',
                 show_acordes = '$show_acordes',
                 show_next_slide = '$show_next_slide',
+                show_en_top = '$show_en_top',
+                show_en_center = '$show_en_center',
                 tiempo_ms = '$tiempo_ms',
                 updated_at = '$fechaHoraActual_ms'
             WHERE id_user = '$id_user_logged'

@@ -2288,25 +2288,28 @@ async function select_slide(){
     select_slide_ul_action.onclick = e => close_ul_action(e);
 
     //pinto botones en rojo si están marcados antes desde localStorage
-    check_PantallaParams();
+    await check_PantallaParams();
     
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
     mySizeEsquema();
 }
 
-function check_PantallaParams(){//pinto botones en rojo si están marcados antes desde localStorage
+async function check_PantallaParams(){//pinto botones en rojo si están marcados antes desde localStorage
     console.log('=== function check_PantallaParams() ===');
     
     //marco/desmarco los botones de fondo y demás segun las variables desde localStorage
     check_pantalla_show();//reviso si marco en rojo o no
     check_fondo_body();//new
     check_show_logo_en_fondo();
+    await check_show_imagen_en_fondo();
     check_show_bible_en_fondo();
     check_show_black_en_fondo();
     check_user_view_control();
     check_show_legend();
     check_show_acordes();
     check_show_next_slide();
+    check_show_en_top();
+    check_show_en_center();
 }
 
 

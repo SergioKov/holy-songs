@@ -1,6 +1,6 @@
 <?php
 
-session_start();//aki obligatorio ya que no tiene header.php (header.php tienen dentro session_start())
+session_start(); //aki obligatorio ya que no tiene header.php (header.php tienen dentro session_start())
 
 //es: song/index.php
 //include('../includes/templates/check_auth.php');//antes (sin el enrutador en /index.php)
@@ -34,27 +34,27 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
 
 
 
-    //sesion iniciada correctamente
-    if(isset($_SESSION['login']) && $_SESSION['login'] === true){
-        $img_login_src = "./images/login2_white.svg";
+//sesion iniciada correctamente
+if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
+    $img_login_src = "./images/login2_white.svg";
 
-        echo '
+    echo '
             <script>
                 let hay_usuario_logueado = true;
-                let username = "'.addslashes($_SESSION['username']).'";
-                let email = "'.addslashes($_SESSION['email']).'";
+                let username = "' . addslashes($_SESSION['username']) . '";
+                let email = "' . addslashes($_SESSION['email']) . '";
                 //alert("username: " + username);        
             </script>
         ';
 
-        if(isset($_SESSION['success'])){
-            echo '
+    if (isset($_SESSION['success'])) {
+        echo '
                 <script>
                     window.addEventListener("DOMContentLoaded", () => {
     
                         showToast(
                             "ok",
-                            "'.addslashes($_SESSION['success']).'",
+                            "' . addslashes($_SESSION['success']) . '",
                             2000,
                             "center"
                         );
@@ -62,18 +62,16 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                     });            
                 </script>
             ';
-            unset($_SESSION['success']);
-        }
-
-    
-    }else{
-        $img_login_src = "./images/login2_grey.svg";
-        echo '
+        unset($_SESSION['success']);
+    }
+} else {
+    $img_login_src = "./images/login2_grey.svg";
+    echo '
             <script>
                 let hay_usuario_logueado = false;        
             </script>
         ';
-    }
+}
 
 
 ?>
@@ -252,7 +250,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                     <!--Canción-->
                                     <img class="btn_img" src="./images/song_512x512_white.png">
                                     <span class="vkl_name">Canción</span>
-                                </div>                                
+                                </div>
                                 <div class="dbtn dbtn_fx dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">
                                     <!--Lista-->
                                     <img class="btn_img" src="./images/checklist2_24x24.png">
@@ -808,10 +806,36 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                                                             <h4>Fondo cuando la diapositiva está oculta</h4>
                                                                             <p>Habilitar / Deshabilitar:</p>
                                                                             <div class="wr_sel_pantalla wr_opt_fondo">
-                                                                                <button id="btn_show_logo_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
-                                                                                <button id="btn_show_bible_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
-                                                                                <button id="btn_show_black_en_fondo" class="btn opt_fondo" onclick="showTipoContent(this,'f')">Black en Fondo</button>
+                                                                                <button id="btn_show_logo_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button id="btn_show_bible_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
+                                                                                <button id="btn_show_black_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'f')">Black en Fondo</button>
+                                                                                <button id="btn_show_imagen_en_fondo" class="btn opt_fondo btn_big w_100" onclick="showTipoContent(this,'g')">Fondo personalizado</button>
                                                                             </div>
+
+                                                                            <div id="wr_imagen_personalizada" class="wr_imagen d-none">
+                                                                                <div class="wr_imagen_inner">
+                                                                                    <input
+                                                                                        id="backgroundImage"
+                                                                                        type="file"
+                                                                                        accept="image/jpeg,image/png,image/webp"
+                                                                                    >
+                                                                                    <div id="previewContainer">
+                                                                                        <!-- Aquí se mostrará la vista previa de la imagen seleccionada -->
+                                                                                    </div>
+                                                                                    <button
+                                                                                        id="btnUploadBackground"
+                                                                                        class="btn btn_big w_100 d-none"
+                                                                                        type="button"
+                                                                                    >
+                                                                                        Subir imagen
+                                                                                    </button>
+
+                                                                                    <div id="imagenesContainer">
+                                                                                        <!-- Aquí se mostrarán las imágenes subidas -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
                                                                         </div>
 
                                                                         <div class="contenedor_sel_pantalla">
@@ -830,6 +854,14 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                                                                 <button id="btn_show_legend" class="btn w_100" onclick="showTipoContent(this,'l')">Títulos</button>
                                                                                 <button id="btn_show_acordes" class="btn w_100" onclick="showTipoContent(this,'c')">Acordes</button>
                                                                                 <button id="btn_show_next_slide" class="btn w_100" onclick="showTipoContent(this,'n')">Siguiente Diapositiva</button>
+                                                                            </div>
+
+                                                                            <br>
+                                                                            <p>Alineación:</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_show_en_top" class="btn w_100" onclick="showTipoContent(this,'t')">Top</button>
+                                                                                <button id="btn_show_en_center" class="btn w_100" onclick="showTipoContent(this,'z')">Center</button>
+
                                                                             </div>
                                                                         </div>
 
@@ -1425,114 +1457,114 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
                                             <!--/parte_variable-->
                                             <div class="parte_variable">
 
-                                                            <!-- experiment -->
-                                                            <div id="tema_block" class="vista_fixed tema_white">
-                                                                <div class="vista_fixed_inner">
-                                                                    
-                                                                    <div class="vista_fixed_head">
+                                                <!-- experiment -->
+                                                <div id="tema_block" class="vista_fixed tema_white">
+                                                    <div class="vista_fixed_inner">
 
-                                                                        <div class="wr_hamburger3 shown" onclick="toggleMenuOver();">
-                                                                            <div id="hamburger3" class="hamburger">
-                                                                                <span></span>
-                                                                                <span></span>
-                                                                                <span></span>
-                                                                            </div>
-                                                                        </div>
+                                                        <div class="vista_fixed_head">
 
-                                                                        <button class="btn_actions no_visible" style="display: none;">&nbsp;</button>
-                                                                        <div id="d_state_drag_song" class="btn_actions" onclick="toggleDragSong();">
-                                                                            <img src="images/drag_left_right.png">
-                                                                        </div>
+                                                            <div class="wr_hamburger3 shown" onclick="toggleMenuOver();">
+                                                                <div id="hamburger3" class="hamburger">
+                                                                    <span></span>
+                                                                    <span></span>
+                                                                    <span></span>
+                                                                </div>
+                                                            </div>
 
-                                                                        <div class="vp_titulo">
-                                                                            <div id="id_song_num">....</div>
-                                                                            <div id="id_song_pos">.. / ..</div>
-                                                                        </div>
+                                                            <button class="btn_actions no_visible" style="display: none;">&nbsp;</button>
+                                                            <div id="d_state_drag_song" class="btn_actions" onclick="toggleDragSong();">
+                                                                <img src="images/drag_left_right.png">
+                                                            </div>
 
-                                                                        <button class="d-none btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');">
-                                                                            <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                            <div class="vp_titulo">
+                                                                <div id="id_song_num">....</div>
+                                                                <div id="id_song_pos">.. / ..</div>
+                                                            </div>
+
+                                                            <button class="d-none btn btn_set btn_actions" onclick="hideShowDiv('bl_actions_lista');">
+                                                                <img class="btn_img" src="./images/tres_puntos_vertical_white.svg">
+                                                            </button>
+
+                                                            <div id="d_state_fullscreen" class="btn_actions" onclick="toggleFullscreen('.vista_fixed', this)">
+                                                                <img src="images/icon_size_max.svg">
+                                                            </div>
+
+                                                            <button class="btn btn_vista_fixed_close" onclick="ocultarVistaFixed();">
+                                                                <img src="images/x_white.png">
+                                                            </button>
+
+                                                        </div><!--/.vista_fixed_head-->
+
+
+                                                        <div class="vista_fixed_body">
+
+                                                            <div class="d_menu_over">
+
+                                                                <div class="wr_btns_actualizar">
+                                                                    <button class="btn btn_vista btn_song_refresh btn_refresh" onclick="refreshSong()">
+                                                                        <img src="images/refresh.png" class="">
+                                                                        <span>Actualizar</span>
+                                                                    </button>
+                                                                    <button class="btn btn_vista btn_song_guardar btn_refresh" onclick="guardarSong(this,'cancion_song_bloques','editar');">
+                                                                        <img src="./images/guardar.png" class="">
+                                                                        <span>Guardar</span>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="wr_btns_next_prev">
+                                                                    <button class="btn" onclick="listaSongGo('prev')">
+                                                                        <img src="images/arrow_chevron_left_white.svg">
+                                                                    </button>
+                                                                    <div id="aviso_lista_song" class="aviso_tmp"></div>
+                                                                    <button class="btn" onclick="listaSongGo('next')">
+                                                                        <img src="images/arrow_chevron_right_white.svg">
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="wr_btns_f_inner">
+                                                                    <div class="d_cat">
+                                                                        <button class="btn" onclick="changeFontSize(-1)">A-</button>
+                                                                        <button class="btn" onclick="changeFontSize(0)">A</button>
+                                                                        <button class="btn" onclick="changeFontSize(1)">A+</button>
+                                                                    </div>
+                                                                    <div class="d_cat">
+                                                                        <button class="btn" onclick="makeColumns(1)">|</button>
+                                                                        <button class="btn" onclick="makeColumns(2)">||</button>
+                                                                        <button class="btn" onclick="makeColumns(3)">|||</button>
+                                                                        <button class="btn" onclick="makeColumns(4)">||||</button>
+                                                                    </div>
+                                                                    <div class="d_cat">
+                                                                        <button id="btn_state_acordes" class="btn" onclick="toggleAcordes()">
+                                                                            <img src="/song/images/music_note_on32x32.png">
                                                                         </button>
-
-                                                                        <div id="d_state_fullscreen" class="btn_actions" onclick="toggleFullscreen('.vista_fixed', this)">
-                                                                            <img src="images/icon_size_max.svg">
-                                                                        </div>
-
-                                                                        <button class="btn btn_vista_fixed_close" onclick="ocultarVistaFixed();">
-                                                                            <img src="images/x_white.png">
+                                                                        <button id="btn_state_texto" class="btn" onclick="toggleTexto()">
+                                                                            <img src="/song/images/text_on32x32.png">
                                                                         </button>
-
-                                                                    </div><!--/.vista_fixed_head-->
-
-
-                                                                    <div class="vista_fixed_body">
-
-                                                                        <div class="d_menu_over">
-
-                                                                            <div class="wr_btns_actualizar">
-                                                                                <button class="btn btn_vista btn_song_refresh btn_refresh" onclick="refreshSong()">
-                                                                                    <img src="images/refresh.png" class="">
-                                                                                    <span>Actualizar</span>
-                                                                                </button>
-                                                                                <button class="btn btn_vista btn_song_guardar btn_refresh" onclick="guardarSong(this,'cancion_song_bloques','editar');">
-                                                                                    <img src="./images/guardar.png" class="">
-                                                                                    <span>Guardar</span>
-                                                                                </button>
-                                                                            </div>
-
-                                                                            <div class="wr_btns_next_prev">
-                                                                                <button class="btn" onclick="listaSongGo('prev')">
-                                                                                    <img src="images/arrow_chevron_left_white.svg">
-                                                                                </button>
-                                                                                <div id="aviso_lista_song" class="aviso_tmp"></div>
-                                                                                <button class="btn" onclick="listaSongGo('next')">
-                                                                                    <img src="images/arrow_chevron_right_white.svg">
-                                                                                </button>
-                                                                            </div>
-
-                                                                            <div class="wr_btns_f_inner">
-                                                                                <div class="d_cat">
-                                                                                    <button class="btn" onclick="changeFontSize(-1)">A-</button>
-                                                                                    <button class="btn" onclick="changeFontSize(0)">A</button>
-                                                                                    <button class="btn" onclick="changeFontSize(1)">A+</button>
-                                                                                </div>
-                                                                                <div class="d_cat">
-                                                                                    <button class="btn" onclick="makeColumns(1)">|</button>
-                                                                                    <button class="btn" onclick="makeColumns(2)">||</button>
-                                                                                    <button class="btn" onclick="makeColumns(3)">|||</button>
-                                                                                    <button class="btn" onclick="makeColumns(4)">||||</button>
-                                                                                </div>
-                                                                                <div class="d_cat">
-                                                                                    <button id="btn_state_acordes" class="btn" onclick="toggleAcordes()">
-                                                                                        <img src="/song/images/music_note_on32x32.png">
-                                                                                    </button>
-                                                                                    <button id="btn_state_texto" class="btn" onclick="toggleTexto()">
-                                                                                        <img src="/song/images/text_on32x32.png">
-                                                                                    </button>
-                                                                                    <button id="btn_state_contenido_width" class="btn" onclick="toggleContenidoWidth()">
-                                                                                        <img src="/song/images/auto_width_off.png">
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
+                                                                        <button id="btn_state_contenido_width" class="btn" onclick="toggleContenidoWidth()">
+                                                                            <img src="/song/images/auto_width_off.png">
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
 
 
 
-                                                                        </div><!--/.d_menu_over-->
+                                                            </div><!--/.d_menu_over-->
 
-                                                                        <div class="d_drag_over">
-                                                                            <div id="aviso_drag_lista_song" class="aviso_tmp"></div>
-                                                                        </div><!--/.d_drag_over-->
+                                                            <div class="d_drag_over">
+                                                                <div id="aviso_drag_lista_song" class="aviso_tmp"></div>
+                                                            </div><!--/.d_drag_over-->
 
-                                                                        <div class="d_contenedor">
-                                                                            <div class="contenedor">
-                                                                                <p class="prim">Para ver el texto de la canción, búscala en la pestaña <b>Buscar</b> o selecciona una canción desde una lista en la pestaña <b>Lista</b>.</p><!-- aki los fieldset -->
-                                                                            </div><!--/.d_contenedor-->
-                                                                        </div><!--/.d_contenedor-->
+                                                            <div class="d_contenedor">
+                                                                <div class="contenedor">
+                                                                    <p class="prim">Para ver el texto de la canción, búscala en la pestaña <b>Buscar</b> o selecciona una canción desde una lista en la pestaña <b>Lista</b>.</p><!-- aki los fieldset -->
+                                                                </div><!--/.d_contenedor-->
+                                                            </div><!--/.d_contenedor-->
 
-                                                                    </div><!--/.vista_fixed_body-->
+                                                        </div><!--/.vista_fixed_body-->
 
-                                                                </div><!--/.vista_fixed_inner-->
-                                                            </div><!--/.vista_fixed-->
-                                                            <!-- end experiment -->
+                                                    </div><!--/.vista_fixed_inner-->
+                                                </div><!--/.vista_fixed-->
+                                                <!-- end experiment -->
 
 
 
@@ -1700,7 +1732,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
 
                                         <div class="wr_block_option">
                                             <div class="wr_block_option_inner">
-                                                
+
                                                 <button id="btn_lista_ver_sm" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">Lista actual</button>
                                                 <button id="btn_lista_sort" class="btn opt_edit" onclick="openModal('full','Ordenar lista',null,'buildLista',true, 'sort');">Ordenar</button>
                                                 <button id="btn_lista_ver" class="btn opt_edit" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver');">Ver</button>
