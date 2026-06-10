@@ -121,7 +121,7 @@ $stmt->close();
 
 
 // Carpeta destino
-$uploadDir = '../uploads/fondos/';
+$uploadDir = '../uploads/fondos/' . $id_iglesia .'/';
 
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
@@ -147,7 +147,7 @@ if (!move_uploaded_file($file['tmp_name'], $filepath)) {
 }
 
 // Ruta relativa para BD y para mostrar en web
-$filepathDb = 'uploads/fondos/' . $filename;
+$filepathDb = 'uploads/fondos/' . $id_iglesia . '/' . $filename;
 
 // Guardar en tabla images
 $sql = "INSERT INTO images
