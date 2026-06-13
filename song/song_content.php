@@ -775,13 +775,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
 
 
-
-
-
-
-
-
-
+                                                    <button id="btn_enfocarPestania_fast" class="btn flex_center btn_actions" onclick="enfocarReferencia(miPestaniaLocal);">
+                                                        <img class="btn_img_sm" src="images/center_focus.png">
+                                                    </button>
 
                                                     <button id="btn_select_slide_settings" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_select_slide_settings');" title="Settings">
                                                         <img class="btn_img_sm" src="./images/settings7_white.svg">
@@ -857,12 +853,26 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </div>
 
                                                                             <br>
-                                                                            <p>Alineación:</p>
+                                                                            <p>Alineación de contenido:</p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button id="btn_show_en_top" class="btn w_100" onclick="showTipoContent(this,'t')">Top</button>
                                                                                 <button id="btn_show_en_center" class="btn w_100" onclick="showTipoContent(this,'z')">Center</button>
 
                                                                             </div>
+
+                                                                            <br>
+                                                                            <p>Parte de visualización:</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_show_en_parte_top" class="btn w_100" onclick="showTipoContent(this,'x')">Parte Top</button>
+                                                                            </div>
+
+                                                                            <br>
+                                                                            <p>Brillo de la pantalla:</p>
+                                                                            <div id="contenedorBrillo" class="contenedor_brillo">
+                                                                                <input id="deslizador" class="deslizador" type="range"   min="10" max="100" value="100">
+                                                                                <span id="valorBrillo" class="porcentaje" >100%</span>
+                                                                            </div>
+
                                                                         </div>
 
                                                                         <h4>Ubicación</h4>
@@ -874,6 +884,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn w_100" onclick="abrirReferencia(miPestaniaLocal);">Pestaña Local</button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPestaniaLocal);">
+                                                                                    <img class="btn_img_sm" src="images/center_focus.png">
+                                                                                </button>
                                                                                 <button class="btn" onclick="recargarReferencia(miPestaniaLocal);">
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
@@ -881,6 +894,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </div>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn w_100" onclick="abrirReferencia(miVentanaLocal);">Ventana Local</button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miVentanaLocal);">
+                                                                                    <img class="btn_img_sm" src="images/center_focus.png">
+                                                                                </button>
                                                                                 <button class="btn" onclick="recargarReferencia(miVentanaLocal);">
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>

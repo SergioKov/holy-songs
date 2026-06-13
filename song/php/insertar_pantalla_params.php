@@ -175,6 +175,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $show_acordes = $conn->real_escape_string($datos['show_acordes']);//get parameter
     $show_next_slide = $conn->real_escape_string($datos['show_next_slide']);//get parameter
     $show_en_top = $conn->real_escape_string($datos['show_en_top']);//get parameter
+    $show_en_parte_top = $conn->real_escape_string($datos['show_en_parte_top']);//get parameter
     $show_en_center = $conn->real_escape_string($datos['show_en_center']);//get parameter
 
     //debug($arr, 'arr');
@@ -272,6 +273,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                 show_acordes = '$show_acordes',
                 show_next_slide = '$show_next_slide',
                 show_en_top = '$show_en_top',
+                show_en_parte_top = '$show_en_parte_top',
                 show_en_center = '$show_en_center',
                 updated_at = '$fechaHoraActual'
             WHERE id_user = '$id_user_logged'
@@ -300,6 +302,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     show_acordes,
                     show_next_slide,
                     show_en_top,
+                    show_en_parte_top,
                     show_en_center,
                     created_at
                 ) 
@@ -317,6 +320,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     '$show_acordes',
                     '$show_next_slide',
                     '$show_en_top',
+                    '$show_en_parte_top',
                     '$show_en_center',
                     '$fechaHoraActual'
                 )

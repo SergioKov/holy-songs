@@ -409,6 +409,7 @@ async function insertarPantallaParams() {
             isNaN(show_acordes) || 
             isNaN(show_next_slide) || 
             isNaN(show_en_top) || 
+            isNaN(show_en_parte_top) || 
             isNaN(show_en_center)
         
         ){

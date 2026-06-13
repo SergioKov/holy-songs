@@ -94,6 +94,7 @@ $sql_init = "SELECT
                 show_acordes,
                 show_next_slide,
                 show_en_top,
+                show_en_parte_top,
                 show_en_center,
 
                 created_at, 
@@ -144,6 +145,7 @@ if($result->num_rows > 0){
         'show_acordes' => $row['show_acordes'],
         'show_next_slide' => $row['show_next_slide'],
         'show_en_top' => $row['show_en_top'],
+        'show_en_parte_top' => $row['show_en_parte_top'],
         'show_en_center' => $row['show_en_center'],
 
         'created_at' => $row['created_at'],

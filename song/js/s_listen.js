@@ -1209,3 +1209,66 @@ function close_ul_action(e){
         closeDiv(e.target.closest('.bl_set'));
     }
 }
+
+// Escucha el movimiento del deslizador de brillo de la pantalla en tiempo real
+eid_deslizador.addEventListener('input', (evento) => {
+    const valor = evento.target.value;
+
+    pintBrillo(valor);
+    eid_contenedorBrillo.style.opacity = valor * 0.01;
+});
+
+// 2. Este evento SE ACTIVA SOLO AL SOLTAR el deslizador
+eid_deslizador.addEventListener('change', async (evento) => {
+    const valor = evento.target.value;
+
+    console.log("change brillo_pantalla: " + valor + "%");
+        
+    // Aquí invocamos tu función pasándole el número de 0 a 100
+    aplicarBrillo(valor); 
+    await guardarEnLocalAndBd('r');// 'r' - de brillo
+});
+
+function pintBrillo(valor){
+    valor = Number(valor);
+    
+    if(valor < 10 || valor > 100){
+        return;
+    }
+    //pinto en el deslizador (DOM)
+    eid_deslizador.value = valor;
+
+    //pinto porcentaje en el visor (DOM)
+    eid_valorBrillo.textContent = valor + '%';
+}
+
+// Tu función (puedes colocarla donde quieras en tu script)
+function aplicarBrillo(valor) {
+    console.log("Brillo aplicado al soltar: " + valor + "%");
+
+    valor = Number(valor);
+    
+    if(valor < 10 || valor > 100){
+        return;
+    }
+
+    brillo_pantalla = valor;
+    localStorage.setItem('brillo_pantalla', brillo_pantalla);
+
+    const opacity_val = valor * 0.01;
+
+    //el contenedor del deslizador
+    eid_contenedorBrillo.style.opacity = opacity_val;
+
+    //solo para eid_fondo_body en pestaña esquema/select_slide!
+    //en 'pantalla.php' todo funciona ok
+    //pero en el iframe no se ve imagen del fondo. por eso lo de abajo es forzar que se vea como debe
+    if(pantalla_show){//muestro texto del slide
+        eid_fondo_body.style = '';//oculto la imagen de fondo
+    }else{//muestro el fondo del slide
+        eid_fondo_body.style.opacity = opacity_val;//muesto brillo personalizado de la imagen de fondo
+        eid_fondo_body.style.backgroundImage = bg_ruta;
+    }
+    
+    //!en el slide en la pestaña esquema no hace falta aplicar brillo. se ve lo aplicado en el iframe!
+}

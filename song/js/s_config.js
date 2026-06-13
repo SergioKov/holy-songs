@@ -171,6 +171,7 @@ const eid_btn_show_legend = document.getElementById('btn_show_legend');
 const eid_btn_show_acordes = document.getElementById('btn_show_acordes');
 const eid_btn_show_next_slide = document.getElementById('btn_show_next_slide');
 const eid_btn_show_en_top = document.getElementById('btn_show_en_top');
+const eid_btn_show_en_parte_top = document.getElementById('btn_show_en_parte_top');
 const eid_btn_show_en_center = document.getElementById('btn_show_en_center');
 
 //========================================================//
@@ -567,6 +568,7 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');//def false
 let bg_ruta = localStorage.getItem('bg_ruta') ?? '';//def false
+let brillo_pantalla = JSON.parse(localStorage.getItem('brillo_pantalla') ?? '100');//def false
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
 let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
@@ -586,6 +588,7 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 let show_en_top = JSON.parse(localStorage.getItem('show_en_top') ?? '0');// def false;
+let show_en_parte_top = JSON.parse(localStorage.getItem('show_en_parte_top') ?? '0');// def false;
 let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
 
 
@@ -603,6 +606,7 @@ let objPantalla = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control, 
@@ -610,6 +614,7 @@ let objPantalla = {
     show_acordes,
     show_next_slide,
     show_en_top,
+    show_en_parte_top,
     show_en_center,
 }
 let objPantalla_str = '';
@@ -623,6 +628,7 @@ let objPantallaToSendToBd = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control, 
@@ -630,6 +636,7 @@ let objPantallaToSendToBd = {
     show_acordes,
     show_next_slide,
     show_en_top,
+    show_en_parte_top,
     show_en_center,
 };
 let objPantallaToSendToBd_str = '';
@@ -642,6 +649,7 @@ let objPantallaParams = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
@@ -649,6 +657,7 @@ let objPantallaParams = {
     show_acordes,
     show_next_slide,
     show_en_top,
+    show_en_parte_top,
     show_en_center,
 }
 //localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
@@ -661,6 +670,7 @@ let objPantallaParamsToSendToBd = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
@@ -668,6 +678,7 @@ let objPantallaParamsToSendToBd = {
     show_acordes,
     show_next_slide,
     show_en_top,
+    show_en_parte_top,
     show_en_center,
 };
 let objPantallaParamsToSendToBd_str = '';
@@ -715,7 +726,6 @@ let miVentanaLocal = null;
 let miPestaniaRemota = null;
 let miVentanaRemota = null;
 
-let variable = 555;
 
 let dragSong = false;//false/true => mover y asi pasar a la sig/prev cancion de la lista en vista
 let tapSlide = false;//false/true => mover y asi pasar a la sig/prev slide en esquema al click /tap
@@ -867,3 +877,7 @@ const mapasDeLetras = {
 };
 
 let textoCancion_is_ok = false;// para revisar_y_guardar. si el texto de la canción es correcto o no. Por defecto es false, y se pone true si el texto es correcto. Se usa en resaltarAlfabetosHTML().
+
+const eid_contenedorBrillo = document.getElementById('contenedorBrillo');
+const eid_deslizador = document.getElementById('deslizador');//control de brillo
+const eid_valorBrillo = document.getElementById('valorBrillo');

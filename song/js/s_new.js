@@ -1425,6 +1425,7 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
@@ -1432,6 +1433,7 @@ async function make_arr_pantalla(currentSlide){
         show_acordes,
         show_next_slide,
         show_en_top,
+        show_en_parte_top,
         show_en_center,
         tipo_fuente,
         tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
@@ -1444,6 +1446,7 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
@@ -1451,6 +1454,7 @@ async function make_arr_pantalla(currentSlide){
         show_acordes,
         show_next_slide,
         show_en_top,
+        show_en_parte_top,
         show_en_center,
         tipo_fuente,
         tiempo_ms: 0, //si meto para local, no se ajusta font-size bien
@@ -1497,6 +1501,7 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
         user_view_control,
@@ -1504,6 +1509,7 @@ async function make_arr_pantalla(currentSlide){
         show_acordes,
         show_next_slide,
         show_en_top,
+        show_en_parte_top,
         show_en_center,
         tiempo_ms,//solo meter en la bd, no en local!
     };
@@ -1521,7 +1527,7 @@ async function make_arr_pantalla(currentSlide){
     
     console.log('fin make_arr_pantalla...');
 
-    //buildArrPantallaDesktop(arr_pantalla);
+    //buildArrPantallaDesktop(arr_pantalla);//aki no uso esto. muestro el iframe
 }
 
 
@@ -1539,6 +1545,7 @@ async function showTipoContent(btn, param){
             show_logo_en_fondo = 0;//reset
             show_imagen_en_fondo = 0;//reset
             bg_ruta = '';//reset
+            brillo_pantalla = 100;//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
 
@@ -1551,6 +1558,7 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
             localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
             localStorage.setItem('bg_ruta', bg_ruta);
+            localStorage.setItem('brillo_pantalla', brillo_pantalla);
             localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
             localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
         }
@@ -1588,6 +1596,10 @@ async function showTipoContent(btn, param){
 
             //pinto las imagenes personalizadas disponibles para elegir
             await pintImagenesSubidas();
+            break;
+
+        case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
+            console.log('aki aplicar brillo...');
             break;
 
         case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
@@ -1682,7 +1694,6 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_en_top', show_en_top);
             break;
 
-
         case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'e
             if(show_en_center == 1){
                 show_en_center = 0;//hext action
@@ -1696,7 +1707,20 @@ async function showTipoContent(btn, param){
                 localStorage.setItem('show_en_top', show_en_top);
             }
             localStorage.setItem('show_en_center', show_en_center);
-            break;            
+            break; 
+            
+        //new    
+        case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
+            if(show_en_parte_top == 1){
+                show_en_parte_top = 0;//hext action
+                btn.classList.remove('btn_active');
+            }else{
+                show_en_parte_top = 1;//hext action
+                btn.classList.add('btn_active');
+            }
+            localStorage.setItem('show_en_parte_top', show_en_parte_top);
+            break;
+            
     
         default:
             break;
@@ -1724,8 +1748,10 @@ async function guardarEnLocalAndBd(param){
     //n -> (next)     -> show_next_slide
     //t -> (top)      -> show_en_top
     //z -> (center)   -> show_en_center
+    //r -> (brillo)   -> brillo_pantalla
+    //x -> (parte top) -> show_en_parte_top
 
-    if(['p','i','g','b','f','u',   'l','c','n',  't','z'].includes(param)){
+    if(['p','i','g','b','f','u',   'l','c','n',  't','z',   'r', 'x'].includes(param)){
         
         //1. asigno la variable global para localStorage
         objPantallaParams = {
@@ -1733,6 +1759,7 @@ async function guardarEnLocalAndBd(param){
             show_logo_en_fondo,
             show_imagen_en_fondo,
             bg_ruta,
+            brillo_pantalla,
             show_bible_en_fondo,
             show_black_en_fondo,
             user_view_control,
@@ -1740,6 +1767,7 @@ async function guardarEnLocalAndBd(param){
             show_acordes,
             show_next_slide,
             show_en_top,
+            show_en_parte_top,
             show_en_center,
             tipo_fuente
         };
@@ -1757,6 +1785,7 @@ async function guardarEnLocalAndBd(param){
             show_logo_en_fondo,
             show_imagen_en_fondo,
             bg_ruta,
+            brillo_pantalla,
             show_bible_en_fondo,
             show_black_en_fondo,
             user_view_control,
@@ -1764,6 +1793,7 @@ async function guardarEnLocalAndBd(param){
             show_acordes,
             show_next_slide,
             show_en_top,
+            show_en_parte_top,
             show_en_center,
             tipo_fuente
         };
@@ -1848,6 +1878,8 @@ function mostrar_pantalla_show(){
 
     localStorage.setItem('pantalla_show','1');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+
+    aplicarBrillo(brillo_pantalla);
 }
 function ocultar_pantalla_show(){
     // eid_btn_pantallaShow.classList.remove('btn_active');
@@ -1857,6 +1889,8 @@ function ocultar_pantalla_show(){
     
     localStorage.setItem('pantalla_show','0');
     make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+
+    aplicarBrillo(brillo_pantalla);
 }
 
 
@@ -1902,6 +1936,17 @@ async function check_show_imagen_en_fondo(){
         await pintImagenActiveEnFondo();//tiene guardado de bg_ruta en localStorage
     }else{
         eid_btn_show_imagen_en_fondo.classList.remove('btn_active');
+    }
+}
+
+
+async function check_brillo_pantalla(){
+    console.log('=== function check_brillo_pantalla() ===');
+    console.log('brillo_pantalla: ', brillo_pantalla);
+    
+    if(brillo_pantalla >= 10 && brillo_pantalla <= 100 ){
+        pintBrillo(brillo_pantalla);
+        aplicarBrillo(brillo_pantalla);
     }
 }
 
@@ -1981,6 +2026,17 @@ function check_show_en_top(){
         eid_btn_show_en_top.classList.add('btn_active');
     }else{
         eid_btn_show_en_top.classList.remove('btn_active');
+    }
+}
+
+function check_show_en_parte_top(){
+    console.log('=== function check_show_en_parte_top() ===');
+    console.log('show_en_parte_top: ', show_en_parte_top);
+    
+    if(show_en_parte_top){
+        eid_btn_show_en_parte_top.classList.add('btn_active');
+    }else{
+        eid_btn_show_en_parte_top.classList.remove('btn_active');
     }
 }
 
@@ -2199,7 +2255,7 @@ function hideShowBlock(id_div){
 
 // hideShowSettings('nav');
 
-function hideShowDiv(id_div){
+async function hideShowDiv(id_div){
     console.log('=== function hideShowDiv() ===');
     console.log('id_div: ',id_div);
 
@@ -2285,8 +2341,9 @@ function hideShowDiv(id_div){
             if(show_imagen_en_fondo == 1){
                 eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
                 eid_wr_imagen_personalizada.classList.add('d-block');//muestro
-                pintImagenesSubidas();
+                await pintImagenesSubidas();
             }
+            check_brillo_pantalla();
             break;
     
         default:
@@ -3711,17 +3768,21 @@ function recargarReferencia(referencia) {
     }
 }
 
+function enfocarReferencia(referencia) {
+    // Usar la variable que contiene la referencia
+    if (referencia && !referencia.closed) {
+        referencia.focus();
+    } else {
+        console.log('La referencia está cerrada o no existe');
+    }
+}
+
 function cerrarReferencia(referencia) {
     if (referencia && !referencia.closed) {
         referencia.close();
     }
     referencia = null; // Limpiar la referencia
 }
-
-
-
-
-
 
 function recargarPestana() {
     // Usar la variable que contiene la referencia
@@ -4133,8 +4194,8 @@ async function subirImagen(){
                 
                 //actualizo HTML DOM
                 marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
-                pintImagenesSubidas();//pinto todas las imagenes disponibles
-                pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                await pintImagenesSubidas();//pinto todas las imagenes disponibles
+                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
 
 
                 showToast(
@@ -4194,7 +4255,7 @@ async function pintImagenActiveEnFondo(){
             localStorage.setItem('bg_ruta', bg_ruta);
             
             // Aplicar inmediatamente el fondo
-            eid_fondo_body.style.backgroundImage = bg_ruta;
+            eid_fondo_body.style.backgroundImage = bg_ruta;//aki obligatorio
             await guardarEnLocalAndBd('g');//g = guardar fondo
 
             showToast(
@@ -4266,7 +4327,7 @@ async function pintImagenesSubidas(){
                         if(e.target.closest('.d_delete')){
                             await deleteImagen(item.id_image);
                         }else{
-                            eid_fondo_body.style.backgroundImage = `url(.${item.filepath})`; 
+                            eid_fondo_body.style.backgroundImage = `url(.${item.filepath})`;//aki obligatorio
                             console.log('item.id_image: ', item.id_image);
     
                             await updateImagenActive(item.id_image);
@@ -4364,7 +4425,7 @@ async function updateImagenActive(id_image){
 
                 //actualizo HTML DOM
                 marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
-                pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
 
                 showToast(
                     'ok',
@@ -4468,7 +4529,7 @@ async function deleteImagen(id_image){
                 if(data.new_id_image_active){
                     //actualizo HTML DOM
                     marcarImagenActiveEnDOM(data.new_id_image_active);//marcar en rojo la imagen en el modal
-                    pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                    await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
                 }
 
                 showToast(
@@ -4639,3 +4700,9 @@ async function getImagenAll(){
 
     }
 }
+
+
+
+
+
+        

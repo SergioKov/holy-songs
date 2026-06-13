@@ -17,6 +17,7 @@ let debug = false;
 // let show_logo_en_fondo = 0;
 // let show_imagen_en_fondo = 0;
 // let bg_ruta = '';
+// let brillo_pantalla = 100;//default
 // let show_bible_en_fondo = 0;
 // let show_black_en_fondo = 0;
 // let user_view_control = 0;
@@ -25,6 +26,7 @@ let debug = false;
 // let show_acordes = 0;
 // let show_next_slide = 0;
 // let show_en_top = 0;
+// let show_en_parte_top = 0;
 // let show_en_center = 0;
 
 
@@ -38,6 +40,7 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');// def false;
 let bg_ruta = localStorage.getItem('bg_ruta') ?? '';// def false;
+let brillo_pantalla = JSON.parse(localStorage.getItem('brillo_pantalla') ?? '100');// def false;
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
 let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
@@ -57,6 +60,7 @@ let show_acordes = JSON.parse(localStorage.getItem('show_acordes') ?? '0');// de
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0');// def false;
 let show_en_top = JSON.parse(localStorage.getItem('show_en_top') ?? '0');// def false;
+let show_en_parte_top = JSON.parse(localStorage.getItem('show_en_parte_top') ?? '0');// def false;
 let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
 
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
@@ -71,6 +75,7 @@ let objPantallaParams_def = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
     user_view_control,
@@ -78,6 +83,7 @@ let objPantallaParams_def = {
     show_acordes,
     show_next_slide,
     show_en_top,
+    show_en_parte_top,
     show_en_center,
     tipo_fuente,
 }
@@ -234,6 +240,7 @@ function aplicarVista(){
     show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
     show_imagen_en_fondo = (objPantallaParams.show_imagen_en_fondo == '1') ? 1 : 0;
     bg_ruta = (objPantallaParams.bg_ruta != '') ? objPantallaParams.bg_ruta : '';
+    brillo_pantalla = (objPantallaParams.brillo_pantalla != '100') ? objPantallaParams.brillo_pantalla : 100;//? revisar!
     show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? 1 : 0;
     show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? 1 : 0;
     user_view_control = (objPantallaParams.user_view_control == '1') ? 1 : 0;
@@ -243,6 +250,7 @@ function aplicarVista(){
     show_acordes = (objPantallaParams.show_acordes == '1') ? 1 : 0;
     show_next_slide = (objPantallaParams.show_next_slide == '1') ? 1 : 0;
     show_en_top = (objPantallaParams.show_en_top == '1') ? 1 : 0;
+    show_en_parte_top = (objPantallaParams.show_en_parte_top == '1') ? 1 : 0;
     show_en_center = (objPantallaParams.show_en_center == '1') ? 1 : 0;
     tipo_fuente = (objPantallaParams.tipo_fuente == 'm') ? 'm' : 'a';
 
@@ -366,11 +374,17 @@ function aplicarVista(){
             eid_contenedor.classList.remove('show_en_top');
         }
 
+        if(show_en_parte_top){
+            //calculo la mitad de la pantalla para restarla en mySizePantalla()
+        }
+
         if(show_en_center){
             eid_contenedor.classList.add('show_en_center');
         }else{
             eid_contenedor.classList.remove('show_en_center');
         }
+
+        aplicarBrilloPantalla(brillo_pantalla);//la comprobacion del rango (10-100) tengo dentro
 
         // if(tipo_fuente == 'm'){
         //     eid_contenedor.classList.add('monospace_font');
@@ -431,6 +445,10 @@ function aplicarVistaUsuario(){
             eid_contenedor.classList.add('show_en_top');
         }else{
             eid_contenedor.classList.remove('show_en_top');
+        }
+
+        if(t.includes('x')){//show_en_parte_top
+            //calculo la mitad de la pantalla para restarla en mySizePantalla()
         }
 
         if(t.includes('z')){
@@ -566,14 +584,17 @@ async function mySizePantallaShow() {//new como ajustarTexto()
     let maxW;
     let maxH;
 
+    let parte_a_restar = (show_en_parte_top == 1) ? (window.innerHeight / 2) : 0 ;
+    console.log('parte_a_restar: ', parte_a_restar);
+
     if(window.innerWidth < 768){//es mobile
         // dejo 10px de padding entre el border de pantalla y el texto
         maxW = window.innerWidth / count_trad - 10;
-        maxH = window.innerHeight / count_trad - 10;
+        maxH = (window.innerHeight - parte_a_restar) / count_trad - 10;
     }else{//es tablet o desktop
         // dejo 32px de padding entre el border de pantalla y el texto
         maxW = window.innerWidth / count_trad - 32;
-        maxH = window.innerHeight / count_trad - 32;        
+        maxH = (window.innerHeight - parte_a_restar) / count_trad - 32;        
     }
 
 
@@ -610,7 +631,7 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         trad.style.fontSize = fontSize_new + 'px';
         //alert('2. sdfgsdg');
 
-        let trad_h = window.innerHeight / count_trad;
+        let trad_h = window.innerHeight / count_trad ;
         //console.log('trad_h: ', trad_h);
 
         // si quero mostrar en varias columnas, divido entre count_trad
@@ -661,5 +682,18 @@ function restoreHtmlFromSanitized(sanitizedHtml) {
     return sanitizedHtml
         .replace(/__\|\|__/g, '"')  // reemplaza __||__ por "
         .replace(/__\|__/g, "'");   // reemplaza __|__ por '
+}
+
+function aplicarBrilloPantalla(valor) {
+    console.log("Brillo en pantalla aplicado al soltar: " + valor + "%");
+    
+    if(valor < 10 || valor > 100){
+        return;
+    }
+
+    const opacity_val = valor * 0.01;
+    
+    //el slide de la pestaña o ventana en 'pantalla.php'
+    document.body.style.opacity = opacity_val;
 }
 

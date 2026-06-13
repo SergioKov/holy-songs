@@ -2302,6 +2302,7 @@ async function check_PantallaParams(){//pinto botones en rojo si están marcados
     check_fondo_body();//new
     check_show_logo_en_fondo();
     await check_show_imagen_en_fondo();
+    check_brillo_pantalla();
     check_show_bible_en_fondo();
     check_show_black_en_fondo();
     check_user_view_control();
@@ -2309,6 +2310,7 @@ async function check_PantallaParams(){//pinto botones en rojo si están marcados
     check_show_acordes();
     check_show_next_slide();
     check_show_en_top();
+    check_show_en_parte_top();
     check_show_en_center();
 }
 
