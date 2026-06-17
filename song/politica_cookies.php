@@ -89,8 +89,7 @@
         <div class="container_inner">
 
             <h1 class="h1_title">
-                Bible-Text.com
-                <span>(Demo)</span>
+                Holy-Songs.com
             </h1>
 
             <div id="wrapper_politica_cookies">
@@ -100,7 +99,7 @@
 
                     <h1>Política de Cookies</h1>
                     
-                    <p>En <strong>Bible-Text.com</strong>, utilizamos cookies para mejorar tu experiencia de navegación y analizar el uso de nuestro sitio web. Al continuar navegando, aceptas el uso de cookies según esta política. A continuación, te proporcionamos detalles sobre el uso que hacemos de ellas.</p>
+                    <p>En <strong>Holy-Songs.com</strong>, utilizamos cookies para mejorar tu experiencia de navegación y analizar el uso de nuestro sitio web. Al continuar navegando, aceptas el uso de cookies según esta política. A continuación, te proporcionamos detalles sobre el uso que hacemos de ellas.</p>
                     
                     <h2>1. ¿Qué son las cookies?</h2>
                     <p>Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Nos permiten recordar tus preferencias y mejorar el rendimiento del sitio.</p>
@@ -145,7 +144,7 @@
                     <p>Nos reservamos el derecho de modificar esta política de cookies en cualquier momento. Te recomendamos revisar esta página periódicamente para estar informado de cualquier cambio. Esta política fue actualizada por última vez el <strong>16 de septiembre de 2024</strong>.</p>
                     
                     <h2>9. Contacto</h2>
-                    <p>Si tienes alguna pregunta o necesitas más información sobre nuestra política de cookies, puedes ponerte en contacto con nosotros a través de <a href="mailto:contact@bible-text.com" target="_blank">contact@bible-text.com</a>.</p>
+                    <p>Si tienes alguna pregunta o necesitas más información sobre nuestra política de cookies, puedes ponerte en contacto con nosotros a través de <a href="mailto:contact@Holy-Songs.com" target="_blank">contact@Holy-Songs.com</a>.</p>
 
                     <div style="height:200px;"></div>
 
@@ -157,7 +156,7 @@
     </div><!--/container-->
 
     <footer id="footer_fijo">
-        <p>&copy; <?=date("Y");?> Bible-Text.com. Todos los derechos reservados.</p>
+        <p>&copy; <?=date("Y");?> Holy-Songs.com. Todos los derechos reservados.</p>
     </footer>
 
 <script type="text/javascript">   

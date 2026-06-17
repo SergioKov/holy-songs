@@ -2294,6 +2294,10 @@ async function select_slide(){
     mySizeEsquema();
 }
 
+
+
+
+
 async function check_PantallaParams(){//pinto botones en rojo si están marcados antes desde localStorage
     console.log('=== function check_PantallaParams() ===');
     
@@ -3889,6 +3893,12 @@ function showBlockName(blockName){
     const bl_titulo = ecl_edit_head.querySelector('.bl_titulo');
 
     switch (blockName) {
+        case 'biblia':
+            bl_titulo.textContent = 'Biblia';
+            showOnlyBlock(blockName);
+            mySizeBible();
+            break;
+        
         default:
         case 'buscar':
             bl_titulo.textContent = 'Buscar canción';

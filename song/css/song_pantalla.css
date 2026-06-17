@@ -1,7 +1,15 @@
+
 * {
     margin:0;
     padding:0;
 }
+
+/* variables */
+:root {
+    --fade-time: 500ms;
+}
+
+
 
 body {
     /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
@@ -16,7 +24,6 @@ body {
     background: black;
     background-size: cover;
     background-position: center;
-    transition: 1s ease;
     overflow: hidden;
 }
 
@@ -61,9 +68,6 @@ body.black_en_fondo {
 }
 
 
-
-
-
 #contenedor {
     height: 100%;
     background: black;
@@ -84,9 +88,11 @@ body.black_en_fondo {
     color: white !important;
 }
 
+body,
 #contenedor,
 #fondo {
-    transition: 1s ease;
+    /* transition: 1s ease; */
+    transition: opacity var(--fade-time) ease;
 }
 
 #contenedor_prev_inner {

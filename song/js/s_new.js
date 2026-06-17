@@ -1359,7 +1359,7 @@ async function make_arr_pantalla(currentSlide){
     }
 
     // 1. Crear el elemento
-    const miIframe = document.createElement('iframe');
+    miIframe = document.createElement('iframe');
     miIframe.id = "miIframe";
 
     // 2. Configurar atributos básicos
@@ -1394,18 +1394,17 @@ async function make_arr_pantalla(currentSlide){
     tipo_content += 'm';//m (monospace) y 'a' (arial) si hay tipo_fuente
 
     //creo datos solo para una pantalla...
-    one_pant_data = {
+    una_pantalla_datos = {
         tipo_content: 'es_song_slide',
         id_song: id_song,
         slide_actual: currentSlide,
         slide_html: slide_divs,
     };
-    console.log('one_pant_data: ', one_pant_data);
+    console.log('una_pantalla_datos: ', una_pantalla_datos);
 
-    arr_pantalla.push(one_pant_data);
-    //arr_pantalla.push(one_pant_data);//test
-    //arr_pantalla.push(one_pant_data);//test
-
+    arr_pantalla.push(una_pantalla_datos);
+    //arr_pantalla.push(una_pantalla_datos);//test
+    //arr_pantalla.push(una_pantalla_datos);//test
     console.log('arr_pantalla: ', arr_pantalla);
 
     arr_pantalla_string = JSON.stringify(arr_pantalla);//es global
@@ -1516,7 +1515,7 @@ async function make_arr_pantalla(currentSlide){
     console.log('objPantallaToSendToBd: ',objPantallaToSendToBd);
 
     //solo grabo en bd si estan abiertas las pestaña o ventana remotas
-    if(miPestaniaRemota || miVentanaRemota){
+    if(miPantallaRemota){
         console.log('grabo en BD...');
 
         //guardo en la BD
@@ -1525,11 +1524,58 @@ async function make_arr_pantalla(currentSlide){
         console.log('result: ', result);
     }
     
-    console.log('fin make_arr_pantalla...');
+    actualizarPantallas();
 
     //buildArrPantallaDesktop(arr_pantalla);//aki no uso esto. muestro el iframe
+    
+    console.log('fin make_arr_pantalla...');
 }
 
+
+function actualizarPantallas({
+    actualizarSlide = true,
+    actualizarVista = true
+} = {}){
+    console.log('=== function actualizarPantallas() ===');
+
+    const payload = {
+        tipo: 'pantalla_update',
+        actualizarSlide,//por defecto es true
+        actualizarVista,//por defecto es true
+        arr_pantalla,
+        objPantallaParams
+    };
+    
+    // iframe local
+    if(miIframe && miIframe.contentWindow){
+        console.log('hay miPantallaLocal abierta. envio mensaje...');
+
+        miIframe.contentWindow.postMessage(
+            payload,
+            window.location.origin
+        );
+    }
+    
+    // pantalla local
+    if(miPantallaLocal && !miPantallaLocal.closed){
+        console.log('hay miPantallaLocal abierta. envio mensaje...');
+
+        miPantallaLocal.postMessage(
+            payload,
+            window.location.origin
+        );
+    }
+
+    // pantalla remota
+    if (miPantallaRemota && !miPantallaRemota.closed) {
+        console.log('hay miPantallaRemota abierta. envio mensaje...');
+
+        pantallaRemota.postMessage(
+            payload,
+            '*'
+        );
+    }
+}
 
 
 async function showTipoContent(btn, param){
@@ -1806,6 +1852,12 @@ async function guardarEnLocalAndBd(param){
         //guardo en localStorage
         objPantallaParamsToSendToBd_str = JSON.stringify(objPantallaParamsToSendToBd);
         localStorage.setItem('objPantallaParamsToSendToBd', objPantallaParamsToSendToBd_str);
+
+        //actualizo solo vista, no arr_pantalla
+        actualizarPantallas({
+            actualizarSlide: false,
+            actualizarVista: true
+        });
     }
 }
 
@@ -1881,16 +1933,17 @@ function mostrar_pantalla_show(){
 
     aplicarBrillo(brillo_pantalla);
 }
-function ocultar_pantalla_show(){
+async function ocultar_pantalla_show(){
     // eid_btn_pantallaShow.classList.remove('btn_active');
     eid_vklad_btn_pantallaShow.classList.remove('btn_active');
     eid_contenedor_prev.classList.remove('shown');
     eid_pantalla_body.classList.remove('shown');
     
     localStorage.setItem('pantalla_show','0');
-    make_arr_pantalla(currentSlide);//dentro hay pantallaShow
-
+    //make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+    
     aplicarBrillo(brillo_pantalla);
+    await guardarEnLocalAndBd('p');//solo actualizo params de vista
 }
 
 
@@ -3705,11 +3758,10 @@ function removeMonospaceFont() {
 /*
     funciones para manejar una pestaña LOCAL con pantalla
     referencia es:
-    - pestaña 'miPestaniaLocal' con nombre_referencia 'miPestañaLocal'
-    - ventana 'miVentanaLocal' con nombre_referencia 'miVentanaLocal'
+    - pestaña o ventana  'miPantallaLocal' con nombre_referencia 'miPantallaLocal'
 */
 function abrirReferencia(referencia) {
-    console.log('=== function abrirReferenciaLocal() ===');
+    console.log('=== function abrirReferencia() ===');
     
     let nombre_referencia = '';
     
@@ -3723,31 +3775,19 @@ function abrirReferencia(referencia) {
     // Abrir y guardar la referencia en la variable
     switch (referencia) {
         //LOCAL
-        case miPestaniaLocal:
-            nombre_referencia = 'miPestañaLocal';
-            referencia = window.open('pantalla.php', 'miPestañaLocal');
-            miPestaniaLocal = referencia; // 🔥 Actualizar la variable global
-            break;
-
-        case miVentanaLocal:
-            nombre_referencia = 'miVentanaLocal';
-            referencia = window.open('pantalla.php','miVentanaLocal', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');
-            miVentanaLocal = referencia; // 🔥 Actualizar la variable global
+        case miPantallaLocal:
+            nombre_referencia = 'miPantallaLocal';
+            referencia = window.open('pantalla.php', nombre_referencia);
+            miPantallaLocal = referencia;// Actualizar la variable global
             break;
 
         //REMOTO
         //ruta_screen_pantalla: 'http://show-screen.local/' en localhost
         //ruta_screen_pantalla: 'https://show-screen.com/' en prod 
-        case miPestaniaRemota:
-            nombre_referencia = 'miPestañaRemota';
-            referencia = window.open(ruta_screen_pantalla,'miPestañaRemota');
-            miPestaniaRemota = referencia; // 🔥 Actualizar la variable global
-            break;
-
-        case miVentanaRemota:
-            nombre_referencia = 'miVentanaRemota';
-            referencia = window.open(ruta_screen_pantalla,'miVentanaRemota', 'width=800,height=600,top=100,left=100,toolbar=yes,resizable=yes,scrollbars=yes');
-            miVentanaRemota = referencia; // 🔥 Actualizar la variable global
+        case miPantallaRemota:
+            nombre_referencia = 'miPantallaRemota';
+            referencia = window.open(ruta_screen_pantalla, nombre_referencia);
+            miPantallaRemota = referencia;// Actualizar la variable global
             break;
     
         default:
@@ -3784,23 +3824,29 @@ function cerrarReferencia(referencia) {
     referencia = null; // Limpiar la referencia
 }
 
-function recargarPestana() {
-    // Usar la variable que contiene la referencia
-    if (miPestaniaLocal && !miPestaniaLocal.closed) {
-        miPestaniaLocal.location.reload();
-        miPestaniaLocal.focus();
+
+
+function enfocarReferenciaOCrear(referencia){  
+    console.log('=== function enfocarReferenciaOCrear() ===');
+
+    if (referencia && !referencia.closed) {
+        referencia.focus();
     } else {
-        console.log('La pestaña está cerrada o no existe');
+        abrirReferencia(referencia);
     }
 }
 
-function cerrarPestana() {
-    if (miPestaniaLocal && !miPestaniaLocal.closed) {
-        miPestaniaLocal.close();
-    }
-    miPestaniaLocal = null; // Limpiar la referencia
-}
 
+function recargarReferenciaOCrear(referencia){
+    console.log('=== function recargarReferenciaOCrear() ===');
+
+    if (referencia && !referencia.closed) {
+        referencia.location.reload();
+        referencia.focus();
+    } else {
+        abrirReferencia(referencia);
+    }
+}
 
 function normalizeSearchText(text) {
     return text

@@ -87,16 +87,11 @@
     `;
 ?>
 
-
     <div id="fondo" class=""></div><!--/#fondo-->
 
-
-    <div id="contenedor" class="">
-
-    </div><!--/#contenedor-->
-    
-    
+    <div id="contenedor" class=""></div><!--/#contenedor-->
+        
     <script src="js/s_pantalla.js"></script>
 
-</bodyd=>
+</body>
 </html>

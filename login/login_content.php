@@ -236,7 +236,7 @@
 
         <div class="wr_block">
 
-            <h1>Iniciar sesión</h1>
+            <h1>Autentifícate como usuario</h1>
 
             <div class="wr_links" style="flex-direction: column;">
 
@@ -247,7 +247,7 @@
                 ></div>
             <?php endif; ?>                
 
-                <button id="test" class="btn" onclick="openModal('top',null,null,'showLogin')">Adelante</button>
+                <button id="test" class="btn" onclick="openModal('top',null,null,'showLogin')">Iniciar sesión</button>
 
             </div>
 

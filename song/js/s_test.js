@@ -243,7 +243,9 @@ async function guardarArrPantallaEnBd(){
     try {
 
         if(arr_pantalla.length == 0){
-            alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+            // alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+            console.warn('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+            return;
         }
 
         const data = await insertarArrPantalla();
@@ -300,7 +302,8 @@ async function insertarArrPantalla() {
         // }
 
         if(!id_song || isNaN(slide_actual) ){
-            alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            // alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            console.warn('222a. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
             return;
         }
 
@@ -348,7 +351,9 @@ async function guardarPantallaParamsEnBd(){
     try {
 
         if(arr_pantalla.length == 0){
-            alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+            //alert('en guardarArrPantallaEnBd() --- arr_pantalla es vacio... hago return.');
+            console.warn('en guardarPantallaParamsEnBd() --- arr_pantalla es vacio... hago return.');
+            return;
         }
 
         const data = await insertarPantallaParams();
@@ -413,7 +418,8 @@ async function insertarPantallaParams() {
             isNaN(show_en_center)
         
         ){
-            alert('222. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            // alert('222params. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
+            console.warn('222params. No hay todos los parametros necesarios (id_song, slide_actual) de la cancion...');//'No hay todos los parametros necesarios.'
             return;
         }
 

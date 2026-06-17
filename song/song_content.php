@@ -621,7 +621,6 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
 
 
-
                             <!--#block_esquema-->
                             <div id="block_esquema" class="edit_blocks">
 
@@ -775,8 +774,12 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
 
 
-                                                    <button id="btn_enfocarPestania_fast" class="btn flex_center btn_actions" onclick="enfocarReferencia(miPestaniaLocal);">
+                                                    <button id="btn_enfocarPantalla_fast" class="btn flex_center btn_actions" onclick="enfocarReferenciaOCrear(miPantallaLocal);">
                                                         <img class="btn_img_sm" src="images/center_focus.png">
+                                                    </button>
+
+                                                    <button id="btn_recargarPantalla_fast" class="btn flex_center btn_actions" onclick="recargarReferenciaOCrear(miPantallaLocal);">
+                                                        <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                     </button>
 
                                                     <button id="btn_select_slide_settings" class="btn btn_set btn_actions" onclick="hideShowDiv('bl_select_slide_settings');" title="Settings">
@@ -883,24 +886,14 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 Escoge esta opción si usas otra pantalla desde el dispositivo actual (PC o MAC) para mostrar en otra pantalla conectada las diapositivas para el público.
                                                                             </p>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miPestaniaLocal);">Pestaña Local</button>
-                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPestaniaLocal);">
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miPantallaLocal);">Pantalla Local</button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPantallaLocal);">
                                                                                     <img class="btn_img_sm" src="images/center_focus.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="recargarReferencia(miPestaniaLocal);">
+                                                                                <button class="btn" onclick="recargarReferencia(miPantallaLocal);">
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miPestaniaLocal);">✕</button>
-                                                                            </div>
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miVentanaLocal);">Ventana Local</button>
-                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miVentanaLocal);">
-                                                                                    <img class="btn_img_sm" src="images/center_focus.png">
-                                                                                </button>
-                                                                                <button class="btn" onclick="recargarReferencia(miVentanaLocal);">
-                                                                                    <img class="btn_img_sm" src="images/reload_white_32x32.png">
-                                                                                </button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miVentanaLocal);">✕</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miPantallaLocal);">✕</button>
                                                                             </div>
                                                                         </div>
 
@@ -923,13 +916,8 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </p>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miPestaniaRemota);">Pestaña Remota</button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miPestaniaRemota);">✕</button>
-                                                                            </div>
-
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miVentanaRemota);">Ventana Remota</button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miVentanaRemota);">✕</button>
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miPantallaRemota);">Pantalla Remota</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miPantallaRemota);">✕</button>
                                                                             </div>
                                                                         </div>
 
@@ -1306,7 +1294,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositiva actual:</span>
-                                                        <button class="btn" onclick="recargarReferencia(miPestaniaLocal);">
+                                                        <button class="btn" onclick="recargarReferencia(miPantallaLocal);">
                                                             <img class="btn_img_sm2" src="images/reload_white_32x32.png">
                                                         </button>
                                                     </h4>

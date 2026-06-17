@@ -94,6 +94,12 @@ let objPantallaParams_str_old = '';
 
 let objPantallaParams = JSON.parse(localStorage.getItem('objPantallaParams')) || objPantallaParams_def;
 
+//tokenes
+let resizeToken = 0;//para construirElementosYAppend()
+let resizeTimeout;//para lanzar mySizePantallaShow(); solo cuando el usuario deje de hacer resize
+let transitionToken = 0;//para mostrarSlide(), mostrarFondo(), cambiarSlideConTransicion()
+let sizeCalcToken = 0;// para mySizePantallaShow() 
+
 
 
 
@@ -104,24 +110,66 @@ let objPantallaParams = JSON.parse(localStorage.getItem('objPantallaParams')) ||
 //si se abre este ficheo , añado la info de esto en localStorage
 localStorage.setItem('pantalla_abierta','true');
 
+//cuando se cargue el documento
 document.addEventListener('DOMContentLoaded', () => {
-    //console.log('documento pantalla cargado');    
-    lanzarIntentos();// dentro está mySizePantallaShow();
+        cargarEstadoInicial();
+    }
+);
+
+//escuchador de postMessage
+window.addEventListener('message', (event) => {
+
+    // seguridad
+    if (
+        // event.origin !== 'http://holy-songs.local' &&
+        // event.origin !== 'http://bible-text.local' &&
+        // event.origin !== 'https://holy-songs.com' &&
+        // event.origin !== 'https://bible-text.com' &&
+        event.origin !==  window.location.origin
+    ) {
+        return;
+    }
+
+    const data = event.data;
+
+    if (!data || data.tipo !== 'pantalla_update') {
+        return;
+    }
+
+    if (data.arr_pantalla) {
+        arr_pantalla = data.arr_pantalla;
+    }
+
+    if (data.objPantallaParams) {
+        objPantallaParams = data.objPantallaParams;
+    }
+
+    if (data.actualizarVista) {
+        console.log(' llamo --- aplicarVista()');
+        aplicarVista();
+    }
+
+    if (data.actualizarSlide) {
+        console.log(' llamo --- construirElementosYAppend()');
+        //construirElementosYAppend();//tiene aplicarVista() dentro
+        cambiarSlideConTransicion();//tiene dentro construirElementosYAppend() y este tiene aplicarVista() dentro
+    }
+
 });
 
-//Si HACE FALTA USAR 
-window.addEventListener('load',() => {
-    //console.log('load - window.innerWidth: ', window.innerWidth);
-    lanzarIntentos();// dentro está mySizePantallaShow();
-});
-
+//cambio de tamaño de la pestaña/ventana
 window.addEventListener('resize',() => {
-    //console.log('resize - window.innerWidth: ', window.innerWidth);
-    mySizePantallaShow();
+    
+    clearTimeout(resizeTimeout);
+
+    resizeTimeout = setTimeout(() => {
+        //console.log('resize - window.innerWidth: ', window.innerWidth);
+        mySizePantallaShow();
+    }, 300);    
 });
 
 
-function lanzarIntentos(){
+function antes_lanzarIntentos(){
     //console.log('=== function lanzarIntentos() ===');
         
     arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
@@ -167,9 +215,7 @@ function lanzarIntentos(){
         lanzarIntentosConDelay();
     }
 }
-
-
-function lanzarIntentosConDelay(){
+function antes_lanzarIntentosConDelay(){
     
     //lanzo intenos cada 0.2 seg para comprobar si ha cambiado localStorage
     //si ha cambiado, actualizo arr_pantalla y reconstruyo el contenedor
@@ -221,12 +267,212 @@ function lanzarIntentosConDelay(){
 
 }
 
+
+function cargarEstadoInicial(){
+    console.log('=== function cargarEstadoInicial() ==='); 
+
+    const arr_pantalla_str = localStorage.getItem('arr_pantalla');
+    const objPantallaParams_str = localStorage.getItem('objPantallaParams');
+
+    if(!arr_pantalla_str || !objPantallaParams_str){
+        return;
+    }
+
+    arr_pantalla = JSON.parse(arr_pantalla_str);
+    objPantallaParams = JSON.parse(objPantallaParams_str);
+
+    aplicarVista();//primero
+    construirElementosYAppend();//segundo
+}
+
+
+function mostrarSlide(){
+    console.log('=== function mostrarSlide() ===');
+    const token = ++transitionToken;
+
+    // Caso carga inicial:
+    // el fondo ya está oculto
+    if(!eid_fondo.classList.contains('shown')){
+        console.log('en mostrarSlide() - Caso carga inicial - eid_contenedor.classList.add shown -> fade in slide');
+
+        requestAnimationFrame(() => {
+            if(token !== transitionToken){
+                return;
+            }
+            eid_contenedor.classList.add('shown');
+            console.log('en mostrarSlide() - eid_contenedor.classList.add shown -> fade in slide');
+        });
+        return;
+    }
+    
+    // fade out fondo
+    eid_fondo.classList.remove('shown');
+    console.log(
+        'remove fondo shown',
+        performance.now()
+    );
+    console.log('en mostrarSlide() - eid_fondo.classList.remove shown -> fade out fondo');
+
+    const onTransitionEnd = (event) => {
+        console.log('TRANSITION END SLIDE');
+
+        if(event.target !== eid_fondo){
+            return;
+        }
+
+        if(token !== transitionToken){
+            return;
+        }
+        
+        // fondo ya es negro aquí
+        // fade in slide inmediatamente
+        requestAnimationFrame(() => {
+            if(token !== transitionToken){
+                return;
+            }
+            eid_contenedor.classList.add('shown');
+            console.log(
+                'add slide shown',
+                performance.now()
+            );
+            console.log('en mostrarSlide() - eid_contenedor.classList.add shown - > fade in slide');
+        });
+    };
+
+    eid_fondo.addEventListener(
+        'transitionend',
+        onTransitionEnd,
+        { once: true }
+    );
+
+}
+
+
+function mostrarFondo(){
+    console.log('=== function mostrarFondo() ===');
+    const token = ++transitionToken;
+
+    if(!eid_contenedor.classList.contains('shown')){
+        console.log('en mostrarSlide() - Caso carga inicial - eid_contenedor.classList.add shown -> fade in fondo');
+        
+        requestAnimationFrame(() => {
+            if(token !== transitionToken){
+                return;
+            }
+            eid_fondo.classList.add('shown');
+            console.log('en mostrarFondo() - Caso carga inicial - eid_fondo.classList.add shown -> fade in fondo');
+        });
+        return;
+    }
+
+    // fade out slide
+    eid_contenedor.classList.remove('shown');
+    console.log('en mostrarFondo() - eid_contenedor.classList.remove shown - > fade out slide');
+    
+    const onTransitionEnd = (event) => {
+        console.log('TRANSITION END FONDO');
+
+        if(event.target !== eid_contenedor){
+            return;
+        }
+
+        if(token !== transitionToken){
+            return;
+        }
+
+        // fade in fondo inmediatamente
+        requestAnimationFrame(() => {
+            if(token !== transitionToken){
+                return;
+            }
+            eid_fondo.classList.add('shown');
+            console.log('en mostrarFondo() - eid_fondo. add shown -> fade in fondo');
+        });
+    };
+
+    eid_contenedor.addEventListener(
+        'transitionend',
+        onTransitionEnd,
+        { once: true }
+    );
+}
+
+
+function cambiarSlideConTransicion(){
+
+    const token = ++transitionToken;
+
+    // Si el texto no está visible,
+    // solo actualizo el HTML interno
+    if(!pantalla_show){
+        console.log('estoy dentro de cambiarSlideConTransicion() --- pantalla_show == 0 --- llamo construirElementosYAppend');
+        construirElementosYAppend();
+        return;
+    }
+
+    // Si ya está oculto, no espero transitionend
+    if(!eid_contenedor.classList.contains('shown')){
+
+        console.log('contenedor ya oculto -> construirElementosYAppend()');
+        construirElementosYAppend();
+
+        requestAnimationFrame(() => {
+            if(token !== transitionToken){
+                return;
+            }
+            eid_contenedor.classList.add('shown');
+        });
+        return;
+    }
+
+    // Fade out
+    eid_contenedor.classList.remove('shown');
+    console.log('dentro de cambiarSlideConTransicion() -> hago fade out');
+
+    const onTransitionEnd = (event) => {
+
+        // Ignorar eventos de hijos
+        if(event.target !== eid_contenedor){
+            return;
+        }
+
+        // Hay una transición más reciente
+        if(token !== transitionToken){
+            return;
+        }
+
+        construirElementosYAppend();
+        console.log('transitionend -> construirElementosYAppend()');
+
+        // Fade in
+        requestAnimationFrame(() => {
+
+            if(token !== transitionToken){
+                return;
+            }
+
+            eid_contenedor.classList.add('shown');
+            console.log('transitionend -> requestAnimationFrame() -> fade in');
+        });
+
+    };
+
+    eid_contenedor.addEventListener(
+        'transitionend',
+        onTransitionEnd,
+        { once: true }
+    );
+
+}
+
+
 //========================================================================================//
 // B O T H
 //========================================================================================//
 //========================================================================================//
 //aki el codigo que se usa con ambos (both) local 'pantall.js' y remoto 'screen_pantalla.js'
 //========================================================================================//
+
 
 /**
  * eid_contenedor es global
@@ -256,49 +502,19 @@ function aplicarVista(){
 
     // si hay contenedor...
     if(eid_contenedor){
+      
+        
         
         //Admin control
         if(pantalla_show){//muestro texto
-
-            //se ha cambiado slide
-            if(arr_pantalla_str_old !== arr_pantalla_str_new){               
-
-                if(!eid_contenedor.classList.contains('shown')){
-                    console.log('if (pantalla_show) - muestro el texto');
-                    eid_contenedor.classList.add('shown');
-                }
-
-            }else{//no se ha cambiado slide
-                
-                if(eid_contenedor.classList.contains('shown')){
-                    console.log('if (pantalla_show) - oculto el texto');
-                    eid_contenedor.classList.remove('shown');
-                }                
-                setTimeout(()=>{
-                    if(!eid_contenedor.classList.contains('shown')){
-                        console.log('if (pantalla_show) - muestro el texto');
-                        eid_contenedor.classList.add('shown');
-                    }
-                },1000);//ya que transition es 1s 
-            }
+            console.log('if -  muestro el slide');
+            
+            mostrarSlide();
 
         }else{//muestro fondo            
-            //console.log('else - oculto el texto - muestro el fondo');
+            console.log('else - oculto el texto - muestro el fondo');
             
-            if(eid_contenedor.classList.contains('shown')){
-                console.log('else (!pantalla_show) - oculto el texto');
-                eid_contenedor.classList.remove('shown');
-            }
-
-            setTimeout(()=>{
-                if(!eid_fondo.classList.contains('shown')){
-                    console.log('if (pantalla_show) - muestro el texto');
-                    eid_fondo.classList.add('shown');
-                }
-            },1000);//ya que transition es 1s
-
-
-
+            mostrarFondo();
 
 
 
@@ -340,7 +556,7 @@ function aplicarVista(){
                 document.body.classList.remove('black_en_fondo');
             }
 
-        }
+        }//din de - muestro fondo 
 
 
         //User control
@@ -410,7 +626,12 @@ function aplicarVistaUsuario(){
 
     // Leer un parámetro específico
     const id = params.get("id");   // "8050"
-    const t  = params.get("t");    // "lc2" //en local solo hay 't' ya que 'id' es el elegido por el admin
+    const t  = params.get("t"); 
+
+    //si no hay parametro, no hago nada.
+    if(!t){
+        return;
+    }
 
     if(t){
 
@@ -469,13 +690,15 @@ function aplicarVistaUsuario(){
 }
 
 
-
 /**
  * eid_contenedor es global
  * arr_pantalla es global
  */
 function construirElementosYAppend(){
     //console.log('=== function construirElementosYAppend() ===');
+
+    resizeToken++;
+    const currentToken = resizeToken;
 
     eid_contenedor.innerHTML = '';//reset
 
@@ -506,22 +729,49 @@ function construirElementosYAppend(){
         
     }
 
-    mySizePantallaShow();
+    //mySizePantallaShow();
+
+    //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
+    lanzarResize(currentToken);
+
+ ;
 
     //reviso si ha conseguido mySizePantallaShow() ajustar el fontSize a todo anco y alto
-    setTimeout(()=>{
+    // setTimeout(()=>{
 
-        let count_trads = eid_contenedor.querySelectorAll('.trad').length;
+    //     let count_trads = eid_contenedor.querySelectorAll('.trad').length;
 
-        //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
-        if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
-            mySizePantallaShow();//vuelvo a llamar para ajustar altura
-        }
+    //     //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
+    //     if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
+    //         console.log('la altura de trad es menor que la de eid_contenedor. llamo otra vez a mySizePantallaShow()');
+    //         alert(55);
+    //         mySizePantallaShow();//vuelvo a llamar para ajustar altura
+    //     }
 
-    },500);
+    // },500);
 
 }//end function construirElementosYAppend()
 
+
+function lanzarResize(currentToken){
+
+    //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
+    requestAnimationFrame(() => {
+        
+        if(currentToken !== resizeToken){
+            return;
+        }
+
+        if(eid_contenedor.offsetWidth === 0 || eid_contenedor.offsetHeight === 0){
+            //vuelvo a llamar
+            lanzarResize();    
+            return;
+        }
+
+        mySizePantallaShow();
+    });
+
+}
 
 
 function sleep(ms) {
@@ -574,8 +824,21 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
 }
 
 
+
 async function mySizePantallaShow() {//new como ajustarTexto()
     //console.log('=== function mySizePantallaShow() ===');
+
+
+    if(eid_contenedor.offsetWidth === 0 || eid_contenedor.offsetHeight === 0){
+        console.warn('contenedor aún sin layout');
+        requestAnimationFrame(() => {
+            mySizePantallaShow();
+        });
+        return;
+    }
+
+
+    const token = ++sizeCalcToken;
         
     const tradAll = document.querySelectorAll('.trad');
     let count_trad = tradAll.length;//en caso de song es 1
@@ -598,10 +861,15 @@ async function mySizePantallaShow() {//new como ajustarTexto()
     }
 
 
-    //recorrer...
-    tradAll.forEach( async (trad) => {
+    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
+    for (const trad of tradAll){
         //console.log('trad: ', trad);
-        
+
+        if(!trad.isConnected){
+            console.warn('trad eliminado');
+            continue;
+        }
+
         if(pantalla_show){
             trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
         }
@@ -613,23 +881,131 @@ async function mySizePantallaShow() {//new como ajustarTexto()
 
         const clone_contenedor = eid_contenedor.cloneNode(true);
         clone_contenedor.style.position = 'relative';
-        //clone_contenedor.style.position = 'absolute';
         clone_contenedor.style.visibility = 'hidden';
         clone_contenedor.style.left = '-9999px';
         document.body.appendChild(clone_contenedor);
 
         const clone = trad.cloneNode(true);
-        clone.style.position = 'absolute';
-        clone.style.visibility = 'hidden';
-        clone.style.left = '-9999px';
+        //clone.style.position = 'absolute';
+        //clone.style.visibility = 'hidden';
+        //clone.style.left = '-9999px';
         clone_contenedor.appendChild(clone);
 
+        /*
+            console.log(
+                'isConnected:',
+                trad.isConnected
+            );
+
+            console.log(
+                'CONTENEDOR',
+                eid_contenedor.offsetWidth,
+                eid_contenedor.offsetHeight
+            );
+            
+            console.log(
+                'TRAD',
+                trad.offsetWidth,
+                trad.offsetHeight
+            );
+            
+            console.log(
+                'TRAD PARENT',
+                trad.parentElement.offsetWidth,
+                trad.parentElement.offsetHeight
+            );
+
+
+            console.log(
+                'MEDICION',
+                clone_contenedor.offsetWidth,
+                clone_contenedor.offsetHeight
+            );
+
+            console.log(
+                getComputedStyle(clone_contenedor).width,
+                getComputedStyle(clone_contenedor).height
+            );
+
+
+
+            console.log(
+                trad.className
+            );
+            
+            console.log(
+                clone.className
+            );
+
+            console.log(
+                getComputedStyle(trad).display,
+                getComputedStyle(clone).display
+            );
+            
+            console.log(
+                getComputedStyle(trad).position,
+                getComputedStyle(clone).position
+            );
+            
+            console.log(
+                getComputedStyle(trad).flex,
+                getComputedStyle(clone).flex
+            );
+
+            console.log(
+                'REAL',
+                trad.offsetWidth,
+                trad.offsetHeight
+            );
+            
+            console.log(
+                'CLONE',
+                clone.offsetWidth,
+                clone.offsetHeight
+            );
+
+            console.log(
+                'REAL parent',
+                trad.parentElement.offsetWidth,
+                trad.parentElement.offsetHeight
+            );
+            
+            console.log(
+                'CLONE parent',
+                clone.parentElement.offsetWidth,
+                clone.parentElement.offsetHeight
+            );
+
+
+
+
+            console.log(
+                getComputedStyle(trad).fontSize
+            );
+            
+            console.log(
+                getComputedStyle(clone).fontSize
+            );
+
+            console.log(
+                getComputedStyle(trad).width,
+                getComputedStyle(trad).height
+            );
+            
+            console.log(
+                getComputedStyle(clone).width,
+                getComputedStyle(clone).height
+            );
+        */
+        
         let fontSize_new = await ajustarFuenteBinaria(/*trad,*/ clone, maxW, maxH);
         //console.log("FontSize final. fontSize_new:", fontSize_new);
-        //alert('1. sdfgsdg');
+
+        if(token !== sizeCalcToken || !trad.isConnected){
+            return;
+        }
         
         trad.style.fontSize = fontSize_new + 'px';
-        //alert('2. sdfgsdg');
 
         let trad_h = window.innerHeight / count_trad ;
         //console.log('trad_h: ', trad_h);
@@ -647,10 +1023,10 @@ async function mySizePantallaShow() {//new como ajustarTexto()
             trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
         }       
         
-        document.body.removeChild(clone_contenedor);//ok
-    });
+        document.body.removeChild(clone_contenedor);//ok        
+    }
     
-    aplicarVista();
+    //aplicarVista(); //antes estaba. ahora comento
 }
 
 

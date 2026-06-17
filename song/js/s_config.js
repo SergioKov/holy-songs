@@ -551,7 +551,7 @@ let slide_actual = 0;//slide para grabar en bd por defecto es 0;
 
 let arr_pantalla = [];//array de objetos con los datos de la canción actual para pantalla
 let arr_pantalla_string = '';//array de objetos con los datos de la canción actual para pantalla
-let one_pant_data = {};//objeto con datos de una pantalla para make_arr_pantalla()
+let una_pantalla_datos = {};//objeto con datos de una pantalla para make_arr_pantalla()
 
 
 //let pantallaShow = JSON.parse(localStorage.getItem('pantallaShow') ?? '0');//por defecto pantalla no se ve
@@ -719,12 +719,10 @@ if(web_tld === 'com'){//hostalia
 }
 
 
-// Variable para almacenar la referencia de la Pestaña
-let miPestaniaLocal = null;
-let miVentanaLocal = null;
-
-let miPestaniaRemota = null;
-let miVentanaRemota = null;
+// Variable para almacenar la referencia de la pantalla local/remota
+let miPantallaLocal = null;
+let miPantallaRemota = null;
+let miIframe = null;
 
 
 let dragSong = false;//false/true => mover y asi pasar a la sig/prev cancion de la lista en vista
