@@ -3,12 +3,6 @@ window.addEventListener('load', (e) => {
     ocultar_calculando();
         mySizeEdit();//en test. luego quitar!!!
     init();
-
-    // ajustarTexto();
-    // pintParrafosAcordes();
-    // pintTipoAcorde();
-    // transponerTodosLosAcordes(currentTransposition);
-    // scrollToSlide(currentSlide);
 });
 
 
@@ -858,10 +852,18 @@ function handleFormInput(e, container_block){
             // match[1]: si era algo dentro de []
             // match[2]: si era palabra del array sin []
             let titulo = match[1] || match[2];
-            titulo = titulo ? titulo.trim() : ''; 
+            titulo = (titulo) ? titulo.trim() : ''; 
             
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
+
+            let tituloOriginal = titulo;
+            let contador = 2;// para añadir (2), (3), etc. si hay títulos repetidos
+
+            while (obj_bloques.hasOwnProperty(titulo)) {
+                titulo = `${tituloOriginal} (${contador})`;
+                contador++;
+            }
 
             console.log(' ');
             console.log('=== BLOQUE ===');
@@ -944,6 +946,14 @@ function handleFormInput(e, container_block){
 
         const titulo = '---';
         const contenido = texto;
+
+        let tituloOriginal = titulo;
+        let contador = 2;// para añadir (2), (3), etc. si hay títulos repetidos
+
+        while (obj_bloques.hasOwnProperty(titulo)) {
+            titulo = `${tituloOriginal} (${contador})`;
+            contador++;
+        }
 
         const step = document.createElement('div');
         step.className = 'step';
@@ -1047,6 +1057,7 @@ function handleFormInput(e, container_block){
     });
 
     pintParrafosAcordes();
+    pintParrafosLlaves();
     changeTipoAcorde(tipoAcorde);
 }
 

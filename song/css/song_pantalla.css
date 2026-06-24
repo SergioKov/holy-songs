@@ -529,3 +529,7 @@ fieldset.kuplet {
     justify-content: center !important;
 }
 
+.llave {
+    /* opacity: 0.1; */
+    opacity: 0;
+}

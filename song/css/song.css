@@ -737,6 +737,9 @@ legend {
 legend, span.barra, p.b {
     color: #909090;
 }
+.llave {
+    opacity: 0.1;
+}
 
 span.repryza {
     font-family: fantasy;
@@ -2666,6 +2669,10 @@ p.p_sm b {
     margin: 0px auto;
     padding: 0px;
     max-width: 425px;
+}
+
+.max_768 {
+    max-width: 768px !important;
 }
 
 .bl_set_inner .inner_content h4 {
@@ -4674,9 +4681,12 @@ fieldset.kuplet.partial{
 
 #previewContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    max-height: 50vh;
 }
+
 #previewImage{
     max-width: 100%;
 }
@@ -4691,7 +4701,7 @@ fieldset.kuplet.partial{
     gap: 10px;
     flex-direction: column;
     overflow: auto;
-    max-height: 300px;
+    max-height: 50vh;
 }
 
 .imagen_item {
@@ -4712,6 +4722,17 @@ fieldset.kuplet.partial{
     background: #ad0000;
 }
 
+.imagen_item.active::before {
+    content: "ACTIVO";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ad0000;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
 .imagen_item_img {
     width: 100%;
     /* max-width: 300px; */
@@ -4720,8 +4741,8 @@ fieldset.kuplet.partial{
 
 .d_delete {
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 10px;
+    top: 10px;
     padding: 10px;
     background: #0000008c;
     width: 40px;
@@ -4730,6 +4751,10 @@ fieldset.kuplet.partial{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.d_delete:hover {
+    background: #ad0000;
+    transition: background-color 0.3s ease;
 }
 
 .flex_center{

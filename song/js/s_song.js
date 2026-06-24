@@ -5,6 +5,7 @@
 async function init() {
     ajustarTexto();
     pintParrafosAcordes();
+    pintParrafosLlaves();
     pintTipoAcorde();
     transponerTodosLosAcordes(currentTransposition);
     scrollToSlide(currentSlide);
@@ -309,7 +310,7 @@ function pintParrafosAcordes() {
     // Regex para acordes: letra A-H + opcional # o b + opcional sufijo alfanumérico
     const regexAcorde = /([A-H](?:#|b)?\w*)/g;
 
-    document.querySelectorAll('p.c').forEach(p => {
+    document.querySelectorAll('fieldset p.c').forEach(p => {
         let textOriginal = p.textContent;
 
         const regexTexto = /(\([^()]*\))|([|\/\-\(\)])|(\s+)|([^\s|\/\-\(\)]+)/g;//separa símbolos, espacios y texto y todo lo que esté dentro de ( ... ) como una sola pieza
@@ -335,6 +336,19 @@ function pintParrafosAcordes() {
         //console.log('2. resultado: ',resultado);
 
         p.innerHTML = resultado;
+    });
+}
+
+
+function pintParrafosLlaves() {
+    console.log('=== function pintParrafosLlaves() ===');
+    const regexLlaves = /[{}]/g;
+
+    document.querySelectorAll('fieldset p.t').forEach(p => {
+        p.innerHTML = p.textContent.replace(
+            regexLlaves,
+            match => `<span class="llave">${match}</span>`
+        );
     });
 }
 
@@ -822,7 +836,7 @@ async function pintLineasAcordes() {
 }
 
 
-
+//no se usa de momento!!!
 async function getSongPages(){
     console.log('=== function getSongPages() ===');
 
@@ -884,7 +898,7 @@ async function getSongPages(){
             // match[1]: si era algo dentro de []
             // match[2]: si era palabra del array sin []
             let titulo = match[1] || match[2];
-            titulo = titulo ? titulo.trim() : ''; 
+            titulo = (titulo) ? titulo.trim() : ''; 
             
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
@@ -1149,6 +1163,7 @@ async function getSongPages(){
     return obj_pages;    
 }
 
+
 async function getSongBlocks(){
     console.log('=== function getSongBlocks() ===');
 
@@ -1210,10 +1225,18 @@ async function getSongBlocks(){
             // match[1]: si era algo dentro de []
             // match[2]: si era palabra del array sin []
             let titulo = match[1] || match[2];
-            titulo = titulo ? titulo.trim() : ''; 
+            titulo = (titulo) ? titulo.trim() : ''; 
             
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
+
+            let tituloOriginal = titulo;
+            let contador = 2;// para añadir (2), (3), etc. si hay títulos repetidos
+
+            while (obj_bloques.hasOwnProperty(titulo)) {
+                titulo = `${tituloOriginal} (${contador})`;
+                contador++;
+            }
 
             console.log(' ');
             console.log('=== BLOQUE ===');
@@ -1318,6 +1341,14 @@ async function getSongBlocks(){
 
         const titulo = '---';
         const contenido = objSongBd['song_text'];
+
+        let tituloOriginal = titulo;
+        let contador = 2;// para añadir (2), (3), etc. si hay títulos repetidos
+
+        while (obj_bloques.hasOwnProperty(titulo)) {
+            titulo = `${tituloOriginal} (${contador})`;
+            contador++;
+        }
 
         const step = document.createElement('div');
         step.className = 'step';
@@ -1433,7 +1464,7 @@ function crear_arr_esquema_bucle(obj_bloques){
 function make_regex_titulos(palabras){
     // regex que captura en grupo (1) palabra entre [] (cualquier palabra)
     // o en grupo (2) palabra del arr_titulos al inicio de línea
-    const regexTitulo = new RegExp(
+    const regexTitulo_old = new RegExp(
         '^\\s*' +                                                   // ^ → inicio de línea, seguido de posibles espacios en blanco
         '(?:' +                                                     // (?: ...) → grupo sin captura (elegir una de las dos opciones)
             '\\[\\s*(.*?)\\s*\\]' +                                 // opción 1: texto entre corchetes. ej.: [Verso 1]
@@ -1441,6 +1472,16 @@ function make_regex_titulos(palabras){
             '((?:\\d+\\s*)?(?:' + palabras + ')[^\\n]*)' +          // opción 2: opcional número + palabra del array hasta el fin de la línea
         ')',                                                        // fin de grupo sin captura. luego va coma ','
         'gim'                                                       // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
+    );
+
+    const regexTitulo = new RegExp(
+        '^\\s*' +                                                               // ^ → inicio de línea, seguido de posibles espacios en blanco
+        '(?:' +                                                                 // (?: ...) → grupo sin captura (elegir una de las dos opciones)
+            '\\[\\s*(.*?)\\s*\\]' +                                             // opción 1: texto entre corchetes. ej.: [Verso 1]
+            '|' +                                                               // o bien
+            '((?:\\d+\\s*)?(?:' + palabras + ')(?!\\p{L})[^\\n]*)' +            // opción 2: opcional número + palabra del array hasta el fin de la línea
+        ')',                                                                    // fin de grupo sin captura. luego va coma ','
+        'gimu'                                                                  // g -> global (se usa con matchAll), i → case-insensitive, m → multiline
     );
     console.log('regexTitulo: ', regexTitulo);
 
@@ -1636,6 +1677,7 @@ function buildPage(){
     //init();
     ajustarTexto();
     pintParrafosAcordes();
+    pintParrafosLlaves();
     pintTipoAcorde();
     scrollToSlide(currentSlide);
 }
@@ -1753,6 +1795,7 @@ async function buildSong(){
 
     ajustarTexto();
     pintParrafosAcordes();
+    pintParrafosLlaves();
     changeTipoAcorde(tipoAcorde);
 
     if(currentTransposition != 0){
@@ -1979,6 +2022,7 @@ async function ver_esquema(){
     ver_esquema_ul_action.onclick = e => close_ul_action(e);
 
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
+    pintParrafosLlaves();//para pintar llaves '{}' si hay con opacity
     mySizeEsquema();
 }
 
@@ -2172,6 +2216,7 @@ async function crear_esquema(){
     });
 
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
+    pintParrafosLlaves();//para pintar llaves '{}' si hay con opacity
     mySizeEsquema();
 }
 
@@ -2291,6 +2336,7 @@ async function select_slide(){
     await check_PantallaParams();
     
     pintParrafosAcordes();//para pintar barras de acordes como mas finas
+    pintParrafosLlaves();//para pintar llaves '{}' si hay con opacity
     mySizeEsquema();
 }
 
@@ -4094,73 +4140,6 @@ async function findWordsSong(){
             // '.td_tonalidad'
         ];//se buscará texto en cada elemento de estos span's
         addFilterListener(contenedor_filtro, sp_icon_filtro, el_input, selector_items, arr_spans);
-
-        /*
-        //CREAR TABLA
-        //Recorrer canciones encontradas... 
-        objDataSongs.arr_data.forEach((el, i, arr) => {
-            //console.log('el: ', el);
-
-            const tr_song = document.createElement('tr');
-            tr_song.className = 'tr_song';
-            tr_song.dataset.id = el.id_song;
-
-            let hay_esquema_texto;
-
-            //convierto arr_esquema (string) en array correcto
-            if(esString(el.arr_esquema) && el.arr_esquema != ''){
-                el.arr_esquema = JSON.parse(el.arr_esquema);
-                hay_esquema_texto = `Sí (${el.arr_esquema.length})`;
-            }else{
-                el.arr_esquema = [];
-                hay_esquema_texto = '';
-            }
-            console.log('(parseado) --- el.arr_esquema: ', el.arr_esquema);
-
-            let category_name_text = '';
-            if(el.category != 0 && el.category_name != null){
-                //inportante en una linea
-                category_name_text = `<span class="sp_number">${el.category}.</span> <span class="sp_name">${el.category_name}</span>`;
-            }
-
-            let songbook_title_text = '';
-            if(el.songbook != 0 && el.songbook_title != null){
-                //inportante en una linea
-                songbook_title_text = `<span class="sp_number">${el.songbook}.</span> <span class="sp_name">${el.songbook_title}</span>`;
-            }
-
-            let lang_name_text = '';
-            if(el.lang){
-                lang_name_text = obj_lang_names[el.lang];
-            }
-
-            tr_song.innerHTML = `
-                <td class="td_n">${i + 1}</td>
-                <td class="td_id_song" data-id_song="${el.id_song}" title="${el.id_song}">${el.id_song}</td>
-                <td class="td_numero">${el.song_number || ''}</td>
-                <td class="td_titulo">${el.title}</td>
-                <td class="td_esquema">${hay_esquema_texto}</td>            
-                <td class="td_category" data-category="${el.category || ''}">${category_name_text}</td>            
-                <td class="td_songbook" data-songbook="${el.songbook || ''}">${songbook_title_text}</td>            
-                <td class="td_idioma" data-lang_name="${el.lang_name}">${lang_name_text}</td>
-                <td class="td_tonalidad">${el.tune}</td>
-                <td class="td_transpose">${el.tune_transpose}</td>
-            `;
-
-            tr_song.onclick = (e)=>{
-                console.log('e.currentTarget: ', e.currentTarget);
-
-                id_song = e.currentTarget.dataset.id;
-                console.log('asigno global --- id_song: ', id_song);               
-                
-                pintSongActive();//en la ventana a la derecha de la tabla de lista
-            }
-
-            tbody.append(tr_song);
-        });
-        */
-
-
 
         //CREAR DIV'S Y P'S
         //Recorrer canciones encontradas... 

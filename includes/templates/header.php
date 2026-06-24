@@ -14,7 +14,7 @@ if (!isset($li_active)) {
 }
 
 if(isset($_SESSION['login'])){
-    $img_src_login = "../song/images/login2_white.svg";
+    $img_src_login = "../song/images/login2_green.svg";
 }else{
     $img_src_login = "../song/images/login2_grey.svg";
 }

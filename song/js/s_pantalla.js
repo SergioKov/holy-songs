@@ -307,10 +307,7 @@ function mostrarSlide(){
     
     // fade out fondo
     eid_fondo.classList.remove('shown');
-    console.log(
-        'remove fondo shown',
-        performance.now()
-    );
+    console.log('remove fondo shown', performance.now() );
     console.log('en mostrarSlide() - eid_fondo.classList.remove shown -> fade out fondo');
 
     const onTransitionEnd = (event) => {
@@ -331,10 +328,7 @@ function mostrarSlide(){
                 return;
             }
             eid_contenedor.classList.add('shown');
-            console.log(
-                'add slide shown',
-                performance.now()
-            );
+            console.log('add slide shown', performance.now());
             console.log('en mostrarSlide() - eid_contenedor.classList.add shown - > fade in slide');
         });
     };
@@ -734,9 +728,9 @@ function construirElementosYAppend(){
     //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
     lanzarResize(currentToken);
 
- ;
+ 
 
-    //reviso si ha conseguido mySizePantallaShow() ajustar el fontSize a todo anco y alto
+    //reviso si ha conseguido mySizePantallaShow() ajustar el fontSize a todo ancho y alto
     // setTimeout(()=>{
 
     //     let count_trads = eid_contenedor.querySelectorAll('.trad').length;
@@ -753,24 +747,39 @@ function construirElementosYAppend(){
 }//end function construirElementosYAppend()
 
 
-function lanzarResize(currentToken){
+function lanzarResize(currentToken, intentos = 0){
+    const MAX_INTENTOS = 5;
 
     //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
-    requestAnimationFrame(() => {
+    requestAnimationFrame( async () => {
         
         if(currentToken !== resizeToken){
             return;
         }
 
         if(eid_contenedor.offsetWidth === 0 || eid_contenedor.offsetHeight === 0){
+
+            if(intentos >= MAX_INTENTOS){
+                console.warn('lanzarResize(): máximo de intentos alcanzado');
+                return;
+            }
+            console.log(`lanzarResize(): intento ${intentos + 1}/${MAX_INTENTOS}`);
+
             //vuelvo a llamar
-            lanzarResize();    
+            lanzarResize(currentToken, intentos + 1);    
             return;
         }
 
-        mySizePantallaShow();
-    });
+        //REVISAR LUEGO SI HACE FALTA ESTA COMPROBACION
+        // let count_trads = eid_contenedor.querySelectorAll('.trad').length;
+        // //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
+        // if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
+        //     console.log('la altura de trad es menor que la de eid_contenedor. llamo otra vez a mySizePantallaShow()');
+        //     lanzarResize(currentToken);
+        // }
 
+        await mySizePantallaShow();
+    });
 }
 
 

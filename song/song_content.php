@@ -36,7 +36,7 @@ if ($_SERVER['HTTP_HOST'] == 'holy-songs.com') { //HOSTALIA
 
 //sesion iniciada correctamente
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    $img_login_src = "./images/login2_white.svg";
+    $img_login_src = "./images/login2_green.svg";
 
     echo '
             <script>
@@ -383,7 +383,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                             placeholder="Введите слово или фразу для поиска..."
                                                             data-dic=""
                                                             va-lue="боже"
-                                                            value="zzz">
+                                                            value="aaa">
                                                         <div class="clear_inpt" onclick="clear_inpt('find')">&times;</div>
                                                     </div>
 
@@ -787,7 +787,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                     </button>
                                                     <div id="bl_select_slide_settings" class="bl_set bl_actions" style="display:none;">
                                                         <div class="bl_set_inner bl_closed">
-                                                            <div class="inner_content">
+                                                            <div class="inner_content max_768">
 
                                                                 <div class="inner_content_head_body">
                                                                     <div class="inner_content_head">
@@ -805,7 +805,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <h4>Fondo cuando la diapositiva está oculta</h4>
                                                                             <p>Habilitar / Deshabilitar:</p>
                                                                             <div class="wr_sel_pantalla wr_opt_fondo">
-                                                                                <button id="btn_show_logo_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
+                                                                                <button id="btn_show_logo_en_fondo" class="btn opt_fondo btn_big d-none" onclick="showTipoContent(this,'i')">Logo en Fondo</button>
                                                                                 <button id="btn_show_bible_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'b')">Bible en Fondo</button>
                                                                                 <button id="btn_show_black_en_fondo" class="btn opt_fondo btn_big" onclick="showTipoContent(this,'f')">Black en Fondo</button>
                                                                                 <button id="btn_show_imagen_en_fondo" class="btn opt_fondo btn_big w_100" onclick="showTipoContent(this,'g')">Fondo personalizado</button>
@@ -816,7 +816,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     <input
                                                                                         id="backgroundImage"
                                                                                         type="file"
+                                                                                        name="images[]"
                                                                                         accept="image/jpeg,image/png,image/webp"
+                                                                                        multiple
                                                                                     >
                                                                                     <div id="previewContainer">
                                                                                         <!-- Aquí se mostrará la vista previa de la imagen seleccionada -->
@@ -826,7 +828,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                         class="btn btn_big w_100 d-none"
                                                                                         type="button"
                                                                                     >
-                                                                                        Subir imagen
+                                                                                        Subir imágenes
                                                                                     </button>
 
                                                                                     <div id="imagenesContainer">

@@ -1145,6 +1145,12 @@ async function make_arr_pantalla(currentSlide){
             }
             if(hijo.className == 't'){
                 count_p_t++;//texto
+
+                //NO HACE FALTA AKI! PERO DEJO COMO EJEMPLO COMO SUSTITUIR
+                // hijo.innerHTML = hijo.innerHTML.replace(
+                //     /[{}]/g,  //los '{' y los '}'
+                //     match => `<span class="llave" en_mmm>${match}</span>` 
+                // );
             }
             d_line.className = `d_line ${hijo.className}`;
             d_line.innerHTML = hijo.innerHTML;
@@ -4162,13 +4168,16 @@ const btnUploadBackground = document.getElementById('btnUploadBackground');
 const previewImage = document.getElementById('previewImage');
 
 let selectedFile = null;
+let selectedFiles = [];
 
 // Vista previa
 inputBackground.addEventListener('change', () => {
 
-    selectedFile = inputBackground.files[0];
+    /*
+    // si una imagen
+    selectedFile = inputBackground.files[0];   
+    if (!selectedFile) return;    
 
-    if (!selectedFile) return;
     eid_previewContainer.innerHTML = '';//reset
     btnUploadBackground.classList.remove('d-none');
 
@@ -4180,16 +4189,48 @@ inputBackground.addEventListener('change', () => {
 
     //añado al DOM
     eid_previewContainer.append(previewImage);
+    */
 
+
+
+    //muchas imagenes
+    selectedFiles = [...inputBackground.files];
+
+    if(selectedFiles.length === 0){
+        return;
+    }
+
+    eid_previewContainer.innerHTML = '';//reset
+    btnUploadBackground.classList.remove('d-none');
+
+    //recorrer las imagenes
+    selectedFiles.forEach(file => {
+
+        const imageUrl = URL.createObjectURL(file);
+
+        const imagen_item = document.createElement('div');
+        imagen_item.className = 'imagen_item' ;
+        imagen_item.innerHTML = `
+            <img class="imagen_item_img" src="${imageUrl}" alt="Imagen de fondo">
+        `;
+
+        // const img = document.createElement('img');
+        // img.src = imageUrl;
+        // img.className = 'previewImage';
+        
+        //añado al DOM
+        eid_previewContainer.append(imagen_item);
+    });
 });
 
 
 btnUploadBackground.addEventListener('click', async () => {
-    subirImagen();
+    //subirImagen();
+    subirImagenes();
 });
 
 
-// Subir imagen
+// Subir una imagen
 async function subirImagen(){
     console.log(' === function subirImagen() === ');    
     
@@ -4198,6 +4239,15 @@ async function subirImagen(){
         return;
     }
 
+    const totalSize = selectedFiles.reduce(
+        (sum, file) => sum + file.size,
+        0
+    );
+
+    if(totalSize > 40 * 1024 * 1024){
+        alert('El tamaño total de la imagen seleccionada supera el límite permitido de 40 MB. Esto puede deberse a que la imagen tiene un tamaño muy grande. Por favor, reduzca la cantidad de la imagen o seleccione la  imagen más ligera.');
+        return;
+    }
     const formData = new FormData();
 
     formData.append('image', selectedFile);
@@ -4243,6 +4293,113 @@ async function subirImagen(){
                 await pintImagenesSubidas();//pinto todas las imagenes disponibles
                 await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
 
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );   
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en upload_imagen.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en upload_imagen.php',
+                { cause: error }
+            );
+        }       
+
+    }
+    catch (error) {
+        console.error('subirImagen. error: ',error);
+    }
+
+}
+
+
+// Subir muchas imagenes
+async function subirImagenes(){
+    console.log(' === function subirImagenes() === ');    
+    
+    if (!selectedFiles.length === 0) {
+        alert('Seleccione una o varias imágenes.');
+        return;
+    }
+
+    const totalSize = selectedFiles.reduce(
+        (sum, file) => sum + file.size,
+        0
+    );
+
+    if(totalSize > 40 * 1024 * 1024){
+        alert('El tamaño total de las imágenes seleccionadas supera el límite permitido de 40 MB. Esto puede deberse a que ha seleccionado demasiadas imágenes o a que alguna de ellas tiene un tamaño muy grande. Por favor, reduzca la cantidad de imágenes, seleccione imágenes más ligeras o realice la subida en varias operaciones.');
+        return;
+    }
+
+    const formData = new FormData();
+
+    selectedFiles.forEach(file => {
+        formData.append('images[]', file);
+    });
+
+
+    try {
+
+        const response = await fetch('../song/php/upload_imagenes.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error upload_imagenes.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //desactivo boton y preview
+                btnUploadBackground.classList.add('d-none');
+                eid_previewContainer.innerHTML = '';//reset
+                
+                //actualizo HTML DOM
+                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
+                await pintImagenesSubidas();//pinto todas las imagenes disponibles
+                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
 
                 showToast(
                     'ok',
@@ -4280,7 +4437,7 @@ async function subirImagen(){
     }
     catch (error) {
 
-        console.error('iniciarSesion. error: ',error);
+        console.error('subirImagenes. error: ',error);
 
     }
 

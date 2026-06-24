@@ -157,7 +157,8 @@
     height: 50%;
     justify-content: center;
     padding: 0;
-    max-width: 425px;
+    /* max-width: 425px; */
+    max-width: 768px;
 }
 .modalContentBottom {
     width: 100%;
@@ -200,7 +201,8 @@
 .modalContentCenter .wr_modcont {
     top: 120%;
     min-width: 320px;
-    max-width: 425px;
+    /* max-width: 425px; */
+    max-width: 768px;
 }
 .modalContentCenter .wr_modcont.mooved {
     top: 50%;

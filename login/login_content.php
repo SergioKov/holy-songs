@@ -247,7 +247,7 @@
                 ></div>
             <?php endif; ?>                
 
-                <button id="test" class="btn" onclick="openModal('top',null,null,'showLogin')">Iniciar sesión</button>
+                <button id="test" class="btn" onclick="openModal('top',null,null,'showLogin')">Pulsa aquí para iniciar sesión</button>
 
             </div>
 
