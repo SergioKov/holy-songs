@@ -25,6 +25,7 @@ body {
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    cursor: none;
 }
 
 /* body.logo_en_fondo {

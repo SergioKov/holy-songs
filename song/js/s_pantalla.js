@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 );
 
 //escuchador de postMessage
-window.addEventListener('message', (event) => {
+window.addEventListener('message', async (event) => {
 
     // seguridad
     if (
@@ -132,27 +132,62 @@ window.addEventListener('message', (event) => {
 
     const data = event.data;
 
-    if (!data || data.tipo !== 'pantalla_update') {
+    if (!data){
         return;
     }
 
-    if (data.arr_pantalla) {
-        arr_pantalla = data.arr_pantalla;
-    }
+    switch(data.tipo){
 
-    if (data.objPantallaParams) {
-        objPantallaParams = data.objPantallaParams;
-    }
+        case 'pantalla_update':
+            if (data.arr_pantalla) {
+                arr_pantalla = data.arr_pantalla;
+            }        
+            if (data.objPantallaParams) {
+                objPantallaParams = data.objPantallaParams;
+            }        
+            if (data.actualizarVista) {
+                console.log(' llamo --- aplicarVista()');
+                aplicarVista();
+            }        
+            if (data.actualizarSlide) {
+                console.log(' llamo --- construirElementosYAppend()');
+                //construirElementosYAppend();//tiene aplicarVista() dentro
+                cambiarSlideConTransicion();//tiene dentro construirElementosYAppend() y este tiene aplicarVista() dentro
+            }            
+            break;
 
-    if (data.actualizarVista) {
-        console.log(' llamo --- aplicarVista()');
-        aplicarVista();
-    }
+        //dejo como ejemplo
+        //no funciona como quiero yo
+        //solo con 'F11' o boton de extension 'fullscreen'    
+        case 'fullscreen':
+            try{
+                await document.documentElement.requestFullscreen();
+            }catch(e){
+                console.error(e);
+            }
+            break;
 
-    if (data.actualizarSlide) {
-        console.log(' llamo --- construirElementosYAppend()');
-        //construirElementosYAppend();//tiene aplicarVista() dentro
-        cambiarSlideConTransicion();//tiene dentro construirElementosYAppend() y este tiene aplicarVista() dentro
+        case 'exit_fullscreen':
+            if(document.fullscreenElement){
+                try{
+                    await document.exitFullscreen();
+                }catch(e){
+                    console.error(e);
+                }
+            }
+            break;
+
+        case 'toggle_fullscreen':
+            try{
+                if(document.fullscreenElement){
+                    await document.exitFullscreen();
+                }else{
+                    await document.documentElement.requestFullscreen();
+                }
+            }catch(e){
+                console.error(e);
+            }
+            break;
     }
 
 });
@@ -167,6 +202,7 @@ window.addEventListener('resize',() => {
         mySizePantallaShow();
     }, 300);    
 });
+
 
 
 function antes_lanzarIntentos(){
@@ -723,26 +759,8 @@ function construirElementosYAppend(){
         
     }
 
-    //mySizePantallaShow();
-
     //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
     lanzarResize(currentToken);
-
- 
-
-    //reviso si ha conseguido mySizePantallaShow() ajustar el fontSize a todo ancho y alto
-    // setTimeout(()=>{
-
-    //     let count_trads = eid_contenedor.querySelectorAll('.trad').length;
-
-    //     //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
-    //     if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
-    //         console.log('la altura de trad es menor que la de eid_contenedor. llamo otra vez a mySizePantallaShow()');
-    //         alert(55);
-    //         mySizePantallaShow();//vuelvo a llamar para ajustar altura
-    //     }
-
-    // },500);
 
 }//end function construirElementosYAppend()
 
@@ -753,10 +771,12 @@ function lanzarResize(currentToken, intentos = 0){
     //cuando el navegador pinte el DOM se llama mySizePantallaShow() para ajustar el fontSize de 'trad' a todo ancho y alto
     requestAnimationFrame( async () => {
         
+        // Hay un resize más reciente
         if(currentToken !== resizeToken){
             return;
         }
-
+        
+        // El contenedor aún no tiene tamaño
         if(eid_contenedor.offsetWidth === 0 || eid_contenedor.offsetHeight === 0){
 
             if(intentos >= MAX_INTENTOS){
@@ -770,15 +790,53 @@ function lanzarResize(currentToken, intentos = 0){
             return;
         }
 
-        //REVISAR LUEGO SI HACE FALTA ESTA COMPROBACION
-        // let count_trads = eid_contenedor.querySelectorAll('.trad').length;
-        // //si la altura de 'trad' es menor que la de 'eid_contenedor', es que no ha conseguido ajustar todo
-        // if( (eid_contenedor.querySelector('.trad').offsetHeight * count_trads) < eid_contenedor.offsetHeight){
-        //     console.log('la altura de trad es menor que la de eid_contenedor. llamo otra vez a mySizePantallaShow()');
-        //     lanzarResize(currentToken);
-        // }
-
+        // Ajustar tamaño del texto
         await mySizePantallaShow();
+
+        //si al haber cambiado el slide no existe el contenedor, salgo de la función.
+        if(!eid_contenedor.isConnected){
+            return;
+        }
+
+
+        // Mientras esperaba apareció otro resize
+        if(currentToken !== resizeToken){
+            return;
+        }
+
+        const trads = eid_contenedor.querySelectorAll('.trad');
+
+        if(trads.length === 0){
+            return;
+        }
+
+        // Altura total ocupada por todos los .trad
+        const alturaTotal = trads[0].offsetHeight * trads.length;
+
+        const diferencia = Math.abs(
+            alturaTotal - eid_contenedor.offsetHeight
+        );
+
+        // Si el ajuste no ha quedado bien, volver a calcular
+        if(diferencia > 2){
+
+            if(intentos >= MAX_INTENTOS){
+                console.warn('lanzarResize(): máximo de intentos alcanzado (fontSize)');
+                return;
+            }
+
+            console.log(`Recalculando fontSize (${intentos + 1}/${MAX_INTENTOS})`);
+            console.log(
+                'alturaTotal:',
+                alturaTotal,
+                'contenedor:',
+                eid_contenedor.offsetHeight
+            );
+
+            lanzarResize(currentToken, intentos + 1);
+            return;
+        }
+
     });
 }
 
@@ -888,151 +946,159 @@ async function mySizePantallaShow() {//new como ajustarTexto()
 
         trad_inner.removeAttribute('style');//reset
 
+
         const clone_contenedor = eid_contenedor.cloneNode(true);
         clone_contenedor.style.position = 'relative';
         clone_contenedor.style.visibility = 'hidden';
         clone_contenedor.style.left = '-9999px';
         document.body.appendChild(clone_contenedor);
 
-        const clone = trad.cloneNode(true);
-        //clone.style.position = 'absolute';
-        //clone.style.visibility = 'hidden';
-        //clone.style.left = '-9999px';
-        clone_contenedor.appendChild(clone);
 
-        /*
-            console.log(
-                'isConnected:',
-                trad.isConnected
-            );
+        try{
 
-            console.log(
-                'CONTENEDOR',
-                eid_contenedor.offsetWidth,
-                eid_contenedor.offsetHeight
-            );
+            const clone = trad.cloneNode(true);        
+            clone_contenedor.appendChild(clone);
+
+            /*
+                console.log(
+                    'isConnected:',
+                    trad.isConnected
+                );
+
+                console.log(
+                    'CONTENEDOR',
+                    eid_contenedor.offsetWidth,
+                    eid_contenedor.offsetHeight
+                );
+                
+                console.log(
+                    'TRAD',
+                    trad.offsetWidth,
+                    trad.offsetHeight
+                );
+                
+                console.log(
+                    'TRAD PARENT',
+                    trad.parentElement.offsetWidth,
+                    trad.parentElement.offsetHeight
+                );
+
+
+                console.log(
+                    'MEDICION',
+                    clone_contenedor.offsetWidth,
+                    clone_contenedor.offsetHeight
+                );
+
+                console.log(
+                    getComputedStyle(clone_contenedor).width,
+                    getComputedStyle(clone_contenedor).height
+                );
+
+
+
+                console.log(
+                    trad.className
+                );
+                
+                console.log(
+                    clone.className
+                );
+
+                console.log(
+                    getComputedStyle(trad).display,
+                    getComputedStyle(clone).display
+                );
+                
+                console.log(
+                    getComputedStyle(trad).position,
+                    getComputedStyle(clone).position
+                );
+                
+                console.log(
+                    getComputedStyle(trad).flex,
+                    getComputedStyle(clone).flex
+                );
+
+                console.log(
+                    'REAL',
+                    trad.offsetWidth,
+                    trad.offsetHeight
+                );
+                
+                console.log(
+                    'CLONE',
+                    clone.offsetWidth,
+                    clone.offsetHeight
+                );
+
+                console.log(
+                    'REAL parent',
+                    trad.parentElement.offsetWidth,
+                    trad.parentElement.offsetHeight
+                );
+                
+                console.log(
+                    'CLONE parent',
+                    clone.parentElement.offsetWidth,
+                    clone.parentElement.offsetHeight
+                );
+
+
+
+
+                console.log(
+                    getComputedStyle(trad).fontSize
+                );
+                
+                console.log(
+                    getComputedStyle(clone).fontSize
+                );
+
+                console.log(
+                    getComputedStyle(trad).width,
+                    getComputedStyle(trad).height
+                );
+                
+                console.log(
+                    getComputedStyle(clone).width,
+                    getComputedStyle(clone).height
+                );
+            */            
             
-            console.log(
-                'TRAD',
-                trad.offsetWidth,
-                trad.offsetHeight
-            );
-            
-            console.log(
-                'TRAD PARENT',
-                trad.parentElement.offsetWidth,
-                trad.parentElement.offsetHeight
-            );
-
-
-            console.log(
-                'MEDICION',
-                clone_contenedor.offsetWidth,
-                clone_contenedor.offsetHeight
-            );
-
-            console.log(
-                getComputedStyle(clone_contenedor).width,
-                getComputedStyle(clone_contenedor).height
-            );
-
-
-
-            console.log(
-                trad.className
-            );
-            
-            console.log(
-                clone.className
-            );
-
-            console.log(
-                getComputedStyle(trad).display,
-                getComputedStyle(clone).display
-            );
-            
-            console.log(
-                getComputedStyle(trad).position,
-                getComputedStyle(clone).position
-            );
-            
-            console.log(
-                getComputedStyle(trad).flex,
-                getComputedStyle(clone).flex
-            );
-
-            console.log(
-                'REAL',
-                trad.offsetWidth,
-                trad.offsetHeight
-            );
-            
-            console.log(
-                'CLONE',
-                clone.offsetWidth,
-                clone.offsetHeight
-            );
-
-            console.log(
-                'REAL parent',
-                trad.parentElement.offsetWidth,
-                trad.parentElement.offsetHeight
-            );
-            
-            console.log(
-                'CLONE parent',
-                clone.parentElement.offsetWidth,
-                clone.parentElement.offsetHeight
-            );
-
-
-
-
-            console.log(
-                getComputedStyle(trad).fontSize
-            );
-            
-            console.log(
-                getComputedStyle(clone).fontSize
-            );
-
-            console.log(
-                getComputedStyle(trad).width,
-                getComputedStyle(trad).height
-            );
-            
-            console.log(
-                getComputedStyle(clone).width,
-                getComputedStyle(clone).height
-            );
-        */
+            let fontSize_new = await ajustarFuenteBinaria(clone, maxW, maxH);
+            //console.log("FontSize final. fontSize_new:", fontSize_new);
         
-        let fontSize_new = await ajustarFuenteBinaria(/*trad,*/ clone, maxW, maxH);
-        //console.log("FontSize final. fontSize_new:", fontSize_new);
-
-        if(token !== sizeCalcToken || !trad.isConnected){
-            return;
+            if(token !== sizeCalcToken || !trad.isConnected){
+                return;
+            }
+        
+            trad.style.fontSize = fontSize_new + 'px';
+        
+            //...
+            let trad_h = window.innerHeight / count_trad ;
+            //console.log('trad_h: ', trad_h);
+    
+            // si quero mostrar en varias columnas, divido entre count_trad
+            // si solo en rows => no divido, sino 
+            // let trad_w = window.innerWidth / count_trad;
+            let trad_w = window.innerWidth;// muestro en rows
+            //console.log('trad_w: ', trad_w);
+    
+            trad_inner.style.height = trad_h + 'px';
+            trad_inner.style.width = trad_w + 'px'; 
+    
+            if(pantalla_show){
+                trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            }       
+                   
         }
-        
-        trad.style.fontSize = fontSize_new + 'px';
-
-        let trad_h = window.innerHeight / count_trad ;
-        //console.log('trad_h: ', trad_h);
-
-        // si quero mostrar en varias columnas, divido entre count_trad
-        // si solo en rows => no divido, sino 
-        // let trad_w = window.innerWidth / count_trad;
-        let trad_w = window.innerWidth;// muestro en rows
-        //console.log('trad_w: ', trad_w);
-
-        trad_inner.style.height = trad_h + 'px';
-        trad_inner.style.width = trad_w + 'px'; 
-
-        if(pantalla_show){
-            trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-        }       
-        
-        document.body.removeChild(clone_contenedor);//ok        
+        finally{
+            if(clone_contenedor.isConnected){
+                clone_contenedor.remove();
+            }
+        }        
+       
     }
     
     //aplicarVista(); //antes estaba. ahora comento
@@ -1082,3 +1148,54 @@ function aplicarBrilloPantalla(valor) {
     document.body.style.opacity = opacity_val;
 }
 
+
+
+/* aki no se usan pero las dejo como ejemplo */
+async function toggleFullscreen(){
+    console.log('=== function toggleFullscreen() ===');
+    console.trace('toggleFullscreen');
+
+    try{
+
+        if(document.fullscreenElement){
+            await document.exitFullscreen();
+        }else{
+            await document.documentElement.requestFullscreen();
+        }
+
+    }catch(error){
+        console.error(error);
+    }
+}
+
+
+async function salirFullscreen(){
+    console.log('=== function salirFullscreen() ===');
+
+    if(!document.fullscreenElement){
+        return;
+    }
+
+    try{
+        await document.exitFullscreen();
+    }catch(error){
+        console.error(error);
+    }
+
+}
+
+
+async function entrarFullscreen(){
+    console.log('=== function entrarFullscreen() ===');
+
+    if(document.fullscreenElement){
+        return;
+    }
+
+    try{
+        await document.documentElement.requestFullscreen();
+    }catch(error){
+        console.error(error);
+    }
+
+}

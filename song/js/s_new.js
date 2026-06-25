@@ -1583,6 +1583,31 @@ function actualizarPantallas({
     }
 }
 
+function enviarMensajeReferencia(referencia, data){
+    console.log('=== function enviarMensajeReferencia() ===');
+
+    if(referencia && !referencia.closed){
+
+        referencia.postMessage(
+            data,
+            window.location.origin
+        );
+        referencia.focus();
+
+    }else{
+        console.log('La referencia está cerrada o no existe');
+    }
+}
+
+function enviarAccionPantalla(tipo){
+
+    enviarMensajeReferencia(
+        miPantallaLocal,
+        { tipo }
+    );
+
+}
+
 
 async function showTipoContent(btn, param){
     console.log('=== function showTipoContent() ===');
@@ -3853,6 +3878,23 @@ function recargarReferenciaOCrear(referencia){
         abrirReferencia(referencia);
     }
 }
+/*
+// no se usa. dejo como ejemplo...
+function fullscreenReferenciaOCrear(referencia){
+    console.log('=== function fullscreenReferenciaOCrear() ===');
+
+    if (referencia && !referencia.closed) {
+        enviarAccionPantalla('fullscreen');
+        referencia.focus();
+    } else {
+        referencia = abrirReferencia(referencia);
+        // Esperar a que cargue la nueva ventana
+        referencia.addEventListener('load', () => {
+            enviarAccionPantalla('fullscreen');
+        }, { once: true });
+    }
+}
+*/
 
 function normalizeSearchText(text) {
     return text
@@ -4682,6 +4724,19 @@ async function deleteImagen(id_image){
         return;
     }
 
+    const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE esta imagen? \n\nEsta acción no se podrá deshacer.`);
+    if(respuesta){
+        console.log('sigo adelante para eliminar la imagen...'); //clic en "Aceptar"
+        if(promtConClaveSecreta()){
+            console.log('Clave secreta correcta. Procedo a eliminar la imagen.');
+        }else{
+            return;
+        }
+    } else {
+        //console.log("7755. Cancelar..."); //clic en "Cancelar"
+        return;
+    }
+
     try {
 
         const response = await fetch('../song/php/delete_imagen.php',
@@ -4909,3 +4964,5 @@ async function getImagenAll(){
 
 
         
+
+
