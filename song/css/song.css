@@ -4687,11 +4687,11 @@ fieldset.kuplet.partial{
     max-height: 50vh;
 }
 
-#previewImage{
+#previewMedia{
     max-width: 100%;
 }
 
-#backgroundImage{
+#backgroundMedia{
     background: #9E9E9E;
 }
 
@@ -4704,7 +4704,7 @@ fieldset.kuplet.partial{
     max-height: 50vh;
 }
 
-.imagen_item {
+.media_item {
     padding: 5px;
     background: #bababa;
     border-radius: 5px;
@@ -4713,16 +4713,16 @@ fieldset.kuplet.partial{
     margin-right: 10px;
     position: relative;
 }
-.imagen_item:hover{
+.media_item:hover{
     opacity: 0.7;
 }
 
-.imagen_item.active {
+.media_item.active {
     padding: 5px;
     background: #ad0000;
 }
 
-.imagen_item.active::before {
+.media_item.active::before {
     content: "ACTIVO";
     position: absolute;
     top: 10px;
@@ -4733,7 +4733,9 @@ fieldset.kuplet.partial{
     font-weight: bold;
 }
 
-.imagen_item_img {
+.media_item_img, 
+.media_item_video 
+{
     width: 100%;
     /* max-width: 300px; */
     border-radius: 5px;

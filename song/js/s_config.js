@@ -147,6 +147,7 @@ const select_slide_wr_vista_blocks = eid_block_esquema.querySelector('.vklad_sel
 const eid_contenedor_nav_pantalla = document.getElementById('contenedor_nav_pantalla');//aki se coloca div 'wr_btns_pantalla'
 const eid_pantalla_body = document.getElementById('pantalla_body');//para slide en select_slide()
 const eid_fondo_body = document.getElementById('fondo_body');//para slide en select_slide()
+const eid_videoFondo_body = document.getElementById('videoFondo_body');//para slide en select_slide()
 
 const eid_previewContainer = document.getElementById('previewContainer');
 const eid_wr_imagen_personalizada = document.getElementById('wr_imagen_personalizada');
@@ -568,6 +569,8 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');//def false
 let bg_ruta = localStorage.getItem('bg_ruta') ?? '';//def false
+let bg_media_type = localStorage.getItem('bg_media_type') ?? 'image';//def 'image' puede haber [image, video]
+let video_ruta = localStorage.getItem('video_ruta') ?? '';//def false
 let brillo_pantalla = JSON.parse(localStorage.getItem('brillo_pantalla') ?? '100');//def false
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
@@ -606,6 +609,8 @@ let objPantalla = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    bg_media_type,
+    video_ruta,
     brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
@@ -628,6 +633,8 @@ let objPantallaToSendToBd = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    bg_media_type,
+    video_ruta,
     brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
@@ -649,6 +656,8 @@ let objPantallaParams = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    bg_media_type,
+    video_ruta,
     brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
@@ -670,6 +679,8 @@ let objPantallaParamsToSendToBd = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    bg_media_type,
+    video_ruta,
     brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
@@ -721,6 +732,8 @@ if(web_tld === 'com'){//hostalia
 
 // Variable para almacenar la referencia de la pantalla local/remota
 let miPantallaLocal = null;
+let miPantallaLocal2 = null;
+let miPantallaLocal3 = null;
 let miPantallaRemota = null;
 let miIframe = null;
 

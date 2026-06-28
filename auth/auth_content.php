@@ -79,9 +79,9 @@
 
                 <form method="POST" class="formulario" novalidate>
                     <fieldset>
-                        <legend>Contraseña</legend>
+                        <legend>Contraseña de autentificación</legend>
 
-                        <input id="password" type="password" name="password" placeholder="Tu Contraseña">
+                        <input id="password" type="password" name="password" placeholder="Tu contraseña...">
                     </fieldset>
                     <button id="btn_submit" class="btn_wide" type="submit">Entrar</button>
                 </form>

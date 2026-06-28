@@ -54,7 +54,8 @@ $maxSize = 10 * 1024 * 1024;
 $allowedMimeTypes = [
     'image/jpeg' => 'jpg',
     'image/png'  => 'png',
-    'image/webp' => 'webp'
+    'image/webp' => 'webp',
+    'image/gif' => 'gif'
 ];
 
 

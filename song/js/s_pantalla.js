@@ -1,5 +1,6 @@
 const eid_style_imagen_en_fondo = document.getElementById('style_imagen_en_fondo');
 const eid_fondo = document.getElementById('fondo');
+const eid_videoFondo = document.getElementById('videoFondo');//para video
 const eid_contenedor = document.getElementById('contenedor');
 
 let arr_pantalla = [];
@@ -17,6 +18,8 @@ let debug = false;
 // let show_logo_en_fondo = 0;
 // let show_imagen_en_fondo = 0;
 // let bg_ruta = '';
+// let bg_media_type = '';
+// let video_ruta = '';
 // let brillo_pantalla = 100;//default
 // let show_bible_en_fondo = 0;
 // let show_black_en_fondo = 0;
@@ -40,6 +43,8 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');// def false;
 let bg_ruta = localStorage.getItem('bg_ruta') ?? '';// def false;
+let bg_media_type = localStorage.getItem('bg_media_type') ?? 'image';// def image;
+let video_ruta = localStorage.getItem('video_ruta') ?? '';// def false;
 let brillo_pantalla = JSON.parse(localStorage.getItem('brillo_pantalla') ?? '100');// def false;
 
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
@@ -75,6 +80,8 @@ let objPantallaParams_def = {
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
+    bg_media_type,
+    video_ruta,
     brillo_pantalla,
     show_bible_en_fondo,
     show_black_en_fondo,
@@ -204,7 +211,7 @@ window.addEventListener('resize',() => {
 });
 
 
-
+/*
 function antes_lanzarIntentos(){
     //console.log('=== function lanzarIntentos() ===');
         
@@ -302,7 +309,7 @@ function antes_lanzarIntentosConDelay(){
     },delay_fn);//COMENTAR PARA TEST        
 
 }
-
+*/
 
 function cargarEstadoInicial(){
     console.log('=== function cargarEstadoInicial() ==='); 
@@ -516,6 +523,8 @@ function aplicarVista(){
     show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
     show_imagen_en_fondo = (objPantallaParams.show_imagen_en_fondo == '1') ? 1 : 0;
     bg_ruta = (objPantallaParams.bg_ruta != '') ? objPantallaParams.bg_ruta : '';
+    bg_media_type = (objPantallaParams.bg_media_type != '') ? objPantallaParams.bg_media_type : 'image';
+    video_ruta = (objPantallaParams.video_ruta != '') ? objPantallaParams.video_ruta : '';
     brillo_pantalla = (objPantallaParams.brillo_pantalla != '100') ? objPantallaParams.brillo_pantalla : 100;//? revisar!
     show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? 1 : 0;
     show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? 1 : 0;
@@ -532,8 +541,6 @@ function aplicarVista(){
 
     // si hay contenedor...
     if(eid_contenedor){
-      
-        
         
         //Admin control
         if(pantalla_show){//muestro texto
@@ -547,7 +554,7 @@ function aplicarVista(){
             mostrarFondo();
 
 
-
+            //diferentes parametros
             if(show_logo_en_fondo){
                 document.body.classList.add('logo_en_fondo');
             }else{
@@ -556,22 +563,40 @@ function aplicarVista(){
 
             if(show_imagen_en_fondo){
                 document.body.classList.add('imagen_en_fondo');
-                //aki pongo la ruta de imagen de fondo
-                if(bg_ruta != ''){
-                    //eid_fondo.style.backgroundImage = bg_ruta;
-                    eid_style_imagen_en_fondo.innerHTML = `
-                        .imagen_en_fondo #fondo {
-                            background-image: ${bg_ruta};
-                        }
-                    `;
-                }else{
-                    //eid_fondo.style = '';//quito la ruta de imagen de fondo
-                    eid_style_imagen_en_fondo.innerHTML = '';
+
+                //IMAGEN
+                if(bg_media_type === 'image'){
+                    //aki pongo la ruta de imagen de fondo
+                    if(bg_ruta != ''){
+                        eid_videoFondo.classList.remove('shown');//aki oculto video
+                        eid_videoFondo.src = '';//aki reset la ruta de video
+                        eid_style_imagen_en_fondo.innerHTML = `
+                            .imagen_en_fondo #fondo {
+                                background-image: url(.${bg_ruta});
+                            }
+                        `;
+                    }else{
+                        eid_style_imagen_en_fondo.innerHTML = '';
+                    }
+                }
+                
+                //VIDEO
+                if(bg_media_type === 'video'){
+                    //aki pongo la ruta de video de fondo
+                    if(video_ruta != ''){
+                        eid_style_imagen_en_fondo.innerHTML = '';//reset
+                        eid_videoFondo.classList.add('shown');
+                        eid_videoFondo.src = `${video_ruta}`;
+                    }else{
+                        eid_style_imagen_en_fondo.innerHTML = '';
+                        eid_videoFondo.classList.remove('shown');//? revisar si hace falta...
+                    }
                 }
 
             }else{
                 document.body.classList.remove('imagen_en_fondo');
-                eid_fondo.style = '';//quito la ruta de imagen de fondo
+                eid_style_imagen_en_fondo.innerHTML = '';//quito la ruta de imagen de fondo
+                eid_videoFondo.classList.remove('shown');//? revisar si hace falta...
             }
 
             if(show_bible_en_fondo){
@@ -648,7 +673,7 @@ function aplicarVista(){
 }//end function aplicarVista()
 
 
-function aplicarVistaUsuario(){
+async function aplicarVistaUsuario(){
     //console.log('=== function aplicarVistaUsuario() ===');
 
     // Obtiene toda la parte de la URL actual
@@ -663,9 +688,78 @@ function aplicarVistaUsuario(){
         return;
     }
 
+    //Todos los GET parametros de ajuste de pantalla permitidos
+    //case 'i'://iglesia => mostrar logotipo de la iglesia en el fondo (cuando no se ve el slide)
+    //case 'g'://imagen de letra 'g' => mostrar imagen personalizada en el fondo (cuando no se ve el slide)
+    //case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
+    //case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
+    //case 'f'://fondo => mostrar fondo black en el fondo (cuando no se ve el slide)
+    //case 'u'://user => usuario puede controlar que mostrar en la vista de slide: legend, acordes, next_slide
+    //case 'l'://legend => mostrar títulos de bloques, legend de fieldset
+    //case 'c'://chords => acordes
+    //case 'n'://next slide => mostrar 2 lineas de sig slide
+    //case 't'://top => mostrar en el top
+    //case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'
+    //case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
+
+
+    //parametro GET 't' de 'tipo de letra'
     if(t){
 
+        //case 'i'://iglesia => mostrar logotipo de la iglesia en el fondo (cuando no se ve el slide)
+        if(t.includes('i')){
+            show_logo_en_fondo = 1;
+            document.body.className = '';//reset
+            document.body.classList.add('logo_en_fondo');
+        }else{
+            show_logo_en_fondo = 0;
+            document.body.classList.remove('logo_en_fondo');
+        }
+
+        //case 'g'://imagen de letra 'g' => mostrar imagen personalizada en el fondo (cuando no se ve el slide)
+        if(t.includes('g')){
+            show_imagen_en_fondo = 1;
+            document.body.className = '';//reset
+            document.body.classList.add('imagen_en_fondo');
+
+            await pintMediaActiveEnFondoPantalla();//pinta la imagen del fondo sin tener en cuenta el fondo elegido en select_slide()            
+
+        }else{
+            show_imagen_en_fondo = 0;
+            document.body.classList.remove('imagen_en_fondo');
+            eid_style_imagen_en_fondo.innerHTML = '';//reset
+        }
+
+        //case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
+        //aki no se controla este parametro por el usuario
+
+        //case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
+        if(t.includes('b')){
+            show_bible_en_fondo = 1;
+            document.body.className = '';//reset
+            document.body.classList.add('bible_en_fondo');
+        }else{
+            show_bible_en_fondo = 0;
+            document.body.classList.remove('bible_en_fondo');
+        }
+
+        //case 'f'://fondo => mostrar fondo black en el fondo (cuando no se ve el slide)
+        if(t.includes('f')){
+            show_black_en_fondo = 1;
+            document.body.className = '';//reset
+            document.body.classList.add('black_en_fondo');
+        }else{
+            show_black_en_fondo = 0;
+            document.body.classList.remove('black_en_fondo');
+        }
+
+        //case 'u'://user => usuario puede controlar que mostrar en la vista de slide: legend, acordes, next_slide 
+        //aki no se controla este parametro por el usuario.
+
+
+        //referente a la visualización de slide
         //legend
+        //case 'l'://legend => mostrar títulos de bloques, legend de fieldset
         if(t.includes('l')){
             show_legend = 1;
             eid_contenedor.classList.add('show_legend');
@@ -675,6 +769,7 @@ function aplicarVistaUsuario(){
         }
 
         //acordes
+        //case 'c'://chords => acordes
         if(t.includes('c')){
             show_acordes = 1;
             eid_contenedor.classList.add('show_acordes');
@@ -684,28 +779,44 @@ function aplicarVistaUsuario(){
         }
 
         //next_slide.  2 lineas del sig kuplet si hay
+        //case 'n'://next slide => mostrar 2 lineas de sig slide
         if(t.includes('n')){
-            show_acordes = 1;
+            show_next_slide = 1;
             eid_contenedor.classList.add('show_next_slide');
         }else{
-            show_acordes = 0;
+            show_next_slide = 0;
             eid_contenedor.classList.remove('show_next_slide');
         }
-
+        
+        //mostrar el slide en el top con: justify-content: flex-start   
+        //case 't'://top => mostrar en el top
         if(t.includes('t')){
+            show_en_top = 1;
+            show_en_center = 0;//deshabilito
             eid_contenedor.classList.add('show_en_top');
         }else{
+            show_en_top = 0;
             eid_contenedor.classList.remove('show_en_top');
         }
 
-        if(t.includes('x')){//show_en_parte_top
-            //calculo la mitad de la pantalla para restarla en mySizePantalla()
-        }
-
+        //mostrar el slide en el center con: justify-content: center   
+        //case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'
         if(t.includes('z')){
+            show_en_center = 1;
+            show_en_top = 0;//deshabilito
             eid_contenedor.classList.add('show_en_center');
         }else{
+            show_en_center = 0;
             eid_contenedor.classList.remove('show_en_center');
+        }
+
+        //parte 50% de arriba
+        //case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
+        if(t.includes('x')){//show_en_parte_top
+            //calculo la mitad de la pantalla para restarla en mySizePantalla()
+            show_en_parte_top = 1;
+        }else{
+            show_en_parte_top = 0;
         }
 
         //tipo_fuente.  monospace/arial
@@ -1196,6 +1307,145 @@ async function entrarFullscreen(){
         await document.documentElement.requestFullscreen();
     }catch(error){
         console.error(error);
+    }
+
+}
+
+
+
+async function pintMediaActiveEnFondoPantalla(){
+    console.log('=== function pintMediaActiveEnFondoPantalla() ===');
+
+    try {
+        
+        const data = await getMediaActivePantalla();
+        console.log('2. data:', data);
+
+        if (data.success) {
+
+            let mediaType = data.media.media_type;
+            let ruta = data.media.filepath;
+
+            aplicarMediaFondo(mediaType, ruta);
+            return true;  
+            
+        } else {
+
+            console.error('error en pintMediaActiveEnFondo(). error: ', data.error);
+            return false;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar el fichero de fondo:',error);
+        return false;
+    } 
+
+}
+
+
+async function getMediaActivePantalla(){//aunque es la misma funcion la nombro distinta para no confundirme
+    console.log('=== function getMediaActivePantalla() ===');
+
+    try {
+
+        const response = await fetch('../song/php/get_media_active.php',
+            {
+                method: 'POST'
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error get_media_active.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en get_media_active.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en get_imagen_active.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error('Error al cargar el fichero media de fondo:', error);
+
+    }
+}
+
+
+function aplicarMediaFondo(mediaType, ruta){
+    console.log('=== function aplicarMediaFondo() ===');
+
+    if(mediaType === 'image'){
+
+        //1. quito el video
+        eid_videoFondo.pause();
+        eid_videoFondo.removeAttribute('src');
+        eid_videoFondo.load();
+
+        //2. saco la ruta del fondo
+        bg_ruta = ruta;
+        console.log('bg_ruta: ', bg_ruta);
+        localStorage.setItem('bg_ruta', bg_ruta);
+
+        //aki pongo la ruta de imagen de fondo
+        if(bg_ruta != ''){
+            eid_videoFondo.classList.remove('shown');//oculto video
+            eid_style_imagen_en_fondo.innerHTML = `
+                .imagen_en_fondo #fondo {
+                    background-image: url(.${bg_ruta});
+                }
+            `;
+        }else{
+            eid_style_imagen_en_fondo.innerHTML = '';//reset
+        }
+        console.log('imagen personalizada cargada correctamente');
+    }
+    
+
+    if(mediaType === 'video'){
+        
+        //1.saco la ruta del video
+        video_ruta = `.${ruta}`;
+        console.log('video_ruta: ', video_ruta);
+        localStorage.setItem('video_ruta', video_ruta);
+
+        //2.aki pongo la ruta de video de fondo
+        if(video_ruta != ''){
+            eid_style_imagen_en_fondo.innerHTML = '';//reset ?
+            eid_videoFondo.classList.add('shown');//muestro video
+            eid_videoFondo.src = `${video_ruta}`;
+        }else{
+            eid_style_imagen_en_fondo.innerHTML = '';//reset
+        }
+        console.log('video personalizado cargado correctamente');
     }
 
 }

@@ -89,9 +89,22 @@ body.black_en_fondo {
     color: white !important;
 }
 
+#videoFondo{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0;
+}
+
 body,
 #contenedor,
-#fondo {
+#fondo,
+#videoFondo 
+{
     /* transition: 1s ease; */
     transition: opacity var(--fade-time) ease;
 }
@@ -534,3 +547,5 @@ fieldset.kuplet {
     /* opacity: 0.1; */
     opacity: 0;
 }
+
+

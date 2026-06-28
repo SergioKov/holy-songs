@@ -814,21 +814,21 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div id="wr_imagen_personalizada" class="wr_imagen d-none">
                                                                                 <div class="wr_imagen_inner">
                                                                                     <input
-                                                                                        id="backgroundImage"
+                                                                                        id="backgroundMedia"
                                                                                         type="file"
-                                                                                        name="images[]"
-                                                                                        accept="image/jpeg,image/png,image/webp"
+                                                                                        name="media[]"
+                                                                                        accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
                                                                                         multiple
                                                                                     >
                                                                                     <div id="previewContainer">
                                                                                         <!-- Aquí se mostrará la vista previa de la imagen seleccionada -->
                                                                                     </div>
                                                                                     <button
-                                                                                        id="btnUploadBackground"
+                                                                                        id="btnUploadMedia"
                                                                                         class="btn btn_big w_100 d-none"
                                                                                         type="button"
                                                                                     >
-                                                                                        Subir imágenes
+                                                                                        Subir media
                                                                                     </button>
 
                                                                                     <div id="imagenesContainer">
@@ -896,6 +896,17 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
                                                                                 <button class="btn" onclick="cerrarReferencia(miPantallaLocal);">✕</button>
+                                                                            </div>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="abrirReferencia(miPantallaLocal2);">Pantalla Local 2</button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPantallaLocal2);">
+                                                                                    <img class="btn_img_sm" src="images/center_focus.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="recargarReferencia(miPantallaLocal2);">
+                                                                                    <img class="btn_img_sm" src="images/reload_white_32x32.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="cerrarReferencia(miPantallaLocal2);">✕</button>
                                                                             </div>
                                                                         </div>
 
@@ -1308,6 +1319,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                         <div class="bloques wr_vista_blocks wr_full_block">
                                                             <div id="pantalla_body">
                                                                 <div id="fondo_body" class="">
+                                                                    <video id="videoFondo_body" autoplay muted loop playsinline>
+                                                                        <sourse src=""></sourse>
+                                                                    </video>
                                                                     <div id="contenedor_prev" class="shown">
                                                                         <div id="contenedor_prev_inner">
                                                                             <!-- aki vista previa -->

@@ -1397,11 +1397,11 @@ async function make_arr_pantalla(currentSlide){
     tipo_content += 'c';//chords -> acordes
     tipo_content += 'l';//legend -> titulos de kuplet o pripev
     tipo_content += 'n';//2 lineas del sig kuplet si hay
-    tipo_content += 'm';//m (monospace) y 'a' (arial) si hay tipo_fuente
+    tipo_content += 'm';//'m' (monospace) y 'a' (arial) si hay tipo_fuente
 
     //creo datos solo para una pantalla...
     una_pantalla_datos = {
-        tipo_content: 'es_song_slide',
+        tipo_content: 'es_song_slide',//por ahora solo texto...
         id_song: id_song,
         slide_actual: currentSlide,
         slide_html: slide_divs,
@@ -1430,6 +1430,8 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        bg_media_type,
+        video_ruta,
         brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
@@ -1451,6 +1453,8 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        bg_media_type,
+        video_ruta,
         brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
@@ -1506,6 +1510,8 @@ async function make_arr_pantalla(currentSlide){
         show_logo_en_fondo,
         show_imagen_en_fondo,
         bg_ruta,
+        bg_media_type,
+        video_ruta,
         brillo_pantalla,
         show_bible_en_fondo,
         show_black_en_fondo,
@@ -1572,6 +1578,16 @@ function actualizarPantallas({
         );
     }
 
+    // pantalla local 2
+    if(miPantallaLocal2 && !miPantallaLocal2.closed){
+        console.log('hay miPantallaLocal2 abierta. envio mensaje...');
+
+        miPantallaLocal2.postMessage(
+            payload,
+            window.location.origin
+        );
+    }
+
     // pantalla remota
     if (miPantallaRemota && !miPantallaRemota.closed) {
         console.log('hay miPantallaRemota abierta. envio mensaje...');
@@ -1598,15 +1614,15 @@ function enviarMensajeReferencia(referencia, data){
         console.log('La referencia está cerrada o no existe');
     }
 }
+//no se usa todavia
+// function enviarAccionPantalla(tipo){
 
-function enviarAccionPantalla(tipo){
+//     enviarMensajeReferencia(
+//         miPantallaLocal,
+//         { tipo }
+//     );
 
-    enviarMensajeReferencia(
-        miPantallaLocal,
-        { tipo }
-    );
-
-}
+// }
 
 
 async function showTipoContent(btn, param){
@@ -1622,6 +1638,8 @@ async function showTipoContent(btn, param){
             show_logo_en_fondo = 0;//reset
             show_imagen_en_fondo = 0;//reset
             bg_ruta = '';//reset
+            bg_media_type = '';//reset
+            video_ruta = '';//reset
             brillo_pantalla = 100;//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
@@ -1635,19 +1653,22 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
             localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
             localStorage.setItem('bg_ruta', bg_ruta);
+            localStorage.setItem('bg_media_type', bg_media_type);
+            localStorage.setItem('video_ruta', video_ruta);
             localStorage.setItem('brillo_pantalla', brillo_pantalla);
             localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
             localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
         }
     }
 
+    //todos los parametros de ajuste de pantalla como letras
     switch (param) {
         case 'i'://iglesia => mostrar logotipo de la iglesia en el fondo (cuando no se ve el slide)
             if(show_logo_en_fondo == 1){
-                show_logo_en_fondo = 0;//hext action
+                show_logo_en_fondo = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_logo_en_fondo = 1;//hext action
+                show_logo_en_fondo = 1;//next action
                 btn.classList.add('btn_active');
             }
             eid_fondo_body.className = '';//reset
@@ -1657,10 +1678,10 @@ async function showTipoContent(btn, param){
 
         case 'g'://imagen de letra 'g' => mostrar imagen personalizada en el fondo (cuando no se ve el slide)
             if(show_imagen_en_fondo == 1){
-                show_imagen_en_fondo = 0;//hext action
+                show_imagen_en_fondo = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_imagen_en_fondo = 1;//hext action
+                show_imagen_en_fondo = 1;//next action
                 btn.classList.add('btn_active');
             }
             eid_fondo_body.className = '';//reset
@@ -1669,10 +1690,10 @@ async function showTipoContent(btn, param){
 
             eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
             eid_wr_imagen_personalizada.classList.add('d-block');//muestro
-            await pintImagenActiveEnFondo();//tiene guardado de bg_ruta en localStorage
+            await pintMediaActiveEnFondo();//tiene guardado de bg_ruta en localStorage
 
             //pinto las imagenes personalizadas disponibles para elegir
-            await pintImagenesSubidas();
+            await pintMediaSubidas();
             break;
 
         case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
@@ -1681,10 +1702,10 @@ async function showTipoContent(btn, param){
 
         case 'b'://bible => mostrar imagen de la biblia abierta en el fondo (cuando no se ve el slide)
             if(show_bible_en_fondo == 1){
-                show_bible_en_fondo = 0;//hext action
+                show_bible_en_fondo = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_bible_en_fondo = 1;//hext action
+                show_bible_en_fondo = 1;//next action
                 btn.classList.add('btn_active');
             }
             eid_fondo_body.className = '';//reset
@@ -1694,10 +1715,10 @@ async function showTipoContent(btn, param){
 
         case 'f'://fondo => mostrar fondo black en el fondo (cuando no se ve el slide)
             if(show_black_en_fondo == 1){
-                show_black_en_fondo = 0;//hext action
+                show_black_en_fondo = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_black_en_fondo = 1;//hext action
+                show_black_en_fondo = 1;//next action
                 btn.classList.add('btn_active');
             }
             eid_fondo_body.className = '';//reset
@@ -1707,10 +1728,10 @@ async function showTipoContent(btn, param){
 
         case 'u'://user => usuario puede controlar que mostrar en la vista de slide: legend, acordes, next_slide 
             if(user_view_control == 1){
-                user_view_control = 0;//hext action
+                user_view_control = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                user_view_control = 1;//hext action
+                user_view_control = 1;//next action
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('user_view_control', user_view_control);
@@ -1718,7 +1739,7 @@ async function showTipoContent(btn, param){
 
 
         //Control por usuario    
-        case 'l'://legend => títulos
+        case 'l'://legend => mostrar títulos de bloques, legend de fieldset
             if(show_legend == 1){
                 show_legend = 0;//next action
                 btn.classList.remove('btn_active');
@@ -1735,7 +1756,7 @@ async function showTipoContent(btn, param){
                 btn.classList.remove('btn_active');
                 ocultarAcordes('#block_esquema_body');
             }else{
-                show_acordes = 1;//hext action
+                show_acordes = 1;//next action
                 btn.classList.add('btn_active');
                 mostrarAcordes('#block_esquema_body');
             }
@@ -1744,24 +1765,23 @@ async function showTipoContent(btn, param){
 
         case 'n'://next slide => mostrar 2 lineas de sig slide
             if(show_next_slide == 1){
-                show_next_slide = 0;//hext action
+                show_next_slide = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_next_slide = 1;//hext action
+                show_next_slide = 1;//next action
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_next_slide', show_next_slide);
             break;
 
 
-
-        //new    
+        //mostrar el slide en el top con: justify-content: flex-start   
         case 't'://top => mostrar en el top
             if(show_en_top == 1){
-                show_en_top = 0;//hext action
+                show_en_top = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_en_top = 1;//hext action
+                show_en_top = 1;//next action
                 btn.classList.add('btn_active');
 
                 show_en_center = 0;//deshabilito
@@ -1771,12 +1791,12 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_en_top', show_en_top);
             break;
 
-        case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'e
+        case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'
             if(show_en_center == 1){
-                show_en_center = 0;//hext action
+                show_en_center = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_en_center = 1;//hext action
+                show_en_center = 1;//next action
                 btn.classList.add('btn_active');
 
                 show_en_top = 0;//deshabilito
@@ -1789,10 +1809,10 @@ async function showTipoContent(btn, param){
         //new    
         case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
             if(show_en_parte_top == 1){
-                show_en_parte_top = 0;//hext action
+                show_en_parte_top = 0;//next action
                 btn.classList.remove('btn_active');
             }else{
-                show_en_parte_top = 1;//hext action
+                show_en_parte_top = 1;//next action
                 btn.classList.add('btn_active');
             }
             localStorage.setItem('show_en_parte_top', show_en_parte_top);
@@ -1836,6 +1856,8 @@ async function guardarEnLocalAndBd(param){
             show_logo_en_fondo,
             show_imagen_en_fondo,
             bg_ruta,
+            bg_media_type,
+            video_ruta,
             brillo_pantalla,
             show_bible_en_fondo,
             show_black_en_fondo,
@@ -1862,6 +1884,8 @@ async function guardarEnLocalAndBd(param){
             show_logo_en_fondo,
             show_imagen_en_fondo,
             bg_ruta,
+            bg_media_type,
+            video_ruta,
             brillo_pantalla,
             show_bible_en_fondo,
             show_black_en_fondo,
@@ -2017,7 +2041,7 @@ async function check_show_imagen_en_fondo(){
     
     if(show_imagen_en_fondo){
         eid_btn_show_imagen_en_fondo.classList.add('btn_active');
-        await pintImagenActiveEnFondo();//tiene guardado de bg_ruta en localStorage
+        await pintMediaActiveEnFondo();//tiene guardado de bg_ruta en localStorage
     }else{
         eid_btn_show_imagen_en_fondo.classList.remove('btn_active');
     }
@@ -2425,7 +2449,7 @@ async function hideShowDiv(id_div){
             if(show_imagen_en_fondo == 1){
                 eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
                 eid_wr_imagen_personalizada.classList.add('d-block');//muestro
-                await pintImagenesSubidas();
+                await pintMediaSubidas();
             }
             check_brillo_pantalla();
             break;
@@ -3812,6 +3836,13 @@ function abrirReferencia(referencia) {
             miPantallaLocal = referencia;// Actualizar la variable global
             break;
 
+        //LOCAL 2
+        case miPantallaLocal2:
+            nombre_referencia = 'miPantallaLocal2';
+            referencia = window.open('pantalla.php', nombre_referencia);
+            miPantallaLocal2 = referencia;// Actualizar la variable global
+            break;
+
         //REMOTO
         //ruta_screen_pantalla: 'http://show-screen.local/' en localhost
         //ruta_screen_pantalla: 'https://show-screen.com/' en prod 
@@ -4205,15 +4236,18 @@ function aplicarSongAjustes(){
 
 
 
-const inputBackground = document.getElementById('backgroundImage');
-const btnUploadBackground = document.getElementById('btnUploadBackground');
-const previewImage = document.getElementById('previewImage');
+//const inputBackground = document.getElementById('backgroundImage');
+const inputMedia = document.getElementById('backgroundMedia');
+// const btnUploadMedia = document.getElementById('btnUploadMedia');
+const btnUploadMedia = document.getElementById('btnUploadMedia');
+// const previewImage = document.getElementById('previewImage');
+const previewMedia = document.getElementById('previewMedia');
 
 let selectedFile = null;
 let selectedFiles = [];
 
 // Vista previa
-inputBackground.addEventListener('change', () => {
+inputMedia.addEventListener('change', () => {
 
     /*
     // si una imagen
@@ -4221,7 +4255,7 @@ inputBackground.addEventListener('change', () => {
     if (!selectedFile) return;    
 
     eid_previewContainer.innerHTML = '';//reset
-    btnUploadBackground.classList.remove('d-none');
+    btnUploadMedia.classList.remove('d-none');
 
     const imageUrl = URL.createObjectURL(selectedFile);
 
@@ -4236,175 +4270,103 @@ inputBackground.addEventListener('change', () => {
 
 
     //muchas imagenes
-    selectedFiles = [...inputBackground.files];
+    // selectedFiles = [...inputBackground.files];
+    selectedFiles = [...inputMedia.files];
 
     if(selectedFiles.length === 0){
         return;
     }
 
     eid_previewContainer.innerHTML = '';//reset
-    btnUploadBackground.classList.remove('d-none');
+    btnUploadMedia.classList.remove('d-none');
 
     //recorrer las imagenes
     selectedFiles.forEach(file => {
 
-        const imageUrl = URL.createObjectURL(file);
+        // const imageUrl = URL.createObjectURL(file);
+        const url = URL.createObjectURL(file);
 
-        const imagen_item = document.createElement('div');
-        imagen_item.className = 'imagen_item' ;
-        imagen_item.innerHTML = `
-            <img class="imagen_item_img" src="${imageUrl}" alt="Imagen de fondo">
-        `;
+        //si es imagen
+        if(file.type.startsWith('image/')){
 
-        // const img = document.createElement('img');
-        // img.src = imageUrl;
-        // img.className = 'previewImage';
+            const media_item = document.createElement('div');
+            media_item.className = 'media_item es_imagen' ;
+            media_item.innerHTML = `
+                <img class="media_item_img" src="${url}" alt="Imagen de fondo">
+            `;
+            
+            //añado al DOM
+            eid_previewContainer.append(media_item);        
+        }
         
-        //añado al DOM
-        eid_previewContainer.append(imagen_item);
+        //si es video
+        if(file.type.startsWith('video/')){
+
+            const video_item = document.createElement('div');
+            video_item.className = 'media_item es_video' ;
+            video_item.innerHTML = `
+                <video class="media_item_video" src="${url}" autoplay muted loop playsinline></video>
+            `;
+            
+            //añado al DOM
+            eid_previewContainer.append(video_item);         
+        }
+
     });
 });
 
 
-btnUploadBackground.addEventListener('click', async () => {
+btnUploadMedia.addEventListener('click', async () => {
     //subirImagen();
-    subirImagenes();
+    // subirImagenes();
+    subirMedia();
 });
 
 
-// Subir una imagen
-async function subirImagen(){
-    console.log(' === function subirImagen() === ');    
-    
-    if (!selectedFile) {
-        alert('Seleccione una imagen.');
-        return;
-    }
 
-    const totalSize = selectedFiles.reduce(
-        (sum, file) => sum + file.size,
-        0
-    );
-
-    if(totalSize > 40 * 1024 * 1024){
-        alert('El tamaño total de la imagen seleccionada supera el límite permitido de 40 MB. Esto puede deberse a que la imagen tiene un tamaño muy grande. Por favor, reduzca la cantidad de la imagen o seleccione la  imagen más ligera.');
-        return;
-    }
-    const formData = new FormData();
-
-    formData.append('image', selectedFile);
-
-    try {
-
-        const response = await fetch('../song/php/upload_imagen.php',
-            {
-                method: 'POST',
-                body: formData
-            }
-        );
-
-        const text = await response.text();
-
-        if(!text.trim()) {
-            throw new Error('Respuesta vacía del servidor');
-        }
-
-        if(debug){
-            console.log('text:', text);
-        }
-
-        if(!response.ok){
-            console.error('❌ HTTP ERROR', response.status);
-            console.error(text.slice(0, 300));
-            throw new Error(`HTTP (error upload_imagen.php) ${response.status}`);
-        }
-
-
-        try {
-            const data = JSON.parse(text);
-            console.log('data:', data);
-    
-            if (data.success) {
-
-                //desactivo boton y preview
-                btnUploadBackground.classList.add('d-none');
-                eid_previewContainer.innerHTML = '';//reset
-                
-                //actualizo HTML DOM
-                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
-                await pintImagenesSubidas();//pinto todas las imagenes disponibles
-                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
-
-                showToast(
-                    'ok',
-                    data.mensaje,
-                    2000
-                );   
-                
-            } else {
-
-                showToast(
-                    'error',
-                    data.error,
-                    null,
-                    'center',
-                    true,
-                    'Error'
-                );
-                return;             
-    
-            }
-
-        } catch (error) {
-            
-            console.error('❌ JSON inválido en upload_imagen.php');
-            console.error(text.slice(0, 500));
-            console.error('error.name: ', error.name);            
-            console.error('error.message: ', error.message);            
-
-            throw new Error(
-                'JSON inválido en upload_imagen.php',
-                { cause: error }
-            );
-        }       
-
-    }
-    catch (error) {
-        console.error('subirImagen. error: ',error);
-    }
-
-}
-
-
-// Subir muchas imagenes
-async function subirImagenes(){
-    console.log(' === function subirImagenes() === ');    
+// Subir MUCHAS imagenes/videos MEDIA
+async function subirMedia(){
+    console.log(' === function subirMedia() === ');    
     
     if (!selectedFiles.length === 0) {
-        alert('Seleccione una o varias imágenes.');
+        alert('Seleccione una o varias imágenes o vídeos.');
         return;
     }
 
-    const totalSize = selectedFiles.reduce(
-        (sum, file) => sum + file.size,
-        0
-    );
+    const MAX_IMAGE_SIZE = 40 * 1024 * 1024;
+    const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
 
-    if(totalSize > 40 * 1024 * 1024){
-        alert('El tamaño total de las imágenes seleccionadas supera el límite permitido de 40 MB. Esto puede deberse a que ha seleccionado demasiadas imágenes o a que alguna de ellas tiene un tamaño muy grande. Por favor, reduzca la cantidad de imágenes, seleccione imágenes más ligeras o realice la subida en varias operaciones.');
-        return;
+    for(const file of selectedFiles){
+
+        if(file.type.startsWith('image/')){
+            if(file.size > MAX_IMAGE_SIZE){
+                alert(
+                    `"${file.name}" supera los 40 MB permitidos para imágenes. El tamaño total de las imágenes seleccionadas supera el límite permitido de 40 MB. Esto puede deberse a que has seleccionado demasiadas imágenes o a que alguna de ellas tiene un tamaño muy grande. Por favor, reduce la cantidad de imágenes, selecciona imágenes más ligeras o realiza la subida en varias operaciones.`
+                );    
+                return;
+            }
+        }
+        else if(file.type.startsWith('video/')){
+            if(file.size > MAX_VIDEO_SIZE){
+                alert(
+                    `"${file.name}" supera los 100 MB permitidos para vídeos. El tamaño total de los vídeos seleccionados supera el límite permitido de 100 MB. Esto puede deberse a que has seleccionado demasiados vídeoss o a que alguno de ellos tiene un tamaño muy grande. Por favor, reduce la cantidad de vídeos, selecciona vídeos más ligeros o realiza la subida en varias operaciones.`
+                );    
+                return;
+            }
+        }    
     }
+
 
     const formData = new FormData();
 
     selectedFiles.forEach(file => {
-        formData.append('images[]', file);
+        formData.append('media[]', file);
     });
 
 
     try {
 
-        const response = await fetch('../song/php/upload_imagenes.php',
+        const response = await fetch('../song/php/upload_media.php',
             {
                 method: 'POST',
                 body: formData
@@ -4435,13 +4397,12 @@ async function subirImagenes(){
             if (data.success) {
 
                 //desactivo boton y preview
-                btnUploadBackground.classList.add('d-none');
+                btnUploadMedia.classList.add('d-none');
                 eid_previewContainer.innerHTML = '';//reset
                 
-                //actualizo HTML DOM
-                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
-                await pintImagenesSubidas();//pinto todas las imagenes disponibles
-                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+
+                await pintMediaSubidas();//pinto todas las imagenes disponibles
+                await pintMediaActiveEnFondo();//aplico la imagen de fondo seleccionada
 
                 showToast(
                     'ok',
@@ -4486,28 +4447,56 @@ async function subirImagenes(){
 }
 
 
-async function pintImagenActiveEnFondo(){
-    
+
+async function pintMediaActiveEnFondo(){
+    console.log('=== function pintMediaActiveEnFondo() ===');
+
     try {
         
-        const data = await getImagenActive();
+        const data = await getMediaActive();
         console.log('2. data:', data);
 
         if (data.success) {
-            //saco la ruta del fondo
-            bg_ruta = `url(.${data.image.filepath})`;
-            console.log('bg_ruta: ', bg_ruta);
-            localStorage.setItem('bg_ruta', bg_ruta);
             
-            // Aplicar inmediatamente el fondo
-            eid_fondo_body.style.backgroundImage = bg_ruta;//aki obligatorio
-            await guardarEnLocalAndBd('g');//g = guardar fondo
+            bg_media_type = data.media.media_type;// o 'image' o 'video'
+            console.log('bg_media_type: ', bg_media_type);
+            localStorage.setItem('bg_media_type', bg_media_type);
 
-            showToast(
-                'ok',
-                'imagen personalizada cargada correctamente',
-                2000
-            );
+            if(data.media.media_type === 'image'){
+                //saco la ruta del fondo
+                video_ruta = '';//reset
+                bg_ruta = data.media.filepath;
+                console.log('bg_ruta: ', bg_ruta);
+                localStorage.setItem('bg_ruta', bg_ruta);
+
+                // Aplicar inmediatamente el fondo
+                eid_fondo_body.style.backgroundImage = `url(.${bg_ruta})`;//aki obligatorio
+                await guardarEnLocalAndBd('g');//g = guardar fondo
+    
+                showToast(
+                    'ok',
+                    'imagen personalizada cargada correctamente',
+                    2000
+                );
+
+            }else if(data.media.media_type === 'video'){
+                //saco la ruta del video
+                bg_ruta = '';//reset
+                video_ruta = `.${data.media.filepath}`;
+                console.log('video_ruta: ', video_ruta);
+                localStorage.setItem('video_ruta', video_ruta);
+
+                // Aplicar inmediatamente el video en el fondo
+                eid_videoFondo_body.src = video_ruta;//aki obligatorio
+                await guardarEnLocalAndBd('g');//g = guardar fondo
+
+                showToast(
+                    'ok',
+                    'Fichero media personalizado cargado correctamente',
+                    2000
+                );
+            }
+            
             return true;  
             
         } else {
@@ -4526,11 +4515,11 @@ async function pintImagenActiveEnFondo(){
 
     } catch (error) {
         
-        console.error('Error al cargar la imagen de fondo:',error);
+        console.error('Error al cargar el fichero de fondo:',error);
 
         showToast(
             'error',
-            `Error al cargar la imagen de fondo: ${error}`,
+            `1. Error al cargar el fichero de fondo: ${error}`,
             null,
             'center',
             true,
@@ -4542,52 +4531,63 @@ async function pintImagenActiveEnFondo(){
 }
 
 
-async function pintImagenesSubidas(){
-    console.log('=== function pintImagenesSubidas() ===');
+async function pintMediaSubidas(){
+    console.log('=== function pintMediaSubidas() ===');
 
     try {
 
-        const data = await getImagenAll();
+        const data = await getMediaAll();
         console.log('3. data:', data);
 
         eid_imagenesContainer.innerHTML = '';//reset
 
         if (data.success) {
 
-            if(data.images.length > 0){
+            if(data.media.length > 0){
 
-                data.images.forEach(item => {
+                data.media.forEach(item => {
                     
-                    const imagen_item = document.createElement('div');
-                    imagen_item.className = (item.is_active == 1) ? 'imagen_item active' : 'imagen_item' ;
-                    imagen_item.dataset.id_image = item.id_image;
-                    imagen_item.innerHTML = `
-                        <div class="d_delete">
-                            <img class="d_delete_img" src="images/delete.png">
-                        </div>
-                        <img class="imagen_item_img" src=".${item.filepath}" alt="Imagen de fondo">
-                    `;
-                    imagen_item.onclick = async (e) => {
+                    const media_item = document.createElement('div');
+                    media_item.className = (item.is_active == 1) ? 'media_item active' : 'media_item' ;
+                    media_item.dataset.id_media = item.id_media;
+                    media_item.dataset.media_type = item.media_type;
+
+                    if(item.media_type == 'image'){
+                        media_item.innerHTML = `
+                            <div class="d_delete">
+                                <img class="d_delete_img" src="images/delete.png">
+                            </div>
+                            <img class="media_item_img" src=".${item.filepath}" alt="Imagen de fondo">
+                        `;
+                    }else if(item.media_type == 'video'){
+                        media_item.innerHTML = `
+                            <div class="d_delete">
+                                <img class="d_delete_img" src="images/delete.png">
+                            </div>
+                            <video class="media_item_video" src=".${item.filepath}" autoplay muted loop playsinline>
+                        `;
+                    }
+                    media_item.onclick = async (e) => {
                         
                         if(e.target.closest('.d_delete')){
-                            await deleteImagen(item.id_image);
+                            await deleteMedia(item.id_media);
                         }else{
                             eid_fondo_body.style.backgroundImage = `url(.${item.filepath})`;//aki obligatorio
-                            console.log('item.id_image: ', item.id_image);
+                            console.log('item.id_media: ', item.id_media);
     
-                            await updateImagenActive(item.id_image);
+                            await updateMediaActive(item.id_media);
                         }
                         
                     }
                     //añado al DOM
-                    eid_imagenesContainer.append(imagen_item);
+                    eid_imagenesContainer.append(media_item);
                 });
 
             }else{
                 const div = document.createElement('div');
                 div.className = 'no_imagen';
                 div.innerHTML = `
-                    <p>No hay imágenes subidas.</p>
+                    <p>No hay imágenes o vídeos subidos.</p>
                 `;
                 eid_imagenesContainer.append(div);
             }                  
@@ -4597,7 +4597,7 @@ async function pintImagenesSubidas(){
             const div = document.createElement('div');
             div.className = 'no_imagen';
             div.innerHTML = `
-                <p class="prim">No hay imágenes subidas.</p>
+                <p class="prim">No hay imágenes o vídeos subidos.</p>
             `;
             eid_imagenesContainer.append(div);
 
@@ -4607,7 +4607,7 @@ async function pintImagenesSubidas(){
 
     } catch (error) {
         
-        console.error('Error al cargar las imágenes de fondo:',error);
+        console.error('Error al cargar media de fondo:',error);
 
         showToast(
             'error',
@@ -4622,24 +4622,24 @@ async function pintImagenesSubidas(){
 }
 
 
-async function updateImagenActive(id_image){
-    console.log('=== function updateImagenActive() ===');
+async function updateMediaActive(id_media){
+    console.log('=== function updateMediaActive() ===');
 
-    if(!id_image){
-        console.error('id_image no válido:', id_image);
+    if(!id_media){
+        console.error('id_media no válido:', id_media);
         return;
     }
 
     try {
 
-        const response = await fetch('../song/php/update_imagen_active.php',
+        const response = await fetch('../song/php/update_media_active.php',
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_image: id_image
+                    id_media: id_media
                 })
             }
         );
@@ -4669,8 +4669,8 @@ async function updateImagenActive(id_image){
             if (data.success) {
 
                 //actualizo HTML DOM
-                marcarImagenActiveEnDOM(data.id_image);//marcar en rojo la imagen en el modal
-                await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                marcarMediaActiveEnDOM(data.id_media);//marcar en rojo la imagen en el modal
+                await pintMediaActiveEnFondo();//aplico la imagen de fondo seleccionada
 
                 showToast(
                     'ok',
@@ -4716,13 +4716,17 @@ async function updateImagenActive(id_image){
 }
 
 
-async function deleteImagen(id_image){
-    console.log('=== function deleteImagen() ===');
+async function deleteMedia(id_media){
+    console.log('=== function deleteMedia() ===');
 
-    if(!id_image){
-        console.error('id_image no válido:', id_image);
+    if(!id_media){
+        console.error('id_media no válido:', id_media);
         return;
     }
+
+    //averiguo si es imagen o vídeo
+    //let palabra_tipo = () ? : ;
+
 
     const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE esta imagen? \n\nEsta acción no se podrá deshacer.`);
     if(respuesta){
@@ -4739,14 +4743,14 @@ async function deleteImagen(id_image){
 
     try {
 
-        const response = await fetch('../song/php/delete_imagen.php',
+        const response = await fetch('../song/php/delete_media.php',
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_image: id_image
+                    id_media: id_media
                 })
             }
         );
@@ -4776,18 +4780,22 @@ async function deleteImagen(id_image){
             if (data.success) {
 
                 //elimino del DOM la imagen eliminada
-                eid_imagenesContainer.querySelector(`.imagen_item[data-id_image="${id_image}"]`).remove();
+                eid_imagenesContainer.querySelector(`.media_item[data-id_media="${id_media}"]`).remove();
                 eid_fondo_body.style = '';//quito el fondo para evitar que quede la imagen rota 
                 bg_ruta = '';//quito la ruta del fondo 
+                bg_media_type = '';//quito tipo de media. luego lo reasigno 
+                video_ruta = '';//quito la ruta del video 
 
                 localStorage.setItem('bg_ruta', '');//quito la ruta del fondo del localStorage
+                localStorage.setItem('bg_media_type', '');//quito tipo de media del fondo del localStorage
+                localStorage.setItem('video_ruta', '');//quito la ruta del video del localStorage
                 await guardarEnLocalAndBd('g');//g = guardar fondo
 
                 //si hay nueva imagen activa la aplico en el fondo
-                if(data.new_id_image_active){
+                if(data.new_id_media_active){
                     //actualizo HTML DOM
-                    marcarImagenActiveEnDOM(data.new_id_image_active);//marcar en rojo la imagen en el modal
-                    await pintImagenActiveEnFondo();//aplico la imagen de fondo seleccionada
+                    marcarMediaActiveEnDOM(data.new_id_media_active);//marcar en rojo la imagen en el modal
+                    await pintMediaActiveEnFondo();//aplico la imagen de fondo seleccionada
                 }
 
                 showToast(
@@ -4812,13 +4820,13 @@ async function deleteImagen(id_image){
 
         } catch (error) {
             
-            console.error('❌ JSON inválido en delete_imagen.php');
+            console.error('❌ JSON inválido en delete_media.php');
             console.error(text.slice(0, 500));
             console.error('error.name: ', error.name);            
             console.error('error.message: ', error.message);            
 
             throw new Error(
-                'JSON inválido en delete_imagen.php',
+                'JSON inválido en delete_media.php',
                 { cause: error }
             );
         } 
@@ -4826,7 +4834,7 @@ async function deleteImagen(id_image){
     } catch (error) {
 
         console.error(
-            'Error al actualizar la imagen de fondo:',
+            'Error al actualizar el fichero de fondo:',
             error
         );
 
@@ -4834,10 +4842,13 @@ async function deleteImagen(id_image){
 }
 
 
-function marcarImagenActiveEnDOM(id_image){
-    
-    Array.from(eid_imagenesContainer.querySelectorAll('.imagen_item')).forEach(item => {
-        if(item.dataset.id_image == id_image){
+function marcarMediaActiveEnDOM(id_media){
+    if(!id_media){
+        return;
+    }
+
+    Array.from(eid_imagenesContainer.querySelectorAll('.media_item')).forEach(item => {
+        if(item.dataset.id_media == id_media){
             item.classList.add('active');
         }else{
             item.classList.remove('active');
@@ -4846,12 +4857,13 @@ function marcarImagenActiveEnDOM(id_image){
 }
 
 
-async function getImagenActive(){
-    console.log('=== function getImagenActive() ===');
+
+async function getMediaActive(){
+    console.log('=== function getMediaActive() ===');
 
     try {
 
-        const response = await fetch('../song/php/get_imagen_active.php',
+        const response = await fetch('../song/php/get_media_active.php',
             {
                 method: 'POST'
             }
@@ -4872,7 +4884,6 @@ async function getImagenActive(){
             console.error(text.slice(0, 300));
             throw new Error(`HTTP (error get_imagen_active.php) ${response.status}`);
         }
-
 
 
         try {
@@ -4902,12 +4913,12 @@ async function getImagenActive(){
 }
 
 
-async function getImagenAll(){
-    console.log('=== function getImagenAll() ===');
+async function getMediaAll(){
+    console.log('=== function getMediaAll() ===');
 
     try {
 
-        const response = await fetch('../song/php/get_imagen_all.php',
+        const response = await fetch('../song/php/get_media_all.php',
             {
                 method: 'POST'
             }
@@ -4944,7 +4955,7 @@ async function getImagenAll(){
             console.error('error.message: ', error.message);            
 
             throw new Error(
-                'JSON inválido en get_imagen_all.php',
+                'JSON inválido en get_media_all.php',
                 { cause: error }
             );
         } 
@@ -4952,14 +4963,12 @@ async function getImagenAll(){
     } catch (error) {
 
         console.error(
-            'Error al cargar las imágenes de fondo:',
+            'Error al cargar las imágenes o vídeos de fondo:',
             error
         );
 
     }
 }
-
-
 
 
 

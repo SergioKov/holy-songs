@@ -87,7 +87,17 @@
     `;
 ?>
 
-    <div id="fondo" class=""></div><!--/#fondo-->
+    <div id="fondo" class="">
+        <video
+            id="videoFondo"
+            src=""
+            autoplay
+            muted
+            loop
+            playsinline
+        >
+        </video>
+    </div><!--/#fondo-->
 
     <div id="contenedor" class=""></div><!--/#contenedor-->
         
