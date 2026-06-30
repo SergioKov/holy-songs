@@ -4740,7 +4740,7 @@ fieldset.kuplet.partial{
     background: #ad0000;
 }
 
-.media_item.active::before {
+.media_item.active::after {
     content: "ACTIVO";
     position: absolute;
     top: 10px;
