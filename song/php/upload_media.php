@@ -233,7 +233,7 @@ function guardarMedia(
     //$filepathDb = 'uploads/media/' . $id_iglesia . '/' . $filename;
 
     // Ruta relativa para BD
-    $filepathDb = "uploads/{$subcarpeta}/{$id_iglesia}/{$filename}";
+    $filepathDb = "uploads/{$id_iglesia}/{$subcarpeta}/{$filename}";
 
     // Insertar en BD
     $sql = "INSERT INTO media
