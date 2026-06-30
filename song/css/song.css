@@ -4751,6 +4751,17 @@ fieldset.kuplet.partial{
     font-weight: bold;
 }
 
+.media_item[data-media_type="video"]::before {
+    content: "VÍDEO";
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: #4CAF50;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
 .media_item_img, 
 .media_item_video 
 {
