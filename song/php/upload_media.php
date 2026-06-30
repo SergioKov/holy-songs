@@ -158,7 +158,7 @@ function guardarMedia(
         ? 'videos'
         : 'fondos';
 
-    $uploadDir = "../uploads/{$subcarpeta}/{$id_iglesia}/";
+    $uploadDir = "../uploads/{$id_iglesia}/{$subcarpeta}/";
 
     // Crear la carpeta si no existe
     if (!is_dir($uploadDir)) {
