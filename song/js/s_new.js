@@ -1560,7 +1560,7 @@ function actualizarPantallas({
     
     // iframe local
     if(miIframe && miIframe.contentWindow){
-        console.log('hay miPantallaLocal abierta. envio mensaje...');
+        console.log('hay miIframe abierto. envio mensaje...');
 
         miIframe.contentWindow.postMessage(
             payload,
@@ -1568,26 +1568,40 @@ function actualizarPantallas({
         );
     }
     
-    // pantalla local
-    if(miPantallaLocal && !miPantallaLocal.closed){
-        console.log('hay miPantallaLocal abierta. envio mensaje...');
+    // Elimino referencias cerradas
+    limpiarReferenciasCerradas();
 
-        miPantallaLocal.postMessage(
-            payload,
-            window.location.origin
-        );
-    }
+    // Todas las pantallas abiertas
+    arr_misPantallas.forEach(referencia => {
 
-    // pantalla local 2
-    if(miPantallaLocal2 && !miPantallaLocal2.closed){
-        console.log('hay miPantallaLocal2 abierta. envio mensaje...');
+        try {
 
-        miPantallaLocal2.postMessage(
-            payload,
-            window.location.origin
-        );
-    }
+            if(!referencia || referencia.closed){
+                return;
+            }
 
+            const origin = (referencia.location.origin === window.location.origin)
+                ? window.location.origin
+                : '*';
+
+            referencia.postMessage(
+                payload,
+                origin
+            );
+
+        } catch(error){
+
+            // Si no puedo acceder a location.origin (cross-origin)
+            referencia.postMessage(
+                payload,
+                '*'
+            );
+
+        }
+
+    });
+
+    //REVISAR LUEGO!!!
     // pantalla remota
     if (miPantallaRemota && !miPantallaRemota.closed) {
         console.log('hay miPantallaRemota abierta. envio mensaje...');
@@ -3815,7 +3829,7 @@ function removeMonospaceFont() {
     referencia es:
     - pestaña o ventana  'miPantallaLocal' con nombre_referencia 'miPantallaLocal'
 */
-function abrirReferencia(referencia) {
+function old_abrirReferencia(referencia) {
     console.log('=== function abrirReferencia() ===');
     
     let nombre_referencia = '';
@@ -3857,10 +3871,11 @@ function abrirReferencia(referencia) {
     }
     
     console.log(`${nombre_referencia} abierta. referencia: `, referencia);
+
+    eid_videoFondo_body.load();
     return referencia;
 }
-
-function recargarReferencia(referencia) {
+function old_recargarReferencia(referencia) {
     // Usar la variable que contiene la referencia
     if (referencia && !referencia.closed) {
         referencia.location.reload();
@@ -3869,8 +3884,7 @@ function recargarReferencia(referencia) {
         console.log('La referencia está cerrada o no existe');
     }
 }
-
-function enfocarReferencia(referencia) {
+function old_enfocarReferencia(referencia) {
     // Usar la variable que contiene la referencia
     if (referencia && !referencia.closed) {
         referencia.focus();
@@ -3878,17 +3892,13 @@ function enfocarReferencia(referencia) {
         console.log('La referencia está cerrada o no existe');
     }
 }
-
-function cerrarReferencia(referencia) {
+function old_cerrarReferencia(referencia) {
     if (referencia && !referencia.closed) {
         referencia.close();
     }
     referencia = null; // Limpiar la referencia
 }
-
-
-
-function enfocarReferenciaOCrear(referencia){  
+function old_enfocarReferenciaOCrear(referencia){  
     console.log('=== function enfocarReferenciaOCrear() ===');
 
     if (referencia && !referencia.closed) {
@@ -3897,18 +3907,208 @@ function enfocarReferenciaOCrear(referencia){
         abrirReferencia(referencia);
     }
 }
-
-
-function recargarReferenciaOCrear(referencia){
+function old_recargarReferenciaOCrear(referencia){
     console.log('=== function recargarReferenciaOCrear() ===');
 
     if (referencia && !referencia.closed) {
-        referencia.location.reload();
-        referencia.focus();
+        recargarReferencia(referencia);
+        eid_videoFondo_body.load();
     } else {
         abrirReferencia(referencia);
     }
 }
+
+
+//=============================================//
+// start - Nuevas funciones de pantalla
+//=============================================//
+function abrirReferencia(url, nombre_referencia){
+    console.log('=== function abrirReferencia() ===');
+
+    const referencia = window.open(url, nombre_referencia);
+
+    if(!referencia){
+        console.warn('No se pudo abrir la ventana.');
+        return null;
+    }
+
+    if(referencia){
+        eid_videoFondo_body.load();
+        console.log(`${nombre_referencia} abierta.`, referencia);
+    }
+
+    return referencia;
+}
+
+
+function abrirPantalla(numero){
+
+    // Limpio referencias cerradas
+    limpiarReferenciasCerradas();
+
+    // Si esa pantalla ya existe, la enfoco
+    if(arr_misPantallas[numero - 1] && !arr_misPantallas[numero - 1].closed){
+        arr_misPantallas[numero - 1].focus();
+        return;
+    }
+
+    let str_get_param = '';
+    if(numero == 2){
+        //t = parametro get, 
+        //'z' - //mostrar el slide en el center con: justify-content: center 
+        str_get_param = '?t=z';
+    }
+
+    const referencia = abrirReferencia(
+        `pantalla.php${str_get_param}`,
+        `PantallaLocal${numero}`
+    );
+
+    if(referencia){
+        arr_misPantallas[numero - 1] = referencia;
+    }
+}
+
+
+function enfocarReferencia(numero){
+
+    const indice = numero - 1;
+
+    if(indice < 0){
+        return;
+    }
+
+    limpiarReferenciasCerradas();
+
+    let referencia = arr_misPantallas[indice];
+
+    // Si no existe o está cerrada, la creo
+    if(!referencia || referencia.closed){
+
+        referencia = abrirReferencia(
+            'pantalla.php',
+            `PantallaLocal${numero}`
+        );
+
+        if(referencia){
+            arr_misPantallas[indice] = referencia;
+        }
+
+        return;
+    }
+
+    referencia.focus();
+}
+
+
+function recargarReferencia(numero){
+
+    const indice = numero - 1;
+    if(indice < 0){
+        return;
+    }
+
+    limpiarReferenciasCerradas();
+
+    let referencia = arr_misPantallas[indice];
+
+    //si no existe o está cerrada, la creo
+    if(!referencia || referencia.closed){
+        console.log('La referencia está cerrada o no existe. la creo...');
+
+        referencia = abrirReferencia(
+            'pantalla.php',
+            `PantallaLocal${numero}`
+        );
+
+        if(referencia){
+            arr_misPantallas[indice] = referencia;
+        }
+
+        return;
+    }
+
+    //si ya existe, la recargo y enfoco
+    referencia.location.reload();
+    referencia.focus();
+}
+
+
+function cerrarReferencia(numero){
+
+    const indice = numero - 1;
+    if(indice < 0){
+        return;
+    }
+
+    const referencia = arr_misPantallas[indice];
+
+    if(referencia && !referencia.closed){
+        referencia.close();
+    }
+
+    arr_misPantallas[indice] = null;
+
+    limpiarReferenciasCerradas();
+}
+
+
+function enfocarMisReferenciasOCrear(){
+    console.log('=== function enfocarMisReferenciasOCrear() ===');
+
+    // Elimino referencias cerradas
+    limpiarReferenciasCerradas();
+
+    // Si no hay ninguna abierta, creo una
+    if(arr_misPantallas.length === 0){
+        abrirPantalla(1);//por defecto
+        return;
+    }
+
+    // Enfoco todas las abiertas
+    arr_misPantallas.forEach(referencia => {
+        if (referencia && !referencia.closed) {
+            referencia.focus();
+        }
+    });
+}
+
+
+function recargarMisReferenciasOCrear(){
+    console.log('=== function recargarMisReferenciasOCrear() ===');
+
+    // Elimino referencias cerradas
+    limpiarReferenciasCerradas();
+
+    // Si no hay ninguna abierta, creo una
+    if(arr_misPantallas.length === 0){
+        abrirPantalla(1);//por defecto
+        return;
+    }
+
+    // Enfoco todas las abiertas
+    arr_misPantallas.forEach(referencia => {
+        if (referencia && !referencia.closed) {
+            referencia.location.reload();
+            referencia.focus();
+            eid_videoFondo_body.load();
+        }
+    });
+}
+
+
+function limpiarReferenciasCerradas(){
+
+    arr_misPantallas = arr_misPantallas.filter(
+        ref => ref && !ref.closed
+    );
+}
+
+//=============================================//
+// end - Nuevas funciones de pantalla
+//=============================================//
+
+
 /*
 // no se usa. dejo como ejemplo...
 function fullscreenReferenciaOCrear(referencia){
@@ -4469,6 +4669,10 @@ async function pintMediaActiveEnFondo(){
                 console.log('bg_ruta: ', bg_ruta);
                 localStorage.setItem('bg_ruta', bg_ruta);
 
+                //quitar video
+                eid_videoFondo_body.classList.remove('shown');//oculto
+                eid_videoFondo_body.src = '';//reset
+                
                 // Aplicar inmediatamente el fondo
                 eid_fondo_body.style.backgroundImage = `url(.${bg_ruta})`;//aki obligatorio
                 await guardarEnLocalAndBd('g');//g = guardar fondo
@@ -4479,7 +4683,9 @@ async function pintMediaActiveEnFondo(){
                     2000
                 );
 
-            }else if(data.media.media_type === 'video'){
+            }
+            
+            if(data.media.media_type === 'video'){
                 //saco la ruta del video
                 bg_ruta = '';//reset
                 video_ruta = `.${data.media.filepath}`;
@@ -4487,7 +4693,9 @@ async function pintMediaActiveEnFondo(){
                 localStorage.setItem('video_ruta', video_ruta);
 
                 // Aplicar inmediatamente el video en el fondo
+                eid_videoFondo_body.classList.add('shown');//muestro
                 eid_videoFondo_body.src = video_ruta;//aki obligatorio
+
                 await guardarEnLocalAndBd('g');//g = guardar fondo
 
                 showToast(

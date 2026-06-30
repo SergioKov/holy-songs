@@ -1024,8 +1024,8 @@ function handleFormInput(e, container_block){
 
     console.log('al final. obj_bloques: ', obj_bloques);
 
-
-    let arr_esquema = Object.keys(obj_bloques);
+    
+    let arr_esquema = Object.keys(obj_bloques);    
 
     //const vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');//antes
     // const vista_blocks = container_block.querySelector('.wr_vista_blocks');
@@ -1063,7 +1063,74 @@ function handleFormInput(e, container_block){
 
 
 
+function crearBloquesMostrar(objBloques, maxLineas){
+    console.log('=== function crearBloquesMostrar() ===');
 
+    obj_bloques_mostrar = {};//reset
+    
+    // recorrer objBloques
+    for(const [titulo, bloque] of Object.entries(objBloques)){
+
+        const slideOriginal = bloque.slide;
+        const stepOriginal = bloque.step;
+
+        //creo array de las lineas '<p></p>'
+        const arr_p = [...slideOriginal.querySelectorAll('fieldset > p')];
+
+        // No hace falta partir el bloque ya que tiene 4 o menos lineas
+        if(arr_p.length <= maxLineas){
+
+            obj_bloques_mostrar[titulo] = {
+                step: stepOriginal.cloneNode(true),
+                slide: slideOriginal.cloneNode(true)
+            };
+
+            continue;
+        }
+
+        // Partir en varios slides ya que tiene mas de 4 lineas
+        let parte = 1;
+
+        for(let i = 0; i < arr_p.length; i += maxLineas){
+
+            const tituloNuevo =
+                (parte === 1)
+                    ? titulo
+                    : `${titulo} (${parte})`;
+
+            const slideNuevo = slideOriginal.cloneNode(true);
+
+            const fieldset = slideNuevo.querySelector('fieldset');
+            fieldset.innerHTML = '';
+
+            // Recupero el legend
+            const legend = document.createElement('legend');
+            legend.textContent = tituloNuevo;
+            fieldset.append(legend);
+
+            arr_p
+                .slice(i, i + maxLineas)
+                .forEach(p => {
+                    fieldset.append(
+                        p.cloneNode(true)
+                    );
+                });
+
+            const stepNuevo = stepOriginal.cloneNode(true);
+            stepNuevo.textContent = tituloNuevo;
+
+            obj_bloques_mostrar[tituloNuevo] = {
+                step: stepNuevo,
+                slide: slideNuevo
+            };
+
+            parte++;
+        }
+    }
+
+    // devolver nuevo objeto
+    return obj_bloques_mostrar;
+}
 
 
 
@@ -1276,9 +1343,11 @@ function aplicarBrillo(valor) {
     //pero en el iframe no se ve imagen del fondo. por eso lo de abajo es forzar que se vea como debe
     if(pantalla_show){//muestro texto del slide
         eid_fondo_body.style = '';//oculto la imagen de fondo
+        eid_videoFondo_body.src = '';//reset la ruta de video
     }else{//muestro el fondo del slide
         eid_fondo_body.style.opacity = opacity_val;//muesto brillo personalizado de la imagen de fondo
         eid_fondo_body.style.backgroundImage = bg_ruta;
+        eid_videoFondo_body.src = video_ruta;
     }
     
     //!en el slide en la pestaña esquema no hace falta aplicar brillo. se ve lo aplicado en el iframe!

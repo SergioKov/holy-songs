@@ -83,7 +83,13 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song</title>
     <link rel="icon" type="image/png" href="../images/hs.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="./css/song.css">
     <link rel="stylesheet" href="./css/toast.css">
@@ -774,11 +780,11 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
 
 
-                                                    <button id="btn_enfocarPantalla_fast" class="btn flex_center btn_actions" onclick="enfocarReferenciaOCrear(miPantallaLocal);">
+                                                    <button id="btn_enfocarPantalla_fast" class="btn flex_center btn_actions" onclick="enfocarMisReferenciasOCrear()">
                                                         <img class="btn_img_sm" src="images/center_focus.png">
                                                     </button>
 
-                                                    <button id="btn_recargarPantalla_fast" class="btn flex_center btn_actions" onclick="recargarReferenciaOCrear(miPantallaLocal);">
+                                                    <button id="btn_recargarPantalla_fast" class="btn flex_center btn_actions" onclick="recargarMisReferenciasOCrear()">
                                                         <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                     </button>
 
@@ -888,30 +894,51 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 Escoge esta opción si usas otra pantalla desde el dispositivo actual (PC o MAC) para mostrar en otra pantalla conectada las diapositivas para el público.
                                                                             </p>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miPantallaLocal);">Pantalla Local</button>
-                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPantallaLocal);">
+                                                                                <button class="btn btn_ver_pantalla w_100" onclick="abrirPantalla(1)">
+                                                                                    <img src="images/monitor_1_white.png">
+                                                                                    <span>Pantalla Local 1 (principal)</span>
+                                                                                </button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(1)">
                                                                                     <img class="btn_img_sm" src="images/center_focus.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="recargarReferencia(miPantallaLocal);">
+                                                                                <button class="btn" onclick="recargarReferencia(1)">
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miPantallaLocal);">✕</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(1)">✕</button>
                                                                             </div>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="abrirReferencia(miPantallaLocal2);">Pantalla Local 2</button>
-                                                                                <button class="btn flex_center" onclick="enfocarReferencia(miPantallaLocal2);">
+                                                                                <button class="btn btn_ver_pantalla w_100" onclick="abrirPantalla(2)">
+                                                                                    <img src="images/monitor_1_white.png">
+                                                                                    <span>Pantalla Local 2 (sala)</span>
+                                                                                </button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(2)">
                                                                                     <img class="btn_img_sm" src="images/center_focus.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="recargarReferencia(miPantallaLocal2);">
+                                                                                <button class="btn" onclick="recargarReferencia(2)">
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
-                                                                                <button class="btn" onclick="cerrarReferencia(miPantallaLocal2);">✕</button>
+                                                                                <button class="btn" onclick="cerrarReferencia(2)">✕</button>
                                                                             </div>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn btn_ver_pantalla w_100" onclick="abrirPantalla(3)">
+                                                                                    <img src="images/monitor_1_white.png">
+                                                                                    <span>Pantalla Local 3 (sala 2)</span>                                                                                    
+                                                                                </button>
+                                                                                <button class="btn flex_center" onclick="enfocarReferencia(3)">
+                                                                                    <img class="btn_img_sm" src="images/center_focus.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="recargarReferencia(3)">
+                                                                                    <img class="btn_img_sm" src="images/reload_white_32x32.png">
+                                                                                </button>
+                                                                                <button class="btn" onclick="cerrarReferencia(3)">✕</button>
+                                                                            </div>
+
                                                                         </div>
 
 
-                                                                        <div class="contenedor_sel_pantalla">
+                                                                        <div class="contenedor_sel_pantalla d-none">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>REMOTO</span>
                                                                                 <button class="btn btn_active">Grabar Slides en BD</button>
@@ -934,7 +961,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="wr_qr_code">
+                                                                        <div class="wr_qr_code d-none">
                                                                             <h4>Escanea el código QR</h4>
                                                                             <div class="wr_qr_img">
                                                                                 <!-- <img class="w_100" src="./images/qr_show_screen_com.png"> -->
@@ -1307,7 +1334,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositiva actual:</span>
-                                                        <button class="btn" onclick="recargarReferencia(miPantallaLocal);">
+                                                        <button class="btn" onclick="recargarMisReferenciasOCrear()">
                                                             <img class="btn_img_sm2" src="images/reload_white_32x32.png">
                                                         </button>
                                                     </h4>
@@ -1319,9 +1346,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                         <div class="bloques wr_vista_blocks wr_full_block">
                                                             <div id="pantalla_body">
                                                                 <div id="fondo_body" class="">
-                                                                    <video id="videoFondo_body" autoplay muted loop playsinline>
-                                                                        <sourse src=""></sourse>
-                                                                    </video>
+                                                                    <video id="videoFondo_body" src="" autoplay muted loop playsinline></video>
                                                                     <div id="contenedor_prev" class="shown">
                                                                         <div id="contenedor_prev_inner">
                                                                             <!-- aki vista previa -->

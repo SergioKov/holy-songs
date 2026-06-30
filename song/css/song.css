@@ -2495,6 +2495,24 @@ p.p_sm b {
     overflow: auto;
 }
 
+#videoFondo_body {
+    /* display: none; */
+    /* background: red; */
+    /* padding: 10px; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    pointer-events: none;
+    transition: 0.5s ease;
+    opacity: 0.5;
+}
+#videoFondo_body.shown {
+    opacity: 1 !important;
+}
+
 #fondo_body.logo_en_fondo {
     background-image: url('../images/logo_iglesia.png');
 }
@@ -4822,3 +4840,22 @@ fieldset.kuplet.partial{
     display: block;
 }
 
+
+
+.btn_ver_pantalla {
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #464646;
+    background: #5a5a5a;
+    color: white;
+    font-size: 14px;
+    transition: 0.3s;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+.btn_ver_pantalla:hover {
+    background: #888;
+}

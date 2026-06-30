@@ -586,7 +586,17 @@ function aplicarVista(){
                     if(video_ruta != ''){
                         eid_style_imagen_en_fondo.innerHTML = '';//reset
                         eid_videoFondo.classList.add('shown');
-                        eid_videoFondo.src = `${video_ruta}`;
+
+                        //1. miro que ruta está en el DOM metida
+                        let video_ruta_src = eid_videoFondo.getAttribute('src');
+
+                        //2. si la actual video_ruta es distinta a video_ruta_src (la del DOM) => la meto en el src
+                        // si la ruta es la mismo. no hago nada
+                        if(video_ruta != video_ruta_src){
+                            //la ruta es distinta. la meto en el src.
+                            eid_videoFondo.src = `${video_ruta}`;
+                        }
+                        
                     }else{
                         eid_style_imagen_en_fondo.innerHTML = '';
                         eid_videoFondo.classList.remove('shown');//? revisar si hace falta...
@@ -718,16 +728,14 @@ async function aplicarVistaUsuario(){
 
         //case 'g'://imagen de letra 'g' => mostrar imagen personalizada en el fondo (cuando no se ve el slide)
         if(t.includes('g')){
+            console.log('es un parametro g - imagen_en_fondo');
+
             show_imagen_en_fondo = 1;
             document.body.className = '';//reset
             document.body.classList.add('imagen_en_fondo');
 
             await pintMediaActiveEnFondoPantalla();//pinta la imagen del fondo sin tener en cuenta el fondo elegido en select_slide()            
 
-        }else{
-            show_imagen_en_fondo = 0;
-            document.body.classList.remove('imagen_en_fondo');
-            eid_style_imagen_en_fondo.innerHTML = '';//reset
         }
 
         //case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
@@ -1441,7 +1449,17 @@ function aplicarMediaFondo(mediaType, ruta){
         if(video_ruta != ''){
             eid_style_imagen_en_fondo.innerHTML = '';//reset ?
             eid_videoFondo.classList.add('shown');//muestro video
-            eid_videoFondo.src = `${video_ruta}`;
+
+            //1. miro que ruta está en el DOM metida
+            let video_ruta_src = eid_videoFondo.getAttribute('src');
+
+            //2. si la actual video_ruta es distinta a video_ruta_src (la del DOM) => la meto en el src
+            // si la ruta es la mismo. no hago nada
+            if(video_ruta != video_ruta_src){
+                //la ruta es distinta. la meto en el src.
+                eid_videoFondo.src = `${video_ruta}`;
+            }
+
         }else{
             eid_style_imagen_en_fondo.innerHTML = '';//reset
         }
