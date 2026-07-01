@@ -1530,6 +1530,10 @@ function pintarTimer(){
     console.log('=== function pintarTimer() ===');
     console.log('Pantalla:', Date.now());
 
+    if(!objTimer){
+        return;
+    }
+
     if(!objTimer.visible){
         eid_timerOverlay.classList.remove('shown');
         return;
@@ -1553,20 +1557,16 @@ function pintarTimer(){
     eid_timerOverlay.classList.add(estado.clase);
 }
 
+
 let timeoutIdentificador = null;
 
 function mostrarNumeroPantalla(numero){
 
     eid_identificadorPantalla.textContent = numero;
-
     eid_identificadorPantalla.classList.add('shown');
-
     clearTimeout(timeoutIdentificador);
 
     timeoutIdentificador = setTimeout(() => {
-
         eid_identificadorPantalla.classList.remove('shown');
-
     },3000);
-
 }
