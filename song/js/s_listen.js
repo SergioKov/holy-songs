@@ -1,5 +1,7 @@
 window.addEventListener('load', (e) => {
     console.log('load - window.innerWidth: ', window.innerWidth);
+    iniciarRenderTimerHoly();//para contador de tiempo del predicador
+
     ocultar_calculando();
         mySizeEdit();//en test. luego quitar!!!
     init();
@@ -1352,3 +1354,19 @@ function aplicarBrillo(valor) {
     
     //!en el slide en la pestaña esquema no hace falta aplicar brillo. se ve lo aplicado en el iframe!
 }
+
+
+//timer
+let timerHolyInterval = null;
+
+function iniciarRenderTimerHoly(){
+
+    if(timerHolyInterval){
+        return; // ya está iniciado
+    }
+
+    timerHolyInterval = setInterval(() => {
+        pintarTimerHoly();
+    }, 1000);
+}
+

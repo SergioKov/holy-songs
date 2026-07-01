@@ -935,9 +935,86 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 <button class="btn" onclick="cerrarReferencia(3)">✕</button>
                                                                             </div>
 
+                                                                            
+
+                                                                        </div>
+
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>Identifica Pantallas</span>
+                                                                            </h4>
+                                                                            <p>Para saber donde está abierta cada ventana, identifícalos.</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="identificarPantallas()">
+                                                                                    🖥️ Identificar pantallas
+                                                                                </button>                                                                                
+                                                                            </div>
                                                                         </div>
 
 
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>Temporizador</span>
+                                                                            </h4>
+                                                                            <p>Control del temporizador en la pantalla 2 (sala):</p>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <p>Tiempo:</p>
+                                                                                <input id="timerMinutos" type="number" min="1" max="60" value="20">
+                                                                            </div>
+
+                                                                            <div id="timerDisplay" class="timer_display">
+                                                                                <div id="estadoTimerHoly" class="timer_text">...</div>
+                                                                                <div id="timerTextHoly" class="timer_text">--:--</div>
+                                                                            </div>
+
+                                                                            <div class="timer_panel wr_sel_pantalla">                                                                               
+
+                                                                                <button class="btn w_100" onclick="iniciarTimer()">
+                                                                                    ▶ Iniciar
+                                                                                </button>
+                                                                                
+                                                                                <button class="btn w_100" onclick="pararTimer()">
+                                                                                    ⏹ Parar
+                                                                                </button>
+
+                                                                                <button class="btn w_100" onclick="pausarTimer()">
+                                                                                    ⏸ Pausar
+                                                                                </button>
+
+                                                                                <button class="btn w_100" onclick="continuarTimer()">
+                                                                                    ▶ Continuar
+                                                                                </button>
+
+                                                                                <button class="btn w_100" onclick="reiniciarTimer()">
+                                                                                    ↺ Reiniciar
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="restarMinutosTimer(1)">
+                                                                                    -1 min
+                                                                                </button>
+
+                                                                                <button class="btn w_100" onclick="sumarMinutosTimer(1)">
+                                                                                    +1 min
+                                                                                </button>
+                                                                            </div>
+                                                                            
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn w_100" onclick="ocultarTimer()">
+                                                                                    Ocultar
+                                                                                </button>
+
+                                                                                <button class="btn w_100" onclick="mostrarTimer()">
+                                                                                    Mostrar
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        
+                                                                        
+                                                                        
                                                                         <div class="contenedor_sel_pantalla d-none">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>REMOTO</span>
@@ -2169,7 +2246,8 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     <script src="js/s_modal.js"></script>
     <script src="js/s_listen.js"></script>
     <script src="js/s_new.js"></script>
-    <script src="js/s_old.js"></script>
+    <script src="js/s_timer.js"></script>
+    <!-- <script src="js/s_old.js"></script> -->
     <script src="js/s_test.js"></script>
 
 </body>

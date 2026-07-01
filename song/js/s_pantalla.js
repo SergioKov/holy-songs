@@ -2,6 +2,7 @@ const eid_style_imagen_en_fondo = document.getElementById('style_imagen_en_fondo
 const eid_fondo = document.getElementById('fondo');
 const eid_videoFondo = document.getElementById('videoFondo');//para video
 const eid_contenedor = document.getElementById('contenedor');
+const eid_identificadorPantalla = document.getElementById('identificadorPantalla');
 
 let arr_pantalla = [];
 let delay_fn = 200;//200 por defecto
@@ -107,6 +108,12 @@ let resizeTimeout;//para lanzar mySizePantallaShow(); solo cuando el usuario dej
 let transitionToken = 0;//para mostrarSlide(), mostrarFondo(), cambiarSlideConTransicion()
 let sizeCalcToken = 0;// para mySizePantallaShow() 
 
+//timer
+const eid_contenedor_timer = document.getElementById('contenedor_timer');
+const eid_timerOverlay = document.getElementById('timerOverlay');
+const eid_timerContent = document.getElementById('timerContent');
+const eid_timerText = document.getElementById('timerText');
+let intervalTimer = null;
 
 
 
@@ -120,6 +127,7 @@ localStorage.setItem('pantalla_abierta','true');
 //cuando se cargue el documento
 document.addEventListener('DOMContentLoaded', () => {
         cargarEstadoInicial();
+        iniciarRenderTimer();//para timer
     }
 );
 
@@ -148,52 +156,68 @@ window.addEventListener('message', async (event) => {
         case 'pantalla_update':
             if (data.arr_pantalla) {
                 arr_pantalla = data.arr_pantalla;
-            }        
+            } 
+
             if (data.objPantallaParams) {
                 objPantallaParams = data.objPantallaParams;
-            }        
+            } 
+
             if (data.actualizarVista) {
                 console.log(' llamo --- aplicarVista()');
                 aplicarVista();
-            }        
+            } 
+
             if (data.actualizarSlide) {
                 console.log(' llamo --- construirElementosYAppend()');
                 //construirElementosYAppend();//tiene aplicarVista() dentro
                 cambiarSlideConTransicion();//tiene dentro construirElementosYAppend() y este tiene aplicarVista() dentro
-            }            
+            } 
+            
+            if(data.objTimer){
+                objTimer = data.objTimer;
+                pintarTimer();
+            }
             break;
 
-        //dejo como ejemplo
+        case 'identificar_pantalla':
+            mostrarNumeroPantalla(data.numero);
+            break;
+
+        //DEJO COMO EJEMPLO
         //no funciona como quiero yo
         //solo con 'F11' o boton de extension 'fullscreen'    
-        case 'fullscreen':
-            try{
-                await document.documentElement.requestFullscreen();
-            }catch(e){
-                console.error(e);
-            }
-            break;
+        // case 'fullscreen':
+        //     try{
+        //         await document.documentElement.requestFullscreen();
+        //     }catch(e){
+        //         console.error(e);
+        //     }
+        //     break;
 
-        case 'exit_fullscreen':
-            if(document.fullscreenElement){
-                try{
-                    await document.exitFullscreen();
-                }catch(e){
-                    console.error(e);
-                }
-            }
-            break;
+        // case 'exit_fullscreen':
+        //     if(document.fullscreenElement){
+        //         try{
+        //             await document.exitFullscreen();
+        //         }catch(e){
+        //             console.error(e);
+        //         }
+        //     }
+        //     break;
 
-        case 'toggle_fullscreen':
-            try{
-                if(document.fullscreenElement){
-                    await document.exitFullscreen();
-                }else{
-                    await document.documentElement.requestFullscreen();
-                }
-            }catch(e){
-                console.error(e);
-            }
+        // case 'toggle_fullscreen':
+        //     try{
+        //         if(document.fullscreenElement){
+        //             await document.exitFullscreen();
+        //         }else{
+        //             await document.documentElement.requestFullscreen();
+        //         }
+        //     }catch(e){
+        //         console.error(e);
+        //     }
+        //     break;
+
+        default:
+            console.warn('Tipo de mensaje desconocido:', data.tipo);
             break;
     }
 
@@ -692,6 +716,7 @@ async function aplicarVistaUsuario(){
     // Leer un parámetro específico
     const id = params.get("id");   // "8050"
     const t  = params.get("t"); 
+    const timer  = params.get("timer"); 
 
     //si no hay parametro, no hago nada.
     if(!t){
@@ -711,6 +736,7 @@ async function aplicarVistaUsuario(){
     //case 't'://top => mostrar en el top
     //case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'
     //case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
+    //case 'y'://mostrar el timer solo en pantalla 2 (sala)
 
 
     //parametro GET 't' de 'tipo de letra'
@@ -834,6 +860,15 @@ async function aplicarVistaUsuario(){
         }else{
             tipo_fuente = 'a';
             eid_contenedor.classList.remove('monospace_font');
+        }
+
+        //timer
+        if(t.includes('y')){
+            eid_contenedor_timer.className = '';
+            eid_contenedor_timer.classList.add('d-block');
+        }else{
+            eid_contenedor_timer.className = '';
+            eid_contenedor_timer.classList.add('d-none');
         }
     }
 }
@@ -1465,5 +1500,73 @@ function aplicarMediaFondo(mediaType, ruta){
         }
         console.log('video personalizado cargado correctamente');
     }
+
+}
+
+
+//============================================================//
+// timer
+//============================================================//
+
+function old_iniciarRenderTimer(){
+
+    clearInterval(intervalTimer);
+    pintarTimer();
+
+    intervalTimer = setInterval(pintarTimer,1000);
+}
+
+function iniciarRenderTimer(){
+
+    if(intervalTimer){
+        return;
+    }
+
+    intervalTimer = setInterval(pintarTimer, 1000);
+}
+
+
+function pintarTimer(){
+    console.log('=== function pintarTimer() ===');
+    console.log('Pantalla:', Date.now());
+
+    if(!objTimer.visible){
+        eid_timerOverlay.classList.remove('shown');
+        return;
+    }
+    
+    eid_timerOverlay.classList.add('shown');
+
+    // console.log(objTimer);
+
+    const estado = calcularEstadoTimer();
+
+    eid_timerText.textContent = estado.texto;
+
+    eid_timerOverlay.classList.remove(
+        'verde',
+        'amarillo',
+        'rojo',
+        'rojo_blink'
+    );
+
+    eid_timerOverlay.classList.add(estado.clase);
+}
+
+let timeoutIdentificador = null;
+
+function mostrarNumeroPantalla(numero){
+
+    eid_identificadorPantalla.textContent = numero;
+
+    eid_identificadorPantalla.classList.add('shown');
+
+    clearTimeout(timeoutIdentificador);
+
+    timeoutIdentificador = setTimeout(() => {
+
+        eid_identificadorPantalla.classList.remove('shown');
+
+    },3000);
 
 }

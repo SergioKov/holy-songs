@@ -1552,10 +1552,14 @@ function actualizarPantallas({
 
     const payload = {
         tipo: 'pantalla_update',
+
         actualizarSlide,//por defecto es true
         actualizarVista,//por defecto es true
+
         arr_pantalla,
-        objPantallaParams
+        objPantallaParams,
+
+        objTimer //para temporizador
     };
     
     // iframe local
@@ -3956,7 +3960,8 @@ function abrirPantalla(numero){
     if(numero == 2){
         //t = parametro get, 
         //'z' - //mostrar el slide en el center con: justify-content: center 
-        str_get_param = '?t=z';
+        //'y' - //mostrar el timer 
+        str_get_param = '?t=zy';
     }
 
     const referencia = abrirReferencia(
@@ -5180,6 +5185,49 @@ async function getMediaAll(){
 
 
 
-        
+function pintarTimerHoly(){
+    console.log('=== function pintarTimerHoly() ===');
+    console.log('Holy:', Date.now());
+
+    console.log(Date.now());
+    console.log(objTimer.endTime);
+
+    const timerState = calcularEstadoTimer();
+
+    eid_timerTextHoly.textContent = timerState.texto;
+    eid_estadoTimerHoly.textContent = timerState.status;
+
+    eid_timerDisplay.classList.remove(
+        'verde',
+        'amarillo',
+        'rojo',
+        'rojo_blink',
+        'grey'
+    );
+
+    if(!objTimer.visible){
+        eid_timerDisplay.classList.add('grey');
+    }else{
+        eid_timerDisplay.classList.add(timerState.clase);
+    }
+}
 
 
+function identificarPantallas(){
+    console.log('=== function identificarPantallas() ===');
+
+    limpiarReferenciasCerradas();
+
+    arr_misPantallas.forEach((pantalla, i) => {
+
+        if(pantalla && !pantalla.closed){
+
+            pantalla.postMessage({
+                tipo: 'identificar_pantalla',
+                numero: i + 1
+            }, window.location.origin);
+
+        }
+
+    });
+}

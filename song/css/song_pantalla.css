@@ -13,7 +13,7 @@
 
 body {
     /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
-    font-family: monospace, Arial, 'Roboto Slab', Tahoma, 'sans serif';
+    font-family: monospace, 'Noto sans', Arial, 'Roboto Slab', Tahoma, 'sans serif';
     margin: 0 auto;
     padding: 0;
     color: white;
@@ -285,9 +285,9 @@ S {
 
 .d_line {
     font-weight: bold;
-    font-family: Arial, Tahoma, 'sans serif';
+    font-family: 'Noto sans', Arial, Tahoma, 'sans serif';
     line-height: normal;
-    white-space: normal;/* para publico */
+    white-space: normal;
 }
 .monospace_font .d_line {
     font-family: monospace, 'sans serif';
@@ -422,7 +422,7 @@ fieldset.kuplet {
 
     p {
         font-weight: bolder;
-        font-family: mono---space, Arial, Tahoma, 'sans serif';
+        font-family: 'Noto sans', Arial, Tahoma, 'sans serif';
         line-height: 1em;
         white-space: pre;
     }
@@ -498,7 +498,7 @@ fieldset.kuplet {
 
 /* show_acordes */
 .show_acordes .d_line {
-    font-family: Arial, Tahoma, 'sans serif';
+    font-family: 'Noto sans', Arial, Tahoma, 'sans serif';
 }
 .show_acordes.monospace_font .d_line {
     font-family: monospace, 'sans serif';
@@ -549,3 +549,109 @@ fieldset.kuplet {
 }
 
 
+/* timer */
+.timer_overlay {
+    background: #000000de;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    transition: background-color .3s;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 1s ease,
+        visibility 1s;
+}
+.timer_overlay.shown{
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* texto */
+.timer_content{
+    font-family: 'Noto sans', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: min(25vw, 50vh);
+    line-height: 1;
+    color: #fff;
+    text-shadow:
+        0 0 10px #000,
+        0 0 30px #000;
+}
+
+/* normal */
+.timer_overlay.verde {
+    background: #009506;
+}
+
+/* últimos minutos */
+.timer_overlay.amarillo {
+    background: #FF9800;
+}
+
+/* tiempo agotado */
+.timer_overlay.rojo {
+    background: #b40000;
+}
+
+.timer_overlay.rojo_blink{
+    animation: timerRojo 2s steps(1, end) infinite;
+}
+
+@keyframes timerRojo{
+    0%, 49.999%{
+        background:#b40000;
+    }
+    50%, 100%{
+        background:#000;
+    }
+}
+
+
+
+#identificadorPantalla{
+
+    position:fixed;
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:35vw;
+    font-weight:bold;
+
+    color:#fff;
+
+    background:rgba(0,0,0,.55);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:opacity .25s;
+
+    z-index:999999;
+
+    pointer-events:none;
+
+}
+
+#identificadorPantalla.shown{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+
+#contenedor_timer {
+    display: none;
+}

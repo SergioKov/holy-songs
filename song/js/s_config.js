@@ -292,7 +292,14 @@ const eid_toast_container = document.getElementById("toast_container");
 //end - toast
 //==================================================================//
 
+//==================================================================//
+//start - timer
+//==================================================================//
+const eid_timerMinutos = document.getElementById('timerMinutos');
 
+const eid_timerDisplay   = document.getElementById('timerDisplay');
+const eid_estadoTimerHoly = document.getElementById('estadoTimerHoly');
+const eid_timerTextHoly   = document.getElementById('timerTextHoly');
 
 //====================================================//
 //Medidas de pantallas para Media Queries - START
@@ -895,3 +902,16 @@ let textoCancion_is_ok = false;// para revisar_y_guardar. si el texto de la canc
 const eid_contenedorBrillo = document.getElementById('contenedorBrillo');
 const eid_deslizador = document.getElementById('deslizador');//control de brillo
 const eid_valorBrillo = document.getElementById('valorBrillo');
+
+
+//temporizador para predicadores
+let objTimer = {
+    visible: false,
+    running: false,
+    status: 'PARADO',//por defecto
+
+    durationMs: 20 * 60 * 1000,   // duración elegida (20 min)
+    remainingMs: null,            // solo cuando está pausado
+    endTime: null,                // instante absoluto en que termina
+    warningMs: 2 * 60 * 1000      // últimos 2 minutos
+};

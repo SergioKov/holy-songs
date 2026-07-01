@@ -104,8 +104,19 @@
     </div><!--/#fondo-->
 
     <div id="contenedor" class=""></div><!--/#contenedor-->
+
+    <div id="contenedor_timer">
+        <div id="timerOverlay" class="timer_overlay">
+            <div id="timerContent" class="timer_content">
+                <span id="timerText">20:00</span>
+            </div>
+        </div><!--/#timerOverlay-->
+    </div><!--/#contenedor_timer-->
+
+    <div id="identificadorPantalla"></div>
         
     <script src="js/s_pantalla.js"></script>
+    <script src="js/s_timer.js"></script>
 
 </body>
 </html>

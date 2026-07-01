@@ -3,6 +3,8 @@
 //=================================================================//
 
 async function init() {
+    
+
     ajustarTexto();
     pintParrafosAcordes();
     pintParrafosLlaves();
@@ -17,6 +19,8 @@ async function init() {
     await crear_objGrupos();
     //pintSongbooksOptionsEnBuscar(eid_songbook_search);//relleno select de songbook para buscar en
     //pintSongbooksCheckboxEnBuscar(eid_wr_sb_checkboxes);//relleno contenedor de checkboxes
+
+    
 }
 
 async function crear_objSongbooks(){
