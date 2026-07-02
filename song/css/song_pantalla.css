@@ -589,9 +589,9 @@ fieldset.kuplet {
 
 /* normal */
 .timer_overlay.verde {
-    background: #009506;
+    background: #009506;/* green */
+    background: black;
 }
-
 /* últimos minutos */
 .timer_overlay.amarillo {
     background: #FF9800;
@@ -602,8 +602,14 @@ fieldset.kuplet {
     background: #b40000;
 }
 
-.timer_overlay.rojo_blink{
+.timer_overlay.rojo_blink {
     animation: timerRojo 2s steps(1, end) infinite;
+}
+
+.timer_overlay.rojo_blink2 {
+    animation:
+        timerRojo 2s steps(1, end) infinite,
+        timerRojo2 2s steps(1, end) infinite;
 }
 
 @keyframes timerRojo{
@@ -616,6 +622,20 @@ fieldset.kuplet {
 }
 
 
+
+@keyframes timerRojo2{
+    0%, 49.999%{
+        transform:scale(1.0);
+    }
+    50%, 100%{
+        transform:scale(1.2);
+    }
+}
+
+
+#timerText {
+
+}
 
 #identificadorPantalla{
 

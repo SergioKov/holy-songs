@@ -1527,10 +1527,10 @@ function iniciarRenderTimer(){
 
 
 function pintarTimer(){
-    console.log('=== function pintarTimer() ===');
-    console.log('Pantalla:', Date.now());
+    //console.log('=== function pintarTimer() ===');
+    //console.log('Pantalla:', Date.now());
 
-    if(!objTimer){
+    if(typeof objTimer === 'undefined' || !objTimer){
         return;
     }
 

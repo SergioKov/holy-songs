@@ -943,7 +943,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>Identifica Pantallas</span>
                                                                             </h4>
-                                                                            <p>Para saber donde está abierta cada ventana, identifícalos.</p>
+                                                                            <p>Para saber donde está abierta cada pantalla, identifícalas.</p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn w_100" onclick="identificarPantallas()">
                                                                                     🖥️ Identificar pantallas
@@ -959,7 +959,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <p>Control del temporizador en la pantalla 2 (sala):</p>
 
                                                                             <div class="wr_sel_pantalla">
-                                                                                <p>Tiempo:</p>
+                                                                                <p>Tiempo en minutos:</p>
                                                                                 <input id="timerMinutos" type="number" min="1" max="60" value="20">
                                                                             </div>
 
