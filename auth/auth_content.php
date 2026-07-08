@@ -1,4 +1,14 @@
 <?php
+
+session_start(); //aki obligatorio ya que no tiene header.php (header.php tienen dentro session_start())
+
+//es: auth/index.php
+//si alguien mete 'http://holy-songs.local/auth/' que le redirija a '/login'
+include __DIR__ . '/../includes/templates/check_login.php';//new. 
+?>
+
+
+<?php
 //es: auth
     
     // Autenticar el usuario
@@ -67,7 +77,7 @@
     
         <div class="wr_block">
 
-            <h1>Autentifícate para ver el demo</h1>
+            <h1>Autentícate para ver el demo</h1>
             
             <div class="wr_links" style="flex-direction: column;">
 

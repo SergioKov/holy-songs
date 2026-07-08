@@ -583,6 +583,8 @@ let bg_media_type = localStorage.getItem('bg_media_type') ?? 'image';//def 'imag
 let video_ruta = localStorage.getItem('video_ruta') ?? '';//def false
 let brillo_pantalla = JSON.parse(localStorage.getItem('brillo_pantalla') ?? '100');//def false
 
+let tipo_content = localStorage.getItem('tipo_content') ?? 'es_song_slide';//def 'es_song_slide' o 'es_bible_slide'
+
 // (show_bible_en_fondo = true) => mostrar la imagen de la biblia abierta cuando el fondo esta mostrado con (pantalla_show = false)
 let show_bible_en_fondo = JSON.parse(localStorage.getItem('show_bible_en_fondo') ?? '0');//def false
 
@@ -605,6 +607,7 @@ let show_en_parte_top = JSON.parse(localStorage.getItem('show_en_parte_top') ?? 
 let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
 
 
+
 let display_title_detalles = localStorage.getItem('display_title_detalles') || 'none';// def 'none';
 let display_form_detalles = localStorage.getItem('display_form_detalles') || 'none';// def 'none';
 
@@ -618,6 +621,7 @@ let objPantalla = {
     pantalla_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
+    tipo_content,
     bg_ruta,
     bg_media_type,
     video_ruta,
@@ -642,6 +646,7 @@ let objPantallaToSendToBd = {
     pantalla_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
+    tipo_content,
     bg_ruta,
     bg_media_type,
     video_ruta,
@@ -662,6 +667,7 @@ let objPantallaToSendToBd_str = '';
 // objPantallaParams se inicializa en 's_pantalla.js' en 2 ficheros 'pantalla.php' (localStorage) y 'pantalla_bd.php' (BD)
 
 let objPantallaParams = {
+    tipo_content: 'es_song_slide',
     pantalla_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
@@ -684,6 +690,7 @@ let objPantallaParams = {
 
 //Params (sin arr_pantalla)
 let objPantallaParamsToSendToBd = {
+    tipo_content,
     id_song,
     pantalla_show,
     show_logo_en_fondo,
@@ -703,6 +710,15 @@ let objPantallaParamsToSendToBd = {
     show_en_center,
 };
 let objPantallaParamsToSendToBd_str = '';
+
+
+//por defecto todo off
+let objPantallaParamsBiblia = {
+    tipo_content: 'es_bible_slide',
+    pantalla_show: 0,
+    show_en_parte_top: 0,
+    show_color_diff: 0
+};
 
 
 let vkladActive = localStorage.getItem('vkladActive') || 'ver_esquema';//[ver_esquema, crear_esquema, select_slide]
@@ -745,8 +761,18 @@ if(web_tld === 'com'){//hostalia
 let miPantallaRemota = null;
 let miIframe = null;
 
-let arr_misPantallas = [];
+const INDICE_PANTALLA_1 = 0;
+const INDICE_PANTALLA_2 = 1;
+const INDICE_PANTALLA_3 = 2;
 
+let miVentanaBiblia = null;
+
+const esProduccion = [
+    'holy-songs.com',
+    'www.holy-songs.com'
+].includes(window.location.hostname);
+
+let arr_misPantallas = [];
 
 let dragSong = false;//false/true => mover y asi pasar a la sig/prev cancion de la lista en vista
 let tapSlide = false;//false/true => mover y asi pasar a la sig/prev slide en esquema al click /tap

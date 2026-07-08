@@ -1352,10 +1352,6 @@ async function make_arr_pantalla(currentSlide){
 
 
 
-
-
-
-
     //===================================================//
     //start - experiment
     //===================================================//
@@ -1385,19 +1381,10 @@ async function make_arr_pantalla(currentSlide){
     // 5. Insertarlo en un div existente (suponiendo que su id es 'contenedor')
     eid_contenedor_prev_inner.append(miIframe);
     mySizeIframe(eid_contenedor_prev);
-
     //===================================================//
     //start - experiment
     //===================================================//
 
-
-
-
-    let tipo_content = '';//sale: 'cl2' o '2lc'
-    tipo_content += 'c';//chords -> acordes
-    tipo_content += 'l';//legend -> titulos de kuplet o pripev
-    tipo_content += 'n';//2 lineas del sig kuplet si hay
-    tipo_content += 'm';//'m' (monospace) y 'a' (arial) si hay tipo_fuente
 
     //creo datos solo para una pantalla...
     una_pantalla_datos = {
@@ -1429,6 +1416,7 @@ async function make_arr_pantalla(currentSlide){
         pantalla_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
+        tipo_content,
         bg_ruta,
         bg_media_type,
         video_ruta,
@@ -1452,6 +1440,7 @@ async function make_arr_pantalla(currentSlide){
         pantalla_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
+        tipo_content,
         bg_ruta,
         bg_media_type,
         video_ruta,
@@ -1509,6 +1498,7 @@ async function make_arr_pantalla(currentSlide){
         pantalla_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
+        tipo_content,
         bg_ruta,
         bg_media_type,
         video_ruta,
@@ -1557,7 +1547,8 @@ function actualizarPantallas({
         actualizarVista,//por defecto es true
 
         arr_pantalla,
-        objPantallaParams,
+        // objPantallaParams,
+        objPantallaParams: crearObjPantallaParamsParaPantalla(),
 
         objTimer //para temporizador
     };
@@ -1655,6 +1646,7 @@ async function showTipoContent(btn, param){
             resetBtnActive(contenedor);
             show_logo_en_fondo = 0;//reset
             show_imagen_en_fondo = 0;//reset
+            tipo_content = '';//reset
             bg_ruta = '';//reset
             bg_media_type = '';//reset
             video_ruta = '';//reset
@@ -1670,6 +1662,7 @@ async function showTipoContent(btn, param){
             //guardo en local
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
             localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
+            localStorage.setItem('tipo_content', tipo_content);
             localStorage.setItem('bg_ruta', bg_ruta);
             localStorage.setItem('bg_media_type', bg_media_type);
             localStorage.setItem('video_ruta', video_ruta);
@@ -1873,6 +1866,7 @@ async function guardarEnLocalAndBd(param){
             pantalla_show,
             show_logo_en_fondo,
             show_imagen_en_fondo,
+            tipo_content,
             bg_ruta,
             bg_media_type,
             video_ruta,
@@ -1901,6 +1895,7 @@ async function guardarEnLocalAndBd(param){
             pantalla_show,
             show_logo_en_fondo,
             show_imagen_en_fondo,
+            tipo_content,
             bg_ruta,
             bg_media_type,
             video_ruta,
@@ -2013,7 +2008,7 @@ async function ocultar_pantalla_show(){
     eid_pantalla_body.classList.remove('shown');
     
     localStorage.setItem('pantalla_show','0');
-    //make_arr_pantalla(currentSlide);//dentro hay pantallaShow
+    await pintMediaActiveEnFondo();
     
     aplicarBrillo(brillo_pantalla);
     await guardarEnLocalAndBd('p');//solo actualizo params de vista
@@ -3946,13 +3941,36 @@ function abrirReferencia(url, nombre_referencia){
 
 
 function abrirPantalla(numero){
+    console.log('=== function abrirPantalla() ===');
+    
+    let indice;
+
+    switch(numero){
+        case 1:
+            indice = INDICE_PANTALLA_1;
+            break;
+
+        case 2:
+            indice = INDICE_PANTALLA_2;
+            break;
+
+        case 3:
+            indice = INDICE_PANTALLA_3;
+            break;
+
+        default:
+            console.warn('Número de pantalla no válido:', numero);
+            return;
+    }
 
     // Limpio referencias cerradas
     limpiarReferenciasCerradas();
 
     // Si esa pantalla ya existe, la enfoco
-    if(arr_misPantallas[numero - 1] && !arr_misPantallas[numero - 1].closed){
-        arr_misPantallas[numero - 1].focus();
+    const referenciaExistente = arr_misPantallas[indice];
+
+    if(referenciaExistente && !referenciaExistente.closed){
+        referenciaExistente.focus();
         return;
     }
 
@@ -3970,10 +3988,35 @@ function abrirPantalla(numero){
     );
 
     if(referencia){
-        arr_misPantallas[numero - 1] = referencia;
+        arr_misPantallas[indice] = referencia;
+
+        // Solo ahora empieza a actualizar el display de Holy Songs
+        iniciarRenderTimerHoly();
     }
 }
 
+function abrirVentanaBiblia(){
+    console.log('=== function abrirVentanaBiblia() ===');
+
+    // Si Bible Text ya está abierto, enfocarlo
+    if(miVentanaBiblia && !miVentanaBiblia.closed){
+        miVentanaBiblia.focus();
+        return;
+    }
+
+    let url_bible_text = (esProduccion) 
+        ? 'https://bible-text.com/bible' //prod
+        : 'http://bible-text.local/bible' ;//local
+
+    miVentanaBiblia = window.open(
+        url_bible_text,
+        'BibleTextControl'
+    );
+
+    if(!miVentanaBiblia){
+        console.warn('El navegador bloqueó la apertura de Bible Text.');
+    }
+}
 
 function enfocarReferencia(numero){
 
@@ -4064,18 +4107,20 @@ function enfocarMisReferenciasOCrear(){
     // Elimino referencias cerradas
     limpiarReferenciasCerradas();
 
-    // Si no hay ninguna abierta, creo una
-    if(arr_misPantallas.length === 0){
-        abrirPantalla(1);//por defecto
-        return;
+    const hayPantallasAbiertas = arr_misPantallas.some(
+        referencia => referencia && !referencia.closed
+    );
+
+    if(!hayPantallasAbiertas){// Si no hay ninguna abierta, creo una
+        abrirPantalla(1);
+    }else{//si ya hay. // Enfoco todas las abiertas
+        arr_misPantallas.forEach(referencia => {
+            if(referencia && !referencia.closed){
+                referencia.focus();
+            }
+        });
     }
 
-    // Enfoco todas las abiertas
-    arr_misPantallas.forEach(referencia => {
-        if (referencia && !referencia.closed) {
-            referencia.focus();
-        }
-    });
 }
 
 
@@ -4085,28 +4130,58 @@ function recargarMisReferenciasOCrear(){
     // Elimino referencias cerradas
     limpiarReferenciasCerradas();
 
-    // Si no hay ninguna abierta, creo una
-    if(arr_misPantallas.length === 0){
-        abrirPantalla(1);//por defecto
-        return;
+    const hayPantallasAbiertas = arr_misPantallas.some(
+        referencia => referencia && !referencia.closed
+    );
+
+    if(!hayPantallasAbiertas){// Si no hay ninguna abierta, creo una
+        abrirPantalla(1);
+    }else{//si ya hay. // Enfoco todas las abiertas
+        arr_misPantallas.forEach(referencia => {
+            if(referencia && !referencia.closed){
+                referencia.location.reload();
+                referencia.focus();
+                eid_videoFondo_body.load();
+            }
+        });
     }
 
-    // Enfoco todas las abiertas
+}
+
+function recargarPantallasAbiertas(){
+    console.log('=== function recargarPantallasAbiertas() ===');
+
+    limpiarReferenciasCerradas();
+
     arr_misPantallas.forEach(referencia => {
-        if (referencia && !referencia.closed) {
-            referencia.location.reload();
-            referencia.focus();
-            eid_videoFondo_body.load();
+
+        if(!referencia || referencia.closed){
+            return;
         }
+
+        referencia.location.reload();
+        referencia.focus();
+        eid_videoFondo_body.load();
     });
+
 }
 
 
 function limpiarReferenciasCerradas(){
 
-    arr_misPantallas = arr_misPantallas.filter(
+    arr_misPantallas = arr_misPantallas.map(ref => {
+        return (ref && !ref.closed)
+            ? ref
+            : null;
+    });
+
+    const hayPantallasAbiertas = arr_misPantallas.some(
         ref => ref && !ref.closed
     );
+
+    if(!hayPantallasAbiertas){
+        pararRenderTimerHoly();
+    }
 }
 
 //=============================================//
@@ -4317,7 +4392,7 @@ function manejarLogin(){
             <p>${email}</p>
             <p>Puedes crear canciones, listas y  guardar tus ajustes personales.</p>
             <div class="wr_btns_vertical">
-                <button class="btn" onclick="window.location.href = '/';">Inicio</button>            
+                <button class="btn" onclick="window.location.href = '/home';">Inicio</button>            
                 <button class="btn" onclick="window.location.href = '/login';">Login</button>            
                 <button class="btn" onclick="window.location.href = '/logout';">Cerrar sesión</button>            
             </div>
@@ -5230,4 +5305,64 @@ function identificarPantallas(){
         }
 
     });
+}
+
+
+
+function actualizarIframePantalla(){
+    console.log('=== function actualizarIframePantalla() ===');
+
+    if(!miIframe || !miIframe.contentWindow){
+        return;
+    }
+
+    const payload = {
+        tipo: 'pantalla_update',
+        actualizarSlide: true,
+        actualizarVista: true,
+        arr_pantalla,
+        objPantallaParams,
+        objTimer
+    };
+
+    miIframe.contentWindow.postMessage(
+        payload,
+        window.location.origin
+    );
+}
+
+function crearPayloadPantalla({
+    actualizarSlide = true,
+    actualizarVista = true
+} = {}){
+    return {
+        tipo: 'pantalla_update',
+        actualizarSlide,
+        actualizarVista,
+        arr_pantalla,
+        objPantallaParams,
+        objTimer
+    };
+}
+
+function actualizarIframePantalla(){
+    if(!miIframe || !miIframe.contentWindow){
+        return;
+    }
+
+    miIframe.contentWindow.postMessage(
+        crearPayloadPantalla(),
+        window.location.origin
+    );
+}
+
+function actualizarReferenciaPantalla(referencia){
+    if(!referencia || referencia.closed){
+        return;
+    }
+
+    referencia.postMessage(
+        crearPayloadPantalla(),
+        window.location.origin
+    );
 }

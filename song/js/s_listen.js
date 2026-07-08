@@ -1,6 +1,6 @@
 window.addEventListener('load', (e) => {
     console.log('load - window.innerWidth: ', window.innerWidth);
-    iniciarRenderTimerHoly();//para contador de tiempo del predicador
+    //iniciarRenderTimerHoly();//para contador de tiempo del predicador
 
     ocultar_calculando();
         mySizeEdit();//en test. luego quitar!!!
@@ -24,6 +24,247 @@ window.onclick = (e) =>{
     if(e.target == eid_myModal || e.target == eid_myModalContent){
         closeModal(null,true);//click_fuera_o_x
     }
+}
+
+
+//escuchador para pasar mensajes a pantalla.php desde bible-text
+window.addEventListener('message', (event) => {
+    console.log('Mensaje recibido en Holy Songs:', event.origin, event.data);
+
+    const data = event.data;
+
+    if(!data || !data.tipo){
+        return;
+    }
+
+
+    const origenHolySongs = window.location.origin;
+
+    // Aviso enviado por pantalla.php del mismo origen
+    if(
+        data.tipo === 'pantalla_ready' &&
+        event.origin === origenHolySongs
+    ){
+        console.log('pantalla.php lista');
+
+        if(miIframe && event.source === miIframe.contentWindow){
+            actualizarIframePantalla();
+        }else{
+            // Es una ventana pantalla.php abierta.
+            // Le mandamos el estado solo a esa ventana, no a todas.
+            actualizarReferenciaPantalla(event.source);
+        }
+
+        return;
+    }
+
+
+
+    // Desde aquí, solo mensajes procedentes de Bible Text
+    const origenesBibleTextPermitidos = [
+        'http://bible-text.local',
+        'http://www.bible-text.local',
+        'https://bible-text.com',
+        'https://www.bible-text.com'
+    ];
+
+    if(!origenesBibleTextPermitidos.includes(event.origin)){
+        console.warn(
+            'bible_pantalla_update recibido desde origen no permitido:',
+            event.origin
+        );
+        return;
+    }
+
+    if(!['bible_recargar_pantallas', 'bible_pantalla_update'].includes(data.tipo)){
+        return;
+    }
+
+
+    if(data.tipo === 'bible_recargar_pantallas'){
+        console.log('bible_recargar_pantallas recibido');
+        recargarPantallasAbiertas();
+        //return;
+    }
+
+
+    const paramsBiblia = data.objPantallaParams || {};
+    let actualizarSlide = false;
+    let actualizarVista = false;            
+    
+    // ── Contenido / slides ──────────────────────────────────────
+    if(data.arr_pantalla){
+        const arrPantallaNueva = data.arr_pantalla;    
+        const haCambiadoContenido = JSON.stringify(arr_pantalla) !== JSON.stringify(arrPantallaNueva);
+    
+        if(haCambiadoContenido){
+            arr_pantalla = arrPantallaNueva;
+            actualizarSlide = true;
+        }
+    }
+                
+    if('pantalla_show' in paramsBiblia && objPantallaParamsBiblia.pantalla_show !== paramsBiblia.pantalla_show){
+
+        objPantallaParamsBiblia.pantalla_show = paramsBiblia.pantalla_show;
+        actualizarVista = true;
+    }
+
+    if('show_en_parte_top' in paramsBiblia && objPantallaParamsBiblia.show_en_parte_top !== paramsBiblia.show_en_parte_top){
+
+        objPantallaParamsBiblia.show_en_parte_top = paramsBiblia.show_en_parte_top;
+        actualizarVista = true;
+    }
+
+    if('show_color_diff' in paramsBiblia && objPantallaParamsBiblia.show_color_diff !== paramsBiblia.show_color_diff){
+
+        objPantallaParamsBiblia.show_color_diff = paramsBiblia.show_color_diff;
+        actualizarVista = true;
+    }
+
+    if(
+        paramsBiblia.tipo_content === 'es_bible_slide' &&
+        objPantallaParams.tipo_content !== 'es_bible_slide'
+    ){
+        objPantallaParams.tipo_content = 'es_bible_slide';    
+        actualizarSlide = true;
+        actualizarVista = true;
+    }
+    
+    
+    // ── Enviar solo lo necesario ─────────────────────────────────
+    if(actualizarSlide || actualizarVista){
+    
+        actualizarPantallas({
+            actualizarSlide,
+            actualizarVista
+        });    
+    }
+
+});
+
+
+function obtenerParamsParaPantalla(){
+
+    if(objPantallaParams.tipo_content === 'es_bible_slide'){
+        return {
+            ...objPantallaParams,
+            pantalla_show: objPantallaParamsBiblia.pantalla_show,
+            show_en_parte_top: objPantallaParamsBiblia.show_en_parte_top,
+            show_color_diff: objPantallaParamsBiblia.show_color_diff
+        };
+    }
+
+    return objPantallaParams;
+}
+
+function crearObjPantallaParamsParaPantalla(){
+
+    const esBiblia = objPantallaParams.tipo_content === 'es_bible_slide';
+
+    if(esBiblia){
+        return {
+            ...objPantallaParams,
+            pantalla_show: objPantallaParamsBiblia.pantalla_show,
+            show_en_parte_top: objPantallaParamsBiblia.show_en_parte_top,
+            show_color_diff: objPantallaParamsBiblia.show_color_diff
+        };
+    }
+
+    return {
+        ...objPantallaParams
+    };
+}
+
+function convertArrPantallaValido(arr){//no se usa...
+    console.log('=== function convertArrPantallaValido() ===');
+    //aki debo convertir arr_pantalla de bible-text en arr_pantalla de Holy Songs válidos
+
+    if(arr.length == 0) return;
+              
+                    
+    const arrPantallaValido = arr.map((pant, i)=>{
+        
+        const slide = createElementSlide(pant, i);
+        console.log('slide: ', slide);
+
+        //creo datos solo para una pantalla...
+        const una_pantalla_datos = {
+            tipo_content: 'es_bible_slide',//por ahora solo texto...
+            id_song: null,
+            slide_actual: 1,//? no sé que poner...
+            slide_html: slide.outerHTML,
+        };
+        console.log('una_pantalla_datos: ', una_pantalla_datos);
+
+        return una_pantalla_datos;
+    });
+
+    //mySizePantallaShowBT();
+
+    console.log('arrPantallaValido: ', arrPantallaValido);
+    return arrPantallaValido;
+}
+
+
+function createElementTrad(pant, i){
+    console.log('=== function createElementTrad(pant, i) ===');
+
+    if(!pant){
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <p>Error en parametros para mostrar.</p>
+        `;
+        return div;
+    }
+
+    pant.verse_text = pant.verse_text.replaceAll('<br>','');//quito los <br> para que todo esté en una línea.
+
+    const trad = document.createElement('div');
+    trad.id = 'trad' + i;
+    trad.className = 'trad';
+    trad.innerHTML = `
+        <div class="trad_inner">
+            <p class="verse">
+                <span class="verse_ref ${pant.cl_verse_ref}">${pant.verse_ref}</span>
+                <span class="verse_number ${pant.cl_verse_number}">${pant.verse_number}</span>
+                <span class="verse_text">${pant.verse_text}</span>
+                <span class="ref_completa_misma_linea ${pant.cl_ref_completa_misma_linea}">${pant.ref_completa_misma_linea}</span>
+                <span class="abreviatura_corta_misma_linea ${pant.cl_abreviatura_corta_misma_linea}">${pant.abreviatura_corta_misma_linea}</span>
+            </p>
+            <div class="verse_full_ref ref_completa_nueva_linea ${pant.cl_ref_completa_nueva_linea}">${pant.ref_completa_nueva_linea}</div>
+        </div>
+    `;
+
+    return trad;
+}
+
+
+function createElementSlide(pant, i){
+    console.log('=== function createElementTrad(pant, i) ===');
+
+    if(!pant){
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <p>Error en parametros para mostrar.</p>
+        `;
+        return div;
+    }
+
+    pant.verse_text = pant.verse_text.replaceAll('<br>','');//quito los <br> para que todo esté en una línea.
+
+    const slide = document.createElement('div');
+    slide.innerHTML = `
+        <p class="verse">
+            <span class="verse_ref ${pant.cl_verse_ref}">${pant.verse_ref}</span>
+            <span class="verse_number ${pant.cl_verse_number}">${pant.verse_number}</span>
+            <span class="verse_text">${pant.verse_text}</span>
+            <span class="ref_completa_misma_linea ${pant.cl_ref_completa_misma_linea}">${pant.ref_completa_misma_linea}</span>
+            <span class="abreviatura_corta_misma_linea ${pant.cl_abreviatura_corta_misma_linea}">${pant.abreviatura_corta_misma_linea}</span>
+        </p>
+        <div class="verse_full_ref ref_completa_nueva_linea ${pant.cl_ref_completa_nueva_linea}">${pant.ref_completa_nueva_linea}</div>
+    `;
+
+    return slide;
 }
 
 
@@ -1370,3 +1611,7 @@ function iniciarRenderTimerHoly(){
     }, 1000);
 }
 
+function pararRenderTimerHoly(){
+    clearInterval(timerHolyInterval);
+    timerHolyInterval = null;
+}

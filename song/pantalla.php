@@ -43,6 +43,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="./css/song_pantalla.css">
+    <link rel="stylesheet" href="./css/song_pantalla_bt.css">
     <?php 
         if(isset($_GET['brillo_bajo'])) {
             echo '<link rel="stylesheet" href="./css/song_pantalla_brillo_bajo.css">';
@@ -91,7 +92,7 @@
     `;
 ?>
 
-    <div id="fondo" class="">
+    <div id="fondo" class="shown">
         <video
             id="videoFondo"
             src=""

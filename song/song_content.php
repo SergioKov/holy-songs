@@ -4,7 +4,8 @@ session_start(); //aki obligatorio ya que no tiene header.php (header.php tienen
 
 //es: song/index.php
 //include('../includes/templates/check_auth.php');//antes (sin el enrutador en /index.php)
-include __DIR__ . '/../includes/templates/check_auth.php';
+// include __DIR__ . '/../includes/templates/check_auth.php';//antes
+include __DIR__ . '/../includes/templates/check_login.php';
 ?>
 
 <?php
@@ -924,7 +925,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn btn_ver_pantalla w_100" onclick="abrirPantalla(3)">
                                                                                     <img src="images/monitor_1_white.png">
-                                                                                    <span>Pantalla Local 3 (sala 2)</span>                                                                                    
+                                                                                    <span>Pantalla Local 3 (sala 2)</span>
                                                                                 </button>
                                                                                 <button class="btn flex_center" onclick="enfocarReferencia(3)">
                                                                                     <img class="btn_img_sm" src="images/center_focus.png">
@@ -933,9 +934,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
                                                                                 <button class="btn" onclick="cerrarReferencia(3)">✕</button>
-                                                                            </div>
-
-                                                                            
+                                                                            </div>                                                                            
 
                                                                         </div>
 
@@ -945,11 +944,28 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </h4>
                                                                             <p>Para saber donde está abierta cada pantalla, identifícalas.</p>
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="identificarPantallas()">
+                                                                                <button class="btn btn_big w_100" onclick="identificarPantallas()">
                                                                                     🖥️ Identificar pantallas
-                                                                                </button>                                                                                
+                                                                                </button>
                                                                             </div>
                                                                         </div>
+
+
+
+                                                                        <h4>Mostrar textos bíblicos </h4>
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>Biblia en la pantalla</span>
+                                                                            </h4>
+                                                                            <p>Para mostrar textos bíblicos en la pantalla de Holy-Songs.com debes abrir el sitio Bible-Text.com pulsando el siguiente botón.</p>
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button class="btn btn_ver_pantalla w_100" onclick="abrirVentanaBiblia()">
+                                                                                    <img src="images/monitor_1_white.png">
+                                                                                    <span>Bible-Text.com</span>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
 
 
                                                                         <div class="contenedor_sel_pantalla ">
@@ -1002,13 +1018,13 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             </div>
                                                                             
                                                                             <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="ocultarTimer()">
-                                                                                    Ocultar
-                                                                                </button>
-
                                                                                 <button class="btn w_100" onclick="mostrarTimer()">
                                                                                     Mostrar
                                                                                 </button>
+                                                                            
+                                                                                <button class="btn w_100" onclick="ocultarTimer()">
+                                                                                    Ocultar
+                                                                                </button>                                                                               
                                                                             </div>
                                                                         </div>
                                                                         

@@ -4,6 +4,11 @@ const eid_videoFondo = document.getElementById('videoFondo');//para video
 const eid_contenedor = document.getElementById('contenedor');
 const eid_identificadorPantalla = document.getElementById('identificadorPantalla');
 
+const esProduccion = [
+    'holy-songs.com',
+    'www.holy-songs.com'
+].includes(window.location.hostname);
+
 let arr_pantalla = [];
 let delay_fn = 200;//200 por defecto
 let count_intentos = 0;
@@ -18,6 +23,7 @@ let debug = false;
 // let pantalla_show = 0;
 // let show_logo_en_fondo = 0;
 // let show_imagen_en_fondo = 0;
+// let tipo_content = '';//'es_bible_slide' o 'es_song_slide'
 // let bg_ruta = '';
 // let bg_media_type = '';
 // let video_ruta = '';
@@ -32,6 +38,7 @@ let debug = false;
 // let show_en_top = 0;
 // let show_en_parte_top = 0;
 // let show_en_center = 0;
+// let show_color_diff = 0;
 
 
 //Vars para formar tipo de contenido por defecto en Pantalla
@@ -43,6 +50,7 @@ let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//p
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
 let show_imagen_en_fondo = JSON.parse(localStorage.getItem('show_imagen_en_fondo') ?? '0');// def false;
+let tipo_content = localStorage.getItem('tipo_content') ?? 'es_song_slide';// def song
 let bg_ruta = localStorage.getItem('bg_ruta') ?? '';// def false;
 let bg_media_type = localStorage.getItem('bg_media_type') ?? 'image';// def image;
 let video_ruta = localStorage.getItem('video_ruta') ?? '';// def false;
@@ -68,6 +76,7 @@ let show_next_slide = JSON.parse(localStorage.getItem('show_next_slide') ?? '0')
 let show_en_top = JSON.parse(localStorage.getItem('show_en_top') ?? '0');// def false;
 let show_en_parte_top = JSON.parse(localStorage.getItem('show_en_parte_top') ?? '0');// def false;
 let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');// def false;
+let show_color_diff = JSON.parse(localStorage.getItem('show_color_diff') ?? '0');// def false;
 
 //mostrar las 2 primeras lineas del siguiente slide (kuplet) de pantalla.php
 let tipo_fuente = localStorage.getItem('tipo_fuente') ?? 'm';// def m = monospace;
@@ -80,6 +89,7 @@ let objPantallaParams_def = {
     pantalla_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
+    tipo_content,
     bg_ruta,
     bg_media_type,
     video_ruta,
@@ -94,6 +104,7 @@ let objPantallaParams_def = {
     show_en_parte_top,
     show_en_center,
     tipo_fuente,
+    show_color_diff,
 }
 // localStorage.setItem('objPantallaParams', JSON.stringify(objPantallaParams) );//IMPORTANTE!
 
@@ -126,34 +137,79 @@ localStorage.setItem('pantalla_abierta','true');
 
 //cuando se cargue el documento
 document.addEventListener('DOMContentLoaded', () => {
-        cargarEstadoInicial();
-        iniciarRenderTimer();//para timer
+    cargarEstadoInicial();
+    iniciarRenderTimer();//para timer
+    
+    if(window.opener && !window.opener.closed){
+        window.opener.postMessage(
+            { tipo: 'pantalla_ready' },
+            window.location.origin
+        );
     }
-);
+    
+    // Avisar a la ventana padre: pantalla.php ya puede recibir postMessage
+    if(window.parent !== window){
+        window.parent.postMessage(
+            { tipo: 'pantalla_ready' },
+            window.location.origin
+        );
+    }
+
+    if(esProduccion){
+        document.body.classList.add('produccion');
+    }
+});
 
 //escuchador de postMessage
 window.addEventListener('message', async (event) => {
+    console.log('=== listener postMessage() ===');
 
-    // seguridad
-    if (
-        // event.origin !== 'http://holy-songs.local' &&
-        // event.origin !== 'http://bible-text.local' &&
-        // event.origin !== 'https://holy-songs.com' &&
-        // event.origin !== 'https://bible-text.com' &&
-        event.origin !==  window.location.origin
-    ) {
+    const origenesPermitidos = [
+        // Holy Songs local y producción
+        'http://holy-songs.local',
+        'http://www.holy-songs.local',
+        'https://holy-songs.com',
+        'https://www.holy-songs.com',
+
+        // Bible Text local y producción
+        'http://bible-text.local',
+        'http://www.bible-text.local',
+        'https://bible-text.com',
+        'https://www.bible-text.com'
+    ];
+
+    // Seguridad: aceptar únicamente estos orígenes
+    if(!origenesPermitidos.includes(event.origin)){
+        console.warn('Origen no permitido:', event.origin);
         return;
     }
 
     const data = event.data;
 
-    if (!data){
+    if(!data || !data.tipo){
         return;
     }
 
-    switch(data.tipo){
-
+    switch(data.tipo){           
+        
         case 'pantalla_update':
+            
+            // Este mensaje debe venir de Holy Songs
+            const origenesHolySongsPermitidos = [
+                'http://holy-songs.local',
+                'http://www.holy-songs.local',
+                'https://holy-songs.com',
+                'https://www.holy-songs.com'
+            ];
+
+            if(!origenesHolySongsPermitidos.includes(event.origin)){
+                console.warn(
+                    'pantalla_update recibido desde origen no permitido:',
+                    event.origin
+                );
+                return;
+            }
+            
             if (data.arr_pantalla) {
                 arr_pantalla = data.arr_pantalla;
             } 
@@ -235,105 +291,6 @@ window.addEventListener('resize',() => {
 });
 
 
-/*
-function antes_lanzarIntentos(){
-    //console.log('=== function lanzarIntentos() ===');
-        
-    arr_pantalla_str_old = localStorage.getItem('arr_pantalla');
-    //console.log('arr_pantalla_str_old: ', arr_pantalla_str_old);
-
-    objPantallaParams_str_old = localStorage.getItem('objPantallaParams');
-    //console.log('objPantallaParams_str_old: ', objPantallaParams_str_old);
-
-
-    if(arr_pantalla_str_old){
-        //arr_pantalla_str_old = arr_pantalla_str_old.replaceAll('<br>','');//en song es importante <br>. no lo quito
-    }else{
-        //console.log('localStorage no existe. espero 1 seg y vuelvo a comprobar');
-        setTimeout(()=>{
-            count_intentos++;
-            //si pasab 5min sin datos en localStorage recargo pantalla
-            if(count_intentos == 60*15){// 15min
-                console.error('localStorage no existe. recargo window.');
-                window.location.reload;
-            }
-            lanzarIntentos();
-        },delay_fn);
-        return;
-    }
-
-    arr_pantalla = JSON.parse(arr_pantalla_str_old);
-    objPantallaParams = JSON.parse(objPantallaParams_str_old);
-    //console.log('old --- arr_pantalla: ', arr_pantalla);
-
-
-    //si el contenedor está vacío, lo construyo
-    if(arr_pantalla && eid_contenedor && eid_contenedor.querySelector('.trad') == null ){
-        //console.log('el contenedor está vacío, lo construyo...');
-
-        aplicarVista();//importante al cargar por primera vez
-        construirElementosYAppend();
-    
-    }else{//el contenedor ya existe
-        //console.log('el contenedor YA EXISTE, no lo construyo de nuevo... lo relleno si ha cambiado localStorage');
-
-        // EN TEST - COMENTAR, SE CARGARÁ 1 VEZ AL RECARGAR CADA SLIDE CON F5.  
-        // EN PROD - DESCOMENTAR!!!
-        lanzarIntentosConDelay();
-    }
-}
-function antes_lanzarIntentosConDelay(){
-    
-    //lanzo intenos cada 0.2 seg para comprobar si ha cambiado localStorage
-    //si ha cambiado, actualizo arr_pantalla y reconstruyo el contenedor
-    setTimeout(()=>{//COMENTAR PARA TEST
-        
-        arr_pantalla_str_new = localStorage.getItem('arr_pantalla');
-        //console.log('arr_pantalla_str_new: ', arr_pantalla_str_new);
-
-        objPantallaParams_str_new = localStorage.getItem('objPantallaParams');
-        //console.log('objPantallaParams_str_new: ', objPantallaParams_str_new);
-        
-        //1. Params de Slide
-        objPantallaParams = JSON.parse(objPantallaParams_str_new);
-        //console.log('nuevo objPantallaParams: ', objPantallaParams);
-
-        //si ha cambiado algo en los parametros de pantalla de localStorage, reviso que mostrar/ocultar
-        if(objPantallaParams_str_old !== objPantallaParams_str_new){
-            // let aviso = '1. objPantallaParams old y new SON DISTINTOS. hago cosas...';
-            // console.log('aviso: ', aviso);
-            // alert('aviso: ', aviso);
-
-            aplicarVista();
-
-            //solo calculo fontSize si hay que mostrar el slide...
-            if(pantalla_show){
-                mySizePantallaShow();//importante!
-            }
-        }
-
-        //2. Datos de Slide
-        arr_pantalla = JSON.parse(arr_pantalla_str_new);
-        //console.log('nuevo arr_pantalla: ', arr_pantalla);        
-
-        //si ha cambiado la longitud de localStorage, construyo nuevos versículos
-        if(arr_pantalla_str_old !== arr_pantalla_str_new){
-            // let aviso = '2. arr_pantalla old y new SON DISTINTOS. hago cosas...';
-            // console.log('aviso: ', aviso);
-            // alert('aviso: ', aviso);
-
-            if(eid_contenedor){ 
-                aplicarVista(); 
-                construirElementosYAppend();//siempre construyo
-            }
-        }
-
-        lanzarIntentos();//COMENTAR PARA TEST
-
-    },delay_fn);//COMENTAR PARA TEST        
-
-}
-*/
 
 function cargarEstadoInicial(){
     console.log('=== function cargarEstadoInicial() ==='); 
@@ -546,6 +503,7 @@ function aplicarVista(){
     pantalla_show = (objPantallaParams.pantalla_show == '1') ? 1 : 0;
     show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
     show_imagen_en_fondo = (objPantallaParams.show_imagen_en_fondo == '1') ? 1 : 0;
+    tipo_content = (objPantallaParams.tipo_content != '') ? objPantallaParams.tipo_content : 'es_song_slide';
     bg_ruta = (objPantallaParams.bg_ruta != '') ? objPantallaParams.bg_ruta : '';
     bg_media_type = (objPantallaParams.bg_media_type != '') ? objPantallaParams.bg_media_type : 'image';
     video_ruta = (objPantallaParams.video_ruta != '') ? objPantallaParams.video_ruta : '';
@@ -553,6 +511,7 @@ function aplicarVista(){
     show_bible_en_fondo = (objPantallaParams.show_bible_en_fondo == '1') ? 1 : 0;
     show_black_en_fondo = (objPantallaParams.show_black_en_fondo == '1') ? 1 : 0;
     user_view_control = (objPantallaParams.user_view_control == '1') ? 1 : 0;
+    
     
     //User control
     show_legend = (objPantallaParams.show_legend == '1') ? 1 : 0;
@@ -562,9 +521,29 @@ function aplicarVista(){
     show_en_parte_top = (objPantallaParams.show_en_parte_top == '1') ? 1 : 0;
     show_en_center = (objPantallaParams.show_en_center == '1') ? 1 : 0;
     tipo_fuente = (objPantallaParams.tipo_fuente == 'm') ? 'm' : 'a';
+    
+    //de Bible-Text
+    show_color_diff = (objPantallaParams.show_color_diff == '1') ? 1 : 0;
+
 
     // si hay contenedor...
     if(eid_contenedor){
+
+        //para ambos: song y bible 
+        if(tipo_content == 'es_song_slide'){
+            document.body.classList.remove('bible_verse');
+        }else if(tipo_content == 'es_bible_slide'){
+            document.body.classList.add('bible_verse');
+        }
+
+        if(show_color_diff){//de Bible-Text
+            eid_contenedor.classList.add('show_color_diff');
+        }else{
+            eid_contenedor.classList.remove('show_color_diff');
+        }
+
+        eid_fondo.classList.add('shown');//aki siempre shown
+
         
         //Admin control
         if(pantalla_show){//muestro texto
@@ -578,7 +557,10 @@ function aplicarVista(){
             mostrarFondo();
 
 
-            //diferentes parametros
+            //===================================================//
+            //start - diferentes parametros
+            //===================================================//           
+            
             if(show_logo_en_fondo){
                 document.body.classList.add('logo_en_fondo');
             }else{
@@ -644,6 +626,11 @@ function aplicarVista(){
             }else{
                 document.body.classList.remove('black_en_fondo');
             }
+
+            //===================================================//
+            //end - diferentes parametros
+            //===================================================//
+
 
         }//din de - muestro fondo 
 
@@ -893,14 +880,36 @@ function construirElementosYAppend(){
             trad.id = 'trad' + i;
             trad.className = 'trad';
 
-            //Reasigno el HTML segun el tipo de mostrar
-            trad.innerHTML = `
-                <div class="trad_inner">
-                    <div class="verse">
-                        ${arr_pantalla[i].slide_html}
+            if(pant.tipo_content == 'es_song_slide'){
+                console.log('es song ');
+
+                //Reasigno el HTML segun el tipo de mostrar
+                trad.innerHTML = `
+                    <div class="trad_inner">
+                        <div class="verse">
+                            ${arr_pantalla[i].slide_html}
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+
+            }else if(pant.tipo_content == 'es_bible_slide'){
+                console.log('es bible ');
+                
+                //Reasigno el HTML segun el tipo de mostrar
+                trad.innerHTML = `
+                    <div class="trad_inner">
+                        <p class="verse">
+                            <span class="verse_ref ${pant.cl_verse_ref}">${pant.verse_ref}</span>
+                            <span class="verse_number ${pant.cl_verse_number}">${pant.verse_number}</span>
+                            <span class="verse_text">${pant.verse_text}</span>
+                            <span class="ref_completa_misma_linea ${pant.cl_ref_completa_misma_linea}">${pant.ref_completa_misma_linea}</span>
+                            <span class="abreviatura_corta_misma_linea ${pant.cl_abreviatura_corta_misma_linea}">${pant.abreviatura_corta_misma_linea}</span>
+                        </p>
+                        <div class="verse_full_ref ref_completa_nueva_linea ${pant.cl_ref_completa_nueva_linea}">${pant.ref_completa_nueva_linea}</div>
+                    </div>
+                `;
+
+            }  
             
             eid_contenedor.append(trad);
         });
@@ -1047,7 +1056,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
 
 
 async function mySizePantallaShow() {//new como ajustarTexto()
-    //console.log('=== function mySizePantallaShow() ===');
+    console.log('=== function mySizePantallaShow() ===');
 
 
     if(eid_contenedor.offsetWidth === 0 || eid_contenedor.offsetHeight === 0){
@@ -1058,204 +1067,19 @@ async function mySizePantallaShow() {//new como ajustarTexto()
         return;
     }
 
+    console.log('tipo_content: ', tipo_content);
 
-    const token = ++sizeCalcToken;
+    if(tipo_content == 'es_song_slide'){
         
-    const tradAll = document.querySelectorAll('.trad');
-    let count_trad = tradAll.length;//en caso de song es 1
+        console.log('es song ');
+        await mySizePantallaShowHS();//Holy-Songs
 
-    //Maxima width y Height permitidos. si se exede, el fontSize deja de aumentarse
-    let maxW;
-    let maxH;
-
-    let parte_a_restar = (show_en_parte_top == 1) ? (window.innerHeight / 2) : 0 ;
-    console.log('parte_a_restar: ', parte_a_restar);
-
-    if(window.innerWidth < 768){//es mobile
-        // dejo 10px de padding entre el border de pantalla y el texto
-        maxW = window.innerWidth / count_trad - 10;
-        maxH = (window.innerHeight - parte_a_restar) / count_trad - 10;
-    }else{//es tablet o desktop
-        // dejo 32px de padding entre el border de pantalla y el texto
-        maxW = window.innerWidth / count_trad - 32;
-        maxH = (window.innerHeight - parte_a_restar) / count_trad - 32;        
-    }
-
-
-    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
-    for (const trad of tradAll){
-        //console.log('trad: ', trad);
-
-        if(!trad.isConnected){
-            console.warn('trad eliminado');
-            continue;
-        }
-
-        if(pantalla_show){
-            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-        }
-
-        const trad_inner = trad.querySelector('.trad_inner');
-        //console.log('trad_inner: ', trad_inner);
-
-        trad_inner.removeAttribute('style');//reset
-
-
-        const clone_contenedor = eid_contenedor.cloneNode(true);
-        clone_contenedor.style.position = 'relative';
-        clone_contenedor.style.visibility = 'hidden';
-        clone_contenedor.style.left = '-9999px';
-        document.body.appendChild(clone_contenedor);
-
-
-        try{
-
-            const clone = trad.cloneNode(true);        
-            clone_contenedor.appendChild(clone);
-
-            /*
-                console.log(
-                    'isConnected:',
-                    trad.isConnected
-                );
-
-                console.log(
-                    'CONTENEDOR',
-                    eid_contenedor.offsetWidth,
-                    eid_contenedor.offsetHeight
-                );
-                
-                console.log(
-                    'TRAD',
-                    trad.offsetWidth,
-                    trad.offsetHeight
-                );
-                
-                console.log(
-                    'TRAD PARENT',
-                    trad.parentElement.offsetWidth,
-                    trad.parentElement.offsetHeight
-                );
-
-
-                console.log(
-                    'MEDICION',
-                    clone_contenedor.offsetWidth,
-                    clone_contenedor.offsetHeight
-                );
-
-                console.log(
-                    getComputedStyle(clone_contenedor).width,
-                    getComputedStyle(clone_contenedor).height
-                );
-
-
-
-                console.log(
-                    trad.className
-                );
-                
-                console.log(
-                    clone.className
-                );
-
-                console.log(
-                    getComputedStyle(trad).display,
-                    getComputedStyle(clone).display
-                );
-                
-                console.log(
-                    getComputedStyle(trad).position,
-                    getComputedStyle(clone).position
-                );
-                
-                console.log(
-                    getComputedStyle(trad).flex,
-                    getComputedStyle(clone).flex
-                );
-
-                console.log(
-                    'REAL',
-                    trad.offsetWidth,
-                    trad.offsetHeight
-                );
-                
-                console.log(
-                    'CLONE',
-                    clone.offsetWidth,
-                    clone.offsetHeight
-                );
-
-                console.log(
-                    'REAL parent',
-                    trad.parentElement.offsetWidth,
-                    trad.parentElement.offsetHeight
-                );
-                
-                console.log(
-                    'CLONE parent',
-                    clone.parentElement.offsetWidth,
-                    clone.parentElement.offsetHeight
-                );
-
-
-
-
-                console.log(
-                    getComputedStyle(trad).fontSize
-                );
-                
-                console.log(
-                    getComputedStyle(clone).fontSize
-                );
-
-                console.log(
-                    getComputedStyle(trad).width,
-                    getComputedStyle(trad).height
-                );
-                
-                console.log(
-                    getComputedStyle(clone).width,
-                    getComputedStyle(clone).height
-                );
-            */            
-            
-            let fontSize_new = await ajustarFuenteBinaria(clone, maxW, maxH);
-            //console.log("FontSize final. fontSize_new:", fontSize_new);
+    }else if(tipo_content == 'es_bible_slide'){
         
-            if(token !== sizeCalcToken || !trad.isConnected){
-                return;
-            }
-        
-            trad.style.fontSize = fontSize_new + 'px';
-        
-            //...
-            let trad_h = window.innerHeight / count_trad ;
-            //console.log('trad_h: ', trad_h);
-    
-            // si quero mostrar en varias columnas, divido entre count_trad
-            // si solo en rows => no divido, sino 
-            // let trad_w = window.innerWidth / count_trad;
-            let trad_w = window.innerWidth;// muestro en rows
-            //console.log('trad_w: ', trad_w);
-    
-            trad_inner.style.height = trad_h + 'px';
-            trad_inner.style.width = trad_w + 'px'; 
-    
-            if(pantalla_show){
-                trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-            }       
-                   
-        }
-        finally{
-            if(clone_contenedor.isConnected){
-                clone_contenedor.remove();
-            }
-        }        
-       
-    }
-    
-    //aplicarVista(); //antes estaba. ahora comento
+        console.log('es bible ');
+        await mySizePantallaShowBT();//Bible-Text
+
+    }    
 }
 
 
@@ -1569,4 +1393,220 @@ function mostrarNumeroPantalla(numero){
     timeoutIdentificador = setTimeout(() => {
         eid_identificadorPantalla.classList.remove('shown');
     },3000);
+}
+
+
+async function mySizePantallaShowHS(){
+    console.log('=== function mySizePantallaShowHS() ===');
+
+    const token = ++sizeCalcToken;
+        
+    const tradAll = document.querySelectorAll('.trad');
+    let count_trad = tradAll.length;//en caso de song es 1
+
+    //Maxima width y Height permitidos. si se exede, el fontSize deja de aumentarse
+    let maxW;
+    let maxH;
+
+    let parte_a_restar = (show_en_parte_top == 1) ? (window.innerHeight / 2) : 0 ;
+    console.log('parte_a_restar: ', parte_a_restar);
+
+    if(window.innerWidth < 768){//es mobile
+        // dejo 10px de padding entre el border de pantalla y el texto
+        maxW = window.innerWidth / count_trad - 10;
+        maxH = (window.innerHeight - parte_a_restar) / count_trad - 10;
+    }else{//es tablet o desktop
+        // dejo 32px de padding entre el border de pantalla y el texto
+        maxW = window.innerWidth / count_trad - 32;
+        maxH = (window.innerHeight - parte_a_restar) / count_trad - 32;        
+    }
+
+
+    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
+    for (const trad of tradAll){
+        //console.log('trad: ', trad);
+
+        if(!trad.isConnected){
+            console.warn('trad eliminado');
+            continue;
+        }
+
+        if(pantalla_show){
+            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        }
+
+        const trad_inner = trad.querySelector('.trad_inner');
+        //console.log('trad_inner: ', trad_inner);
+
+        trad_inner.removeAttribute('style');//reset
+
+
+        const clone_contenedor = eid_contenedor.cloneNode(true);
+        clone_contenedor.style.position = 'relative';
+        clone_contenedor.style.visibility = 'hidden';
+        clone_contenedor.style.left = '-9999px';
+        document.body.appendChild(clone_contenedor);
+
+
+        try {
+
+            const clone = trad.cloneNode(true);
+            clone_contenedor.appendChild(clone);
+            
+            let fontSize_new = await ajustarFuenteBinaria(clone, maxW, maxH);
+            //console.log("FontSize final. fontSize_new:", fontSize_new);
+        
+            if(token !== sizeCalcToken || !trad.isConnected){
+                return;
+            }
+        
+            trad.style.fontSize = fontSize_new + 'px';
+        
+            //...
+            let trad_h = window.innerHeight / count_trad ;
+            //console.log('trad_h: ', trad_h);
+    
+            // si quero mostrar en varias columnas, divido entre count_trad
+            // si solo en rows => no divido, sino 
+            // let trad_w = window.innerWidth / count_trad;
+            let trad_w = window.innerWidth;// muestro en rows
+            //console.log('trad_w: ', trad_w);
+    
+            trad_inner.style.height = trad_h + 'px';
+            trad_inner.style.width = trad_w + 'px'; 
+    
+            if(pantalla_show){
+                trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            }       
+                   
+        }
+        finally{
+            if(clone_contenedor.isConnected){
+                clone_contenedor.remove();
+            }
+        }        
+       
+    }//end for
+
+}
+
+
+async function mySizePantallaShowBT(){
+    console.log('=== function mySizePantallaShowBT() ===');
+
+    const token = ++sizeCalcToken;
+
+    // if(eid_contenedor){
+    //     eid_contenedor.classList.remove('shown');
+    // }
+
+    //let window_w = window.innerWidth;
+    let window_h = window.innerHeight;
+
+    if(show_en_parte_top == 1){
+        window_h = window_h / 2;
+    }
+
+    //console.log('window_w: ',window_w);
+    //console.log('window_h: ',window_h);
+    
+    let tradAll = document.querySelectorAll('.trad');
+    let count_trad = tradAll.length;
+
+    if(!count_trad){
+        return;
+    }
+
+
+    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
+    for(const trad of tradAll){
+        
+        if(!trad.isConnected){
+            console.warn('trad eliminado');
+            continue;
+        }
+
+        if(pantalla_show){
+            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        }
+
+        const trad_inner = trad.querySelector('.trad_inner');
+        trad_inner.removeAttribute('style'); // reset
+        
+        
+        let trad_h = window_h / count_trad;
+        // console.log('trad_h: ', trad_h);
+
+        if(token !== sizeCalcToken || !trad.isConnected){
+            return;
+        }
+                
+        trad.style.height = trad_h + 'px';
+    
+        const trad_inner_h = trad_inner.offsetHeight;
+        // console.log('trad_inner_h: ', trad_inner_h);
+    
+        // Obtener los estilos calculados
+        const trad_styles = window.getComputedStyle(trad);
+        const font_size_inicial = parseInt(trad_styles.fontSize, 10);
+        // console.log('font_size_inicial: ', font_size_inicial);
+        
+        let font_size_new; 
+        let font_size_full_ref; 
+    
+        if(trad_inner_h > trad_h){ // hay mucho texto
+    
+            for(let i = 1; i < font_size_inicial; i++){
+                font_size_new = font_size_inicial - i;
+    
+                trad.style.fontSize = font_size_new + 'px';
+    
+                if(trad_inner.offsetHeight <= trad_h){
+                    trad.style.fontSize = (font_size_new - 2) + 'px';
+    
+                    font_size_full_ref = parseInt(
+                        (font_size_new - 2) * 0.6,
+                        10
+                    );
+    
+                    if(font_size_full_ref > 65){
+                        font_size_full_ref = 65;
+                    }
+    
+                    trad.querySelector('.verse_full_ref').style.fontSize = font_size_full_ref + 'px';
+    
+                    break;
+                }
+            }
+    
+        }else if(trad_inner_h < trad_h){ // hay poco texto
+    
+            for(let i = 1; i < (font_size_inicial * 3); i++){
+                font_size_new = font_size_inicial + i;
+    
+                trad.style.fontSize = font_size_new + 'px';
+    
+                if(trad_inner.offsetHeight >= trad_h){
+                    trad.style.fontSize = (font_size_new - 2) + 'px';
+    
+                    font_size_full_ref = parseInt(
+                        (font_size_new - 2) * 0.6,
+                        10
+                    );
+    
+                    trad.querySelector('.verse_full_ref').style.fontSize = font_size_full_ref + 'px';
+    
+                    break;
+                }
+            }
+        }
+    
+        trad_inner.style.height = '100%';
+
+        if(pantalla_show){
+            trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        } 
+
+    }//end for
+
 }

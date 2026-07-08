@@ -6,7 +6,7 @@
 
 body {
     /* background: linear-gradient(to bottom right, white 0%, #9dd3fd 10%, #1875bf 45%, #012643 100%); */
-    font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif';
+    font-family: 'Noto sans', 'Roboto Slab', Arial, Tahoma, 'sans serif';
     background-size: contain !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
@@ -27,7 +27,7 @@ header:not(#myModal header) {
     padding: 0;
     color: white;
     height: 100%;
-    font-family: 'Roboto Slab',Arial,Tahoma, 'sans serif';
+    font-family: 'Noto sans', 'Roboto Slab', Arial, Tahoma, 'sans serif';
     /* background-size: contain !important; */
     background-size: cover !important;
     background-position: center center !important;
@@ -228,6 +228,10 @@ input {
 #btn_submit {
     margin: 0 auto;
     min-width: 230px;
+}
+
+.wr_block p {
+    margin: 10px 0;
 }
 
 

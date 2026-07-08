@@ -102,16 +102,16 @@
                     // Establecer una cookie de autenticación válida por 1 hora
                     //setcookie("authenticated", "true", time() + 3600, "/");//antes
                     // cookie opcional
-                    setcookie(
-                        "authenticated",
-                        "true",
-                        [
-                            'expires' => time() + 3600,
-                            'path' => '/',
-                            'httponly' => true,
-                            'samesite' => 'Lax'
-                        ]
-                    );
+                    // setcookie(
+                    //     "authenticated",
+                    //     "true",
+                    //     [
+                    //         'expires' => time() + 3600,
+                    //         'path' => '/',
+                    //         'httponly' => true,
+                    //         'samesite' => 'Lax'
+                    //     ]
+                    // );
 
                     // Redirigir al contenido protegido
                     // header("Location: /home");
@@ -236,7 +236,7 @@
 
         <div class="wr_block">
 
-            <h1>Autentifícate como usuario</h1>
+            <h1>Autentícate como usuario</h1>
 
             <div class="wr_links" style="flex-direction: column;">
 

@@ -3,7 +3,8 @@
 session_start();
 
 //include('../includes/templates/check_auth.php');//antes (sin el enrutador en /index.php)
-include __DIR__ . '/../includes/templates/check_auth.php';
+// include __DIR__ . '/../includes/templates/check_auth.php';//antes
+//include __DIR__ . '/../includes/templates/check_login.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -25,6 +26,25 @@ include __DIR__ . '/../includes/templates/check_auth.php';
     <div class="container">
 
         <h1 class="h1_title">Holy-Songs.com</h1>
+        
+
+        <div class="wr_block">
+
+            <h1>Acceso restringido</h1>
+
+            <p>Esta plataforma se encuentra en desarrollo continuo y su contenido está disponible únicamente para usuarios registrados y autorizados.</p>
+
+            <p>Actualmente, el registro de nuevos usuarios está desactivado. Las cuentas son creadas exclusivamente por el administrador para personas previamente autorizadas.</p>
+
+            <p>Si ya dispones de una cuenta creada en la plataforma, inicia sesión para acceder.</p>
+
+            <div class="wr_links" style="flex-direction: column;">                           
+
+                <button id="test" class="btn" onclick="window.location.href = '/login'">Iniciar sesión</button>
+
+            </div>
+
+        </div>
 
     </div><!--/container-->
 

@@ -13,7 +13,7 @@
 
 body {
     /* font-family: Arial, 'Roboto Slab', Tahoma, 'sans serif'; */
-    font-family: monospace, 'Noto sans', Arial, 'Roboto Slab', Tahoma, 'sans serif';
+    font-family: 'Noto sans', Arial, 'Roboto Slab', Tahoma, 'sans serif';
     margin: 0 auto;
     padding: 0;
     color: white;
@@ -25,6 +25,10 @@ body {
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    cursor: auto;
+}
+
+body.produccion{
     cursor: none;
 }
 
@@ -45,13 +49,15 @@ body.black_en_fondo {
     padding: 0;
     width: 100vw;
     height: 100vh;
+    background-position: center;
     background-size: cover;
-    background-position: center;    
+    background-repeat: no-repeat;    
     overflow: hidden;
     
     position: fixed;
     opacity: 0;
     z-index: 1;
+    inset: 0;
 }
 #fondo.shown {
     opacity: 1 !important;
@@ -87,6 +93,10 @@ body.black_en_fondo {
 .shown {
     opacity: 1 !important;
     color: white !important;
+}
+
+#contenedor:not(.shown){
+    opacity:0;
 }
 
 #videoFondo{
@@ -130,6 +140,9 @@ S {
 .d-none{
     display: none !important;
 }
+.d-inline-block {
+    display: inline-block !important;
+}
 
 .trad {
     box-sizing: border-box;
@@ -139,16 +152,16 @@ S {
     position: relative;
 }
 .trad:not(.trad:last-child)::after {
-    content:  '';
+    /* content:  '';
     position: absolute;
     background: #1e1e1e;
     width: 100%;
     height: 1px;
-    bottom: 0;
+    bottom: 0; */
 }
 
 .shown .trad:not(.trad:last-child) {
-    box-shadow: 0px 0px 35px -15px #ffffff;
+    /* box-shadow: 0px 0px 35px -15px #ffffff; */
 }
 
 
@@ -633,9 +646,7 @@ fieldset.kuplet {
 }
 
 
-#timerText {
 
-}
 
 #identificadorPantalla{
 
@@ -675,3 +686,5 @@ fieldset.kuplet {
 #contenedor_timer {
     display: none;
 }
+
+

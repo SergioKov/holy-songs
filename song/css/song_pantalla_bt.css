@@ -1,0 +1,137 @@
+.bible_verse {
+/*************** end - bible_verse *************************/
+
+    #contenedor {
+        justify-content: flex-start;
+    }
+
+    .trad_inner {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 25px;
+    }
+
+    .verse {
+        font-weight: 600;
+        white-space: normal;
+        text-align: left;
+
+        display: block;
+        width: 100%;
+    }
+
+    .verse_ref,
+    .verse_number {
+        color: #20b1ff;
+        margin-right: 15px;
+    }
+
+    .verse_text {
+        color: #ffffff;
+    }
+
+
+    /* Versículos impares */
+    .trad:nth-child(odd) .verse_text{
+        color: white;
+    }
+
+    /* Versículos pares */
+    .trad:nth-child(even) .verse_text{
+        /* color: yellow; */
+        color: #FF9800;
+    }
+
+    .ref_completa_misma_linea,
+    .ref_completa_nueva_linea,
+    .abreviatura_corta_misma_linea,
+    .verse_full_ref
+    {
+        color: #a5a5a5;
+        font-style: italic;
+        font-weight: normal;
+    }
+
+    .ref_completa_nueva_linea {
+        text-align: right;
+        width: 100%;
+    }
+
+    .ref_completa_misma_linea,
+    .abreviatura_corta_misma_linea
+    {
+        font-size: 55%;
+        white-space: pre;
+    }
+
+    .ref_completa_nueva_linea
+    {
+        white-space: pre;
+    }
+
+
+
+
+    span.verse_title {
+        color: red;
+        display: block;
+        padding-bottom: 2px;
+        text-align: center;
+        font-size: 16px;
+    }
+    i {
+        color: grey;
+        font-family: Comic;
+        font-weight: bold;
+    }
+
+    span.wr_tooltip,
+    span.verse_title,
+    span.refs
+    {
+        display: none;
+    }
+
+    font[color="darkred"] {
+        color: #ff3838;
+        /* color: #f97c91; */
+    }
+
+
+    /*los versiculos pares/impares del mismo color blanco */
+    .trad:nth-child(odd) .verse_text, 
+    .trad:nth-child(odd) i,
+    .trad:nth-child(even) .verse_text, 
+    .trad:nth-child(even) i,
+    i, 
+    font[color="darkred"]
+    {
+        color: white;
+    }
+
+    /* mostrar en colores diferentes */
+    .show_color_diff {
+
+        /* Versículos impares */
+        .trad:nth-child(odd) .verse_text
+        .trad:nth-child(odd) i,
+        .trad:nth-child(odd) font[color="darkred"]
+        {
+            color: white;
+        }
+
+        /* Versículos pares */
+        .trad:nth-child(even) .verse_text,
+        .trad:nth-child(even) i,
+        .trad:nth-child(even) font[color="darkred"]
+        {
+            /* color: yellow; */
+            color: #FF9800;
+        }
+
+    }
+
+/*************** end - bible_verse *************************/
+}

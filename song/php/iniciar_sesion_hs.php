@@ -206,16 +206,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Establecer una cookie de autenticación válida por 1 hora
                 //setcookie("authenticated", "true", time() + 3600, "/");//antes
                 // cookie opcional
-                setcookie(
-                    "authenticated",
-                    "true",
-                    [
-                        'expires' => time() + 3600,
-                        'path' => '/',
-                        'httponly' => true,
-                        'samesite' => 'Lax'
-                    ]
-                );
+                // setcookie(
+                //     "authenticated",
+                //     "true",
+                //     [
+                //         'expires' => time() + 3600,
+                //         'path' => '/',
+                //         'httponly' => true,
+                //         'samesite' => 'Lax'
+                //     ]
+                // );
 
                 echo json_encode([
                     'success' => true, 

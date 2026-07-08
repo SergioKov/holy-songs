@@ -604,11 +604,11 @@ async function enviarEmail(){
                 console.error('data.dic_code: ', data.dic_code);
                 //console.error(obj_lang[data.dic_code]);//pongo con [] ya que viene  obj_lang['d231']
 
-                // let frase = obj_lang.d215 || 'Hubo problemas al enviar el correo de resauración de contraseña al __VAR__. <br><br>__VAR__';
+                // let frase = obj_lang.d215 || 'Hubo problemas al enviar el correo de restauración de contraseña al __VAR__. <br><br>__VAR__';
                 // let arr_valores = [email, obj_lang[data.dic_code]];
                 // let text_show = reemplazarValores(frase, arr_valores);
                 
-                let text_show = `Hubo problemas al enviar el correo de resauración de contraseña al ${email}.`;
+                let text_show = `Hubo problemas al enviar el correo de restauración de contraseña al ${email}.`;
                 document.querySelector('#bl_email_form .mensaje').innerHTML = `<span class="clr_red">${text_show}</span>`;
 
                 showToastLogin(
