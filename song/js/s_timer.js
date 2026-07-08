@@ -12,6 +12,9 @@ function iniciarTimer(){
         return;
     }
 
+    objTimer.tiempoPausadoMs = 0;
+    objTimer.pauseStartedAt = null;
+
     objTimer.durationMs = minutos * 60 * 1000;
     objTimer.remainingMs = null;// <-- importante
     objTimer.endTime = Date.now() + objTimer.durationMs;
@@ -33,8 +36,10 @@ function pararTimer(){
     objTimer.remainingMs = objTimer.durationMs;
     objTimer.endTime = null;
     objTimer.status = 'PARADO';
-
-    //clearTimeout(timerHolyTimeout);
+    objTimer.pauseStartedAt = null;
+    objTimer.tiempoPausadoMs = 0;
+    objTimer.tiempoRestadoMs = 0;
+    objTimer.tiempoSumadoMs = 0;
 
     enviarTimerPantallas();
 }
@@ -47,6 +52,10 @@ function reiniciarTimer(){
     objTimer.running = true;
     objTimer.visible = true;
     objTimer.status = 'REINICIADO';
+    objTimer.pauseStartedAt = null;
+    objTimer.tiempoPausadoMs = 0;
+    objTimer.tiempoRestadoMs = 0;
+    objTimer.tiempoSumadoMs = 0;
 
     enviarTimerPantallas();
 }
@@ -58,12 +67,17 @@ function pausarTimer(){
         return;
     }
 
-    objTimer.remainingMs = objTimer.endTime - Date.now();
-    objTimer.endTime = null;
+    const ahora = Date.now();
+    const restanteActualMs = objTimer.endTime - ahora;
+
+    objTimer.remainingMs = restanteActualMs;
     objTimer.running = false;
+    objTimer.endTime = null;
     objTimer.status = 'PAUSADO';
 
-    //clearTimeout(timerHolyTimeout);
+    // Desde este instante empieza la pausa.
+    // No modificar tiempoPausadoMs aquí.
+    objTimer.pauseStartedAt = ahora;
 
     enviarTimerPantallas();
 }
@@ -75,13 +89,19 @@ function continuarTimer(){
         return;
     }
 
-    objTimer.endTime = Date.now() + objTimer.remainingMs;
+    const ahora = Date.now();
+
+    if(objTimer.pauseStartedAt){
+        objTimer.tiempoPausadoMs += ahora - objTimer.pauseStartedAt;
+        objTimer.pauseStartedAt = null;
+    }
+
+    objTimer.endTime = ahora + objTimer.remainingMs;
     objTimer.remainingMs = null;
     objTimer.running = true;
-    objTimer.status = 'CONTINUANDO';
+    objTimer.status = 'EN MARCHA';
 
     enviarTimerPantallas();
-    //programarSiguienteTick();
 }
 
 function ocultarTimer(){
@@ -116,8 +136,16 @@ function mostrarTimer(){
 function sumarMinutosTimer(minutos){
     console.log('=== function sumarMinutosTimer() ===');
 
-    objTimer.endTime += minutos * 60000;
-    objTimer.status = `SUMADO +${minutos} MINUTO`;
+    const ms = minutos * 60 * 1000;
+
+    if(objTimer.running){
+        objTimer.endTime += ms;
+    }else{
+        objTimer.remainingMs += ms;
+    }
+
+    objTimer.tiempoSumadoMs += ms;
+    objTimer.status = `SUMADO`;
 
     enviarTimerPantallas();
 }
@@ -125,8 +153,16 @@ function sumarMinutosTimer(minutos){
 function restarMinutosTimer(minutos){
     console.log('=== function restarMinutosTimer() ===');
 
-    objTimer.endTime -= minutos * 60000;
-    objTimer.status = `RESTADO -${minutos} MINUTO`;
+    const ms = minutos * 60 * 1000;
+
+    if(objTimer.running){
+        objTimer.endTime -= ms;
+    }else{
+        objTimer.remainingMs -= ms;
+    }
+
+    objTimer.tiempoRestadoMs += ms;
+    objTimer.status = `RESTADO`;
 
     enviarTimerPantallas();
 }
@@ -145,6 +181,19 @@ function enviarTimerPantallas(){
 
 }
 
+function obtenerTiempoPausadoActualMs(){
+    let tiempoPausadoActualMs = objTimer.tiempoPausadoMs || 0;
+
+    if(
+        !objTimer.running &&
+        objTimer.status === 'PAUSADO' &&
+        objTimer.pauseStartedAt
+    ){
+        tiempoPausadoActualMs += Date.now() - objTimer.pauseStartedAt;
+    }
+
+    return tiempoPausadoActualMs;
+}
 
 //========================================//
 //end - temporizador para predicadores
@@ -161,11 +210,20 @@ function calcularEstadoTimer(){
     console.log('=== function calcularEstadoTimer() ===');
 
     let restante;
+    let tiempoPausadoMs = objTimer.tiempoPausadoMs || 0;
 
     if(objTimer.running){
         restante = objTimer.endTime - Date.now();
     }else{
         restante = objTimer.remainingMs;
+    }
+
+    if(
+        !objTimer.running &&
+        objTimer.status === 'PAUSADO' &&
+        objTimer.pauseStartedAt
+    ){
+        tiempoPausadoMs += Date.now() - objTimer.pauseStartedAt;
     }
 
     const negativo = restante < 0;
@@ -205,6 +263,15 @@ function calcularEstadoTimer(){
         segundos,
         texto: tiempo_mostrar,
         clase,
-        status: objTimer.status
+        status: objTimer.status,
+        tiempoPausadoMs
     };
+}
+
+function formatearTiempoTimer(ms){
+    const totalSegundos = Math.ceil(Math.abs(ms) / 1000);
+    const minutos = Math.floor(totalSegundos / 60);
+    const segundos = totalSegundos % 60;
+
+    return `${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
 }

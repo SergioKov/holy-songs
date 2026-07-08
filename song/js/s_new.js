@@ -5265,12 +5265,29 @@ function pintarTimerHoly(){
     console.log('Holy:', Date.now());
 
     console.log(Date.now());
-    console.log(objTimer.endTime);
+    console.log(objTimer.endTime); 
+    
+    const tiempoPausadoActualMs = obtenerTiempoPausadoActualMs();
 
     const timerState = calcularEstadoTimer();
+    eid_timerTextHoly.textContent    = timerState.texto;
 
-    eid_timerTextHoly.textContent = timerState.texto;
-    eid_estadoTimerHoly.textContent = timerState.status;
+    let textoEstado = timerState.status;
+
+    if(objTimer.status === 'SUMADO'){
+        const minutosSumados = Math.floor(objTimer.tiempoSumadoMs / 60000);    
+        textoEstado = `SUMADO TOTAL: +${minutosSumados} min.`;
+    }
+    else if(objTimer.status === 'RESTADO'){
+        const minutosRestados = Math.floor(objTimer.tiempoRestadoMs / 60000);    
+        textoEstado = `RESTADO TOTAL: -${minutosRestados} min.`;
+    }
+
+    eid_estadoTimerHoly.textContent = textoEstado;
+
+    eid_timerPausadoHoly.textContent = `Tiempo en pausa: ${formatearTiempoTimer(tiempoPausadoActualMs)}`;
+    eid_timerRestadoHoly.textContent = `Total restado: ${formatearTiempoTimer(objTimer.tiempoRestadoMs)}`;
+    eid_timerSumadoHoly.textContent  = `Total sumado: ${formatearTiempoTimer(objTimer.tiempoSumadoMs)}`;
 
     eid_timerDisplay.classList.remove(
         'verde',

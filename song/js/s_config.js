@@ -300,6 +300,9 @@ const eid_timerMinutos = document.getElementById('timerMinutos');
 const eid_timerDisplay   = document.getElementById('timerDisplay');
 const eid_estadoTimerHoly = document.getElementById('estadoTimerHoly');
 const eid_timerTextHoly   = document.getElementById('timerTextHoly');
+const eid_timerPausadoHoly   = document.getElementById('timerPausadoHoly');
+const eid_timerRestadoHoly   = document.getElementById('timerRestadoHoly');
+const eid_timerSumadoHoly   = document.getElementById('timerSumadoHoly');
 
 //====================================================//
 //Medidas de pantallas para Media Queries - START
@@ -939,5 +942,10 @@ let objTimer = {
     durationMs: 20 * 60 * 1000,   // duración elegida (20 min)
     remainingMs: null,            // solo cuando está pausado
     endTime: null,                // instante absoluto en que termina
-    warningMs: 2 * 60 * 1000      // últimos 2 minutos
+    warningMs: 2 * 60 * 1000,     // últimos 2 minutos
+    
+    pauseStartedAt: null,         //cuando se pulsó en pausar
+    tiempoPausadoMs: 0,           // tiempo transcurrido al pulsar Pausar
+    tiempoRestadoMs: 0,           // total añadido con sumarMinutosTimer()
+    tiempoSumadoMs: 0             // total restado con restarMinutosTimer()
 };

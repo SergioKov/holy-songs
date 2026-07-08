@@ -13,6 +13,9 @@ let arr_pantalla = [];
 let delay_fn = 200;//200 por defecto
 let count_intentos = 0;
 
+const MIN_FONT_SIZE = 5; // Tamaño minimo de fuente en píxeles en canciones y versículos
+const MAX_FONT_SIZE = 200; // Tamaño máximo de fuente en píxeles en canciones y versículos
+
 
 let objPantalla = {};
 let debug = false;
@@ -1014,10 +1017,10 @@ function nextFrame() {
 
 
 /**
- * Ajusta el font-size de `trad` para que su .verse quepa en maxW x maxH.
+ * Ajusta el font-size de `trad` para que su verse quepa en maxW x maxH.
  * Usa búsqueda binaria para hacerlo rápido y requestAnimationFrame para mediciones correctas.
  */
-async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
+async function ajustarFuenteBinaria(trad, maxW, maxH, min = MIN_FONT_SIZE, max = MAX_FONT_SIZE) {
     let lo = min, hi = max, best = min;
 
     //const { width: trad_width, height: trad_height } = trad.getBoundingClientRect();
@@ -1026,7 +1029,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
 
     while (lo <= hi) {
         const mid = Math.floor((lo + hi) / 2);
-        trad.style.fontSize = mid + 'px';
+        trad.style.fontSize = `${mid}px`;
 
         // Espera que el navegador pinte y calcule layout
         await nextFrame();//cuando lo quito animacion es mejor!
@@ -1047,7 +1050,7 @@ async function ajustarFuenteBinaria(trad, maxW, maxH, min = 5, max = 300) {
         }
     }
 
-    trad.style.fontSize = best + 'px';
+    trad.style.fontSize = `${best}px`;
     //console.log("dentro de func ajustarFuenteBinaria --- FontSize final:", best);
 
     return best;
@@ -1404,6 +1407,10 @@ async function mySizePantallaShowHS(){
     const tradAll = document.querySelectorAll('.trad');
     let count_trad = tradAll.length;//en caso de song es 1
 
+    if(!count_trad){
+        return;
+    }
+
     //Maxima width y Height permitidos. si se exede, el fontSize deja de aumentarse
     let maxW;
     let maxH;
@@ -1422,72 +1429,103 @@ async function mySizePantallaShowHS(){
     }
 
 
-    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
-    for (const trad of tradAll){
-        //console.log('trad: ', trad);
+    //antes de for() oculto elementos manteniendo sus tamaños
+    if(pantalla_show){
+        //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        ocultarVisibilidadItems(tradAll);
+    }
 
-        if(!trad.isConnected){
-            console.warn('trad eliminado');
-            continue;
-        }
+    try {
 
-        if(pantalla_show){
-            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-        }
+        //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
+        for (const trad of tradAll){
+            //console.log('trad: ', trad);
 
-        const trad_inner = trad.querySelector('.trad_inner');
-        //console.log('trad_inner: ', trad_inner);
+            if(!trad.isConnected){
+                console.warn('trad eliminado');
+                continue;
+            }
 
-        trad_inner.removeAttribute('style');//reset
+            const trad_inner = trad.querySelector('.trad_inner');
+            //console.log('trad_inner: ', trad_inner);
+            if(!trad_inner){
+                console.warn('trad_inner no existe');
+                continue;
+            }
+
+            trad_inner.removeAttribute('style');//reset
 
 
-        const clone_contenedor = eid_contenedor.cloneNode(true);
-        clone_contenedor.style.position = 'relative';
-        clone_contenedor.style.visibility = 'hidden';
-        clone_contenedor.style.left = '-9999px';
-        document.body.appendChild(clone_contenedor);
+            const clone_contenedor = eid_contenedor.cloneNode(true);
+            clone_contenedor.style.position = 'relative';
+            clone_contenedor.style.visibility = 'hidden';
+            clone_contenedor.style.left = '-9999px';
+            document.body.appendChild(clone_contenedor);
 
 
-        try {
+            try {
 
-            const clone = trad.cloneNode(true);
-            clone_contenedor.appendChild(clone);
+                const clone = trad.cloneNode(true);
+                clone_contenedor.appendChild(clone);
+                
+                let fontSize_new = await ajustarFuenteBinaria(clone, maxW, maxH);
+                //console.log("FontSize final. fontSize_new:", fontSize_new);
             
-            let fontSize_new = await ajustarFuenteBinaria(clone, maxW, maxH);
-            //console.log("FontSize final. fontSize_new:", fontSize_new);
+                if(token !== sizeCalcToken || !trad.isConnected){
+                    return;
+                }
+            
+                trad.style.fontSize = `${fontSize_new}px`;
+            
+                //...
+                let trad_h = window.innerHeight / count_trad ;
+                //console.log('trad_h: ', trad_h);
         
-            if(token !== sizeCalcToken || !trad.isConnected){
-                return;
-            }
+                // si quero mostrar en varias columnas, divido entre count_trad
+                // si solo en rows => no divido, sino 
+                // let trad_w = window.innerWidth / count_trad;
+                let trad_w = window.innerWidth;// muestro en rows
+                //console.log('trad_w: ', trad_w);
         
-            trad.style.fontSize = fontSize_new + 'px';
+                trad_inner.style.height = `${trad_h}px`;
+                trad_inner.style.width = `${trad_w}px`; 
         
-            //...
-            let trad_h = window.innerHeight / count_trad ;
-            //console.log('trad_h: ', trad_h);
-    
-            // si quero mostrar en varias columnas, divido entre count_trad
-            // si solo en rows => no divido, sino 
-            // let trad_w = window.innerWidth / count_trad;
-            let trad_w = window.innerWidth;// muestro en rows
-            //console.log('trad_w: ', trad_w);
-    
-            trad_inner.style.height = trad_h + 'px';
-            trad_inner.style.width = trad_w + 'px'; 
-    
-            if(pantalla_show){
-                trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-            }       
-                   
-        }
-        finally{
-            if(clone_contenedor.isConnected){
-                clone_contenedor.remove();
-            }
-        }        
-       
-    }//end for
+            } finally{
+                if(clone_contenedor.isConnected){
+                    clone_contenedor.remove();
+                }
+            }        
+        
+        }//end for
 
+    } finally{
+        //despues de for() muestro elementos manteniendo sus tamaños
+        if(pantalla_show){
+            //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            mostrarVisibilidadItems(tradAll);
+        }
+    }     
+
+}
+
+
+// aplico a todas las trad's visibility: hiden para que no se vea como cambia el tamaño del div 'trad' mientras ajusto el fontSize
+function ocultarVisibilidadItems(tradAll){
+    tradAll.forEach(trad => {
+        if(trad.isConnected){
+            //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            trad.style.visibility = 'hidden';
+        }
+    });
+}
+// aplico a todas las trad's visibility: visible para que no se vea como cambia el tamaño del div 'trad' mientras ajusto el fontSize
+function mostrarVisibilidadItems(tradAll){
+    tradAll.forEach(trad => {
+        if(trad.isConnected){
+            //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            trad.style.visibility = 'visible';
+        }
+    });
 }
 
 
@@ -1495,10 +1533,6 @@ async function mySizePantallaShowBT(){
     console.log('=== function mySizePantallaShowBT() ===');
 
     const token = ++sizeCalcToken;
-
-    // if(eid_contenedor){
-    //     eid_contenedor.classList.remove('shown');
-    // }
 
     //let window_w = window.innerWidth;
     let window_h = window.innerHeight;
@@ -1518,95 +1552,112 @@ async function mySizePantallaShowBT(){
     }
 
 
-    //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
-    for(const trad of tradAll){
-        
-        if(!trad.isConnected){
-            console.warn('trad eliminado');
-            continue;
-        }
+    //antes de for() oculto elementos manteniendo sus tamaños
+    if(pantalla_show){
+        //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+        ocultarVisibilidadItems(tradAll);
+    }
+    
+    try {
 
-        if(pantalla_show){
-            trad.style.visibility = 'hidden';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-        }
+        //nueva forma. for() espera el resultado de await; forEach() no espera. AKI USAR FOR()!!! 
+        for(const trad of tradAll){
+            
+            if(!trad.isConnected){
+                console.warn('trad eliminado');
+                continue;
+            }
 
-        const trad_inner = trad.querySelector('.trad_inner');
-        trad_inner.removeAttribute('style'); // reset
-        
-        
-        let trad_h = window_h / count_trad;
-        // console.log('trad_h: ', trad_h);
+            const trad_inner = trad.querySelector('.trad_inner');
+            if(!trad_inner){
+                console.warn('trad_inner no existe');
+                continue;
+            }
 
-        if(token !== sizeCalcToken || !trad.isConnected){
-            return;
-        }
+            trad_inner.removeAttribute('style'); // reset
+            
+            
+            let trad_h = window_h / count_trad;
+            // console.log('trad_h: ', trad_h);
+
+            if(token !== sizeCalcToken || !trad.isConnected){
+                return;
+            }
+                    
+            trad.style.height = `${trad_h}px`;
+        
+            const trad_inner_h = trad_inner.offsetHeight;
+            // console.log('trad_inner_h: ', trad_inner_h);
+        
+            // Obtener los estilos calculados
+            const trad_styles = window.getComputedStyle(trad);
+
+            const font_size_css = parseInt(trad_styles.fontSize, 10);
+            const font_size_inicial = Math.min(
+                Math.max(font_size_css, MIN_FONT_SIZE),//devuelve el maximo de estos dos
+                MAX_FONT_SIZE
+            );//devuelve valor minimo de estos dos
+
+            //const font_size_inicial = parseInt(trad_styles.fontSize, 10);//antes
+            console.log('font_size_inicial: ', font_size_inicial);
+            
+            let font_size_new; 
+            let font_size_full_ref; 
+        
+            if(trad_inner_h > trad_h){ // hay mucho texto
                 
-        trad.style.height = trad_h + 'px';
-    
-        const trad_inner_h = trad_inner.offsetHeight;
-        // console.log('trad_inner_h: ', trad_inner_h);
-    
-        // Obtener los estilos calculados
-        const trad_styles = window.getComputedStyle(trad);
-        const font_size_inicial = parseInt(trad_styles.fontSize, 10);
-        // console.log('font_size_inicial: ', font_size_inicial);
+                //con cada iteracion disminuyo el fontSize hasta que el texto quepa en el div 'trad'
+                for(let font_size_new = font_size_inicial - 1; font_size_new >= MIN_FONT_SIZE; font_size_new--){
+                            
+                    trad.style.fontSize = `${font_size_new}px`;
         
-        let font_size_new; 
-        let font_size_full_ref; 
-    
-        if(trad_inner_h > trad_h){ // hay mucho texto
-    
-            for(let i = 1; i < font_size_inicial; i++){
-                font_size_new = font_size_inicial - i;
-    
-                trad.style.fontSize = font_size_new + 'px';
-    
-                if(trad_inner.offsetHeight <= trad_h){
-                    trad.style.fontSize = (font_size_new - 2) + 'px';
-    
-                    font_size_full_ref = parseInt(
-                        (font_size_new - 2) * 0.6,
-                        10
-                    );
-    
-                    if(font_size_full_ref > 65){
-                        font_size_full_ref = 65;
+                    if(trad_inner.offsetHeight <= trad_h){
+                        
+                        const font_size_final = Math.max(font_size_new - 2, MIN_FONT_SIZE);
+                        trad.style.fontSize = `${font_size_final}px`;
+
+                        font_size_full_ref = Math.floor(font_size_final * 0.6);        
+        
+                        if(font_size_full_ref > 65){
+                            font_size_full_ref = 65;
+                        }
+        
+                        trad.querySelector('.verse_full_ref').style.fontSize = `${font_size_full_ref}px`;        
+                        break;
                     }
-    
-                    trad.querySelector('.verse_full_ref').style.fontSize = font_size_full_ref + 'px';
-    
-                    break;
                 }
-            }
-    
-        }else if(trad_inner_h < trad_h){ // hay poco texto
-    
-            for(let i = 1; i < (font_size_inicial * 3); i++){
-                font_size_new = font_size_inicial + i;
-    
-                trad.style.fontSize = font_size_new + 'px';
-    
-                if(trad_inner.offsetHeight >= trad_h){
-                    trad.style.fontSize = (font_size_new - 2) + 'px';
-    
-                    font_size_full_ref = parseInt(
-                        (font_size_new - 2) * 0.6,
-                        10
-                    );
-    
-                    trad.querySelector('.verse_full_ref').style.fontSize = font_size_full_ref + 'px';
-    
-                    break;
-                }
-            }
-        }
-    
-        trad_inner.style.height = '100%';
+        
+            }else if(trad_inner_h < trad_h){ // hay poco texto
+        
+                //con cada iteracion aumento el fontSize hasta que el texto quepa en el div 'trad'
+                for(let font_size_new = font_size_inicial + 1; font_size_new <= MAX_FONT_SIZE; font_size_new++){
+                    trad.style.fontSize = `${font_size_new}px`;                    
+        
+                    if(trad_inner.offsetHeight >= trad_h){
+                        const font_size_final = Math.max(font_size_new - 2, MIN_FONT_SIZE);
+                        trad.style.fontSize = `${font_size_final}px`;
 
+                        font_size_full_ref = Math.floor(font_size_final * 0.6);
+
+                        if(font_size_full_ref > 65){
+                            font_size_full_ref = 65;
+                        }        
+        
+                        trad.querySelector('.verse_full_ref').style.fontSize = `${font_size_full_ref}px`;        
+                        break;
+                    }
+                }
+            }
+        
+            trad_inner.style.height = '100%'; 
+
+        }//end for
+    
+    } finally{
+        //despues de for() muestro elementos manteniendo sus tamaños
         if(pantalla_show){
-            trad.style.visibility = 'visible';//IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
-        } 
-
-    }//end for
-
+            //IMPORTANTE PARA QUE NO SE VEA COMO CAMBIA EL TAMAÑO DEL DIV 'TRAD'
+            mostrarVisibilidadItems(tradAll);
+        }
+    }
 }

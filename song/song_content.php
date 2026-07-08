@@ -911,7 +911,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button class="btn btn_ver_pantalla w_100" onclick="abrirPantalla(2)">
                                                                                     <img src="images/monitor_1_white.png">
-                                                                                    <span>Pantalla Local 2 (sala)</span>
+                                                                                    <span>Pantalla Local 2 (sala) + Temporizador</span>
                                                                                 </button>
                                                                                 <button class="btn flex_center" onclick="enfocarReferencia(2)">
                                                                                     <img class="btn_img_sm" src="images/center_focus.png">
@@ -982,6 +982,12 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div id="timerDisplay" class="timer_display">
                                                                                 <div id="estadoTimerHoly" class="timer_text">...</div>
                                                                                 <div id="timerTextHoly" class="timer_text">--:--</div>
+                                                                                
+                                                                                <div class="wr_totales_timer">
+                                                                                    <div id="timerPausadoHoly">PAUSADO TRAS: 00:00</div>
+                                                                                    <div id="timerRestadoHoly">TOTAL RESTADO: 00:00</div>
+                                                                                    <div id="timerSumadoHoly">TOTAL SUMADO: 00:00</div>
+                                                                                </div>
                                                                             </div>
 
                                                                             <div class="timer_panel wr_sel_pantalla">                                                                               
