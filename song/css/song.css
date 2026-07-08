@@ -2509,9 +2509,7 @@ p.p_sm b {
     transition: 0.5s ease;
     opacity: 0.5;
 }
-#videoFondo_body.shown {
-    opacity: 1 !important;
-}
+
 
 #fondo_body.logo_en_fondo {
     background-image: url('../images/logo_iglesia.png');
@@ -2522,6 +2520,16 @@ p.p_sm b {
 }
 #fondo_body.black_en_fondo {
     background: black;
+}
+
+#fondo_body.bible_en_fondo #videoFondo_body, 
+#fondo_body.black_en_fondo #videoFondo_body, 
+#fondo_body.imagen_en_fondo #videoFondo_body 
+{
+    opacity: 0 !important;
+}
+#videoFondo_body.shown {
+    opacity: 1 !important;
 }
 
 
