@@ -1309,7 +1309,7 @@ function handleFormInput(e, container_block){
 function crearBloquesMostrar(objBloques, maxLineas){
     console.log('=== function crearBloquesMostrar() ===');
 
-    obj_bloques_mostrar = {};//reset
+    obj_bloques_maxlineas = {};//reset
     
     // recorrer objBloques
     for(const [titulo, bloque] of Object.entries(objBloques)){
@@ -1323,7 +1323,7 @@ function crearBloquesMostrar(objBloques, maxLineas){
         // No hace falta partir el bloque ya que tiene 4 o menos lineas
         if(arr_p.length <= maxLineas){
 
-            obj_bloques_mostrar[titulo] = {
+            obj_bloques_maxlineas[titulo] = {
                 step: stepOriginal.cloneNode(true),
                 slide: slideOriginal.cloneNode(true)
             };
@@ -1362,7 +1362,7 @@ function crearBloquesMostrar(objBloques, maxLineas){
             const stepNuevo = stepOriginal.cloneNode(true);
             stepNuevo.textContent = tituloNuevo;
 
-            obj_bloques_mostrar[tituloNuevo] = {
+            obj_bloques_maxlineas[tituloNuevo] = {
                 step: stepNuevo,
                 slide: slideNuevo
             };
@@ -1372,7 +1372,7 @@ function crearBloquesMostrar(objBloques, maxLineas){
     }
 
     // devolver nuevo objeto
-    return obj_bloques_mostrar;
+    return obj_bloques_maxlineas;
 }
 
 

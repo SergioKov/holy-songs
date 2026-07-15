@@ -265,7 +265,8 @@ S {
     text-align: center;
     display: block;
     width: 100%;
-    font-size: 58px;
+    /* font-size: 58px; */
+    font-size: 35px;
     
     height: 70px;
     padding-top: 25px;

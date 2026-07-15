@@ -2240,12 +2240,12 @@ async function select_slide(){
 
 
     //lo haré luego
-    // obj_bloques_mostrar = crearBloquesMostrar(
+    // obj_bloques_maxlineas = crearBloquesMostrar(
     //     obj_bloques,
     //     MAX_LINEAS_POR_SLIDE //máximo líneas por slide que son 4
     // );
-    // console.log('obj_bloques_mostrar: ', obj_bloques_mostrar);
-    // arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques_mostrar);//creo el array de esquema para bucle
+    // console.log('obj_bloques_maxlineas: ', obj_bloques_maxlineas);
+    // arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques_maxlineas);//creo el array de esquema para bucle
 
     arr_esquema_bucle = crear_arr_esquema_bucle(obj_bloques);//creo el array de esquema para bucle
     console.log('crearSlides() --- arr_esquema_bucle: ', arr_esquema_bucle);
@@ -2268,7 +2268,7 @@ async function select_slide(){
         console.log('titulo: ', titulo);
 
         const slide_original = obj_bloques[titulo]?.slide;//bd
-            //const slide_original = obj_bloques_mostrar[titulo]?.slide;// new
+            //const slide_original = obj_bloques_maxlineas[titulo]?.slide;// new
         console.log('slide_original: ', slide_original);
         
         const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 

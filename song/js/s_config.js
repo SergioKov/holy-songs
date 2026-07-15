@@ -490,10 +490,10 @@ let objDataListas = {};//objeto con datos de todas las listas encontradas en 'Li
 let objSongBd = {};//datos de bd de song
 
 let obj_bloques = {};//elementos html de slides: kuplet, pripev bridge (SIN REPETIRSE)
-let obj_bloques_mostrar = {};//elementos html de slides: kuplet, pripev bridge para select_slides() en esquema
+let obj_bloques_maxlineas = {};//elementos html de slides: kuplet, pripev bridge para select_slides() en esquema
 let obj_pages = {};//elementos html de slides: kuplet, pripev bridge todo juntos para el texto maximo en una hoja
 
-let MAX_LINEAS_POR_SLIDE = 8;//en esquema select_slide() para mostrar en pantalla.php
+let MAX_LINEAS_POR_SLIDE = 4;//en esquema select_slide() para mostrar en pantalla.php
 
 let arr_esquema_obj = [];//array de objetos temporal para guardar el esquema creada en crear_esquema()
 let arr_esquema_bucle = [];//array de objetos con los bloques de esquema, sin repetirse
