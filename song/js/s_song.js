@@ -1442,7 +1442,8 @@ function crear_arr_esquema_bucle(obj_bloques){
         arr_esquema_titlulos = objSongBd.arr_esquema.map(el => el.nombre);//desde BD
     }else{
         arr_esquema_titlulos = Object.keys(obj_bloques).map(el => el);
-        arr_esquema_titlulos = addCoroAfterVerse();//solo añado pripev despues de kuplet si no hay esquema en bd.
+        //DE MOMENTO QUITO EL AÑADIDO DE PRIPEV DESPUÉS DE CADA KUPLET
+        //arr_esquema_titlulos = addCoroAfterVerse();//solo añado pripev despues de kuplet si no hay esquema en bd.
     }
     console.log('arr_esquema_bd: ', arr_esquema_bd);
     console.log('arr_esquema_titlulos: ', arr_esquema_titlulos);
@@ -3299,9 +3300,17 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
 
             let text_show = 'Error al guardar la canción.';
             let text_error = data.error;
+
+            let aviso_html = `
+                <p>${text_error}</p>
+                <p>Puedes iniciar sesión.</p>
+                <div class="wr_btns_vertical">
+                    <button class="btn" onclick="window.open('/login', '_blank');">Login</button>            
+                </div>
+            `;
     
             if(hayElementosModalesAbiertos()){
-                showToast('error', text_error, 500, 'center');
+                showToast('error', aviso_html, 500, 'center');
             }
         }
     
@@ -3879,7 +3888,7 @@ function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
     //const regexAcorde = /^(?:\s*[|()\-\s]*[A-H](#|b)?(m|maj7|m7|m7-5|sus|sus2|sus4|dim|dim7|aug|add9|2|4|6|9|11|13)?(\/[A-H](#|b)?)?[|()\-\s]*)*$/;
     //const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;//ok funciona
 
-    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||\([^()]*\)|[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;//test new
+    const regexAcorde = /^(?:\s*(?:\|\|:|:\|\||\([^()]*\)|[|()\-\s]*[A-H](#|b)?(?:m|maj7|m7|m7-5|m9|m6|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(?:\/[A-H](#|b)?)?)[|()\-\s]*)*$/;//test new
 
     //'|D      |F#m |G  |G - (Cm7) |' => true;
     //'| Вступ |Dm  |G  |C         |' =>  false (palabra 'Вступ' no es acorde) 
@@ -3887,7 +3896,7 @@ function contieneSoloAcordes(str) {// busca ÚNICAMENTE: acordes, barras
 }
 
 function contieneAcordes(str) {// busca CUALQUIER acorde , barra y texto
-    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|m7-5|m9|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
+    const regexAcorde = /\b[ABCDEFGH](#|b)?(m|maj7|m7|m7-5|m9|m6|sus|sus2|sus4|dim|dim7|aug|add9|2|4|5|6|7|9|11|13)?(\/[ABCDEFGH](#|b)?)?\b/g;
     //'|D      |F#m |G  |G  |'  => true;
     //'| Вступ |Dm  |G  |C  |' =>  true (aunque hay palabra 'Вступ' que no es acorde en el texto hay al menos un acorde) 
     return regexAcorde.test(str);
