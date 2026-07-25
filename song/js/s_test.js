@@ -407,6 +407,8 @@ async function insertarPantallaParams() {
         if(
             !id_song || 
             isNaN(pantalla_show) || 
+            isNaN(tiempo_restante_show) || 
+            isNaN(hora_actual_show) || 
             isNaN(show_logo_en_fondo) || 
             isNaN(show_imagen_en_fondo) || 
             isNaN(user_view_control) || 

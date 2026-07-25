@@ -104,7 +104,19 @@
         </video>
     </div><!--/#fondo-->
 
+
     <div id="contenedor" class=""></div><!--/#contenedor-->
+
+
+    <div id="contenedor_hora">
+        <div id="horaOverlay" class="hora_overlay">
+            <div id="horaContent" class="hora_content">
+                <div id="horaActual">18:55:59</div>
+                <div id="horaRestante">4:01</div>
+            </div>
+        </div><!--/#horaOverlay-->
+    </div><!--/#contenedor_hora-->
+
 
     <div id="contenedor_timer">
         <div id="timerOverlay" class="timer_overlay">
@@ -114,7 +126,9 @@
         </div><!--/#timerOverlay-->
     </div><!--/#contenedor_timer-->
 
+
     <div id="identificadorPantalla"></div>
+
         
     <script src="js/s_pantalla.js"></script>
     <script src="js/s_timer.js"></script>

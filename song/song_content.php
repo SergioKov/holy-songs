@@ -970,13 +970,76 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
+                                                                                <span>Hora actual</span>
+                                                                            </h4>
+                                                                            <p>Control de la vista de la hora actual y cuanto queda hasta el inicio en la pantalla  (escena):</p>
+
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <p>Hora de inicio:</p>
+                                                                                <div class="wr_hora_inputs">
+                                                                                    <input 
+                                                                                        id="horaInicio" 
+                                                                                        class="hora_text_val" 
+                                                                                        type="number" 
+                                                                                        min="1" 
+                                                                                        max="23" 
+                                                                                        value="11"
+                                                                                    >
+                                                                                    <span>:</span> 
+                                                                                    <input 
+                                                                                        id="minutosInicio" 
+                                                                                        class="hora_text_val" 
+                                                                                        type="text" 
+                                                                                        inputmode="numeric" 
+                                                                                        maxlength="2"
+                                                                                        value="00"
+                                                                                    >
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                            <div class="wr_sel_pantalla">
+                                                                                <button id="btn_tiempo_restante_show" class="btn w_100" onclick="showTipoContent(this,'w')">Tiempo restante</button>
+                                                                            </div>
+
+                                                                            <div id="horaHoly" class="timer_display">
+                                                                                <div id="estadoHoraHoly" class="timer_text">...</div>
+                                                                                <div id="horaActualHoly">--:--:--</div>
+                                                                                <div id="horaRestanteHoly">--:--</div>
+                                                                            </div>
+
+                                                                            <div id="horaControlPanel" class="timer_panel wr_sel_pantalla">                                                                               
+                                                                                <button id="btn_iniciarHora" class="btn w_100" onclick="iniciarRenderHoraHoly()">
+                                                                                    ▶ Iniciar
+                                                                                </button>
+                                                                                
+                                                                                <button id="btn_pararHora" class="btn w_100" onclick="pararRenderHoraHoly()">
+                                                                                    ⏹ Parar
+                                                                                </button>
+                                                                            </div>
+
+
+                                                                            
+                                                                            <div id="horaControlVista" class="wr_sel_pantalla">
+                                                                                <button id="btn_mostrarHora" class="btn w_100" onclick="mostrarHora()">
+                                                                                    Mostrar
+                                                                                </button>
+                                                                            
+                                                                                <button id="btn_ocultarHora" class="btn w_100" onclick="ocultarHora()">
+                                                                                    Ocultar
+                                                                                </button>                                                                               
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
                                                                                 <span>Temporizador</span>
                                                                             </h4>
                                                                             <p>Control del temporizador en la pantalla 2 (sala):</p>
 
                                                                             <div class="wr_sel_pantalla">
                                                                                 <p>Tiempo en minutos:</p>
-                                                                                <input id="timerMinutos" type="number" min="1" max="60" value="20">
+                                                                                <input id="timerMinutos" class="hora_min_val" type="number" min="1" max="60" value="20">
                                                                             </div>
 
                                                                             <div id="timerDisplay" class="timer_display">
@@ -990,45 +1053,45 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div class="timer_panel wr_sel_pantalla">                                                                               
+                                                                            <div id="timerControlPanel" class="timer_panel wr_sel_pantalla">                                                                               
 
-                                                                                <button class="btn w_100" onclick="iniciarTimer()">
+                                                                                <button id="btn_iniciarTimer" class="btn w_100" onclick="iniciarTimer()">
                                                                                     ▶ Iniciar
                                                                                 </button>
                                                                                 
-                                                                                <button class="btn w_100" onclick="pararTimer()">
+                                                                                <button id="btn_pararTimer" class="btn w_100" onclick="pararTimer()">
                                                                                     ⏹ Parar
                                                                                 </button>
 
-                                                                                <button class="btn w_100" onclick="pausarTimer()">
+                                                                                <button id="btn_pausarTimer" class="btn w_100" onclick="pausarTimer()">
                                                                                     ⏸ Pausar
                                                                                 </button>
 
-                                                                                <button class="btn w_100" onclick="continuarTimer()">
+                                                                                <button id="btn_continuarTimer" class="btn w_100" onclick="continuarTimer()">
                                                                                     ▶ Continuar
                                                                                 </button>
 
-                                                                                <button class="btn w_100" onclick="reiniciarTimer()">
+                                                                                <button id="btn_reiniciarTimer" class="btn w_100" onclick="reiniciarTimer()">
                                                                                     ↺ Reiniciar
                                                                                 </button>
                                                                             </div>
 
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="restarMinutosTimer(1)">
+                                                                            <div id="timerControlMinutos" class="wr_sel_pantalla">
+                                                                                <button id="btn_restarMinutosTimer" class="btn w_100" onclick="restarMinutosTimer(1)">
                                                                                     -1 min
                                                                                 </button>
 
-                                                                                <button class="btn w_100" onclick="sumarMinutosTimer(1)">
+                                                                                <button id="btn_sumarMinutosTimer" class="btn w_100" onclick="sumarMinutosTimer(1)">
                                                                                     +1 min
                                                                                 </button>
                                                                             </div>
                                                                             
-                                                                            <div class="wr_sel_pantalla">
-                                                                                <button class="btn w_100" onclick="mostrarTimer()">
+                                                                            <div id="timerControlVista" class="wr_sel_pantalla">
+                                                                                <button id="btn_mostrarTimer" class="btn w_100" onclick="mostrarTimer()">
                                                                                     Mostrar
                                                                                 </button>
                                                                             
-                                                                                <button class="btn w_100" onclick="ocultarTimer()">
+                                                                                <button id="btn_ocultarTimer" class="btn w_100" onclick="ocultarTimer()">
                                                                                     Ocultar
                                                                                 </button>                                                                               
                                                                             </div>
@@ -1390,6 +1453,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                 <div class="parte_fija">
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositivas:</span>
+                                                        <button class="btn" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">
+                                                            <img class="btn_img_sm2" src="images/checklist2_24x24.png">  
+                                                        </button>
                                                     </h4>
                                                 </div><!--/.parte_fija-->
 

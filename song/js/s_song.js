@@ -1928,8 +1928,7 @@ async function ver_esquema(){
 
     ver_esquema_ul_action.innerHTML = '<span class="sp_prim">Para ver la esquema hay que seleccionar antes la canción...</span>';
        
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_ver_esquema').classList.add('btn_active');
+    makeBtnActive(eid_block_esquema_head, eid_btn_ver_esquema);
     pageActiveEsquema = 'ver_esquema';
 
     //Recorrer el bucle - partes de song (SIN REPETIRSE)...
@@ -1995,8 +1994,7 @@ async function ver_esquema(){
             console.log('e.target: ', e.target);
 
             const btn_clicked = e.currentTarget;
-            resetBtnActive(ver_esquema_wr_vista_btns);//reseteo btn_active de botones en el contenedor
-            btn_clicked.classList.add('btn_active');
+            makeBtnActive(ver_esquema_wr_vista_btns, btn_clicked);
 
 
             const song_element_legend = [...ver_esquema_song_bloques.querySelectorAll('legend')].find(el => el.textContent.trim() === e.currentTarget.dataset.titulo);
@@ -2064,8 +2062,7 @@ async function crear_esquema(){
     `;
     crear_esquema_ul_action.onclick = e => close_ul_action(e);
 
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_crear_esquema').classList.add('btn_active');
+    makeBtnActive(eid_block_esquema_head, eid_btn_crear_esquema);
     pageActiveEsquema = 'crear_esquema';
 
     const sp_prim = document.createElement('span');
@@ -2259,8 +2256,7 @@ async function select_slide(){
     arr_fieldsets = [];//reset
     currentSlide = 0;//aki siempre para con click dcho empezar desde inicio de canción
     
-    resetBtnActive(eid_block_esquema_head);//reseteo btn_active de botones en el contenedor
-    eid_block_esquema_head.querySelector('#btn_select_slide').classList.add('btn_active');
+    makeBtnActive(eid_block_esquema_head, eid_btn_select_slide);
     pageActiveEsquema = 'select_slide';
 
 
@@ -2363,6 +2359,8 @@ async function check_PantallaParams(){//pinto botones en rojo si están marcados
     
     //marco/desmarco los botones de fondo y demás segun las variables desde localStorage
     check_pantalla_show();//reviso si marco en rojo o no
+    check_tiempo_restante_show();//reviso si marco en rojo o no
+    check_hora_actual_show();//reviso si marco en rojo o no
     check_fondo_body();//new
     check_show_logo_en_fondo();
     await check_show_imagen_en_fondo();
@@ -4681,8 +4679,7 @@ async function nueva_song(){
         </button>
     `;
 
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_nueva').classList.add('btn_active');
+    makeBtnActive(eid_block_cancion_head, eid_btn_song_nueva);
 
     cancion_ul_action.innerHTML = `
         <li class="li_action" onclick="showBlockName('buscar');">Buscar</li>
@@ -4737,8 +4734,7 @@ function ver_song(){
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Ver canción:';
 
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_ver').classList.add('btn_active');    
+    makeBtnActive(eid_block_cancion_head, eid_btn_song_ver);  
 
 
     //cancion_wr_vista_blocks.innerHTML = '...';//reset
@@ -4828,9 +4824,7 @@ function editar_song(){
         </button>
     `;
 
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_editar').classList.add('btn_active');
-
+    makeBtnActive(eid_block_cancion_head, eid_btn_song_editar);
 
     //creo btn actualizar song
     const element_btn_cancion_refresh = eid_block_cancion.querySelector('#btn_cancion_refresh');
@@ -5102,8 +5096,7 @@ function eliminar_song(){
     //Partes left-right
     eid_block_cancion.querySelector('.bl_parte_l h4').textContent = 'Eliminar canción:';
 
-    resetBtnActive(eid_block_cancion_head);//reseteo btn_active de botones en el contenedor
-    eid_block_cancion_head.querySelector('#btn_song_eliminar').classList.add('btn_active');
+    makeBtnActive(eid_block_cancion_head, eid_btn_song_eliminar);
 
     //cancion_wr_vista_blocks.innerHTML = '...';//reset
     //cancion_ul_action.innerHTML = '...';//reset    
@@ -5144,12 +5137,12 @@ function showEjemplo(lang){
     if(Object.keys(obj_lang_names).includes(lang)){
         console.log('lang: ', lang);
     
-        ejemplo_wr_vista_blocks.innerHTML = '...';//reset
-    
+        ejemplo_wr_vista_blocks.innerHTML = '...';//reset    
         ejemplo_song_bloques.classList.add('solo_ver'); 
         
-        resetBtnActive(eid_block_ejemplo_head);//reseteo btn_active de botones en el contenedor
-        eid_block_ejemplo_head.querySelector(`#btn_ejemplo_${lang}`).classList.add('btn_active');
+        const btn_to_active = eid_block_ejemplo_head.querySelector(`#btn_ejemplo_${lang}`)
+        makeBtnActive(eid_block_ejemplo_head, btn_to_active);
+
         pageActiveEjemplo = lang;
 
         ejemplo_ul_action.innerHTML = `

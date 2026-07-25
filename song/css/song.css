@@ -3221,9 +3221,10 @@ span.sp_number {
     background: black;
     color: white;
     padding: 10px;
+    border-radius: 5px;
 }
 .contenedor_sel_pantalla:not(:last-child){
-    margin: 0 0 10px;
+    margin: 0 0 20px;
 }
 
 
@@ -4880,7 +4881,14 @@ fieldset.kuplet.partial{
 }
 
 
-#timerMinutos {
+.hora_text_val {
+    width: 65px;
+    padding: 5px 10px;
+    font-weight: bolder;
+    font-family: "Noto sans";
+}
+
+.hora_min_val {
     width: 65px;
     padding: 5px 10px;
     font-weight: bolder;
@@ -4923,6 +4931,9 @@ fieldset.kuplet.partial{
 .timer_display.verde {
     background: #009506;
 }
+.timer_display.azul {
+    background: #2196F3;
+}
 
 /* últimos minutos */
 .timer_display.amarillo {
@@ -4961,4 +4972,54 @@ fieldset.kuplet.partial{
     background: #000000;
     padding: 10px;
     border-radius: 5px;
+}
+
+.wr_hora_inputs {
+    /* background: green; */
+    /* padding: 2px; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+#contenedor_hora{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+.hora_overlay{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100%;
+    opacity:0;
+    transition:opacity .3s;
+}
+
+.hora_overlay.shown{
+    opacity:1;
+}
+
+.hora_content{
+    text-align:center;
+}
+
+#horaActualHoly{
+    font-size:3rem;
+    font-weight:bold;
+}
+
+#horaRestanteHoly{
+    margin-top:.3em;
+    font-size:2rem;
+}
+
+#horaRestanteHoly {
+    display: none;
+}
+#horaRestanteHoly.shown {
+    display: block;
 }

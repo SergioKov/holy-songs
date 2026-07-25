@@ -142,6 +142,17 @@ window.addEventListener('message', (event) => {
 
 });
 
+eid_horaInicio.addEventListener('change', actualizarHoraInicio);
+eid_minutosInicio.addEventListener('change', actualizarHoraInicio);
+
+function actualizarHoraInicio(){
+
+    objHora.horaInicio = parseInt(eid_horaInicio.value, 10);
+    objHora.minutosInicio = parseInt(eid_minutosInicio.value, 10);
+
+    enviarHoraPantallas();
+}
+
 
 function obtenerParamsParaPantalla(){
 
@@ -1615,3 +1626,11 @@ function pararRenderTimerHoly(){
     clearInterval(timerHolyInterval);
     timerHolyInterval = null;
 }
+
+
+//input de minutos en hora actual
+eid_minutosInicio.addEventListener('blur', () => {
+    eid_minutosInicio.value = String(
+        Math.min(59, Math.max(0, parseInt(minutosInicio.value || 0, 10)))
+    ).padStart(2, '0');
+});

@@ -920,11 +920,13 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
 
     eid_contenedor_prev_inner.innerHTML = '';//reset
 
-    resetBtnActive(select_slide_wr_vista_btns);//reseteo btn_active de botones en el contenedor
-    elementBtnSimple?.classList.add('btn_active');
+    // resetBtnActive(select_slide_wr_vista_btns);//reseteo btn_active de botones en el contenedor
+    // elementBtnSimple?.classList.add('btn_active');
+    makeBtnActive(select_slide_wr_vista_btns, elementBtnSimple);
 
-    resetFldActive(select_slide_song_bloques);//reseteo fieldset active de kuplet's a la izda
-    elementFieldset?.classList.add('fld_active');
+    // resetFldActive(select_slide_song_bloques);//reseteo fieldset active de kuplet's a la izda
+    // elementFieldset?.classList.add('fld_active');
+    makeFldActive(select_slide_song_bloques, elementFieldset);
 
     if(elementClicked){
         if(elementClicked === elementBtnSimple){
@@ -943,16 +945,6 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
         elementFieldset?.scrollIntoView({behavior: 'smooth', block: "center"});
         elementBtnSimple?.scrollIntoView({behavior: 'smooth', block: "center"});
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -983,10 +975,6 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
 
 
 
-
-
-
-
     //Si hay sig kuplet, saco 2 primeras lineas...
     if(next_fieldset_cloned){
 
@@ -1011,12 +999,6 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
 
         add_next_slide = true;
     }
-
-
-
-
-
-
 
 
 
@@ -1066,7 +1048,6 @@ function showOneSlideFrom(elementClicked = null, index_esquema){
     } 
 
     select_slide_ul_action.prepend(li_actual);
-
     make_arr_pantalla(currentSlide);
 }
 
@@ -1414,6 +1395,8 @@ async function make_arr_pantalla(currentSlide){
         slide_actual,
         arr_pantalla,
         pantalla_show,
+        tiempo_restante_show,
+        hora_actual_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
         tipo_content,
@@ -1438,6 +1421,8 @@ async function make_arr_pantalla(currentSlide){
     //1.2 Objeto Params para LOCAL
     objPantallaParams = {
         pantalla_show,
+        tiempo_restante_show,
+        hora_actual_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
         tipo_content,
@@ -1496,6 +1481,8 @@ async function make_arr_pantalla(currentSlide){
         slide_actual,
         arr_pantalla: arr_pantalla_safe,
         pantalla_show,
+        tiempo_restante_show,
+        hora_actual_show,
         show_logo_en_fondo,
         show_imagen_en_fondo,
         tipo_content,
@@ -1540,6 +1527,10 @@ function actualizarPantallas({
 } = {}){
     console.log('=== function actualizarPantallas() ===');
 
+    // Actualizar datos de la hora antes de enviarlos
+    objHora.horaInicio = parseInt(eid_horaInicio.value, 10);
+    objHora.minutosInicio = parseInt(eid_minutosInicio.value, 10);
+
     const payload = {
         tipo: 'pantalla_update',
 
@@ -1547,10 +1538,10 @@ function actualizarPantallas({
         actualizarVista,//por defecto es true
 
         arr_pantalla,
-        // objPantallaParams,
         objPantallaParams: crearObjPantallaParamsParaPantalla(),
 
-        objTimer //para temporizador
+        objTimer, //para temporizador
+        objHora   //para hora actual
     };
     
     // iframe local
@@ -1653,6 +1644,8 @@ async function showTipoContent(btn, param){
             brillo_pantalla = 100;//reset
             show_bible_en_fondo = 0;//reset
             show_black_en_fondo = 0;//reset
+            tiempo_restante_show = 0;//reset
+            hora_actual_show = 0;//reset
 
             eid_fondo_body.className = '';//reset
             eid_fondo_body.style = '';//reset
@@ -1669,6 +1662,8 @@ async function showTipoContent(btn, param){
             localStorage.setItem('brillo_pantalla', brillo_pantalla);
             localStorage.setItem('show_bible_en_fondo', show_bible_en_fondo);
             localStorage.setItem('show_black_en_fondo', show_black_en_fondo);
+            localStorage.setItem('tiempo_restante_show', tiempo_restante_show);
+            localStorage.setItem('hora_actual_show', hora_actual_show);
         }
     }
 
@@ -1829,6 +1824,32 @@ async function showTipoContent(btn, param){
             localStorage.setItem('show_en_parte_top', show_en_parte_top);
             break;
             
+        //new    
+        case 'w'://w => mostrar el tiempo restante hasta el inicio del culto en la hora actual
+            if(tiempo_restante_show == 1){
+                tiempo_restante_show = 0;//next action
+                btn.classList.remove('btn_active');
+            }else{
+                tiempo_restante_show = 1;//next action
+                btn.classList.add('btn_active');
+            }
+            check_tiempo_restante_show();
+            localStorage.setItem('tiempo_restante_show', tiempo_restante_show);
+            break;
+            
+        //new    
+        case 'h'://h => mostrar la hora actual del culto
+            if(hora_actual_show == 1){
+                hora_actual_show = 0;//next action
+                btn.classList.remove('btn_active');
+            }else{
+                hora_actual_show = 1;//next action
+                btn.classList.add('btn_active');
+            }
+            check_hora_actual_show();
+            localStorage.setItem('hora_actual_show', hora_actual_show);
+            break;
+            
     
         default:
             break;
@@ -1844,6 +1865,8 @@ async function guardarEnLocalAndBd(param){
 
     //Admin control
     //p -> (pantalla) -> pantalla_show
+    //w -> (w una letra disponible) -> tiempo_restante_show
+    //h -> (hora)     -> hora_actual_show
     //i -> (iglesia)  -> show_logo_en_fondo
     //g -> (imagen)  -> show_imagen_en_fondo
     //b -> (bible)    -> show_bible_en_fondo
@@ -1859,11 +1882,13 @@ async function guardarEnLocalAndBd(param){
     //r -> (brillo)   -> brillo_pantalla
     //x -> (parte top) -> show_en_parte_top
 
-    if(['p','i','g','b','f','u',   'l','c','n',  't','z',   'r', 'x'].includes(param)){
+    if(['p','w','h',  'i','g','b','f','u',   'l','c','n',  't','z',   'r', 'x'].includes(param)){
         
         //1. asigno la variable global para localStorage
         objPantallaParams = {
             pantalla_show,
+            tiempo_restante_show,
+            hora_actual_show,
             show_logo_en_fondo,
             show_imagen_en_fondo,
             tipo_content,
@@ -1893,6 +1918,8 @@ async function guardarEnLocalAndBd(param){
         objPantallaParamsToSendToBd = {
             id_song,
             pantalla_show,
+            tiempo_restante_show,
+            hora_actual_show,
             show_logo_en_fondo,
             show_imagen_en_fondo,
             tipo_content,
@@ -2015,6 +2042,94 @@ async function ocultar_pantalla_show(){
 }
 
 
+
+function toggle_tiempo_restante_show(){
+    if(tiempo_restante_show){
+        tiempo_restante_show = 0;//siguiente accion
+    }else{        
+        tiempo_restante_show = 1;//siguiente accion
+    }
+    check_tiempo_restante_show();
+}
+function check_tiempo_restante_show(){
+    console.log('=== function check_tiempo_restante_show() ===');
+    console.log('tiempo_restante_show: ', tiempo_restante_show);
+
+    if(tiempo_restante_show){
+        mostrar_tiempo_restante_show();
+    }else{
+        ocultar_tiempo_restante_show();
+    }
+}
+async function mostrar_tiempo_restante_show(){   
+    eid_btn_tiempo_restante_show.classList.add('btn_active');
+    eid_horaRestanteHoly.classList.add('shown');
+    
+    localStorage.setItem('tiempo_restante_show','1');
+    await guardarEnLocalAndBd('w');//solo actualizo params de vista
+}
+async function ocultar_tiempo_restante_show(){
+    eid_btn_tiempo_restante_show.classList.remove('btn_active');
+    eid_horaRestanteHoly.classList.remove('shown');
+    
+    localStorage.setItem('tiempo_restante_show','0');
+    await guardarEnLocalAndBd('w');//solo actualizo params de vista
+}
+
+
+//hora_actual_show
+function toggle_hora_actual_show(){
+    if(hora_actual_show){
+        hora_actual_show = 0;//siguiente accion
+    }else{        
+        hora_actual_show = 1;//siguiente accion
+    }
+    check_hora_actual_show();
+}
+function check_hora_actual_show(){
+    console.log('=== function check_hora_actual_show() ===');
+    console.log('hora_actual_show: ', hora_actual_show);
+
+    if(hora_actual_show){
+        mostrar_hora_actual_show();
+    }else{
+        ocultar_hora_actual_show();
+    }
+}
+async function mostrar_hora_actual_show(){   
+    console.log('=== function mostrar_hora_actual_show() ===');
+
+    eid_horaHoly.classList.remove('grey');
+    eid_horaHoly.classList.add('azul');
+
+    makeBtnActive(eid_horaControlVista, eid_btn_mostrarHora);
+    
+    hora_actual_show = 1;
+    localStorage.setItem('hora_actual_show','1');
+    await guardarEnLocalAndBd('h');//solo actualizo params de vista
+            //make_arr_pantalla(currentSlide);//dentro hay pantallaShow REVISAR SI HACE FALTA!!!
+}
+async function ocultar_hora_actual_show(){
+    console.log('=== function ocultar_hora_actual_show() ===');
+
+    eid_horaHoly.classList.remove('azul');
+    eid_horaHoly.classList.add('grey');
+
+    if(horaHolyInterval){
+        // Sigue calculando la hora y el tiempo restante.
+        // Sólo cambia el aspecto.
+    } else {
+        // No hay render: mostrar placeholders.
+        eid_horaActualHoly.textContent = '--:--:--';
+        eid_horaRestanteHoly.textContent = '--:--';
+    }
+
+    makeBtnActive(eid_horaControlVista, eid_btn_ocultarHora);
+    
+    hora_actual_show = 0;
+    localStorage.setItem('hora_actual_show','0');
+    await guardarEnLocalAndBd('h');//solo actualizo params de vista
+}
 
 
 
@@ -3975,11 +4090,21 @@ function abrirPantalla(numero){
     }
 
     let str_get_param = '';
+    if(numero == 1){//pantalla escena
+        //t = parametro get, 
+        //'z' - //mostrar el slide en el center con: justify-content: center 
+        //'y' - //mostrar el timer 
+        //'w' - //mostrar el tiempo restante 
+        //'h' - //mostrar la hora actiual 
+        str_get_param = '?t=zwh';
+    }
     if(numero == 2){
         //t = parametro get, 
         //'z' - //mostrar el slide en el center con: justify-content: center 
         //'y' - //mostrar el timer 
-        str_get_param = '?t=zy';
+        //'w' - //mostrar el tiempo restante 
+        //'h' - //mostrar la hora actiual 
+        str_get_param = '?t=zywh';
     }
 
     const referencia = abrirReferencia(
@@ -5339,7 +5464,8 @@ function actualizarIframePantalla(){
         actualizarVista: true,
         arr_pantalla,
         objPantallaParams,
-        objTimer
+        objTimer,
+        objHora
     };
 
     miIframe.contentWindow.postMessage(
@@ -5358,7 +5484,8 @@ function crearPayloadPantalla({
         actualizarVista,
         arr_pantalla,
         objPantallaParams,
-        objTimer
+        objTimer,
+        objHora
     };
 }
 
@@ -5383,3 +5510,31 @@ function actualizarReferenciaPantalla(referencia){
         window.location.origin
     );
 }
+
+
+function makeBtnActive(contenedor, btn){
+    console.log('=== function makeBtnActive() ===');
+
+    if(!contenedor || !btn){
+        return;
+    }
+
+    resetBtnActive(contenedor);//reseteo btn_active de botones en el contenedor
+    btn.classList.add('btn_active');
+}
+
+
+function makeFldActive(contenedor, fld){
+    console.log('=== function makeFldActive() ===');
+
+    if(!contenedor || !fld){
+        return;
+    }
+
+    resetFldActive(contenedor);//reseteo fld_active de fieldset's en el contenedor
+    fld.classList.add('fld_active');
+}
+
+
+
+

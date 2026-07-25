@@ -24,6 +24,8 @@ let debug = false;
 //Vars para formar tipo de contenido por defecto
 //Admin control
 // let pantalla_show = 0;
+// let tiempo_restante_show = 0;
+// let hora_actual_show = 0;
 // let show_logo_en_fondo = 0;
 // let show_imagen_en_fondo = 0;
 // let tipo_content = '';//'es_bible_slide' o 'es_song_slide'
@@ -49,6 +51,8 @@ let debug = false;
 // (pantalla_show == 1) => mostrar slide con texto; 
 // (pantalla_show == 0) => ocultar slide y mostrar fondo con la biblia abierta
 let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//por defecto pantalla no se ve;
+let tiempo_restante_show = JSON.parse(localStorage.getItem('tiempo_restante_show') ?? '0');//por defecto tiempo restante no se ve;
+let hora_actual_show = JSON.parse(localStorage.getItem('hora_actual_show') ?? '0');//por defecto hora actual no se ve;
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
@@ -90,6 +94,8 @@ let arr_pantalla_str_new = '';
 
 let objPantallaParams_def = {
     pantalla_show,
+    tiempo_restante_show,
+    hora_actual_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
     tipo_content,
@@ -129,6 +135,17 @@ const eid_timerContent = document.getElementById('timerContent');
 const eid_timerText = document.getElementById('timerText');
 let intervalTimer = null;
 
+//hora actual
+const eid_contenedor_hora = document.getElementById('contenedor_hora');
+const eid_horaOverlay = document.getElementById('horaOverlay');
+const eid_horaContent = document.getElementById('horaContent');
+//const eid_horaText = document.getElementById('horaText');
+const eid_horaActual = document.getElementById('horaActual');
+const eid_horaRestante = document.getElementById('horaRestante');
+let intervalHora = null;
+
+let timeoutIdentificador = null;//se usa en mostrarNumeroPantalla()
+
 
 
 //==================================================================================//
@@ -142,6 +159,7 @@ localStorage.setItem('pantalla_abierta','true');
 document.addEventListener('DOMContentLoaded', () => {
     cargarEstadoInicial();
     iniciarRenderTimer();//para timer
+    iniciarRenderHora();//para hora actual
     
     if(window.opener && !window.opener.closed){
         window.opener.postMessage(
@@ -236,6 +254,31 @@ window.addEventListener('message', async (event) => {
                 objTimer = data.objTimer;
                 pintarTimer();
             }
+
+            if(data.objHora){
+
+                objHora = data.objHora;
+                console.log('objHora recibida:', objHora);
+            
+                // Arrancar / parar el cálculo
+                if(objHora.running){
+                    iniciarRenderHora();
+                }else{
+                    pararRenderHora();
+                }
+
+                console.log('ANTES:', eid_horaOverlay.className);
+            
+                // Mostrar / ocultar el div
+                if(objHora.visible){
+                    eid_horaOverlay.classList.add('shown');
+                }else{
+                    eid_horaOverlay.classList.remove('shown');
+                }
+
+                console.log('DESPUÉS:', eid_horaOverlay.className);
+            }
+
             break;
 
         case 'identificar_pantalla':
@@ -504,6 +547,8 @@ function aplicarVista(){
 
     //Admin control
     pantalla_show = (objPantallaParams.pantalla_show == '1') ? 1 : 0;
+    tiempo_restante_show = (objPantallaParams.tiempo_restante_show == '1') ? 1 : 0;
+    hora_actual_show = (objPantallaParams.hora_actual_show == '1') ? 1 : 0;
     show_logo_en_fondo = (objPantallaParams.show_logo_en_fondo == '1') ? 1 : 0;
     show_imagen_en_fondo = (objPantallaParams.show_imagen_en_fondo == '1') ? 1 : 0;
     tipo_content = (objPantallaParams.tipo_content != '') ? objPantallaParams.tipo_content : 'es_song_slide';
@@ -681,12 +726,22 @@ function aplicarVista(){
 
         aplicarBrilloPantalla(brillo_pantalla);//la comprobacion del rango (10-100) tengo dentro
 
+        //tiempo_restante_show
+        if(tiempo_restante_show){
+            eid_horaRestante.className = '';
+            eid_horaRestante.classList.add('d-block');
+        }else{
+            eid_horaRestante.className = '';
+            eid_horaRestante.classList.add('d-none');
+        }
+
         // if(tipo_fuente == 'm'){
         //     eid_contenedor.classList.add('monospace_font');
         // }else{
         //     eid_contenedor.classList.remove('monospace_font');
         // }        
-    }
+
+    }//end - si hay contenedor
 
     //si está permitido para el usuario controlar la vista, ...
     if(user_view_control){
@@ -727,6 +782,7 @@ async function aplicarVistaUsuario(){
     //case 'z'://center la 'c' está ocupada para acordes 'chords' por eso => 'z'
     //case 'x'://top => mostrar en la parte top (50% de arriba de la pantalla)
     //case 'y'://mostrar el timer solo en pantalla 2 (sala)
+    //case 'w'://mostrar el tiempo restante para inicio del culto
 
 
     //parametro GET 't' de 'tipo de letra'
@@ -859,6 +915,24 @@ async function aplicarVistaUsuario(){
         }else{
             eid_contenedor_timer.className = '';
             eid_contenedor_timer.classList.add('d-none');
+        }
+        
+        //tiempo_restante_show
+        if(t.includes('w')){
+            eid_horaRestante.className = '';
+            eid_horaRestante.classList.add('d-block');
+        }else{
+            eid_horaRestante.className = '';
+            eid_horaRestante.classList.add('d-none');
+        }
+
+        //hora actual
+        if(t.includes('h')){
+            eid_contenedor_hora.className = '';
+            eid_contenedor_hora.classList.add('d-block');
+        }else{
+            eid_contenedor_hora.className = '';
+            eid_contenedor_hora.classList.add('d-none');
         }
     }
 }
@@ -1335,13 +1409,6 @@ function aplicarMediaFondo(mediaType, ruta){
 // timer
 //============================================================//
 
-function old_iniciarRenderTimer(){
-
-    clearInterval(intervalTimer);
-    pintarTimer();
-
-    intervalTimer = setInterval(pintarTimer,1000);
-}
 
 function iniciarRenderTimer(){
 
@@ -1350,6 +1417,32 @@ function iniciarRenderTimer(){
     }
 
     intervalTimer = setInterval(pintarTimer, 1000);
+}
+
+function iniciarRenderHora(){
+
+    if(intervalHora){
+        return;
+    }
+
+    pintarHora();
+
+    intervalHora = setInterval(pintarHora, 1000);
+}
+
+
+function pararRenderHora(){
+    console.log('Antes:', eid_horaOverlay.className);
+
+    if(intervalHora){
+        clearInterval(intervalHora);
+        intervalHora = null;
+    }
+
+    eid_horaActual.textContent = '--:--:--';
+    eid_horaRestante.textContent = '--:--';
+
+    console.log('Después:', eid_horaOverlay.className);
 }
 
 
@@ -1365,10 +1458,9 @@ function pintarTimer(){
         eid_timerOverlay.classList.remove('shown');
         return;
     }
+    // console.log(objTimer);
     
     eid_timerOverlay.classList.add('shown');
-
-    // console.log(objTimer);
 
     const estado = calcularEstadoTimer();
 
@@ -1385,7 +1477,60 @@ function pintarTimer(){
 }
 
 
-let timeoutIdentificador = null;
+function pintarHora(){
+    console.log('=== function pintarHora() ===');
+    //console.log('Pantalla:', Date.now());
+
+    if(typeof objHora === 'undefined' || !objHora){
+        return;
+    }
+
+    const ahora = new Date();
+    const inicio = new Date();
+
+    inicio.setHours(
+        objHora.horaInicio,
+        objHora.minutosInicio,
+        0,
+        0
+    );
+
+    const diferenciaMs = inicio.getTime() - ahora.getTime();
+    
+    eid_horaActual.textContent = ahora.toLocaleTimeString(
+        'es-ES',
+        { hour12: false }
+    );
+
+    if(diferenciaMs > 0){
+        eid_horaRestante.innerHTML = `
+            <span class="horaRestante_text">До початку залишилось: </span>
+            <span class="horaRestante_time">${formatearHora(diferenciaMs, true)}</span>
+        `;
+    }else{
+        const transcurridoMs = Math.abs(diferenciaMs); 
+        //console.log('transcurridoMs: ', transcurridoMs);
+        
+        const transcurridoMs_formateado = formatearHora(transcurridoMs, false); 
+        //console.log('transcurridoMs_formateado:', transcurridoMs_formateado);
+        
+        if(transcurridoMs_formateado == 0){
+            eid_horaRestante.textContent = 'Початок богослужіння';
+        }else{
+            //eid_horaRestante.textContent = 'Від початку минуло: <br>' + transcurridoMs_formateado;
+            eid_horaRestante.innerHTML = `
+                <span class="horaRestante_text">Від початку минуло: </span>
+                <span class="horaRestante_time">${transcurridoMs_formateado}</span>
+            `;  
+        }   
+    }
+}
+
+
+
+
+
+
 
 function mostrarNumeroPantalla(numero){
 

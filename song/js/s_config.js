@@ -121,6 +121,10 @@ const ver_esquema_ul_action = eid_block_esquema.querySelector('.vklad_ver_esquem
 const crear_esquema_ul_action = eid_block_esquema.querySelector('.vklad_crear_esquema .ul_action');
 const select_slide_ul_action = eid_block_esquema.querySelector('.vklad_select_slide .ul_action');
 
+const eid_btn_ver_esquema = document.getElementById('btn_ver_esquema');
+const eid_btn_crear_esquema = document.getElementById('btn_crear_esquema');
+const eid_btn_select_slide = document.getElementById('btn_select_slide');
+
 //bl_parte_l
 const ver_esquema_song_bloques = eid_block_esquema.querySelector('.vklad_ver_esquema .song_bloques');
 //bl_parte_c
@@ -175,6 +179,10 @@ const eid_btn_show_en_top = document.getElementById('btn_show_en_top');
 const eid_btn_show_en_parte_top = document.getElementById('btn_show_en_parte_top');
 const eid_btn_show_en_center = document.getElementById('btn_show_en_center');
 
+
+
+
+const eid_btn_tiempo_restante_show = document.getElementById('btn_tiempo_restante_show');
 //========================================================//
 //end - block_esquema
 //========================================================//
@@ -190,6 +198,11 @@ const eid_block_cancion_body = document.getElementById('block_cancion_body');
 //edit_blocks_head
 const cancion_option_inner = eid_block_cancion.querySelector('.wr_block_option_inner');
 const cancion_ul_action = eid_block_cancion.querySelector('.ul_action');
+
+const eid_btn_song_ver = document.getElementById('btn_song_ver');//revisar si hace falta...
+const eid_btn_song_editar = document.getElementById('btn_song_editar');
+const eid_btn_song_eliminar = document.getElementById('btn_song_eliminar');
+const eid_btn_song_nueva = document.getElementById('btn_song_nueva');
 
 //bl_parte_l
 const cancion_song_bloques = eid_block_cancion.querySelector('.song_bloques');
@@ -295,14 +308,61 @@ const eid_toast_container = document.getElementById("toast_container");
 //==================================================================//
 //start - timer
 //==================================================================//
-const eid_timerMinutos = document.getElementById('timerMinutos');
+const eid_timerMinutos = document.getElementById('timerMinutos');//input
 
 const eid_timerDisplay   = document.getElementById('timerDisplay');
+const eid_timerControlPanel   = document.getElementById('timerControlPanel');
+const eid_timerControlMinutos   = document.getElementById('timerControlMinutos');
+const eid_timerControlVista   = document.getElementById('timerControlVista');
+
+const eid_btn_iniciarTimer   = document.getElementById('btn_iniciarTimer');
+const eid_btn_pararTimer   = document.getElementById('btn_pararTimer');
+const eid_btn_pausarTimer   = document.getElementById('btn_pausarTimer');
+const eid_btn_continuarTimer   = document.getElementById('btn_continuarTimer');
+const eid_btn_reiniciarTimer   = document.getElementById('btn_reiniciarTimer');
+
+const eid_btn_restarMinutosTimer   = document.getElementById('btn_restarMinutosTimer');
+const eid_btn_sumarMinutosTimer   = document.getElementById('btn_sumarMinutosTimer');
+
+const eid_btn_mostrarTimer   = document.getElementById('btn_mostrarTimer');
+const eid_btn_ocultarTimer   = document.getElementById('btn_ocultarTimer');
+
+
 const eid_estadoTimerHoly = document.getElementById('estadoTimerHoly');
 const eid_timerTextHoly   = document.getElementById('timerTextHoly');
 const eid_timerPausadoHoly   = document.getElementById('timerPausadoHoly');
 const eid_timerRestadoHoly   = document.getElementById('timerRestadoHoly');
 const eid_timerSumadoHoly   = document.getElementById('timerSumadoHoly');
+//==================================================================//
+//end - timer
+//==================================================================//
+
+
+//==================================================================//
+//start - hora
+//==================================================================//
+const eid_cbox_tiempoRestante = document.getElementById('cbox_tiempoRestante');//checkbox
+const eid_horaInicio = document.getElementById('horaInicio');//input
+const eid_minutosInicio = document.getElementById('minutosInicio');//input
+
+const eid_horaControlPanel = document.getElementById('horaControlPanel');
+const eid_horaControlVista   = document.getElementById('horaControlVista');
+
+const eid_horaHoly = document.getElementById('horaHoly');
+const eid_estadoHoraHoly = document.getElementById('estadoHoraHoly');
+const eid_horaActualHoly = document.getElementById('horaActualHoly');
+const eid_horaRestanteHoly = document.getElementById('horaRestanteHoly');
+
+const eid_btn_iniciarHora   = document.getElementById('btn_iniciarHora');
+const eid_btn_pararHora   = document.getElementById('btn_pararHora');
+
+const eid_btn_mostrarHora   = document.getElementById('btn_mostrarHora');
+const eid_btn_ocultarHora   = document.getElementById('btn_ocultarHora');
+
+//==================================================================//
+//end - hora
+//==================================================================//
+
 
 //====================================================//
 //Medidas de pantallas para Media Queries - START
@@ -577,6 +637,8 @@ let una_pantalla_datos = {};//objeto con datos de una pantalla para make_arr_pan
 // (pantalla_show == 1) => mostrar slide con texto; 
 // (pantalla_show == 0) => ocultar slide y mostrar fondo con la biblia abierta
 let pantalla_show = JSON.parse(localStorage.getItem('pantalla_show') ?? '0');//por defecto pantalla no se ve;
+let tiempo_restante_show = JSON.parse(localStorage.getItem('tiempo_restante_show') ?? '0');// def false; no se ve el tiempo restante hasta el inicio
+let hora_actual_show = JSON.parse(localStorage.getItem('hora_actual_show') ?? '0');// def false; no se ve el la hora actual 
 
 // (show_logo_en_fondo = true) => mostrar el logotipo de la iglesia cuando el fondo esta mostrado con (pantalla_show = false)
 let show_logo_en_fondo = JSON.parse(localStorage.getItem('show_logo_en_fondo') ?? '0');// def false;
@@ -611,6 +673,7 @@ let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');/
 
 
 
+
 let display_title_detalles = localStorage.getItem('display_title_detalles') || 'none';// def 'none';
 let display_form_detalles = localStorage.getItem('display_form_detalles') || 'none';// def 'none';
 
@@ -622,6 +685,8 @@ let objPantalla = {
     slide_actual,
     arr_pantalla, //los datos en html con '__||__' en vez de comillas dobles (")
     pantalla_show,
+    tiempo_restante_show,
+    hora_actual_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
     tipo_content,
@@ -647,6 +712,8 @@ let objPantallaToSendToBd = {
     slide_actual,
     arr_pantalla,//aki se añadirá 'arr_pantalla_safe'
     pantalla_show,
+    tiempo_restante_show,
+    hora_actual_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
     tipo_content,
@@ -672,6 +739,8 @@ let objPantallaToSendToBd_str = '';
 let objPantallaParams = {
     tipo_content: 'es_song_slide',
     pantalla_show,
+    tiempo_restante_show,
+    hora_actual_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
@@ -696,6 +765,8 @@ let objPantallaParamsToSendToBd = {
     tipo_content,
     id_song,
     pantalla_show,
+    tiempo_restante_show,
+    hora_actual_show,
     show_logo_en_fondo,
     show_imagen_en_fondo,
     bg_ruta,
@@ -949,3 +1020,10 @@ let objTimer = {
     tiempoRestadoMs: 0,           // total añadido con sumarMinutosTimer()
     tiempoSumadoMs: 0             // total restado con restarMinutosTimer()
 };
+
+let objHora = {
+    visible: false,   // controla únicamente si el div se muestra
+    running: false,   // controla si el reloj está calculándose
+    //horaInicio: ...,
+   // minutosInicio: ...
+}
