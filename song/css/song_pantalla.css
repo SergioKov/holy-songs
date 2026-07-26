@@ -143,6 +143,9 @@ S {
 .d-inline-block {
     display: inline-block !important;
 }
+.d-flex {
+    display: flex !important;
+}
 
 .trad {
     box-sizing: border-box;
