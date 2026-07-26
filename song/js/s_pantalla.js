@@ -729,7 +729,7 @@ function aplicarVista(){
         //tiempo_restante_show
         if(tiempo_restante_show){
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-block');
+            eid_horaRestante.classList.add('');//como es flex no añado 'd-block'
         }else{
             eid_horaRestante.className = '';
             eid_horaRestante.classList.add('d-none');
@@ -920,7 +920,7 @@ async function aplicarVistaUsuario(){
         //tiempo_restante_show
         if(t.includes('w')){
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-block');
+            eid_horaRestante.classList.add('');//como es flex no añado 'd-block'
         }else{
             eid_horaRestante.className = '';
             eid_horaRestante.classList.add('d-none');
