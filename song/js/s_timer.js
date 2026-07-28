@@ -304,7 +304,9 @@ function iniciarRenderHoraHoly(){
 
     makeBtnActive(eid_horaControlPanel, eid_btn_iniciarHora);
 
+    // Ya está funcionando
     if(horaHolyInterval){
+        //ya que está funcionando, no vuelvo a lanzarla de nuevo. return.
         return;
     }
 
@@ -318,7 +320,7 @@ function iniciarRenderHoraHoly(){
     objHora.running = true;
     console.log('objHora: ', objHora);
 
-    enviarHoraPantallas();// pantalla.php recibe visible=true
+    enviarHoraPantallas(); // pantalla.php recibe running=true
 }
 
 function pararRenderHoraHoly(){
@@ -336,12 +338,18 @@ function pararRenderHoraHoly(){
 
     eid_estadoHoraHoly.textContent = 'PARADO';
     eid_horaActualHoly.textContent = '--:--:--';//reset
-    eid_horaRestanteHoly.textContent = '--:--';//reset
+    eid_horaRestanteHoly_text.textContent = '1.зупинено...';//reset
+    eid_horaRestanteHoly_time.textContent = '--:--';//reset
 
     objHora.running = false;
     console.log('objHora: ', objHora);
 
     enviarHoraPantallas();
+
+    setTimeout(()=>{
+        //alert('tiempo parado. voy a ocultar la hora.')
+        ocultarHora();
+    },2000);
 }
 
 function mostrarHora(){
@@ -358,16 +366,11 @@ function mostrarHora(){
     objHora.visible = true;
     console.log('objHora: ', objHora);
 
-    enviarHoraPantallas();
+    enviarHoraPantallas();    
 }
 
 function ocultarHora(){
     console.log('=== function ocultarHora() ===');
-    
-    // if(!horaHolyInterval){
-    //     eid_horaActualHoly.textContent = '--:--:--';
-    //     eid_horaRestanteHoly.textContent = '--:--';
-    // }
 
     ocultar_hora_actual_show();
     eid_estadoHoraHoly.textContent = 'OCULTADO';
@@ -377,6 +380,29 @@ function ocultarHora(){
 
     enviarHoraPantallas();
 }
+
+
+
+
+function mostrarHoraRestante(){
+    console.log('=== function mostrarHoraRestante() ===');
+    
+    objHora.visible_restante = true;
+    console.log('objHora: ', objHora);
+
+    enviarHoraPantallas();    
+}
+
+function ocultarHoraRestante(){
+    console.log('=== function ocultarHora() ===');
+
+    objHora.visible_restante = false;
+    console.log('objHora: ', objHora);
+
+    enviarHoraPantallas();
+}
+
+
 
 function formatearHora(ms, redondearArriba = true){
 
@@ -411,7 +437,8 @@ function pintarHoraHoly(){
 
     if(!horaHolyInterval){
         eid_horaActualHoly.textContent = '--:--:--';//reset
-        eid_horaRestanteHoly.textContent = '--:--';//reset
+        eid_horaRestanteHoly_text.textContent = 'Годинник зупинено...';//reset
+        eid_horaRestanteHoly_time.textContent = '--:--';//reset
         return;
     }
 
@@ -444,7 +471,8 @@ function pintarHoraHoly(){
     );
 
     if(diferenciaMs > 0){
-        eid_horaRestanteHoly.textContent = 'До початку залишилось: ' + formatearHora(diferenciaMs, true);
+        eid_horaRestanteHoly_text.textContent = 'До початку залишилось: ';
+        eid_horaRestanteHoly_time.textContent = formatearHora(diferenciaMs, true);
     }else{
         const transcurridoMs = Math.abs(diferenciaMs); 
         //console.log('transcurridoMs: ', transcurridoMs);
@@ -453,9 +481,11 @@ function pintarHoraHoly(){
         //console.log('transcurridoMs_formateado:', transcurridoMs_formateado);
         
         if(transcurridoMs_formateado == 0){
-            eid_horaRestanteHoly.textContent = 'Початок богослужіння';
+            eid_horaRestanteHoly_text.textContent = 'Початок богослужіння';
+            eid_horaRestanteHoly_time.innerHTML = '&nbsp;';
         }else{
-            eid_horaRestanteHoly.textContent = 'Від початку минуло: ' + transcurridoMs_formateado;    
+            eid_horaRestanteHoly_text.textContent = 'Від початку минуло: ';
+            eid_horaRestanteHoly_time.textContent = transcurridoMs_formateado;    
         }   
     }
 }

@@ -2064,6 +2064,7 @@ function check_tiempo_restante_show(){
 async function mostrar_tiempo_restante_show(){   
     eid_btn_tiempo_restante_show.classList.add('btn_active');
     eid_horaRestanteHoly.classList.add('shown');
+    mostrarHoraRestante();    
     
     localStorage.setItem('tiempo_restante_show','1');
     await guardarEnLocalAndBd('w');//solo actualizo params de vista
@@ -2071,6 +2072,7 @@ async function mostrar_tiempo_restante_show(){
 async function ocultar_tiempo_restante_show(){
     eid_btn_tiempo_restante_show.classList.remove('btn_active');
     eid_horaRestanteHoly.classList.remove('shown');
+    ocultarHoraRestante();
     
     localStorage.setItem('tiempo_restante_show','0');
     await guardarEnLocalAndBd('w');//solo actualizo params de vista
@@ -2121,7 +2123,8 @@ async function ocultar_hora_actual_show(){
     } else {
         // No hay render: mostrar placeholders.
         eid_horaActualHoly.textContent = '--:--:--';
-        eid_horaRestanteHoly.textContent = '--:--';
+        eid_horaRestanteHoly_text.textContent = 'Годинник не увімкнено...';
+        eid_horaRestanteHoly_time.textContent = '--:--';
     }
 
     makeBtnActive(eid_horaControlVista, eid_btn_ocultarHora);

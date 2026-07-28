@@ -41,7 +41,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
-    
+
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Michroma&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Michroma&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="./css/song_pantalla.css">
     <link rel="stylesheet" href="./css/song_pantalla_bt.css">
     <?php 
@@ -105,29 +108,78 @@
     </div><!--/#fondo-->
 
 
+
+
     <div id="contenedor" class=""></div><!--/#contenedor-->
 
 
+
+    <!-- Hora Actual -->
     <div id="contenedor_hora">
         <div id="horaOverlay" class="hora_overlay">
             <div id="horaContent" class="hora_content">
-                <div id="horaActual">18:55:59</div>
-                <div id="horaRestante">4:01</div>
+                
+                <!-- Logo -->
+                <div class="wr_logo_iglesia">
+                    <img src="images/logo_iglesia_oro_transparent.png">
+                </div>
+
+                <!-- Tiempo Restante hasta el Inicio -->
+                <div id="horaRestante">
+                    <span id="horaRestante_text" class="hr_text">До початку залишилось: </span>
+                    <span id="horaRestante_time" class="hr_time hora_font">4:25</span>
+                </div><!--/ Tiempo Restante hasta el Inicio -->
+
+
+                <!-- Reloj -->
+                <div class="wr_reloj">
+                    <div class="wr_reloj_inner">
+                        <div id="horaActual" class="hora_reloj hora_font">13:05:59</div>
+                    </div>
+                    <div class="wr_nozhki">
+                        <div class="nozhka"></div>
+                        <div class="nozhka"></div>
+                    </div>
+                </div><!--/ Reloj -->
+
+                
             </div>
         </div><!--/#horaOverlay-->
     </div><!--/#contenedor_hora-->
+    <!--/ Hora Actual -->
+
+    
 
 
+    <!-- Temporizador -->
     <div id="contenedor_timer">
         <div id="timerOverlay" class="timer_overlay">
+            
+            <!-- Temporizador atras -->
             <div id="timerContent" class="timer_content">
-                <span id="timerText">20:00</span>
+                <span id="timerText" class="hora_font">20:00</span>
             </div>
+
+                        
+            <!-- Reloj -->
+            <div class="wr_reloj">
+                <div class="wr_reloj_inner">
+                    <div id="timerHoraActual" class="hora_reloj hora_font">13:24:57</div>
+                </div>
+                <div class="wr_nozhki">
+                    <div class="nozhka"></div>
+                    <div class="nozhka"></div>
+                </div>
+            </div><!--/ Reloj -->
+
         </div><!--/#timerOverlay-->
     </div><!--/#contenedor_timer-->
+    <!--/ Temporizador -->
+
 
 
     <div id="identificadorPantalla"></div>
+
 
         
     <script src="js/s_pantalla.js"></script>

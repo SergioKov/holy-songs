@@ -133,6 +133,8 @@ const eid_contenedor_timer = document.getElementById('contenedor_timer');
 const eid_timerOverlay = document.getElementById('timerOverlay');
 const eid_timerContent = document.getElementById('timerContent');
 const eid_timerText = document.getElementById('timerText');
+const eid_timerHoraActual = document.getElementById('timerHoraActual');
+
 let intervalTimer = null;
 
 //hora actual
@@ -142,6 +144,9 @@ const eid_horaContent = document.getElementById('horaContent');
 //const eid_horaText = document.getElementById('horaText');
 const eid_horaActual = document.getElementById('horaActual');
 const eid_horaRestante = document.getElementById('horaRestante');
+const eid_horaRestante_text = document.getElementById('horaRestante_text');
+const eid_horaRestante_time = document.getElementById('horaRestante_time');
+
 let intervalHora = null;
 
 let timeoutIdentificador = null;//se usa en mostrarNumeroPantalla()
@@ -274,6 +279,13 @@ window.addEventListener('message', async (event) => {
                     eid_horaOverlay.classList.add('shown');
                 }else{
                     eid_horaOverlay.classList.remove('shown');
+                }
+
+                // Mostrar / ocultar el div de horaRestante
+                if(objHora.visible_restante){
+                    eid_horaRestante.classList.add('shown');
+                }else{
+                    eid_horaRestante.classList.remove('shown');
                 }
 
                 console.log('DESPUÉS:', eid_horaOverlay.className);
@@ -729,10 +741,10 @@ function aplicarVista(){
         //tiempo_restante_show
         if(tiempo_restante_show){
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-flex');//como es flex no añado 'd-block'
+            eid_horaRestante.classList.add('shown');//como es flex no añado 'd-block' en '.shown hay flex'
         }else{
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-none');
+            eid_horaRestante.classList.remove('shown');
         }
 
         // if(tipo_fuente == 'm'){
@@ -920,10 +932,10 @@ async function aplicarVistaUsuario(){
         //tiempo_restante_show
         if(t.includes('w')){
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-flex');//como es flex no añado 'd-block'
+            eid_horaRestante.classList.add('shown');//como es flex no añado 'd-block' en '.shown hay flex'
         }else{
             eid_horaRestante.className = '';
-            eid_horaRestante.classList.add('d-none');
+            eid_horaRestante.classList.remove('shown');
         }
 
         //hora actual
@@ -1440,7 +1452,8 @@ function pararRenderHora(){
     }
 
     eid_horaActual.textContent = '--:--:--';
-    eid_horaRestante.textContent = '--:--';
+    eid_horaRestante_text.textContent = 'Годинник зупинено...';
+    eid_horaRestante_time.textContent = '--:--';
 
     console.log('Después:', eid_horaOverlay.className);
 }
@@ -1459,6 +1472,19 @@ function pintarTimer(){
         return;
     }
     // console.log(objTimer);
+
+    const ahora = new Date();
+    const h = String(ahora.getHours()).padStart(2, '0');
+    const m = String(ahora.getMinutes()).padStart(2, '0');
+    const s = String(ahora.getSeconds()).padStart(2, '0');
+
+    eid_timerHoraActual.innerHTML = `
+        <span class="hh">${h}</span>
+        <span class="separadorHora">:</span>
+        <span class="mm">${m}</span>
+        <span class="separadorHora">:</span>
+        <span class="ss">${s}</span>
+    `;    
     
     eid_timerOverlay.classList.add('shown');
 
@@ -1496,32 +1522,51 @@ function pintarHora(){
     );
 
     const diferenciaMs = inicio.getTime() - ahora.getTime();
-    
-    eid_horaActual.textContent = ahora.toLocaleTimeString(
-        'es-ES',
-        { hour12: false }
-    );
+
+    const h = String(ahora.getHours()).padStart(2, '0');
+    const m = String(ahora.getMinutes()).padStart(2, '0');
+    const s = String(ahora.getSeconds()).padStart(2, '0');
+
+    eid_horaActual.innerHTML = `
+        <span class="hh">${h}</span>
+        <span class="separadorHora">:</span>
+        <span class="mm">${m}</span>
+        <span class="separadorHora">:</span>
+        <span class="ss">${s}</span>
+    `;
 
     if(diferenciaMs > 0){
-        eid_horaRestante.innerHTML = `
-            <span class="horaRestante_text">До початку залишилось: </span>
-            <span class="horaRestante_time">${formatearHora(diferenciaMs, true)}</span>
-        `;
-    }else{
+        const restanteMs = Math.abs(diferenciaMs); 
+        console.log('restanteMs: ', restanteMs);
+
+        const restanteMs_formateado = formatearHora(restanteMs, true); 
+        console.log('restanteMs_formateado:', restanteMs_formateado);
+
+        eid_horaRestante_text.innerHTML = 'До початку залишилось: ';
+        
+        if(restanteMs_formateado < 60){
+            eid_horaRestante_time.classList.add('pulsar');
+            eid_horaRestante_time.innerHTML = restanteMs_formateado;
+        }else{ 
+            eid_horaRestante_time.classList.remove('pulsar');
+            eid_horaRestante_time.innerHTML = formatearHora(diferenciaMs, true);
+        }
+
+    }else{        
         const transcurridoMs = Math.abs(diferenciaMs); 
         //console.log('transcurridoMs: ', transcurridoMs);
         
         const transcurridoMs_formateado = formatearHora(transcurridoMs, false); 
         //console.log('transcurridoMs_formateado:', transcurridoMs_formateado);
         
+        eid_horaRestante_time.classList.remove('pulsar');
+
         if(transcurridoMs_formateado == 0){
-            eid_horaRestante.textContent = 'Початок богослужіння';
-        }else{
-            //eid_horaRestante.textContent = 'Від початку минуло: <br>' + transcurridoMs_formateado;
-            eid_horaRestante.innerHTML = `
-                <span class="horaRestante_text">Від початку минуло: </span>
-                <span class="horaRestante_time">${transcurridoMs_formateado}</span>
-            `;  
+            eid_horaRestante_text.innerHTML = 'Початок богослужіння: ';
+            eid_horaRestante_time.innerHTML = '&nbsp;';            
+        }else{ 
+            eid_horaRestante_text.innerHTML = 'Від початку минуло: ';
+            eid_horaRestante_time.innerHTML = transcurridoMs_formateado;
         }   
     }
 }

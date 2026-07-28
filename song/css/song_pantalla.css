@@ -4,6 +4,14 @@
     padding:0;
 }
 
+@font-face {
+	font-family: 'Seven Segment';
+    src:
+    local("Seven Segment"),
+    url("fonts/Seven Segment.woff") format("woff"),
+    url("fonts/Seven Segment.ttf") format("truetype");    
+}
+
 /* variables */
 :root {
     --fade-time: 500ms;
@@ -583,15 +591,24 @@ fieldset.kuplet {
     opacity: 0;
     visibility: hidden;
 
-    transition:
+    transition: 
         opacity 1s ease,
         visibility 1s;
+    
+    padding: 2rem;
+    font-weight: bold;
 }
 .timer_overlay.shown,
 .hora_overlay.shown
 {
     opacity: 1;
     visibility: visible;
+}
+
+.hora_overlay {
+    background-image: url('../images/iglesia_fondo_azul.png');
+    background-size: cover;
+    background-position: center;
 }
 
 
@@ -605,7 +622,7 @@ fieldset.kuplet {
     line-height: 1;
     color: #fff;
     text-shadow:
-        0 0 10px #000,
+        0 0 30px #000,
         0 0 30px #000;
 }
 
@@ -694,11 +711,8 @@ fieldset.kuplet {
 }
 
 
-#contenedor_timer, 
-#contenedor_hora 
-{
-    display: none;
-}
+
+
 
 
 /* texto de hora */
@@ -706,23 +720,17 @@ fieldset.kuplet {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
     font-weight: bold;
     color: #fff;
-    text-shadow: 0 0 10px #000, 0 0 30px #000;
+    /* text-shadow: 0 0 10px #000, 0 0 30px #000; */
     width: 100%;
     height: 100%;
-    gap: 3rem;
+    gap: 2rem;
 }
 
-#horaActual{
-    font-size:min(16vw, 26vh);
-    line-height:1;
- 
-    
-    white-space:nowrap;
-}
+
 
 #horaRestante {
     margin-top: .15em;
@@ -738,6 +746,149 @@ fieldset.kuplet {
     justify-content: center;
 }
 
-#horaRestante_time {
-    color: orange;
+#contenedor_hora,
+#contenedor_timer,
+#horaRestante 
+{
+    display: none;
+}
+
+#horaRestante.shown {
+    display: flex;
+}
+
+
+.hora_reloj {
+    color: #ffffff;
+    font-size: min(16vw, 26vh);
+    line-height: 1;
+    white-space: nowrap;
+    padding: 1rem 3rem 1rem;
+    border-radius: 1rem;
+    outline: 0.3rem solid white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.hr_text {
+    color: #2196f3;
+}
+
+.hr_time {
+    color: #ffffff;
+    font-size: min(10vw, 30vh);
+    transition: 1s ease;
+}
+
+
+#timerOverlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.wr_reloj {
+    background: transparent;
+}
+.wr_reloj_inner {
+    padding: 10px;
+    outline: 7px solid white;
+    border-radius: 25px;
+}
+
+.wr_reloj_inner,
+.hora_reloj {
+    background: #2196f3;
+    /* background: #9C27B0; */
+}
+
+
+.wr_nozhki {
+    /* background: red; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 50px;
+    flex-direction: row;
+}
+.wr_nozhki .nozhka {
+    background: #ffffff;
+    width: 20%;
+    border: 5px solid white;
+    border-radius: 0 0 15px 15px;
+    height: 10px;
+    margin-top: 0px;
+}
+
+.hora_font {
+    font-family: "Chivo Mono", monospace;
+}
+
+.wr_logo_iglesia {
+    /* background: red; */
+    height: 15%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wr_logo_iglesia img {
+    width: auto;
+    height: 100%;
+}
+
+
+
+
+.pulsar{
+    border-radius:1rem;
+    padding:1rem 3rem;
+    animation:pulsarRojo 1s ease-in-out infinite;
+}
+
+@keyframes pulsarRojo{
+
+    from{
+        /* background:#ffffff; */
+        /* color:#ff0000; */
+        transform:scale(1);
+        opacity: 1;
+    }
+
+    to{
+        /* background:#ff0000; */
+        /* color:#ffffff; */
+        transform:scale(2);
+        opacity: 0;
+    }
+
+}
+
+
+.separadorHora{
+    animation: blinkSeparador 1s steps(1,end) infinite;
+}
+
+@keyframes blinkSeparador{
+    0%,49.999%{
+        visibility:visible;
+    }
+    50%,100%{
+        visibility:hidden;
+    }
+}
+
+.hh {
+    /* background: blue; */
+} 
+.mm {
+    /* background: #03a609; */
+}
+
+.ss {
+    /* font-size: 60%; */
+    /* background:red; */
+    /* margin-left: 2rem; */
+    /* display: inline-block; */
 }

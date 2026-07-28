@@ -352,6 +352,8 @@ const eid_horaHoly = document.getElementById('horaHoly');
 const eid_estadoHoraHoly = document.getElementById('estadoHoraHoly');
 const eid_horaActualHoly = document.getElementById('horaActualHoly');
 const eid_horaRestanteHoly = document.getElementById('horaRestanteHoly');
+const eid_horaRestanteHoly_text = document.getElementById('horaRestanteHoly_text');
+const eid_horaRestanteHoly_time = document.getElementById('horaRestanteHoly_time');
 
 const eid_btn_iniciarHora   = document.getElementById('btn_iniciarHora');
 const eid_btn_pararHora   = document.getElementById('btn_pararHora');
@@ -1024,6 +1026,7 @@ let objTimer = {
 let objHora = {
     visible: false,   // controla únicamente si el div se muestra
     running: false,   // controla si el reloj está calculándose
+    visible_restante: true,   // controla únicamente si el div de hora restante se muestra
     //horaInicio: ...,
    // minutosInicio: ...
 }

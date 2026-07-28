@@ -4895,7 +4895,10 @@ fieldset.kuplet.partial{
     font-family: "Noto sans";
 }
 
-.timer_display {
+
+.hora_display, 
+.timer_display 
+{
     background: grey;
     /* background-color: #ffffff; */
     padding: 10px;
@@ -4922,7 +4925,9 @@ fieldset.kuplet.partial{
 }
 
 /* gris. oculto */
-.timer_display.grey{
+.hora_display.grey,
+.timer_display.grey
+{
     background:#666;
     color:#fff;
 }
@@ -4931,7 +4936,8 @@ fieldset.kuplet.partial{
 .timer_display.verde {
     background: #009506;
 }
-.timer_display.azul {
+
+.hora_display.azul {
     background: #2196F3;
 }
 
@@ -5016,10 +5022,23 @@ fieldset.kuplet.partial{
     margin-top:.3em;
     font-size:2rem;
 }
+#horaRestanteHoly {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 #horaRestanteHoly {
     display: none;
 }
 #horaRestanteHoly.shown {
-    display: block;
+    display: flex;
+}
+
+.hora_font {
+    font-family: "Chivo Mono", monospace;
+}
+.hr_time {
+    font-weight: bold;
 }
