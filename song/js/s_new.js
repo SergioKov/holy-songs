@@ -5398,7 +5398,7 @@ function pintarTimerHoly(){
     const tiempoPausadoActualMs = obtenerTiempoPausadoActualMs();
 
     const timerState = calcularEstadoTimer();
-    eid_timerTextHoly.textContent    = timerState.texto;
+    eid_timerTextHoly.innerHTML = timerState.texto;
 
     let textoEstado = timerState.status;
 

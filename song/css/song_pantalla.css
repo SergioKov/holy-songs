@@ -842,12 +842,12 @@ fieldset.kuplet {
 
 
 .pulsar{
-    border-radius:1rem;
-    padding:1rem 3rem;
-    animation:pulsarRojo 1s ease-in-out infinite;
+    border-radius: 1rem;
+    padding: 1rem 3rem;
+    animation: pulsarRojo 1s ease-in-out infinite;
 }
 
-@keyframes pulsarRojo{
+@keyframes pulsarRojo {
 
     from{
         /* background:#ffffff; */
@@ -866,8 +866,32 @@ fieldset.kuplet {
 }
 
 
+.pulsar2 {
+    animation: pulsarRojo2 1s ease-in-out infinite;
+}
+
+@keyframes pulsarRojo2 {
+
+    from{
+        /* background:#ffffff; */
+        /* color:#ff0000; */
+        transform:scale(1);
+        opacity: 1;
+    }
+
+    to{
+        /* background:#ff0000; */
+        /* color:#ffffff; */
+        transform:scale(0.5);
+        opacity: 0;
+    }
+
+}
+
 .separadorHora{
-    animation: blinkSeparador 1s steps(1,end) infinite;
+    animation: 
+        /* blinkSeparador 1s steps(1,end) infinite, */
+        pulsarRojo2 1s ease-in-out infinite;
 }
 
 @keyframes blinkSeparador{
@@ -887,8 +911,9 @@ fieldset.kuplet {
 }
 
 .ss {
-    /* font-size: 60%; */
+    font-size: 60%;
     /* background:red; */
-    /* margin-left: 2rem; */
-    /* display: inline-block; */
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+    display: inline-block;
 }

@@ -199,7 +199,7 @@ function obtenerTiempoPausadoActualMs(){
 }
 
 function calcularEstadoTimer(){
-    console.log('=== function calcularEstadoTimer() ===');
+    //console.log('=== function calcularEstadoTimer() ===');
 
     let restante;
     let tiempoPausadoMs = objTimer.tiempoPausadoMs || 0;
@@ -246,7 +246,7 @@ function calcularEstadoTimer(){
     }
 
     const tiempo_mostrar = `${negativo ? '-' : ''}${String(minutos).padStart(2,'0')}:${String(segundos).padStart(2,'0')}`;
-    console.log('tiempo_mostrar: ', tiempo_mostrar);
+    //console.log('tiempo_mostrar: ', tiempo_mostrar);
 
     return {
         negativo,
@@ -433,7 +433,7 @@ function formatearHora(ms, redondearArriba = true){
 }
 
 function pintarHoraHoly(){
-    console.log('=== function pintarHoraHoly() ===');
+    //console.log('=== function pintarHoraHoly() ===');
 
     if(!horaHolyInterval){
         eid_horaActualHoly.textContent = '--:--:--';//reset
@@ -482,7 +482,7 @@ function pintarHoraHoly(){
         
         if(transcurridoMs_formateado == 0){
             eid_horaRestanteHoly_text.textContent = 'Початок богослужіння';
-            eid_horaRestanteHoly_time.innerHTML = '&nbsp;';
+            eid_horaRestanteHoly_time.innerHTML = '!';
         }else{
             eid_horaRestanteHoly_text.textContent = 'Від початку минуло: ';
             eid_horaRestanteHoly_time.textContent = transcurridoMs_formateado;    

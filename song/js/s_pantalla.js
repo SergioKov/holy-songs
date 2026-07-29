@@ -251,12 +251,17 @@ window.addEventListener('message', async (event) => {
 
             if (data.actualizarSlide) {
                 console.log(' llamo --- construirElementosYAppend()');
-                //construirElementosYAppend();//tiene aplicarVista() dentro
                 cambiarSlideConTransicion();//tiene dentro construirElementosYAppend() y este tiene aplicarVista() dentro
             } 
             
             if(data.objTimer){
                 objTimer = data.objTimer;
+                
+                //oculto Timer si hay cambio de slide o versículo
+                if (objPantallaParams.pantalla_show) {
+                    objTimer.visible = false;
+                }
+
                 pintarTimer();
             }
 
@@ -273,6 +278,11 @@ window.addEventListener('message', async (event) => {
                 }
 
                 console.log('ANTES:', eid_horaOverlay.className);
+
+                //oculto horaActual si hay cambio de slide o versículo
+                if (objPantallaParams.pantalla_show) {
+                    objHora.visible = false;
+                }
             
                 // Mostrar / ocultar el div
                 if(objHora.visible){
@@ -289,6 +299,11 @@ window.addEventListener('message', async (event) => {
                 }
 
                 console.log('DESPUÉS:', eid_horaOverlay.className);
+            }
+
+            //oculto horaActual y Timer si hay cambio de slide o versículo
+            if (data.actualizarSlide) {
+
             }
 
             break;
@@ -1482,15 +1497,14 @@ function pintarTimer(){
         <span class="hh">${h}</span>
         <span class="separadorHora">:</span>
         <span class="mm">${m}</span>
-        <span class="separadorHora">:</span>
-        <span class="ss">${s}</span>
+        <span class="ss pulsar2">${s}</span>
     `;    
     
     eid_timerOverlay.classList.add('shown');
 
     const estado = calcularEstadoTimer();
 
-    eid_timerText.textContent = estado.texto;
+    eid_timerText.innerHTML = estado.texto;
 
     eid_timerOverlay.classList.remove(
         'verde',
@@ -1504,7 +1518,7 @@ function pintarTimer(){
 
 
 function pintarHora(){
-    console.log('=== function pintarHora() ===');
+    //console.log('=== function pintarHora() ===');
     //console.log('Pantalla:', Date.now());
 
     if(typeof objHora === 'undefined' || !objHora){
@@ -1531,8 +1545,7 @@ function pintarHora(){
         <span class="hh">${h}</span>
         <span class="separadorHora">:</span>
         <span class="mm">${m}</span>
-        <span class="separadorHora">:</span>
-        <span class="ss">${s}</span>
+        <span class="ss pulsar2">${s}</span>
     `;
 
     if(diferenciaMs > 0){
@@ -1559,12 +1572,13 @@ function pintarHora(){
         const transcurridoMs_formateado = formatearHora(transcurridoMs, false); 
         //console.log('transcurridoMs_formateado:', transcurridoMs_formateado);
         
-        eid_horaRestante_time.classList.remove('pulsar');
+        
 
         if(transcurridoMs_formateado == 0){
-            eid_horaRestante_text.innerHTML = 'Початок богослужіння: ';
-            eid_horaRestante_time.innerHTML = '&nbsp;';            
-        }else{ 
+            eid_horaRestante_text.innerHTML = 'Початок богослужіння:';
+            eid_horaRestante_time.innerHTML = '!';            
+        }else{
+            eid_horaRestante_time.classList.remove('pulsar'); 
             eid_horaRestante_text.innerHTML = 'Від початку минуло: ';
             eid_horaRestante_time.innerHTML = transcurridoMs_formateado;
         }   
