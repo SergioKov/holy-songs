@@ -4930,7 +4930,8 @@ function editar_song(){
 
 
 async function listaSongGo(dirrection){
-    console.log('ir a la siguiente canción de la lista');
+    console.log(' === function listaSongGo() ===');
+    console.log('ir a la siguiente o previa canción de la lista');
 
     let currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
     let prevIndexOfSong = currentIndexOfSong - 1;
@@ -4971,6 +4972,100 @@ async function listaSongGo(dirrection){
     }
 }
 
+
+function parteSongGo(dirrection){
+    console.log(' === function parteSongGo() ===');
+    console.log('ir a la siguiente o previa parte de la canción. como swipe abajo o arriba');
+
+    if(dirrection === 'next'){
+        console.log('ir a la parte siguiente');
+
+        const fieldsets = [
+            ...d_contenedor.querySelectorAll('fieldset.kuplet')
+        ];
+    
+        const containerTop = d_contenedor.scrollTop;
+        const containerBottom = containerTop + d_contenedor.clientHeight;
+
+        console.log('=== avanzar ===');
+        let moved = false;
+        
+        // ====================================
+        // 1. parcialmente visible abajo
+        // ====================================
+        for (const fs of fieldsets) {
+
+            const fsTop = fs.offsetTop;
+            const fsBottom = fsTop + fs.offsetHeight;
+
+            // parcialmente visible abajo
+            if (
+                fsTop < containerBottom &&
+                fsBottom > containerBottom
+            ) {
+
+                // guardar posición REAL actual
+                swipeHistory.push(d_contenedor.scrollTop);
+                console.log('swipeHistory: ', swipeHistory);
+
+                // mover al siguiente bloque
+                d_contenedor.scrollTop = fsTop - 10;//'-10' para que quede un poco visible 
+
+                updatePartialFieldsets(); 
+                moved = true;
+                break;
+            }
+        }
+
+
+        // ====================================
+        // 2. siguiente bloque completo
+        // ====================================
+        if (!moved) {
+
+            for (const fs of fieldsets) {
+
+                const fsTop = fs.offsetTop;
+
+                // completamente debajo
+                if (fsTop > containerBottom) {
+
+                    swipeHistory.push(
+                        d_contenedor.scrollTop
+                    );
+
+                    console.log(
+                        'swipeHistory:',
+                        swipeHistory
+                    );
+
+                    d_contenedor.scrollTop = fsTop;
+
+                    updatePartialFieldsets();
+
+                    break;
+                }
+            }
+        }
+
+    }//end - next
+
+    
+    if(dirrection === 'prev'){
+        console.log('ir a la parte anterior');
+
+        if(swipeHistory.length === 0){
+            return;
+        }
+
+        const prevScrollTop = swipeHistory.pop();
+        console.log('prevScrollTop:', prevScrollTop);
+
+        d_contenedor.scrollTop = prevScrollTop;
+
+        updatePartialFieldsets();        
+    }//end - prev
+}
 
 
 function hideShowFontMenu(){
