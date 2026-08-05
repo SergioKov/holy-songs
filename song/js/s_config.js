@@ -366,6 +366,41 @@ const eid_btn_ocultarHora   = document.getElementById('btn_ocultarHora');
 //==================================================================//
 
 
+
+
+//==================================================================//
+//start - video
+//==================================================================//
+const eid_videoMinutos = document.getElementById('videoMinutos');//input
+
+const eid_videoDisplay   = document.getElementById('videoDisplay');
+const eid_videoControlPanel   = document.getElementById('videoControlPanel');
+const eid_videoControlMinutos   = document.getElementById('videoControlMinutos');
+const eid_videoControlVista   = document.getElementById('videoControlVista');
+
+const eid_btn_prevVideo   = document.getElementById('btn_prevVideo');
+const eid_btn_playPauseVideo   = document.getElementById('btn_playPauseVideo');
+const eid_btn_pararVideo   = document.getElementById('btn_pararVideo');
+const eid_btn_nextVideo   = document.getElementById('btn_nextVideo');
+const eid_btn_back10   = document.getElementById('btn_back10');
+const eid_btn_forward10   = document.getElementById('btn_forward10');
+const eid_btn_abrirVideo   = document.getElementById('btn_abrirVideo');
+
+const eid_btn_mostrarVideo   = document.getElementById('btn_mostrarVideo');
+const eid_btn_ocultarVideo   = document.getElementById('btn_ocultarVideo');
+
+
+const eid_estadoVideoHoly = document.getElementById('estadoVideoHoly');
+const eid_videoTextHoly   = document.getElementById('videoTextHoly');
+const eid_videoSliderHoly   = document.getElementById('videoSliderHoly');
+//==================================================================//
+//end - video
+//==================================================================//
+
+
+
+
+
 //====================================================//
 //Medidas de pantallas para Media Queries - START
 //====================================================//
@@ -1030,3 +1065,35 @@ let objHora = {
     //horaInicio: ...,
    // minutosInicio: ...
 }
+
+let objVideo = {
+    visible: false,   // controla únicamente si el div se muestra
+    running: false,   // controla si el reloj está calculándose
+    estado: 'STOP',
+    src: '',
+    syncCurrentTime: false,
+    currentTime: 0,
+    duration: 0,
+    volume: 1,
+    muted: false,
+    loop: false,
+    playbackRate: 1,
+}
+
+// Holy Songs
+//de iframe
+let eid_videoPeliculaHoly = null;
+let ultimoSegundoVideo = -1;
+let sliderDragging = false;
+
+// let src_video_actual = "./uploads/1/videos/media_6a68c3815ff805.73116679.mp4";
+// let src_video_actual = "./uploads/1/videos/video_demo.mp4";
+// let src_video_actual = "./uploads/1/videos/video_demo.mp4";
+let src_video_actual = "./uploads/1/videos/video_demo_convertido.mp4";
+// let src_video_actual = "./uploads/1/videos/spain_camp_2026.mp4";
+// let src_video_actual = "./uploads/1/videos/video_demo_16_sec_convertido.mp4";
+// let src_video_actual = "./uploads/1/videos/video_demo_16_sec_original.mp4";
+// let src_video_actual = "./uploads/1/videos/video_demo_its_on.mp4";
+
+const MAX_IMAGE_SIZE = 200 * 1024 * 1024;//antes 40
+const MAX_VIDEO_SIZE = 200 * 1024 * 1024;//antes 100

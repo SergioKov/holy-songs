@@ -178,12 +178,37 @@
 
 
 
+    <!-- Vídeo Película -->
+    <div id="contenedor_video" class="d-block">
+        <div id="videoOverlay" class="video_overlay shown">
+            
+            <div id="activarInteraccionUsuario" class="d_activar_interaccion" onclick="activarInteraccion()">
+                <div class="d_activar_interaccion_inner">
+                    <img src="images/icon_play3.png">
+                    <h1></h1>
+                </div>
+            </div>
+
+            <video
+                id="videoPelicula"
+                src=""
+                playsinline
+            >
+            </video>
+        </div><!--/#videoOverlay-->
+    </div><!--/#contenedor_video-->
+    <!--/ Vídeo Película -->
+
+
+
+
     <div id="identificadorPantalla"></div>
 
 
         
     <script src="js/s_pantalla.js"></script>
     <script src="js/s_timer.js"></script>
+    <script src="js/s_video.js"></script>
 
 </body>
 </html>

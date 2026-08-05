@@ -1362,6 +1362,18 @@ async function make_arr_pantalla(currentSlide){
     // 5. Insertarlo en un div existente (suponiendo que su id es 'contenedor')
     eid_contenedor_prev_inner.append(miIframe);
     mySizeIframe(eid_contenedor_prev);
+
+    //para el video pelicula
+    eid_videoPeliculaHoly = miIframe.contentWindow.document.getElementById('videoPelicula');
+    miIframe.onload = () => {
+        const videoHoly = miIframe.contentWindow.document.getElementById('videoPelicula');
+        if(videoHoly){
+            console.log('hago videoHoly muted');
+            //alert('videoHoly muted');
+            videoHoly.muted = true;
+        }
+    };
+
     //===================================================//
     //start - experiment
     //===================================================//
@@ -1541,7 +1553,8 @@ function actualizarPantallas({
         objPantallaParams: crearObjPantallaParamsParaPantalla(),
 
         objTimer, //para temporizador
-        objHora   //para hora actual
+        objHora,  //para hora actual
+        objVideo   //para video
     };
     
     // iframe local
@@ -4043,7 +4056,7 @@ function abrirReferencia(url, nombre_referencia){
     console.log('=== function abrirReferencia() ===');
 
     const referencia = window.open(url, nombre_referencia);
-
+    
     if(!referencia){
         console.warn('No se pudo abrir la ventana.');
         return null;
@@ -4051,6 +4064,7 @@ function abrirReferencia(url, nombre_referencia){
 
     if(referencia){
         eid_videoFondo_body.load();
+        referencia.focus();
         console.log(`${nombre_referencia} abierta.`, referencia);
     }
 
@@ -4741,15 +4755,12 @@ async function subirMedia(){
         return;
     }
 
-    const MAX_IMAGE_SIZE = 40 * 1024 * 1024;
-    const MAX_VIDEO_SIZE = 100 * 1024 * 1024;
-
     for(const file of selectedFiles){
 
         if(file.type.startsWith('image/')){
             if(file.size > MAX_IMAGE_SIZE){
                 alert(
-                    `"${file.name}" supera los 40 MB permitidos para imágenes. El tamaño total de las imágenes seleccionadas supera el límite permitido de 40 MB. Esto puede deberse a que has seleccionado demasiadas imágenes o a que alguna de ellas tiene un tamaño muy grande. Por favor, reduce la cantidad de imágenes, selecciona imágenes más ligeras o realiza la subida en varias operaciones.`
+                    `"${file.name}" supera los 200 MB permitidos para imágenes. El tamaño total de las imágenes seleccionadas supera el límite permitido de 200 MB. Esto puede deberse a que has seleccionado demasiadas imágenes o a que alguna de ellas tiene un tamaño muy grande. Por favor, reduce la cantidad de imágenes, selecciona imágenes más ligeras o realiza la subida en varias operaciones.`
                 );    
                 return;
             }
@@ -4757,7 +4768,7 @@ async function subirMedia(){
         else if(file.type.startsWith('video/')){
             if(file.size > MAX_VIDEO_SIZE){
                 alert(
-                    `"${file.name}" supera los 100 MB permitidos para vídeos. El tamaño total de los vídeos seleccionados supera el límite permitido de 100 MB. Esto puede deberse a que has seleccionado demasiados vídeoss o a que alguno de ellos tiene un tamaño muy grande. Por favor, reduce la cantidad de vídeos, selecciona vídeos más ligeros o realiza la subida en varias operaciones.`
+                    `"${file.name}" supera los 200 MB permitidos para vídeos. El tamaño total de los vídeos seleccionados supera el límite permitido de 200 MB. Esto puede deberse a que has seleccionado demasiados vídeoss o a que alguno de ellos tiene un tamaño muy grande. Por favor, reduce la cantidad de vídeos, selecciona vídeos más ligeros o realiza la subida en varias operaciones.`
                 );    
                 return;
             }

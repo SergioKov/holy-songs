@@ -41,7 +41,7 @@ if (
 ) {
     echo json_encode([
         'success' => false,
-        'error' => 'No se recibió ninguna imagen'
+        'error' => 'No se recibió ningún fichero media.'
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -49,8 +49,8 @@ if (
 
 // Tamaño máximo: 10 MB
 //$maxSize = 10 * 1024 * 1024;
-$maxImageSize = 40 * 1024 * 1024;   // 40 MB para imagenes
-$maxVideoSize = 100 * 1024 * 1024;  // 100 MB para vídeo
+$maxImageSize = 200 * 1024 * 1024;   // antes 40 MB para imagenes
+$maxVideoSize = 200 * 1024 * 1024;  // antes 100 MB para vídeo
 
 // Tipos permitidos
 $allowedMimeTypes = [

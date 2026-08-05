@@ -135,6 +135,7 @@ const eid_timerContent = document.getElementById('timerContent');
 const eid_timerText = document.getElementById('timerText');
 const eid_timerHoraActual = document.getElementById('timerHoraActual');
 
+let objTimer = {};
 let intervalTimer = null;
 
 //hora actual
@@ -148,8 +149,24 @@ const eid_horaRestante_text = document.getElementById('horaRestante_text');
 const eid_horaRestante_time = document.getElementById('horaRestante_time');
 
 let intervalHora = null;
+let objHora = {};
 
 let timeoutIdentificador = null;//se usa en mostrarNumeroPantalla()
+
+
+//Video Película
+const eid_contenedor_video = document.getElementById('contenedor_video');
+const eid_videoOverlay = document.getElementById('videoOverlay');
+const eid_activarInteraccionUsuario = document.getElementById('activarInteraccionUsuario');
+const eid_videoPelicula = document.getElementById('videoPelicula');
+eid_videoPelicula.muted = false;//aki siempre false para que se pueda escuchar el audio de la película
+let objVideo = {};
+
+let usuarioInteractuo = false;
+let ignorarPause = false;
+let ultimoSegundoVideo = -1;
+
+
 
 
 
@@ -184,7 +201,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if(esProduccion){
         document.body.classList.add('produccion');
     }
+
+    //envio mensaje a holy-songs que la pantalla se ha cargado ya.
+    if(window.opener){
+        window.opener.postMessage({
+            tipo: 'pantalla_ready'
+        }, window.location.origin);
+    }
 });
+
+
+//al hacer click en pantalla en cualquier parte activo interaccion de usuario y así desbloqueo el audio de la película
+document.addEventListener('pointerdown', async () => {
+    await activarInteraccion();
+}, { once:true });
+
+//al teclear cualquier tecla en pantalla enfocada activo interaccion de usuario y así desbloqueo el audio de la película
+document.addEventListener('keydown', async () => {
+    await activarInteraccion();
+}, { once:true });
+
+
+
+//===========================================// 
+//start - escuchar estados de video
+//===========================================// 
+eid_videoPelicula.addEventListener(
+    'timeupdate',
+    enviarEstadoVideo
+);
+
+eid_videoPelicula.addEventListener('ended', () => {
+    objVideo.estado = 'ENDED';
+    enviarEstadoVideo();
+});
+
+eid_videoPelicula.addEventListener(
+    'loadedmetadata',
+    enviarEstadoVideo
+);
+//===========================================// 
+//end - escuchar estados de video
+//===========================================//
+
+
 
 //escuchador de postMessage
 window.addEventListener('message', async (event) => {
@@ -216,7 +276,7 @@ window.addEventListener('message', async (event) => {
         return;
     }
 
-    switch(data.tipo){           
+    switch(data.tipo){
         
         case 'pantalla_update':
             
@@ -301,9 +361,33 @@ window.addEventListener('message', async (event) => {
                 console.log('DESPUÉS:', eid_horaOverlay.className);
             }
 
-            //oculto horaActual y Timer si hay cambio de slide o versículo
-            if (data.actualizarSlide) {
 
+            if(data.objVideo){
+
+                objVideo = data.objVideo;
+                console.log('objVideo recibido:', objVideo);
+
+                pintarVideo();
+            
+                // Si se está mostrando un slide o un versículo,
+                // ocultamos el vídeo aunque siga reproduciéndose.
+                if(objPantallaParams.pantalla_show){
+                    objVideo.visible = false;
+                }
+            
+                // Mostrar / ocultar vídeo
+                if(objVideo.visible){
+                    eid_videoOverlay.classList.add('shown');
+                }else{
+                    eid_videoOverlay.classList.remove('shown');
+                }
+            }
+
+            // Si cambia el slide, oculto todos los overlays
+            if(data.actualizarSlide){
+                eid_horaOverlay.classList.remove('shown');
+                eid_timerOverlay.classList.remove('shown');
+                eid_videoOverlay.classList.remove('shown');
             }
 
             break;
@@ -311,6 +395,7 @@ window.addEventListener('message', async (event) => {
         case 'identificar_pantalla':
             mostrarNumeroPantalla(data.numero);
             break;
+
 
         //DEJO COMO EJEMPLO
         //no funciona como quiero yo
@@ -1571,8 +1656,6 @@ function pintarHora(){
         
         const transcurridoMs_formateado = formatearHora(transcurridoMs, false); 
         //console.log('transcurridoMs_formateado:', transcurridoMs_formateado);
-        
-        
 
         if(transcurridoMs_formateado == 0){
             eid_horaRestante_text.innerHTML = 'Початок богослужіння:';
@@ -1864,4 +1947,183 @@ async function mySizePantallaShowBT(){
             mostrarVisibilidadItems(tradAll);
         }
     }
+}
+
+
+
+//video pelicula
+
+async function videoPlay(){
+    console.log(' === function videoPlay() ===');
+
+    if(!usuarioInteractuo){
+        console.warn('Aún no hay interacción del usuario.');
+        console.warn('hace falta activar la interacción del usuario para reproducir el vídeo');
+        
+        //aviso al usuario
+        eid_activarInteraccionUsuario.querySelector('h1').innerHTML = `
+            <span>Para reproducir el vídeo <br> 
+            haz click en cualquier parte de la pantalla <br>
+            o presiona cualquier tecla.</span>
+        `;        
+        return;
+    }
+
+    if(!eid_videoPelicula.paused){
+        return;
+    }
+
+    try{
+        
+        await eid_videoPelicula.play();
+        console.log('Vídeo reproduciéndose');
+
+        enviarEstadoVideo();
+
+    }catch(error){
+        console.error('Vídeo reproduciéndose error:', error);
+    }
+
+}
+
+async function videoPause(){
+    console.log('=== function videoPause() ===');
+
+    if(eid_videoPelicula.paused){
+        return;
+    }
+
+    eid_videoPelicula.pause();
+    enviarEstadoVideo();
+}
+
+function videoStop(){
+    console.log('=== function videoStop() ===');
+    
+    ignorarPause = true;
+    
+    eid_videoPelicula.pause();
+    eid_videoPelicula.currentTime = 0;
+    
+    enviarEstadoVideo();
+}
+
+function pintarVideo(){
+    console.log(' === function pintarVideo() ===');
+
+    const nuevaUrl = new URL(objVideo.src, window.location.href).href;
+    
+    // Cambiar vídeo si ha cambiado
+    if(eid_videoPelicula.src !== nuevaUrl){
+        console.log('Nuevo vídeo');
+
+        eid_videoPelicula.src = objVideo.src;
+        eid_videoPelicula.load();
+    }
+
+    actualizarOverlayInteraccion();
+
+    eid_videoPelicula.volume = objVideo.volume;
+    eid_videoPelicula.muted = objVideo.muted;
+    eid_videoPelicula.loop = objVideo.loop;
+    eid_videoPelicula.playbackRate = objVideo.playbackRate;
+
+    // Sincronizar tiempo SOLO cuando sea necesario
+    if(
+        objVideo.syncCurrentTime &&
+        Math.abs(
+            eid_videoPelicula.currentTime -
+            objVideo.currentTime
+        ) > 0.2
+    ){
+        eid_videoPelicula.currentTime = objVideo.currentTime;
+        objVideo.syncCurrentTime = false;
+    }
+
+    switch(objVideo.estado){
+
+        case 'PLAY':
+            if(eid_videoPelicula.paused){
+                videoPlay();
+            }
+            break;
+
+        case 'PAUSE':
+            if(!eid_videoPelicula.paused){
+                videoPause();
+            }
+            break;
+
+        case 'STOP':
+            if(!eid_videoPelicula.paused || eid_videoPelicula.currentTime > 0){
+                videoStop();
+            }
+            break;
+    }
+
+    // Mostrar / ocultar
+    eid_videoOverlay.classList.toggle(
+        'shown',
+        objVideo.visible
+    );
+}
+
+function actualizarOverlayInteraccion(){
+
+    if(objVideo.visible && !usuarioInteractuo){
+        eid_activarInteraccionUsuario.classList.add('shown');
+    }else{
+        eid_activarInteraccionUsuario.classList.remove('shown');
+    }
+}
+
+async function activarInteraccion(){
+    usuarioInteractuo = true;
+
+    actualizarOverlayInteraccion();
+    await videoPlay();
+}
+
+function enviarEstadoVideo(){
+    console.log('=== function enviarEstadoVideo() ===');
+
+    //si he presionado STOP, no se enviará el estado a Holy-Songs
+    if(ignorarPause){
+        ignorarPause = false;
+        console.log('ignorarPause es true. No se enviará el estado a Holy-Songs');
+        return;
+    }
+
+    const segundoActual = Math.floor(
+        eid_videoPelicula.currentTime
+    );
+
+    if(
+        segundoActual === ultimoSegundoVideo &&
+        !eid_videoPelicula.paused
+    ){
+        return;
+    }
+
+    ultimoSegundoVideo = segundoActual;
+
+    if(!window.opener){
+        return;
+    }
+
+    window.opener.postMessage({
+        tipo: 'video_estado',
+
+        estado: objVideo.estado,   // <-- nuevo
+
+        currentTime: eid_videoPelicula.currentTime,
+        duration: eid_videoPelicula.duration,
+
+        paused: eid_videoPelicula.paused,
+        ended: eid_videoPelicula.ended,
+
+        volume: eid_videoPelicula.volume,
+        muted: eid_videoPelicula.muted
+
+    }, window.location.origin);
 }

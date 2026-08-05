@@ -59,6 +59,15 @@ window.addEventListener('message', (event) => {
     }
 
 
+    //escuchar estados de video desde pantalla.php
+    if(
+        data.tipo === 'video_estado' &&
+        event.origin === window.location.origin
+    ){
+        actualizarEstadoVideo(data);
+        return;
+    }
+
 
     // Desde aquí, solo mensajes procedentes de Bible Text
     const origenesBibleTextPermitidos = [
@@ -1524,4 +1533,34 @@ eid_minutosInicio.addEventListener('blur', () => {
     eid_minutosInicio.value = String(
         Math.min(59, Math.max(0, parseInt(minutosInicio.value || 0, 10)))
     ).padStart(2, '0');
+});
+
+
+
+//slider de video
+eid_videoSliderHoly.addEventListener('pointerdown', () => {
+    sliderDragging = true;
+});
+
+eid_videoSliderHoly.addEventListener('pointerup', () => {
+    sliderDragging = false;
+    objVideo.currentTime = parseFloat(eid_videoSliderHoly.value);
+    objVideo.syncCurrentTime = true;
+    
+    enviarVideoPantallas();
+});
+
+eid_videoSliderHoly.addEventListener('input', () => {
+
+    if(!sliderDragging){
+        return;
+    }
+
+    const tiempo = parseFloat(eid_videoSliderHoly.value);
+
+    eid_videoTextHoly.textContent =
+        formatearHora(tiempo * 1000, false)
+        + ' / ' +
+        formatearHora(objVideo.duration * 1000, false);
+
 });
