@@ -5819,7 +5819,8 @@ function pintVideoActiveEnPlayer(){
     console.log('=== function pintVideoActiveEnPlayer() ===');  
     
     if(!id_video){
-        alert('no hay id_video');
+        //alert('no hay id_video');
+        console.warn('no hay id_video');
         return;
     }    
     
@@ -5840,7 +5841,8 @@ function update_objVideoActual(){
     console.log('=== function update_objVideoActual() ===');
 
     if(!id_video){
-        alert('no hay id_video');
+        // alert('no hay id_video');
+        console.warn('no hay id_video');
         return;
     } 
 
