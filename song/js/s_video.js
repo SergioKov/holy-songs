@@ -86,12 +86,31 @@ function pararVideo(){
 function videoPrev(){
     console.log('=== function videoPrev() ===');
 
-    // TODO:
-    // Seleccionar el vídeo anterior de la lista
-    // objVideo.src = ...
+    const estabaReproduciendo = objVideo.running;
 
-    objVideo.estado = 'PLAY';
-    objVideo.running = true;
+    const index_video_prev = index_video_actual - 1;
+
+    if(arr_lista_videos[index_video_prev] === undefined){
+        //alert('No hay vídeo anterior.');
+        showToast(
+            "info",
+            "No hay vídeo anterior. Has llegado al principio de la lista",
+            2000,
+            "center",
+            true,
+            "Info",
+        );
+        return;
+    }
+
+    index_video_actual = index_video_prev;
+
+    objVideo.src = arr_lista_videos[index_video_prev].ruta;
+
+    objVideo.currentTime = 0;
+
+    objVideo.running = estabaReproduciendo;
+    objVideo.estado = estabaReproduciendo ? 'PLAY' : 'STOP';
 
     enviarVideoPantallas();
 }
@@ -100,16 +119,34 @@ function videoPrev(){
 function videoNext(){
     console.log('=== function videoNext() ===');
 
-    // TODO:
-    // Seleccionar el siguiente vídeo de la lista
-    // objVideo.src = ...
+    const estabaReproduciendo = objVideo.running;
 
-    objVideo.estado = 'PLAY';
-    objVideo.running = true;
+    const index_video_next = index_video_actual + 1;
+
+    if(arr_lista_videos[index_video_next] === undefined){
+        ///alert('No hay siguiente vídeo.');
+        showToast(
+            "info",
+            "No hay siguiente vídeo. Has llegado al final de la lista",
+            2000,
+            "center",
+            true,
+            "Info",
+        );
+        return;
+    }
+
+    index_video_actual = index_video_next;
+
+    objVideo.src = arr_lista_videos[index_video_next].ruta;
+
+    objVideo.currentTime = 0;
+
+    objVideo.running = estabaReproduciendo;
+    objVideo.estado = estabaReproduciendo ? 'PLAY' : 'STOP';
 
     enviarVideoPantallas();
 }
-
 
 function videoBack(valor){
     console.log('=== function videoBack() ===');

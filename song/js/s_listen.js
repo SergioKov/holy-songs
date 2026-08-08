@@ -1537,6 +1537,141 @@ eid_minutosInicio.addEventListener('blur', () => {
 
 
 
+//=========================================================// 
+// start - subir media
+//=========================================================//
+// Vista previa de imagen/video como fondo antes de subirla
+eid_mediaFileInput.addEventListener('change', () => {
+
+    /*
+    // si una imagen
+    selectedFile = inputBackground.files[0];   
+    if (!selectedFile) return;    
+
+    eid_previewContainer.innerHTML = '';//reset
+    eid_btnUploadMedia.classList.remove('d-none');
+
+    const imageUrl = URL.createObjectURL(selectedFile);
+
+    const previewImage = document.createElement('img');
+    previewImage.id = 'previewImage';
+    previewImage.src = imageUrl;
+
+    //añado al DOM
+    eid_previewContainer.append(previewImage);
+    */
+
+
+
+    //muchas imagenes
+    // selectedFiles = [...inputBackground.files];
+    selectedFiles = [...eid_mediaFileInput.files];
+
+    if(selectedFiles.length === 0){
+        return;
+    }
+
+    eid_previewContainer.innerHTML = '';//reset
+    eid_btnUploadMedia.classList.remove('d-none');
+
+    //recorrer las imagenes
+    selectedFiles.forEach(file => {
+
+        // const imageUrl = URL.createObjectURL(file);
+        const url = URL.createObjectURL(file);
+
+        //si es imagen
+        if(file.type.startsWith('image/')){
+
+            const media_item = document.createElement('div');
+            media_item.className = 'media_item es_imagen' ;
+            media_item.innerHTML = `
+                <img class="media_item_img" src="${url}" alt="Imagen de fondo">
+            `;
+            
+            //añado al DOM
+            eid_previewContainer.append(media_item);        
+        }
+        
+        //si es video
+        if(file.type.startsWith('video/')){
+
+            const video_item = document.createElement('div');
+            video_item.className = 'media_item es_video' ;
+            video_item.innerHTML = `
+                <video class="media_item_video" src="${url}" autoplay muted loop playsinline></video>
+            `;
+            
+            //añado al DOM
+            eid_previewContainer.append(video_item);         
+        }
+
+    });
+});
+
+//boton de subir imagenes/videos MEDIA como fondo
+eid_btnUploadMedia.addEventListener('click', async () => {
+    //subirImagen();
+    // subirImagenes();
+    subirMedia();
+});
+//=========================================================// 
+// end - subir media
+//=========================================================// 
+
+
+
+//=========================================================// 
+// start - subir video pelicula
+//=========================================================//
+// Vista previa de video como película antes de subirlo
+eid_videoFileInput.addEventListener('change', () => {
+    console.log(' === listener change eid_videoFileInput === ');
+
+
+    const file = eid_videoFileInput.files[0];
+
+    //Reset
+    eid_previewContainerVideo.innerHTML = '';//reset
+    eid_btnUploadVideo.classList.remove('d-none');
+
+    if(!file){
+        return;
+    }
+
+    if(!file.type.startsWith('video/')){
+        alert('El archivo seleccionado no es un vídeo.');
+        eid_videoFileInput.value = '';
+        return;
+    }
+
+    const url = URL.createObjectURL(file);
+
+    const video_item = document.createElement('div');
+    video_item.className = 'video_item es_video' ;
+    video_item.innerHTML = `
+        <video class="video_item_video" src="${url}" autoplay muted loop playsinline></video>
+    `;
+    
+    //añado al DOM
+    eid_previewContainerVideo.append(video_item);
+
+    eid_btnUploadVideo.classList.remove('d-none');    
+});
+
+//boton de subir imagenes/videos MEDIA como fondo
+eid_btnUploadVideo.addEventListener('click', async () => {
+    console.log('llamo subirVideo()');
+    subirVideo();
+});
+//=========================================================// 
+// end - subir video pelicula
+//=========================================================// 
+
+
+
+
+
 //slider de video
 eid_videoSliderHoly.addEventListener('pointerdown', () => {
     sliderDragging = true;

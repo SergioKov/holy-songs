@@ -156,9 +156,9 @@ function guardarMedia(
     // Carpeta destino
     $subcarpeta = ($media_type === 'video')
         ? 'videos'
-        : 'fondos';
+        : 'imagenes';
 
-    $uploadDir = "../uploads/{$id_iglesia}/{$subcarpeta}/";
+    $uploadDir = "../uploads/{$id_iglesia}/fondos/{$subcarpeta}/";
 
     // Crear la carpeta si no existe
     if (!is_dir($uploadDir)) {
@@ -200,7 +200,7 @@ function guardarMedia(
         
         return [
             'success'    => true,
-            'duplicada'  => true,
+            'duplicado'  => true,
             'mensaje'    => 'El archivo ya existe.',
             'id_media'   => (int)$row['id_media'],
             'media_type' => $media_type,
@@ -213,8 +213,13 @@ function guardarMedia(
     // Extensión
     $extension = $allowedMimeTypes[$mimeType];
 
+    $palabra_inicio_fichero = ($media_type === 'video')
+        ? 'video_'
+        : 'imagen_';
+
     // Nombre único
-    $filename = uniqid('media_', true) . '.' . $extension;
+    $filename = uniqid($palabra_inicio_fichero, true) . '.' . $extension;
+        
 
     // Ruta física
     $filepath = $uploadDir . $filename;
@@ -233,7 +238,7 @@ function guardarMedia(
     //$filepathDb = 'uploads/media/' . $id_iglesia . '/' . $filename;
 
     // Ruta relativa para BD
-    $filepathDb = "uploads/{$id_iglesia}/{$subcarpeta}/{$filename}";
+    $filepathDb = "uploads/{$id_iglesia}/fondos/{$subcarpeta}/{$filename}";
 
     // Insertar en BD
     $sql = "INSERT INTO media
@@ -278,7 +283,7 @@ function guardarMedia(
 
     return [
         'success'   => true,
-        'duplicada' => false,
+        'duplicado' => false,
         'mensaje'   => ucfirst($media_type) . ' guardado correctamente.',
         'id_media'  => $id_media,
         'media_type'=> $media_type,

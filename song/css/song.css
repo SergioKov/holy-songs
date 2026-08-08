@@ -2703,6 +2703,11 @@ p.p_sm b {
 }
 
 .bl_set_inner .inner_content h4 {
+    /* border-bottom: 1px solid #5e5e5e; */
+    padding: 0 0 5px;
+}
+
+.contenedor_sel_pantalla h4 {
     border-bottom: 1px solid #5e5e5e;
     padding: 0 0 5px;
 }
@@ -4719,8 +4724,9 @@ fieldset.kuplet.partial{
     max-width: 100%;
 }
 
-#backgroundMedia{
+.btn_select_file {
     background: #9E9E9E;
+    cursor: pointer;
 }
 
 #imagenesContainer {
@@ -4732,7 +4738,9 @@ fieldset.kuplet.partial{
     max-height: 50vh;
 }
 
-.media_item {
+.media_item, 
+.video_item 
+{
     padding: 5px;
     background: #bababa;
     border-radius: 5px;
@@ -4741,11 +4749,15 @@ fieldset.kuplet.partial{
     margin-right: 10px;
     position: relative;
 }
-.media_item:hover{
+.media_item:hover,
+.video_item:hover
+{
     opacity: 0.7;
 }
 
-.media_item.active {
+.media_item.active, 
+.video_item.active 
+{
     padding: 5px;
     background: #ad0000;
 }
@@ -4772,8 +4784,20 @@ fieldset.kuplet.partial{
     font-weight: bold;
 }
 
+.video_item.active::after {
+    content: "ACTIVO";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ad0000;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
 .media_item_img, 
-.media_item_video 
+.media_item_video, 
+.video_item_video 
 {
     width: 100%;
     /* max-width: 300px; */
@@ -5076,4 +5100,55 @@ fieldset.kuplet.partial{
     background:#FF9800;
     margin-top:-6px;
     cursor:pointer;
+}
+
+
+#videosContainer {
+    /* background: purple; */
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 50vh;
+}
+
+.m_top15 {
+    margin-top: 15px;
+}
+
+.wr_tit_desc {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    background: #00000036;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    margin: -10px -10px 15px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#d_notes_video {
+    font-size: 80%;
+}
+
+.wr_video_title {
+    position: relative;
+}
+.wr_video_title .d_limpiar_input {
+    top: 8px;
+}
+
+.video_item_info {
+    background: #000000c2;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0px 0px 0px;
+    border-radius: 0 0 5px 5px;
+    padding: 5px;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
 }

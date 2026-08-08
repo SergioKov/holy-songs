@@ -1662,8 +1662,8 @@ async function showTipoContent(btn, param){
 
             eid_fondo_body.className = '';//reset
             eid_fondo_body.style = '';//reset
-            eid_wr_imagen_personalizada.classList.remove('d-block');
-            eid_wr_imagen_personalizada.classList.add('d-none');//oculto
+            eid_imagenPersonalizada.classList.remove('d-block');
+            eid_imagenPersonalizada.classList.add('d-none');//oculto
             
             //guardo en local
             localStorage.setItem('show_logo_en_fondo', show_logo_en_fondo);
@@ -1707,12 +1707,12 @@ async function showTipoContent(btn, param){
             eid_fondo_body.classList.add('imagen_en_fondo');
             localStorage.setItem('show_imagen_en_fondo', show_imagen_en_fondo);
 
-            eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
-            eid_wr_imagen_personalizada.classList.add('d-block');//muestro
+            eid_imagenPersonalizada.classList.remove('d-none');//muestro
+            eid_imagenPersonalizada.classList.add('d-block');//muestro
             await pintMediaActiveEnFondo();//tiene guardado de bg_ruta en localStorage
 
             //pinto las imagenes personalizadas disponibles para elegir
-            await pintMediaSubidas();
+            await pintMediaSubidos();
             break;
 
         case 'r'://brillo de letra 'r' => brillo de la pantalla (opacity) en fondo y texto
@@ -2590,12 +2590,19 @@ async function hideShowDiv(id_div){
             break;
             
         case 'bl_select_slide_settings':
+            //imagen/media
             if(show_imagen_en_fondo == 1){
-                eid_wr_imagen_personalizada.classList.remove('d-none');//muestro
-                eid_wr_imagen_personalizada.classList.add('d-block');//muestro
-                await pintMediaSubidas();
+                eid_imagenPersonalizada.classList.remove('d-none');//muestro
+                eid_imagenPersonalizada.classList.add('d-block');//muestro
+                await pintMediaSubidos();
             }
             check_brillo_pantalla();
+
+            //video/pelicula
+            arr_lista_videos = await make_arr_lista_videos();
+            await pintVideoSubidos();
+            pintVideoActiveEnPlayer();
+
             break;
     
         default:
@@ -4656,96 +4663,6 @@ function aplicarSongAjustes(){
 
 
 
-
-
-//const inputBackground = document.getElementById('backgroundImage');
-const inputMedia = document.getElementById('backgroundMedia');
-// const btnUploadMedia = document.getElementById('btnUploadMedia');
-const btnUploadMedia = document.getElementById('btnUploadMedia');
-// const previewImage = document.getElementById('previewImage');
-const previewMedia = document.getElementById('previewMedia');
-
-let selectedFile = null;
-let selectedFiles = [];
-
-// Vista previa
-inputMedia.addEventListener('change', () => {
-
-    /*
-    // si una imagen
-    selectedFile = inputBackground.files[0];   
-    if (!selectedFile) return;    
-
-    eid_previewContainer.innerHTML = '';//reset
-    btnUploadMedia.classList.remove('d-none');
-
-    const imageUrl = URL.createObjectURL(selectedFile);
-
-    const previewImage = document.createElement('img');
-    previewImage.id = 'previewImage';
-    previewImage.src = imageUrl;
-
-    //añado al DOM
-    eid_previewContainer.append(previewImage);
-    */
-
-
-
-    //muchas imagenes
-    // selectedFiles = [...inputBackground.files];
-    selectedFiles = [...inputMedia.files];
-
-    if(selectedFiles.length === 0){
-        return;
-    }
-
-    eid_previewContainer.innerHTML = '';//reset
-    btnUploadMedia.classList.remove('d-none');
-
-    //recorrer las imagenes
-    selectedFiles.forEach(file => {
-
-        // const imageUrl = URL.createObjectURL(file);
-        const url = URL.createObjectURL(file);
-
-        //si es imagen
-        if(file.type.startsWith('image/')){
-
-            const media_item = document.createElement('div');
-            media_item.className = 'media_item es_imagen' ;
-            media_item.innerHTML = `
-                <img class="media_item_img" src="${url}" alt="Imagen de fondo">
-            `;
-            
-            //añado al DOM
-            eid_previewContainer.append(media_item);        
-        }
-        
-        //si es video
-        if(file.type.startsWith('video/')){
-
-            const video_item = document.createElement('div');
-            video_item.className = 'media_item es_video' ;
-            video_item.innerHTML = `
-                <video class="media_item_video" src="${url}" autoplay muted loop playsinline></video>
-            `;
-            
-            //añado al DOM
-            eid_previewContainer.append(video_item);         
-        }
-
-    });
-});
-
-
-btnUploadMedia.addEventListener('click', async () => {
-    //subirImagen();
-    // subirImagenes();
-    subirMedia();
-});
-
-
-
 // Subir MUCHAS imagenes/videos MEDIA
 async function subirMedia(){
     console.log(' === function subirMedia() === ');    
@@ -4816,11 +4733,12 @@ async function subirMedia(){
             if (data.success) {
 
                 //desactivo boton y preview
-                btnUploadMedia.classList.add('d-none');
+                eid_btnUploadMedia.classList.add('d-none');
                 eid_previewContainer.innerHTML = '';//reset
+                eid_mediaFileInput.value = '';//reset
                 
 
-                await pintMediaSubidas();//pinto todas las imagenes disponibles
+                await pintMediaSubidos();//pinto todas las imagenes disponibles
                 await pintMediaActiveEnFondo();//aplico la imagen de fondo seleccionada
 
                 showToast(
@@ -4858,14 +4776,145 @@ async function subirMedia(){
 
     }
     catch (error) {
-
-        console.error('subirImagenes. error: ',error);
-
+        console.error('subirMedia. error: ',error);
     }
 
 }
 
 
+// Subir MUCHOS videos Película
+async function subirVideo(){
+    console.log(' === function subirVideo() === ');    
+    
+    const file = eid_videoFileInput.files[0];
+    const title = eid_videoTitle.value.trim();
+    const note = eid_videoNote.value.trim();
+
+    if(!file){
+        alert('Seleccione un vídeo.');
+        return;
+    }
+
+    if(!file.type.startsWith('video/')){
+        alert(
+            `"${file.name}" no es un vídeo válido.`
+        );    
+        return;
+    }
+
+    if(file.size > MAX_VIDEO_SIZE){
+        alert(
+            `"${file.name}" con el tamaño ${file.size} supera los 200 MB permitidos. Por favor, reduce el tamaño del fichero.`
+        );    
+        return;
+    }
+
+    if(title === ''){
+        alert('Introduzca un título.');
+        eid_videoTitle.focus();
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('video', file);
+    formData.append('title', title);
+    formData.append('note', note);
+
+    try {
+
+        const response = await fetch('../song/php/upload_video.php',
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error upload_video.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //desactivo boton y preview
+                eid_btnUploadVideo.classList.add('d-none');
+                eid_previewContainerVideo.innerHTML = '';//reset
+                eid_videoFileInput.value = '';//reset
+                eid_videoTitle.value = '';//reset
+                eid_videoNote.value = '';//reset
+
+                if(data.video.duplicado){
+                    showToast(
+                        'info',
+                        data.video.mensaje,
+                        null,
+                        'center',
+                        true,
+                        'Info'
+                    );
+                    return; 
+                }
+                
+                arr_lista_videos = await make_arr_lista_videos();
+                await pintVideoSubidos();//pinto todos los videos disponibles
+                pintVideoActiveEnPlayer();
+                await pintVideoActiveEnFondo();//aplico el vídeo seleccionado
+
+                showToast(
+                    'ok',
+                    data.video.mensaje,
+                    2000
+                );   
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.video.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en upload_video.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en upload_video.php',
+                { cause: error }
+            );
+        }       
+
+    }
+    catch (error) {
+        console.error('subirVideo. error: ',error);
+    }
+
+}
 
 async function pintMediaActiveEnFondo(){
     console.log('=== function pintMediaActiveEnFondo() ===');
@@ -4958,8 +5007,69 @@ async function pintMediaActiveEnFondo(){
 }
 
 
-async function pintMediaSubidas(){
-    console.log('=== function pintMediaSubidas() ===');
+async function pintVideoActiveEnFondo(){
+    console.log('=== function pintVideoActiveEnFondo() ===');
+
+    try {
+        
+        const data = await getVideoActive();
+        console.log('52. data:', data);
+
+        if (data.success) {
+            
+            //saco la ruta del video
+            // bg_ruta = '';//reset
+            // video_ruta = `.${data.media.filepath}`;
+            // console.log('video_ruta: ', video_ruta);
+            // localStorage.setItem('video_ruta', video_ruta);
+
+            // Aplicar inmediatamente el video en el fondo
+            // eid_videoFondo_body.classList.add('shown');//muestro
+            // eid_videoFondo_body.src = video_ruta;//aki obligatorio
+
+            //await guardarEnLocalAndBd('g');//g = guardar fondo
+
+            showToast(
+                'ok',
+                'Fichero de vídeo cargado correctamente',
+                2000
+            );
+            return true;  
+            
+        } else {
+
+            showToast(
+                'error',
+                data.error,
+                null,
+                'center',
+                true,
+                'Error'
+            );
+            return false;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar el fichero de vídeo:',error);
+
+        showToast(
+            'error',
+            `1. Error al cargar el fichero de vídeo: ${error}`,
+            null,
+            'center',
+            true,
+            'Error'
+        );
+        return false;
+    } 
+
+}
+
+
+async function pintMediaSubidos(){
+    console.log('=== function pintMediaSubidos() ===');
 
     try {
 
@@ -5035,6 +5145,182 @@ async function pintMediaSubidas(){
     } catch (error) {
         
         console.error('Error al cargar media de fondo:',error);
+
+        showToast(
+            'error',
+            data.error,
+            null,
+            'center',
+            true,
+            'Error'
+        );
+        return false;
+    } 
+}
+
+
+async function pintVideoSubidos(){
+    console.log('=== function pintVideoSubidos() ===');
+
+    try {
+
+        const data = await getVideoAll();
+        console.log('3. data:', data);
+
+        eid_videosContainer.innerHTML = '';//reset
+
+        if (data.success) {
+
+            if(data.video.length > 0){
+
+                data.video.forEach(item => {
+                    
+                    const video_item = document.createElement('div');
+                    video_item.className = (item.is_active == 1) ? 'video_item active' : 'video_item' ;
+                    video_item.dataset.id_video = item.id_video;
+                    video_item.dataset.id_media = item.id_media;
+                    video_item.dataset.media_type = item.media_type;                    
+                    video_item.innerHTML = `
+                        <div class="d_delete">
+                            <img class="d_delete_img" src="images/delete.png">
+                        </div>
+
+                        <video class="video_item_video" src=".${item.filepath}" autoplay muted loop playsinline></video>
+                        
+                        <div class="video_item_info">
+                            <div>${item.id_video}</div>
+                            <div>${item.title}</div>
+                            <div>${item.note}</div>
+                        </div>
+                    `;
+                    video_item.onclick = async (e) => {
+                        
+                        if(e.target.closest('.d_delete')){
+                            await deleteVideo(item.id_video);
+                        }else{
+                            //eid_fondo_body.style.backgroundImage = `url(.${item.filepath})`;//aki obligatorio
+                            console.log('item.id_video: ', item.id_video);
+    
+                            await updateVideoActive(item.id_video);
+                        }
+                        
+                    }
+                    //añado al DOM
+                    eid_videosContainer.append(video_item);
+                });
+
+            }else{
+                const div = document.createElement('div');
+                div.className = 'no_video';
+                div.innerHTML = `
+                    <p>1. No hay vídeos subidos.</p>
+                `;
+                eid_videosContainer.append(div);
+            }                  
+            
+        } else {
+
+            const div = document.createElement('div');
+            div.className = 'no_video';
+            div.innerHTML = `
+                <p class="prim">2. No hay vídeos subidos.</p>
+            `;
+            eid_videosContainer.append(div);
+
+            return;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar vídeo como película:',error);
+
+        showToast(
+            'error',
+            data.error,
+            null,
+            'center',
+            true,
+            'Error'
+        );
+        return false;
+    } 
+}
+
+
+async function make_arr_lista_videos(){
+    console.log('=== function make_arr_lista_videos() ===');
+
+    try {
+
+        const data = await getVideoAll();
+        console.log('3. data:', data);
+
+        eid_videosContainer.innerHTML = '';//reset
+        
+        if (data.success) {
+            
+            if(data.video.length > 0){
+                
+                arr_lista_videos = [];//reset
+                
+                data.video.forEach((item,i) => {
+                    
+                    if(item.is_active){
+                        index_video_actual = i;
+                        console.log('hago index_video_actual el vídeo que en la bd is_active == 1. index_video_actual: ', index_video_actual);
+                        
+                        id_video = item.id_video;
+                        console.log('id_video: ', id_video);
+                    }
+
+                    //reasigno valores de bd
+                    arr_lista_videos[i] = {
+                        id_video: item.id_video,
+                        id_media: item.id_media,
+                        title: item.title,
+                        note: item.note,
+                        ruta: '.' + item.filepath,
+                        is_active: item.is_active
+                    }
+                    console.log('arr_lista_videos: ', arr_lista_videos);
+
+                });
+                
+                //reasigno
+                src_video_actual = arr_lista_videos[index_video_actual].ruta;
+                console.warn('src_video_actual: ', src_video_actual);
+
+                return arr_lista_videos;
+
+            }else{
+                
+                showToast(
+                    'info',
+                    'no hay vídeos subidos para poder crear una lista de reproducción.',
+                    null,
+                    'center',
+                    true,
+                    'Info'
+                );
+            }                  
+            
+        } else {
+
+            const div = document.createElement('div');
+            div.className = 'no_video';
+            div.innerHTML = `
+                <p class="prim">No hay vídeos subidos.</p>
+            `;
+            eid_videosContainer.append(div);
+
+            return;             
+
+        }
+
+    } catch (error) {
+        
+        console.error('Error al cargar vídeo como película:',error);
 
         showToast(
             'error',
@@ -5136,6 +5422,104 @@ async function updateMediaActive(id_media){
 
         console.error(
             'Error al actualizar la imagen de fondo:',
+            error
+        );
+
+    }
+}
+
+
+async function updateVideoActive(id_video_val){
+    console.log('=== function updateVideoActive() ===');
+
+    if(!id_video_val){
+        console.error('id_video_val no válido:', id_video_val);
+        return;
+    }
+
+    try {
+
+        const response = await fetch('../song/php/update_video_active.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_video: id_video_val
+                })
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error update_video_active.php) ${response.status}`);
+        }
+
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                id_video = data.id_video;//reasigno id_video global para luego usarlo en el player
+                update_objVideoActual();
+
+                //actualizo HTML DOM
+                pintVideoActiveEnPlayer();//poner datos del video en el player
+                marcarVideoActiveEnDOM(id_video);//marcar en rojo el vídeo en el modal
+                await pintVideoActiveEnFondo();//aplico el vídeo seleccionado
+
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );                  
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en update_video_active.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en update_video_active.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al actualizar el vídeo:',
             error
         );
 
@@ -5269,6 +5653,125 @@ async function deleteMedia(id_media){
 }
 
 
+async function deleteVideo(id_video_val){
+    console.log('=== function deleteVideo() ===');
+
+    if(!id_video_val){
+        console.error('id_video_val no válido:', id_video_val);
+        return;
+    }
+
+    //averiguo si es imagen o vídeo
+    //let palabra_tipo = () ? : ;
+
+
+    const respuesta = confirm(`¿Estás seguro de que quieres ELIMINAR IRREVERSIBLEMENTE este vídeo? \n\nEsta acción no se podrá deshacer.`);
+    if(respuesta){
+        console.log('sigo adelante para eliminar el vídeo...'); //clic en "Aceptar"
+        if(promtConClaveSecreta()){
+            console.log('Clave secreta correcta. Procedo a eliminar el vídeo.');
+        }else{
+            return;
+        }
+    } else {
+        //console.log("7755. Cancelar..."); //clic en "Cancelar"
+        return;
+    }
+
+    try {
+
+        const response = await fetch('../song/php/delete_video.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_video: id_video_val
+                })
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error delete_imagen.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            if (data.success) {
+
+                //elimino del DOM la imagen eliminada
+                eid_videosContainer.querySelector(`.video_item[data-id_video="${id_video}"]`).remove();
+
+                //si hay un nuevo vídeo activo lo aplico en el DOM
+                if(data.new_id_media_active){
+                    id_video = data.new_id_video_active;
+                    
+                    //actualizo HTML DOM
+                    pintVideoActiveEnPlayer();//poner datos del video en el player
+                    marcarVideoActiveEnDOM(data.new_id_media_active);//marcar en rojo el video en el modal
+                    await pintVideoActiveEnFondo();//aplico el vídeo seleccionado
+                }
+
+                showToast(
+                    'ok',
+                    data.mensaje,
+                    2000
+                );                  
+                
+            } else {
+
+                showToast(
+                    'error',
+                    data.error,
+                    null,
+                    'center',
+                    true,
+                    'Error'
+                );
+                return;             
+    
+            }
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en delete_video.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en delete_video.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al actualizar el vídeo:',
+            error
+        );
+
+    }
+}
+
+
 function marcarMediaActiveEnDOM(id_media){
     if(!id_media){
         return;
@@ -5283,6 +5786,70 @@ function marcarMediaActiveEnDOM(id_media){
     });
 }
 
+function marcarVideoActiveEnDOM(id_video){
+    if(!id_video){
+        return;
+    }
+
+    Array.from(eid_videosContainer.querySelectorAll('.video_item')).forEach(item => {
+        if(item.dataset.id_video == id_video){
+            item.classList.add('active');
+        }else{
+            item.classList.remove('active');
+        }
+    });
+}
+
+function getIndexVideoActual(id_video){
+    console.log('=== function getIndexVideoActual() ===');
+
+    //busco datos del video seleccionado en el arr_lista_videos
+    const indexVideo = arr_lista_videos.findIndex(
+        v => v.id_video == id_video
+    );
+    
+    if(indexVideo === -1){
+        return false;
+    }
+    
+    return indexVideo;
+}
+
+function pintVideoActiveEnPlayer(){
+    console.log('=== function pintVideoActiveEnPlayer() ===');  
+    
+    if(!id_video){
+        alert('no hay id_video');
+        return;
+    }    
+    
+    index_video_actual = getIndexVideoActual(id_video);
+    
+    objVideoActual = arr_lista_videos[index_video_actual];
+
+    if(objVideoActual){
+        eid_d_id_video.textContent = objVideoActual.id_video;
+        eid_d_title_video.textContent = objVideoActual.title;
+        eid_d_note_video.textContent = objVideoActual.note;
+    }
+
+    update_objVideoActual();
+}
+
+function update_objVideoActual(){
+    console.log('=== function update_objVideoActual() ===');
+
+    if(!id_video){
+        alert('no hay id_video');
+        return;
+    } 
+
+    index_video_actual = getIndexVideoActual(id_video);
+    
+    objVideoActual = arr_lista_videos[index_video_actual];
+
+    src_video_actual = objVideoActual.ruta;
+}
 
 
 async function getMediaActive(){
@@ -5321,21 +5888,72 @@ async function getMediaActive(){
 
         } catch (error) {
             
-            console.error('❌ JSON inválido en get_imagen_active.php');
+            console.error('❌ JSON inválido en get_media_active.php');
             console.error(text.slice(0, 500));
             console.error('error.name: ', error.name);            
             console.error('error.message: ', error.message);            
 
             throw new Error(
-                'JSON inválido en get_imagen_active.php',
+                'JSON inválido en get_media_active.php',
                 { cause: error }
             );
         } 
 
     } catch (error) {
+        console.error('Error al cargar el fichero media de fondo:', error);
+    }
+}
 
-        console.error('Error al cargar la imagen de fondo:', error);
 
+async function getVideoActive(){
+    console.log('=== function getVideoActive() ===');
+
+    try {
+
+        const response = await fetch('../song/php/get_video_active.php',
+            {
+                method: 'POST'
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error get_video_active.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+    
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en get_video_active.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en get_video_active.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+        console.error('Error al cargar el fichero de vídeo:', error);
     }
 }
 
@@ -5364,7 +5982,7 @@ async function getMediaAll(){
         if(!response.ok){
             console.error('❌ HTTP ERROR', response.status);
             console.error(text.slice(0, 300));
-            throw new Error(`HTTP (error get_imagen_all.php) ${response.status}`);
+            throw new Error(`HTTP (error get_media_all.php) ${response.status}`);
         }
 
 
@@ -5376,7 +5994,7 @@ async function getMediaAll(){
 
         } catch (error) {
             
-            console.error('❌ JSON inválido en get_imagen_all.php');
+            console.error('❌ JSON inválido en get_media_all.php');
             console.error(text.slice(0, 500));
             console.error('error.name: ', error.name);            
             console.error('error.message: ', error.message);            
@@ -5391,6 +6009,64 @@ async function getMediaAll(){
 
         console.error(
             'Error al cargar las imágenes o vídeos de fondo:',
+            error
+        );
+
+    }
+}
+
+
+async function getVideoAll(){
+    console.log('=== function getVideoAll() ===');
+
+    try {
+
+        const response = await fetch('../song/php/get_video_all.php',
+            {
+                method: 'POST'
+            }
+        );
+
+        const text = await response.text();
+
+        if(!text.trim()) {
+            throw new Error('Respuesta vacía del servidor');
+        }
+
+        if(debug){
+            console.log('text:', text);
+        }
+
+        if(!response.ok){
+            console.error('❌ HTTP ERROR', response.status);
+            console.error(text.slice(0, 300));
+            throw new Error(`HTTP (error get_video_all.php) ${response.status}`);
+        }
+
+
+        try {
+            const data = JSON.parse(text);
+            console.log('data:', data);
+            
+            return data;
+
+        } catch (error) {
+            
+            console.error('❌ JSON inválido en get_video_all.php');
+            console.error(text.slice(0, 500));
+            console.error('error.name: ', error.name);            
+            console.error('error.message: ', error.message);            
+
+            throw new Error(
+                'JSON inválido en get_videoall.php',
+                { cause: error }
+            );
+        } 
+
+    } catch (error) {
+
+        console.error(
+            'Error al cargar el vídeo:',
             error
         );
 

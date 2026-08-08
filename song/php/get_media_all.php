@@ -45,7 +45,7 @@ $sql = "SELECT
             created_at,
             is_active
         FROM media
-        WHERE id_iglesia = ?
+        WHERE id_iglesia = ? AND es_pelicula = 0
         ORDER BY created_at DESC
 ";
 $stmt = $conn->prepare($sql);

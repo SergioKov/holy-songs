@@ -154,8 +154,25 @@ const eid_fondo_body = document.getElementById('fondo_body');//para slide en sel
 const eid_videoFondo_body = document.getElementById('videoFondo_body');//para slide en select_slide()
 
 const eid_previewContainer = document.getElementById('previewContainer');
-const eid_wr_imagen_personalizada = document.getElementById('wr_imagen_personalizada');
+const eid_imagenPersonalizada = document.getElementById('imagenPersonalizada');
 const eid_imagenesContainer = document.getElementById('imagenesContainer');
+
+const eid_mediaFileInput = document.getElementById('mediaFileInput');
+const eid_btnUploadMedia = document.getElementById('btnUploadMedia');
+const eid_previewMedia = document.getElementById('previewMedia');
+
+
+const eid_previewContainerVideo = document.getElementById('previewContainerVideo');
+const eid_videoPersonalizado = document.getElementById('videoPersonalizado');
+const eid_videosContainer = document.getElementById('videosContainer');
+
+const eid_videoFileInput = document.getElementById('videoFileInput');
+const eid_videoTitle = document.getElementById('videoTitle');
+const eid_videoNote = document.getElementById('videoNote');
+const eid_btnUploadVideo = document.getElementById('btnUploadVideo');
+const eid_previewVideo = document.getElementById('previewVideo');
+
+
 
 const eid_contenedor_prev = document.getElementById('contenedor_prev');//para slide en select_slide()
 const eid_contenedor_prev_inner = document.getElementById('contenedor_prev_inner');//para slide en select_slide()
@@ -389,6 +406,10 @@ const eid_btn_abrirVideo   = document.getElementById('btn_abrirVideo');
 const eid_btn_mostrarVideo   = document.getElementById('btn_mostrarVideo');
 const eid_btn_ocultarVideo   = document.getElementById('btn_ocultarVideo');
 
+
+const eid_d_id_video = document.getElementById('d_id_video');
+const eid_d_title_video = document.getElementById('d_title_video');
+const eid_d_note_video = document.getElementById('d_note_video');
 
 const eid_estadoVideoHoly = document.getElementById('estadoVideoHoly');
 const eid_videoTextHoly   = document.getElementById('videoTextHoly');
@@ -1095,5 +1116,48 @@ let src_video_actual = "./uploads/1/videos/video_demo_convertido.mp4";
 // let src_video_actual = "./uploads/1/videos/video_demo_16_sec_original.mp4";
 // let src_video_actual = "./uploads/1/videos/video_demo_its_on.mp4";
 
+let id_video = null;//video Holy Songs de iframe
+let index_video_actual = 0;//por defecto es el primero de la lista
+index_video_actual = 1;
+// index_video_actual = 2;
+
+let arr_lista_videos = [
+    {
+        id_video: 1,
+        title: 'es titulo de video 1',
+        notes: 'es nota de video',
+        ruta: "./uploads/1/videos/video_demo_convertido.mp4",
+    },
+    {
+        id_video: 2,
+        title: 'es titulo de video 2',
+        notes: 'es nota de video 2',
+        ruta: "./uploads/1/videos/spain_camp_2026.mp4",
+    },
+    {
+        id_video: 3,
+        title: 'es titulo de video 3',
+        notes: 'es nota de video 3',
+        ruta: "./uploads/1/videos/video_demo_16_sec_convertido.mp4",
+    }
+];
+
+src_video_actual = arr_lista_videos[index_video_actual].ruta;
+
+let objVideoActual = {
+    id_video: null,
+    id_media: null,
+    title: 'aki titulo de video actual',
+    notes: 'aki nota de video actual',
+    ruta: "./uploads/1/videos/video_demo_convertido.mp4",
+    is_active: 1
+};
+
+
 const MAX_IMAGE_SIZE = 200 * 1024 * 1024;//antes 40
 const MAX_VIDEO_SIZE = 200 * 1024 * 1024;//antes 100
+
+//para subir media como fondos
+let selectedFile = null;
+let selectedFiles = [];
+

@@ -108,7 +108,7 @@ if ($row = $result->fetch_assoc()) {
 
     echo json_encode([
         'success'    => true,
-        'duplicada'  => true,
+        'duplicado'  => true,
         'mensaje'    => 'La imagen ya existe.',
         'id_image'   => (int)$row['id_image'],
         'filepath'   => '/' . $row['filepath']

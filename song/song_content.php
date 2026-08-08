@@ -84,10 +84,10 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song</title>
     <link rel="icon" type="image/png" href="../images/hs.png">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Noto+Music&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Sans+Narrow:wght@400;700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
@@ -807,8 +807,8 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
                                                                     <div class="inner_content_body">
 
-                                                                        <h4>Admin</h4>
-
+                                                                        <!-- Fondo -->
+                                                                        <h4>Fondo</h4>
                                                                         <div class="contenedor_sel_pantalla">
                                                                             <h4>Fondo cuando la diapositiva está oculta</h4>
                                                                             <p>Habilitar / Deshabilitar:</p>
@@ -819,34 +819,39 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 <button id="btn_show_imagen_en_fondo" class="btn opt_fondo btn_big w_100" onclick="showTipoContent(this,'g')">Fondo personalizado</button>
                                                                             </div>
 
-                                                                            <div id="wr_imagen_personalizada" class="wr_imagen d-none">
+                                                                            <div id="imagenPersonalizada" class="wr_imagen d-none">
                                                                                 <div class="wr_imagen_inner">
                                                                                     <input
-                                                                                        id="backgroundMedia"
+                                                                                        id="mediaFileInput"
+                                                                                        class="btn_select_file"
                                                                                         type="file"
                                                                                         name="media[]"
                                                                                         accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
-                                                                                        multiple
-                                                                                    >
+                                                                                        multiple>
                                                                                     <div id="previewContainer">
                                                                                         <!-- Aquí se mostrará la vista previa de la imagen seleccionada -->
                                                                                     </div>
                                                                                     <button
                                                                                         id="btnUploadMedia"
                                                                                         class="btn btn_big w_100 d-none"
-                                                                                        type="button"
-                                                                                    >
+                                                                                        type="button">
                                                                                         Subir media
                                                                                     </button>
 
+                                                                                    <h4 class="h4_vista_previa m_top15">
+                                                                                        <span>Fondos (imágenes o vídeos) subidos:</span>
+                                                                                    </h4>
                                                                                     <div id="imagenesContainer">
                                                                                         <!-- Aquí se mostrarán las imágenes subidas -->
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
 
-                                                                        </div>
+                                                                        </div><!-- / Fondo -->
 
+
+                                                                        <!-- Control de Usuario -->
+                                                                        <h4>Control de Usuario</h4>
                                                                         <div class="contenedor_sel_pantalla">
                                                                             <h4>Permiso al Usuario personalizar la vista de la diapositiva</h4>
                                                                             <p>Si está habilitado, el usuario puede elegir qué quiere ver en la diapositiva: títulos, acordes, una parte de la siguiente diapositiva.</p>
@@ -854,10 +859,13 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button id="btn_user_view_control" class="btn w_100" onclick="showTipoContent(this,'u')">Control de Usuario</button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div><!-- / Control de Usuario -->
 
+
+                                                                        <!-- / Vista de Diapositiva -->
                                                                         <h4>Vista de Diapositiva</h4>
                                                                         <div class="contenedor_sel_pantalla">
+                                                                            <h4>Vista de Diapositiva</h4>
                                                                             <p>Mostrar / Ocultar:</p>
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button id="btn_show_legend" class="btn w_100" onclick="showTipoContent(this,'l')">Títulos</button>
@@ -882,12 +890,14 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <br>
                                                                             <p>Brillo de la pantalla:</p>
                                                                             <div id="contenedorBrillo" class="contenedor_brillo">
-                                                                                <input id="deslizador" class="deslizador" type="range"   min="10" max="100" value="100">
-                                                                                <span id="valorBrillo" class="porcentaje" >100%</span>
+                                                                                <input id="deslizador" class="deslizador" type="range" min="10" max="100" value="100">
+                                                                                <span id="valorBrillo" class="porcentaje">100%</span>
                                                                             </div>
 
-                                                                        </div>
+                                                                        </div><!-- / Vista de Diapositiva -->
 
+
+                                                                        <!-- Ubicación -->
                                                                         <h4>Ubicación</h4>
                                                                         <div class="contenedor_sel_pantalla">
                                                                             <h4>LOCAL</h4>
@@ -935,10 +945,13 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     <img class="btn_img_sm" src="images/reload_white_32x32.png">
                                                                                 </button>
                                                                                 <button class="btn" onclick="cerrarReferencia(3)">✕</button>
-                                                                            </div>                                                                            
+                                                                            </div>
 
-                                                                        </div>
+                                                                        </div><!-- / Ubicación -->
 
+
+                                                                        <!-- Identificación de pantallas -->
+                                                                        <h4>Identificación de pantallas</h4>
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>Identifica Pantallas</span>
@@ -949,11 +962,11 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     🖥️ Identificar pantallas
                                                                                 </button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div><!-- / Identificación de pantallas -->
 
 
-
-                                                                        <h4>Mostrar textos bíblicos </h4>
+                                                                        <!-- Mostrar textos bíblicos -->
+                                                                        <h4>Mostrar textos bíblicos</h4>
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>Biblia en la pantalla</span>
@@ -965,20 +978,21 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     <span>Bible-Text.com</span>
                                                                                 </button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div><!-- / Mostrar textos bíblicos -->
 
 
                                                                         <!-- Hora actual -->
+                                                                        <h4>Mostrar Hora actual</h4>
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>Hora actual</span>
                                                                             </h4>
-                                                                            <p>Control de la vista de la hora actual y cuanto queda hasta el inicio en la pantalla  (escena):</p>
+                                                                            <p>Control de la vista de la hora actual y cuanto queda hasta el inicio en la pantalla (escena):</p>
 
                                                                             <div class="wr_sel_pantalla">
                                                                                 <p>Hora de inicio:</p>
                                                                                 <div class="wr_hora_inputs">
-                                                                                    
+
                                                                                     <select id="horaInicio" class="hora_text_val">
                                                                                         <option value="00">00</option>
                                                                                         <option value="01">01</option>
@@ -1005,7 +1019,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                         <option value="22">22</option>
                                                                                         <option value="23">23</option>
                                                                                     </select>
-                                                                                    <span>:</span> 
+                                                                                    <span>:</span>
                                                                                     <select id="minutosInicio" class="hora_text_val">
                                                                                         <option value="00" selected>00</option>
                                                                                         <option value="01">01</option>
@@ -1070,7 +1084,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                                                                            
+
                                                                             <div class="wr_sel_pantalla">
                                                                                 <button id="btn_tiempo_restante_show" class="btn w_100" onclick="showTipoContent(this,'w')">Tiempo restante / pasado</button>
                                                                             </div>
@@ -1085,30 +1099,31 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div id="horaControlPanel" class="timer_panel wr_sel_pantalla">                                                                             
+                                                                            <div id="horaControlPanel" class="timer_panel wr_sel_pantalla">
                                                                                 <button id="btn_iniciarHora" class="btn w_100" onclick="iniciarRenderHoraHoly()">
                                                                                     ▶ Iniciar
-                                                                                </button>                                                                                
+                                                                                </button>
                                                                                 <button id="btn_pararHora" class="btn w_100" onclick="pararRenderHoraHoly()">
                                                                                     ⏹ Parar
                                                                                 </button>
                                                                             </div>
 
 
-                                                                            
+
                                                                             <div id="horaControlVista" class="wr_sel_pantalla">
                                                                                 <button id="btn_mostrarHora" class="btn w_100" onclick="mostrarHora()">
                                                                                     Mostrar
                                                                                 </button>
-                                                                            
+
                                                                                 <button id="btn_ocultarHora" class="btn w_100" onclick="ocultarHora()">
                                                                                     Ocultar
-                                                                                </button>                                                                               
+                                                                                </button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div><!-- / Hora actual -->
 
 
                                                                         <!-- Temporizador -->
+                                                                        <h4>Mostrar Temporizador</h4>
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>Temporizador</span>
@@ -1123,7 +1138,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                             <div id="timerDisplay" class="timer_display">
                                                                                 <div id="estadoTimerHoly" class="timer_text">...</div>
                                                                                 <div id="timerTextHoly" class="timer_text">--:--</div>
-                                                                                
+
                                                                                 <div class="wr_totales_timer">
                                                                                     <div id="timerPausadoHoly">PAUSADO TRAS: 00:00</div>
                                                                                     <div id="timerRestadoHoly">TOTAL RESTADO: 00:00</div>
@@ -1131,12 +1146,12 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div id="timerControlPanel" class="timer_panel wr_sel_pantalla">                                                                               
+                                                                            <div id="timerControlPanel" class="timer_panel wr_sel_pantalla">
 
                                                                                 <button id="btn_iniciarTimer" class="btn w_100" onclick="iniciarTimer()">
                                                                                     ▶ Iniciar
                                                                                 </button>
-                                                                                
+
                                                                                 <button id="btn_pararTimer" class="btn w_100" onclick="pararTimer()">
                                                                                     ⏹ Parar
                                                                                 </button>
@@ -1163,27 +1178,35 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                     +1 min
                                                                                 </button>
                                                                             </div>
-                                                                            
+
                                                                             <div id="timerControlVista" class="wr_sel_pantalla">
                                                                                 <button id="btn_mostrarTimer" class="btn w_100" onclick="mostrarTimer()">
                                                                                     Mostrar
                                                                                 </button>
-                                                                            
+
                                                                                 <button id="btn_ocultarTimer" class="btn w_100" onclick="ocultarTimer()">
                                                                                     Ocultar
-                                                                                </button>                                                                               
+                                                                                </button>
                                                                             </div>
-                                                                        </div>
-                                                                        
-                                                                        
-                                                                        <!-- Vídeo Película -->
+                                                                        </div><!-- / Vídeo. Vídeos subidos -->
+
+
+                                                                        <!-- Vídeo. Panel de control -->
+                                                                        <h4>Mostrar Vídeo</h4>
                                                                         <div class="contenedor_sel_pantalla ">
                                                                             <h4 class="h4_vista_previa">
-                                                                                <span>Vídeo Pelicula</span>
+                                                                                <span>Vídeo. Panel de control</span>
                                                                             </h4>
                                                                             <p>Control del vídeo en la pantalla:</p>
 
                                                                             <div id="videoDisplay" class="video_display">
+
+                                                                                <div class="wr_tit_desc">
+                                                                                    <div id="d_id_video">...</div>
+                                                                                    <div id="d_title_video">...</div>
+                                                                                    <div id="d_note_video">...</div>
+                                                                                </div>
+
                                                                                 <div id="estadoVideoHoly" class="timer_text">...</div>
                                                                                 <div id="videoTextHoly" class="timer_text">--:--</div>
                                                                                 <div class="wr_video_slider">
@@ -1194,30 +1217,28 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                         min="0"
                                                                                         max="100"
                                                                                         step="0.01"
-                                                                                        value="0"
-                                                                                    >
+                                                                                        value="0">
                                                                                 </div>
                                                                             </div>
 
+                                                                            <div id="videoControlPanel" class="timer_panel wr_sel_pantalla">
 
-                                                                            <div id="videoControlPanel" class="timer_panel wr_sel_pantalla">                                                                               
-                                                                                
                                                                                 <button id="btn_prevVideo" class="btn w_100" onclick="videoPrev()">
                                                                                     ⏮
                                                                                 </button>
 
                                                                                 <button id="btn_playPauseVideo" class="btn w_100" onclick="togglePlayPauseVideo()">
-                                                                                    ▶ 
+                                                                                    ▶
                                                                                 </button>
 
                                                                                 <button id="btn_pararVideo" class="btn w_100" onclick="pararVideo()">
-                                                                                    ⏹ 
+                                                                                    ⏹
                                                                                 </button>
 
                                                                                 <button id="btn_nextVideo" class="btn w_100" onclick="videoNext()">
                                                                                     ⏭
-                                                                                </button> 
-                                                                                
+                                                                                </button>
+
                                                                                 <button id="btn_back10" class="btn w_100" onclick="videoBack(15)">
                                                                                     ⏪ -15
                                                                                 </button>
@@ -1231,22 +1252,90 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                                 </button>
                                                                             </div>
 
-                                                                                                                          
                                                                             <div id="videoControlVista" class="wr_sel_pantalla">
                                                                                 <button id="btn_mostrarVideo" class="btn w_100" onclick="mostrarVideo()">
                                                                                     Mostrar
                                                                                 </button>
-                                                                            
+
                                                                                 <button id="btn_ocultarVideo" class="btn w_100" onclick="ocultarVideo()">
                                                                                     Ocultar
-                                                                                </button>                                                                               
+                                                                                </button>
                                                                             </div>
-                                                                        </div>
-
-                                                                        
+                                                                        </div><!-- / Temporizador -->
 
 
-                                                                        
+                                                                        <!-- Vídeo. Subida del fichero -->
+                                                                        <h4>Subir Vídeo</h4>
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>Vídeo. Subida del fichero</span>
+                                                                            </h4>
+                                                                            <p>Sube aquí el vídeo para verlo en la pantalla:</p>
+
+                                                                            <div id="videoPersonalizado" class="wr_imagen">
+                                                                                <div class="wr_imagen_inner">                                                                                    
+
+                                                                                    <div class="wr_video_title">
+                                                                                        <div class="d_limpiar_input" onclick="limpiarInput('#videoTitle')">
+                                                                                            <img src="images/x_white.png">
+                                                                                        </div>
+                                                                                        <input 
+                                                                                            id="videoTitle" 
+                                                                                            name="videoTitle" 
+                                                                                            type="text" 
+                                                                                            placeholder="Título del vídeo..." 
+                                                                                        >                                                                                        
+                                                                                    </div>
+
+                                                                                    <div class="wr_video_title">
+                                                                                        <div class="d_limpiar_input" onclick="limpiarInput('#videoNote')">
+                                                                                            <img src="images/x_white.png">
+                                                                                        </div>
+                                                                                        <textarea id="videoNote" name="videoNote" placeholder="Descripción..."></textarea>
+                                                                                    </div>
+
+                                                                                    <input
+                                                                                        id="videoFileInput"
+                                                                                        class="btn_select_file"
+                                                                                        type="file"
+                                                                                        name="video[]"
+                                                                                        accept="video/*"
+                                                                                    >
+
+                                                                                    
+                                                                                    <div id="previewContainerVideo">
+                                                                                        <!-- Aquí se mostrará la vista previa del video seleccionado -->
+                                                                                    </div>
+                                                                                    <button
+                                                                                        id="btnUploadVideo"
+                                                                                        class="btn btn_big w_100 d-none"
+                                                                                        type="button">
+                                                                                        Subir vídeo
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div><!-- / Vídeo. Subida del fichero -->
+
+
+
+                                                                        <!-- Vídeo. Vídeos subidos -->
+                                                                        <h4>Vídeos subidos</h4>
+                                                                        <div class="contenedor_sel_pantalla ">
+                                                                            <h4 class="h4_vista_previa">
+                                                                                <span>Vídeos subidos:</span>
+                                                                            </h4>
+
+                                                                            <p>Vista preliminar de los vídeos subidos en la pantalla:</p>
+                                                                            <div id="videosContainer">
+                                                                                <!-- Aquí se mostrarán los vídeos subidos -->
+                                                                            </div>
+                                                                        </div><!-- / Vídeo. Vídeos subidos -->
+
+
+
+
+
                                                                         <div class="contenedor_sel_pantalla d-none">
                                                                             <h4 class="h4_vista_previa">
                                                                                 <span>REMOTO</span>
@@ -1601,7 +1690,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                     <h4 class="h4_vista_previa">
                                                         <span>3. Diapositivas:</span>
                                                         <button class="btn" onclick="openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');">
-                                                            <img class="btn_img_sm2" src="images/checklist2_24x24.png">  
+                                                            <img class="btn_img_sm2" src="images/checklist2_24x24.png">
                                                         </button>
                                                     </h4>
                                                 </div><!--/.parte_fija-->

@@ -192,7 +192,7 @@ function guardarImagen(
         
         return [
             'success' => true,
-            'duplicada' => true,
+            'duplicado' => true,
             'mensaje' => 'La imagen ya existe.',
             'id_image' => (int)$row['id_image'],
             'filepath' => '/' . $row['filepath']
@@ -263,7 +263,7 @@ function guardarImagen(
 
     return [
         'success' => true,
-        'duplicada' => false,
+        'duplicado' => false,
         'mensaje' => 'Fondo guardado correctamente.',
         'id_image' => $id_image,
         'filepath' => '/' . $filepathDb
