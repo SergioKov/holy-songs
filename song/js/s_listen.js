@@ -1051,7 +1051,8 @@ function handleFormInput(e, container_block){
                         <!-- aki los p -->
                     </fieldset>
                 </div>
-            `;            
+            `; 
+            
 
             if(arr_lineas.length > 0){
                 arr_lineas.forEach((linea, i) => {
@@ -1062,6 +1063,10 @@ function handleFormInput(e, container_block){
                     switch (true) {
                         case contieneSoloAcordes(linea):
                             p.className = 'c';// 'c' => 'chord'
+                            // Si la línea anterior también contiene acordes
+                            if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
+                                p.classList.add('c_next');
+                            }
                             break;
 
                         case contieneSoloPuntos(linea):

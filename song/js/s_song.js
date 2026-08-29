@@ -323,7 +323,7 @@ function pintParrafosAcordes() {
 
 
         let resultado = partes.map(parte => {
-            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)','||:', ':||'].includes(parte) ) {
+            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)','(mod)','(mod.)','||:', ':||'].includes(parte) ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
                 return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
@@ -967,6 +967,10 @@ async function getSongPages(){
 
                         case contieneSoloAcordes(linea):
                             p.className = 'c';// 'c' => 'chord'
+                            // Si la línea anterior también contiene acordes
+                            if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
+                                p.classList.add('c_next');
+                            }
                             break;
 
                         case contieneSoloPuntos(linea):
@@ -1099,6 +1103,10 @@ async function getSongPages(){
 
                     case contieneSoloAcordes(linea):
                         p.className = 'c';// 'c' => 'chord'
+                        // Si la línea anterior también contiene acordes
+                        if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
+                            p.classList.add('c_next');
+                        }
                         break;
 
                     case contieneSoloPuntos(linea):
@@ -1275,6 +1283,10 @@ async function getSongBlocks(){
                     switch (true) {
                         case contieneSoloAcordes(linea):
                             p.className = 'c';// 'c' => 'chord'
+                            // Si la línea anterior también contiene acordes
+                            if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
+                                p.classList.add('c_next');
+                            }
                             break;
 
                         case contieneSoloPuntos(linea):
@@ -1389,6 +1401,10 @@ async function getSongBlocks(){
                 switch (true) {
                     case contieneSoloAcordes(linea):
                         p.className = 'c';// 'c' => 'chord'
+                        // Si la línea anterior también contiene acordes
+                        if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
+                            p.classList.add('c_next');
+                        }
                         break;
 
                     case contieneSoloPuntos(linea):

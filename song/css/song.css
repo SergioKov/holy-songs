@@ -3429,6 +3429,9 @@ span.sp_number {
 .tema_white p.c {
     color: red;
 }
+.tema_white p.c_next {
+    color: blue;
+}
 
 /* color de border de fieldset y legend */
 .tema_white fieldset, 
