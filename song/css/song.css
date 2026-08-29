@@ -3429,8 +3429,17 @@ span.sp_number {
 .tema_white p.c {
     color: red;
 }
-.tema_white p.c_next {
+.tema_white p.c_next1 {
     color: blue;
+}
+.tema_white p.c_next2 {
+    color: orange;
+}
+.tema_white p.c_next3 {
+    color: fuchsia;
+}
+.tema_white p.c_next4 {
+    color: green;
 }
 
 /* color de border de fieldset y legend */

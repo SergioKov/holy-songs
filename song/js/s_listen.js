@@ -1052,7 +1052,8 @@ function handleFormInput(e, container_block){
                     </fieldset>
                 </div>
             `; 
-            
+
+            let i_acorde = 0;
 
             if(arr_lineas.length > 0){
                 arr_lineas.forEach((linea, i) => {
@@ -1063,22 +1064,27 @@ function handleFormInput(e, container_block){
                     switch (true) {
                         case contieneSoloAcordes(linea):
                             p.className = 'c';// 'c' => 'chord'
-                            // Si la línea anterior también contiene acordes
-                            if (i > 0 && contieneSoloAcordes(arr_lineas[i - 1]) ) {
-                                p.classList.add('c_next');
+                            // Incrementamos la posición dentro de
+                            // la secuencia consecutiva de acordes
+                            if (i_acorde > 0) {
+                                p.classList.add(`c_next${i_acorde}`);
                             }
+                            i_acorde++;
                             break;
 
                         case contieneSoloPuntos(linea):
                             p.className = 'b';// 'b' => 'bola' o punto medio '·' o punto normal '.'
+                            i_acorde = 0;//reset
                             break;
-
+                            
                         case contieneSoloNota(linea):
                             p.className = 'n';// 'n' => 'nota' ej.: '     (modulación +2)    '
+                            i_acorde = 0;//reset
                             break;
 
                         default:
                             p.className = 't';// 't' => 'text'
+                            i_acorde = 0;//reset
                             break;
                     }
 
@@ -1140,6 +1146,8 @@ function handleFormInput(e, container_block){
         let arr_lineas = contenido.split(/\r\n|\r|\n/);
         arr_lineas = arr_lineas.filter(el => el !== '');//elimino strings vacias
 
+        let i_acorde = 0;
+
         if(arr_lineas.length > 0){
             arr_lineas.forEach((linea, i) => {
                 console.log('linea:', linea);
@@ -1149,18 +1157,27 @@ function handleFormInput(e, container_block){
                 switch (true) {
                     case contieneSoloAcordes(linea):
                         p.className = 'c';// 'c' => 'chord'
+                        // Incrementamos la posición dentro de
+                        // la secuencia consecutiva de acordes
+                        if (i_acorde > 0) {
+                            p.classList.add(`c_next${i_acorde}`);
+                        }
+                        i_acorde++;
                         break;
 
                     case contieneSoloPuntos(linea):
                         p.className = 'b';// 'b' => 'bola' o punto medio '·' o punto normal '.'
+                        i_acorde = 0;//reset
                         break;
 
                     case contieneSoloNota(linea):
                         p.className = 'n';// 'n' => 'nota' ej.: '     (modulación +2)    '
+                        i_acorde = 0;//reset
                         break;
 
                     default:
                         p.className = 't';// 't' => 'text'
+                        i_acorde = 0;//reset
                         break;
                 }
 
