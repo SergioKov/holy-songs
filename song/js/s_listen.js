@@ -1054,6 +1054,11 @@ function handleFormInput(e, container_block){
             `; 
 
             let i_acorde = 0;
+            const hayTexto = arr_lineas.some(linea =>
+                !contieneSoloAcordes(linea) &&
+                !contieneSoloPuntos(linea) &&
+                !contieneSoloNota(linea)
+            );
 
             if(arr_lineas.length > 0){
                 arr_lineas.forEach((linea, i) => {
@@ -1064,9 +1069,8 @@ function handleFormInput(e, container_block){
                     switch (true) {
                         case contieneSoloAcordes(linea):
                             p.className = 'c';// 'c' => 'chord'
-                            // Incrementamos la posición dentro de
-                            // la secuencia consecutiva de acordes
-                            if (i_acorde > 0) {
+                            // Si hay texto y ya había una línea de acordes anterior
+                            if (hayTexto && i_acorde > 0) {
                                 p.classList.add(`c_next${i_acorde}`);
                             }
                             i_acorde++;
@@ -1147,6 +1151,12 @@ function handleFormInput(e, container_block){
         arr_lineas = arr_lineas.filter(el => el !== '');//elimino strings vacias
 
         let i_acorde = 0;
+        const hayTexto = arr_lineas.some(linea =>
+            !contieneSoloAcordes(linea) &&
+            !contieneSoloPuntos(linea) &&
+            !contieneSoloNota(linea)
+        );
+
 
         if(arr_lineas.length > 0){
             arr_lineas.forEach((linea, i) => {
@@ -1157,9 +1167,8 @@ function handleFormInput(e, container_block){
                 switch (true) {
                     case contieneSoloAcordes(linea):
                         p.className = 'c';// 'c' => 'chord'
-                        // Incrementamos la posición dentro de
-                        // la secuencia consecutiva de acordes
-                        if (i_acorde > 0) {
+                        // Si hay texto y ya había una línea de acordes anterior
+                        if (hayTexto && i_acorde > 0) {
                             p.classList.add(`c_next${i_acorde}`);
                         }
                         i_acorde++;
