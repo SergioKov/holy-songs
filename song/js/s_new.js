@@ -2012,6 +2012,76 @@ function ocultar_pantallaShow(){
 */
 
 
+function toggle_ajustes_pers(){//muestra o oculta
+    if(ajustes_pers){
+        ajustes_pers = 0;//siguiente accion
+    }else{        
+        ajustes_pers = 1;//siguiente accion
+    }
+    check_ajustes_pers();
+}
+function check_ajustes_pers(){
+    console.log('=== function check_ajustes_pers() ===');
+    console.log('ajustes_pers: ', ajustes_pers);
+
+    if(ajustes_pers){
+        mostrar_ajustes_pers();
+    }else{
+        ocultar_ajustes_pers();
+    }
+}
+function mostrar_ajustes_pers(){//es lo mismo que deshabilitar
+    const d_ajustes_pers = eid_block_cancion.querySelector('#d_ajustes_pers');
+    d_ajustes_pers.classList.add('active');
+    d_ajustes_pers.querySelector('span').textContent = 'Deshabilitar ajustes personalizados';//next action
+    eid_block_cancion.querySelector('#head_pers_shapka').innerHTML = 'Ajustes personalizados <b>HABILITADOS</b>';
+    eid_block_cancion.querySelector('#wr_form_detalles_pers').style.display = 'block';
+
+    //deshabilito inputs de ajustes generales
+    document.querySelectorAll('.aj_general').forEach(el => {
+        el.classList.add('desactivado');
+        if(el.type == 'input'){
+            el.disabled = true;
+        }
+    });
+
+    const tipo_acorde_pers_input = eid_block_cancion.querySelector('#tipo_acorde_pers_hidden');
+    const eid_tune_transpose_pers = eid_block_cancion.querySelector('#tune_transpose_pers');
+    const eid_capo_pers = eid_block_cancion.querySelector('#capo_pers');
+
+    const transpose_pers_val = Number(eid_tune_transpose_pers.value);
+    const capo_pers_val = Number(eid_capo_pers.value);
+
+    const transpose_val_new = getTransposeFromCapo(transpose_pers_val, capo_pers_val);        
+    handleFormTranspose(transpose_val_new);
+    handleFormTipoAcorde(tipo_acorde_pers_input.value);//para cambiar tipo acorde    
+}
+function ocultar_ajustes_pers(){//es lo mismo que deshabilitar
+    const d_ajustes_pers = eid_block_cancion.querySelector('#d_ajustes_pers');
+    d_ajustes_pers.classList.remove('active');
+    d_ajustes_pers.querySelector('span').textContent = 'Habilitar ajustes personalizados';//next action
+    eid_block_cancion.querySelector('#head_pers_shapka').innerHTML = 'Ajustes personalizados <b>DESHABILITADOS</b>';
+    eid_block_cancion.querySelector('#wr_form_detalles_pers').style.display = 'none';
+
+    //habilito inputs de ajustes generales
+    document.querySelectorAll('.aj_general').forEach(el => {
+        el.classList.remove('desactivado');
+        if(el.type == 'input'){
+            el.disabled = false;
+        }
+    });
+
+    const tipo_acorde_input = eid_block_cancion.querySelector('#tipo_acorde_hidden');
+    const eid_tune_transpose = eid_block_cancion.querySelector('#tune_transpose');
+
+    handleFormTipoAcorde(tipo_acorde_input.value);//para cambiar tipo acorde
+    handleFormTranspose(Number(eid_tune_transpose.value));//para transponer al cargar 
+}
+
+
+
+
+
 function toggle_pantalla_show(){//muestra o oculta
     if(pantalla_show){
         pantalla_show = 0;//siguiente accion
@@ -2492,15 +2562,24 @@ function hideShowBlock(id_div){
     divElement.style.display = next_display;
 
     //guardo variable en localStorage
+    //titulos
+    if(id_div == 'title_detalles'){
+        display_title_detalles = next_display;
+        localStorage.setItem('display_title_detalles',display_title_detalles);
+    }
+
+    //detalles de la canción
     if(id_div == 'form_detalles'){
         display_form_detalles = next_display;
         localStorage.setItem('display_form_detalles',display_form_detalles);
     }
 
-    if(id_div == 'title_detalles'){
-        display_title_detalles = next_display;
-        localStorage.setItem('display_title_detalles',display_title_detalles);
-    }    
+    //Ajustes personalizados
+    if(id_div == 'form_detalles_pers'){
+        display_form_detalles_pers = next_display;
+        localStorage.setItem('display_form_detalles_pers',display_form_detalles_pers);
+    }  
+  
 }
 
 
@@ -4657,6 +4736,72 @@ function aplicarSongAjustes(){
     }
 
 }
+
+
+
+function aplicarUsersAjustes(){
+    console.log('=== function aplicarUsersAjustes() ===');
+
+    if(esObjeto(objSong) && Object.keys(objSong).length === 0){
+        console.log('objSong es vacio, hago return...');
+        return;
+    }
+
+    const ajustes_pers = Number(objSong.ajustes_pers);
+    console.log('ajustes_pers: ', ajustes_pers);
+
+    if(!ajustes_pers){
+        console.log('no hay objSong.ajustes_pers, hago return...');
+        return;
+    }
+    
+    if(ajustes_pers){//hay datos de ajustes personalizados
+
+        //transponer o capo - capodastr
+        if(objSong.tune_transpose_pers || objSong.capo_pers){
+            console.log('hay tune_transpose_pers o capo_pers en users_ajustes, la aplico al cargar el form...');
+
+            const tune_transpose_pers_val = Number(objSong.tune_transpose_pers);
+            const capo_pers_val = Number(objSong.capo_pers);
+
+            const transpose_val_new = getTransposeFromCapo(tune_transpose_pers_val, capo_pers_val);        
+            console.log('transpose_val: ', transpose_val_new);
+
+            handleFormTranspose(transpose_val_new);
+
+        }else{
+            console.log('no hay tune_transpose_pers o capo_pers en users_ajustes, aplico valor por defecto...');
+        }
+
+
+        setTimeout(()=>{
+            permitirShowToast = true;//para mostrar toast 
+            //para que no se muestre el ultimo mensaje por showToast(), muestro algo generico
+            showToast('info', 'Ajustes personalizados de Usuario aplicados correctamente.', 2000, 'bottom', false, '', document.querySelector('.vista_fixed_body'));
+        },10);
+
+    }
+
+}
+
+function getTransposeFromCapo(transpose_val, capo_val){
+    console.log('=== function getTransposeFromCapo() ===');
+
+    transpose_val = Number(transpose_val);
+    capo_val = Number(capo_val);
+
+    //si no es un numero
+    if(isNaN(transpose_val) || isNaN(capo_val) ){
+        transpose_val = 0;
+        return transpose_val;
+    }
+    
+    const transpose_val_new = transpose_val - capo_val;
+    console.log('transpose_val_new: ', transpose_val_new);
+
+    return Number(transpose_val_new);    
+}
+
 
 
 

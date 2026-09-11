@@ -698,7 +698,7 @@ span.barra {
 
 
 fieldset {
-    /* background: green; */
+    background: transparent;
     border-radius: 10px;
     /* border-color: transparent; */
     margin-inline: 8px;
@@ -1647,7 +1647,7 @@ form > .form_group:has(+ .wr_btns_eliminar)
 
 /* para id.notes */
 .form_group_last {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 
 form .d_canciones_lista.parte_lista ,
@@ -1734,9 +1734,13 @@ textarea:not(:placeholder-shown) + label
 .wr_song_number,
 .wr_tune,
 .wr_tune_transpose,
+.wr_tune_transpose_pers,
+.wr_capo_pers,
 .wr_tipo_acorde,
+.wr_tipo_acorde_pers,
 .wr_tipo_fuente,
 .wr_tempo_bpm,
+.wr_tempo_bpm_pers,
 .wr_id_grupo,
 .wr_lang
  {
@@ -3364,41 +3368,72 @@ span.sp_number {
 #tema_block.tema_black {
     background: #280861;
 }
-.tema_black .wr_vista_blocks {
-    font-size: 22px;
-    background: #280861;
-    /* background: #ffffff; */
-}
 
-/* fondo de fieldset */
-.tema_white .wr_vista_blocks fieldset {
-    background: white;
-}
 
-/* color de texto */
-.tema_black .bloques{
-    color: white;
-}
+/* color de texto y acordes */
+.tema_black {
+    /***********************************/   
+    
+    .wr_vista_blocks {
+        background: #280861;
+        font-size: 22px;
+    }
 
-/* color de acordes */
-.tema_white p.c {
-    color: #00e2ff;
-}
+    .wr_vista_blocks fieldset {
+        background: #280861;
+    }
+    
+    .bloques{
+        color: white;
+    }    
 
-/* color de border de fieldset y legend */
-.tema_black fieldset, 
-.tema_black legend 
-{
-    border: 3px solid #333333;
-    border-radius: 10px;
-}
+    .d_contenedor {
+        background: #280861;
+    }
+    
+    p.t {
+        color: white;
+    }
 
-/* fondo de legend */
-.tema_black .wr_vista_blocks legend {
-    color: #FFEB3B !important;
-    background: #545454 !important;
-    font-size: 12px;
+    p.c {
+        color: #00e2ff;
+    }
+
+    p.c_next1 {
+        color: #3636eb;
+    }
+
+    p.c_next2 {
+        color: fuchsia;
+    }
+
+    p.c_next3 {
+        color: orange;
+    }
+
+    p.c_next4 {
+        color: green;
+    }
+
+    fieldset, 
+    legend 
+    {
+        background: #000000;
+        border: 3px solid #333333;
+        border-radius: 10px;
+    }
+
+    legend {
+        color: #ffeb3b !important;
+        font-size: 72%;
+    }
+
+
+
+
+    /***********************************/
 }
+/* end ./tema_black */
 /********************* END - TEMA BLACK *********************/
 
 
@@ -3410,54 +3445,67 @@ span.sp_number {
 #tema_block.tema_white {
     background: white;
 }
-.tema_white .wr_vista_blocks {
-    font-size: 22px;
-    background: white;
-}
 
-/* fondo de fieldset */
-.tema_white .wr_vista_blocks fieldset {
-    background: white;
-}
 
-/* color de texto 'p' */
-.tema_white .bloques{
-    color: black;
-}
+/* color y fondo */
+.tema_white {
+    /***********************************/
+    .wr_vista_blocks {
+        background: white;
+        font-size: 22px;
+    }
 
-/* color de acordes */
-.tema_white p.c {
-    color: red;
-}
-.tema_white p.c_next1 {
-    color: blue;
-}
-.tema_white p.c_next2 {
-    color: fuchsia;
-}
-.tema_white p.c_next3 {
-    color: orange;
-}
-.tema_white p.c_next4 {
-    color: green;
-}
+    .wr_vista_blocks fieldset {
+        background: white;
+    }
+    
+    .bloques{
+        color: black;
+    }
 
-/* color de border de fieldset y legend */
-.tema_white fieldset, 
-.tema_white legend 
-{
-    border: 3px solid #e8e8e8;
-    border-radius: 10px;
-}
+    .d_contenedor {
+        background: #f0f0f0;
+    }
+    
+    p.t {
+        color: black;
+    }
 
-/* fondo de legend */
-.tema_white legend {
-    color: #00a707 !important;
-    /* background: #f3f3f3; */
-    background: white !important;
-    /* font-size: 12px; */
-    font-size: 72%;
-}
+    p.c {
+        color: red;
+    }
+
+    p.c_next1 {
+        color: blue;
+    }
+
+    p.c_next2 {
+        color: fuchsia;
+    }
+
+    p.c_next3 {
+        color: orange;
+    }
+
+    p.c_next4 {
+        color: green;
+    }
+
+    fieldset, 
+    legend 
+    {
+        background: white !important;
+        border: 3px solid #d3d3d3;
+        border-radius: 10px;
+    }
+
+    legend {
+        color: #00a707 !important;
+        font-size: 72%;
+    }
+    /***********************************/
+} 
+/* end ./tema_white */
 /********************* END - TEMA WHITE *********************/
 
 
@@ -3544,6 +3592,12 @@ span.sp_number {
     /* background: #f0f0f0; */
     border: 1px solid #dddddd;
     border-radius: 0 0 5px 5px;
+}
+.head_pers {
+    background: purple;
+}
+.body_pers {
+    border: 1px solid purple;
 }
 
 
@@ -4311,7 +4365,8 @@ span.sp_number {
 }
 
 .d_contenedor {
-    background: #ffffff;
+    /* background: #ffffff; */
+    background: #f0f0f0;
     overflow: auto;
     overflow-y: scroll;
     width: 100%;
@@ -5163,4 +5218,39 @@ fieldset.kuplet.partial{
     bottom: 5px;
     left: 5px;
     width: calc(100% - 10px);
+}
+
+#d_ajustes_pers {
+    background: #5a5a5a;
+    border: 1px solid #464646;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 1rem;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+#d_ajustes_pers:hover {
+    background-color: #888;
+    /* opacity: 0.8; */
+}
+#d_ajustes_pers.active {
+    border: 1px solid #440044 !important;
+    background: purple;
+}
+
+.desactivado {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.sp_pers {
+    background: purple;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    padding: 5px 5px 3px;
 }

@@ -457,7 +457,7 @@ function buildFormCancion(contenedor, cancion_action = null){
 
 
 
-                
+                <!-- Título -->
                 <div class="form_group wr_detalles">
                     <div class="wr_detalles_head" onclick="hideShowBlock('title_detalles');">
                         Título (detalles)
@@ -491,9 +491,10 @@ function buildFormCancion(contenedor, cancion_action = null){
 
                     </div><!--/#title_detalles-->
                 </div><!--/#wr_detalles-->
+                <!-- /Título -->
 
 
-
+                <!-- Detalles de la canción -->
                 <div class="form_group wr_detalles">
                     <div class="wr_detalles_head" onclick="hideShowBlock('form_detalles');">
                         Detalles de la canción
@@ -678,15 +679,15 @@ function buildFormCancion(contenedor, cancion_action = null){
                             
                             <div class="form_group wr_tipo_acorde" style="display: block;">
                                 <label class="${id_vstavka} lab_di_bem">Tipo Acorde</label>
-                                <div class="wr_di_bem">
-                                    <div class="dbtn" data-value="#" on-click="meterTipoAcorde('#')">#</div>
-                                    <div class="dbtn" data-value="b" on-click="meterTipoAcorde('b')">b</div>
+                                <div id="d_tipo_acorde" class="wr_di_bem aj_general">
+                                    <div class="dbtn" data-value="#">#</div>
+                                    <div class="dbtn" data-value="b">b</div>
                                 </div>
                                 <input id="tipo_acorde_hidden" type="hidden" name="tipo_acorde" value=""> 
                             </div>
 
                             <div class="form_group wr_tune_transpose select_container">
-                                <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt" required="">
+                                <select id="${id_vstavka}tune_transpose" name="tune_transpose" class="sel_opt aj_general" required="">
                                     <option value="" disabled selected hidden></option>
                                     
                                     <option>+12</option>
@@ -722,7 +723,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                             </div>
 
                             <div class="form_group wr_tempo_bpm">
-                                <input id="${id_vstavka}tempo_bpm" name="tempo_bpm" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" " value="0">
+                                <input id="${id_vstavka}tempo_bpm" class="aj_general" name="tempo_bpm" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" " value="0">
                                 <label for="${id_vstavka}tempo_bpm">Tempo (BPM)</label>
                             </div>
 
@@ -736,9 +737,120 @@ function buildFormCancion(contenedor, cancion_action = null){
                             <label for="${id_vstavka}url_youtube">Enlace de vídeo de YouTube</label>
                         </div>
 
+                        <div id="d_ajustes_pers" onclick="toggle_ajustes_pers()">
+                            <span>---Habilitar ajustes personalizados---</span>
+                        </div>
+
+                    </div>
+                </div><!-- /Detalles de la canción -->
+            
+
+
+
+
+                <!-- Ajustes personalizados -->
+                <div id="wr_form_detalles_pers" class="form_group wr_detalles">
+                    <div id="head_pers_shapka" class="wr_detalles_head head_pers" onclick="hideShowBlock('form_detalles_pers');">
+                        Ajustes personalizados
+                    </div>
+
+                    <div id="form_detalles_pers" class="wr_detalles_body body_pers" style="display: ${display_form_detalles_pers};">
+
+                        <div class="wr_group">
+
+                            <div class="form_group wr_tipo_acorde" style="display: block;">
+                                <label class="${id_vstavka} lab_di_bem">Tipo Acorde (Usuario)</label>
+                                <div id="d_tipo_acorde_pers" class="wr_di_bem aj_pers">
+                                    <div class="dbtn" data-value="#">#</div>
+                                    <div class="dbtn" data-value="b">b</div>
+                                </div>
+                                <input id="tipo_acorde_pers_hidden" type="hidden" name="tipo_acorde_pers" value=""> 
+                            </div>
+
+
+                            <div class="form_group wr_tune_transpose_pers select_container">
+                                <select id="${id_vstavka}tune_transpose_pers" name="tune_transpose_pers" class="sel_opt aj_pers" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    
+                                    <option>+12</option>
+                                    <option>+11</option>
+                                    <option>+10</option>
+                                    <option>+9</option>
+                                    <option>+8</option>
+                                    <option>+7</option>
+                                    <option>+6</option>
+                                    <option>+5</option>
+                                    <option>+4</option>
+                                    <option>+3</option>
+                                    <option>+2</option>
+                                    <option>+1</option>
+                                    
+                                    <option selected>0</option>
+                                    
+                                    <option>-1</option>
+                                    <option>-2</option>
+                                    <option>-3</option>
+                                    <option>-4</option>
+                                    <option>-5</option>
+                                    <option>-6</option>
+                                    <option>-7</option>
+                                    <option>-8</option>
+                                    <option>-9</option>
+                                    <option>-10</option>
+                                    <option>-11</option>
+                                    <option>-12</option>
+                                    
+                                </select>
+                                <label for="${id_vstavka}tune_transpose_pers">Transpose (Usuario)</label>
+                            </div>
+
+
+
+                            <div class="form_group wr_capo_pers select_container">
+                                <select id="${id_vstavka}capo_pers" name="capo_pers" class="sel_opt aj_pers" required="">
+                                    <option value="" disabled selected hidden></option>
+                                    
+                                    <option>+12</option>
+                                    <option>+11</option>
+                                    <option>+10</option>
+                                    <option>+9</option>
+                                    <option>+8</option>
+                                    <option>+7</option>
+                                    <option>+6</option>
+                                    <option>+5</option>
+                                    <option>+4</option>
+                                    <option>+3</option>
+                                    <option>+2</option>
+                                    <option>+1</option>
+                                    
+                                    <option selected>0</option>
+                                                                        
+                                </select>
+                                <label for="${id_vstavka}capo_pers">Capo (Usuario)</label>
+                            </div>
+
+                            <div class="form_group wr_tempo_bpm_pers">
+                                <input id="${id_vstavka}tempo_bpm_pers" class="aj_pers" name="tempo_bpm_pers" type="number" maxlength="3" pattern="\d*" inputmode="numeric" required placeholder=" " value="0">
+                                <label for="${id_vstavka}tempo_bpm_pers">Tempo (BPM) (Usuario)</label>
+                            </div>
+
+                            
+        
+                        </div><!-- /.wr_group -->
+
+
+                        <!-- Notas personalizadas --> 
+                        <div class="form_group form_group_last">
+                            <textarea id="${id_vstavka}notes_pers" name="notes_pers" rows="3" required="" placeholder=" "></textarea>
+                            <label for="${id_vstavka}notes_pers" class="lab_textarea">Notas personalizadas del Usuario</label>
+                        </div>
+
                     </div>
                 </div>
-            
+                <!-- /Ajustes personalizados -->
+
+
+
 
 
                 <div class="form_group">
@@ -759,7 +871,7 @@ function buildFormCancion(contenedor, cancion_action = null){
 
                 <div class="form_group">
                     <textarea id="${id_vstavka}notes" name="notes" rows="7" required="" placeholder=" "></textarea>
-                    <label for="${id_vstavka}notes" class="lab_textarea">Notas (apuntes personales)</label>
+                    <label for="${id_vstavka}notes" class="lab_textarea">Notas (apuntes generales a la canción)</label>
                 </div>
 
             </form>
@@ -771,6 +883,9 @@ function buildFormCancion(contenedor, cancion_action = null){
 
     const form = form_cancion.querySelector('form');
     //form.prepend(wr_dbtn_fullscreen);
+
+    const eid_d_tipo_acorde = form.querySelector('#d_tipo_acorde');
+    const eid_d_tipo_acorde_pers = form.querySelector('#d_tipo_acorde_pers');
 
 
     switch (cancion_action) {
@@ -786,52 +901,7 @@ function buildFormCancion(contenedor, cancion_action = null){
             form.elements["id_song"].disabled = true;//deshabilito input id_song   
             form.querySelector('.wr_id_song').style.display = 'none';//oculto el wr_id_song
             
-            pintSongbooksOptions(form.elements['songbook']); 
-            
-            //2. escucho al cambiar el texto...
-            form.elements['song_text'].oninput = (e) => {
-                handleFormInput(e, eid_block_cancion);
-            }
-            
-            //3. añado escuchador de change al 'transpose' 
-            form.elements['tune_transpose'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-                const transpose_val = Number(e.currentTarget.value);
-                handleFormTranspose(transpose_val);
-            }
-
-            //4. añado escuchador de change al 'tipo_acorde' 
-            // form.elements['tipo_acorde'].onchange = (e) => {
-            //     console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-            //     const tipo_acorde_val = e.currentTarget.value;
-            //     handleFormTipoAcorde(tipo_acorde_val);
-            // }
-
-            form.querySelector('.wr_di_bem').onclick = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                console.log('e.target.value: ', e.target.value);
-                let tipo_acorde_val;
-
-                if(e.target.dataset.value == '#'){
-                    tipo_acorde_val = '#';
-                }
-                if(e.target.dataset.value == 'b'){
-                    tipo_acorde_val = 'b';
-                }
-                meterTipoAcorde(tipo_acorde_val);
-                handleFormTipoAcorde(tipo_acorde_val);
-            }
-
-            //5. añado escuchador de change al 'tipo_fuente' 
-            form.elements['tipo_fuente'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-                const tipo_fuente_val = e.currentTarget.value;
-                handleFormTipoFuente(tipo_fuente_val);
-            }            
-                        
+            pintSongbooksOptions(form.elements['songbook']);           
             break;
                     
         default:
@@ -863,12 +933,12 @@ function buildFormCancion(contenedor, cancion_action = null){
             form.querySelector('.wr_id_song').style.display = 'block';//muestro el wr_id_song
             form.elements['song_number'].value = objSong.song_number || '';
             form.elements['tune'].value = objSong.tune || '';
-            form.elements['tune_transpose'].value = objSong.tune_transpose || '';
-            form.elements['tipo_acorde'].value = objSong.tipo_acorde || '';
-            form.elements['tipo_fuente'].value = objSong.tipo_fuente || '';
+            form.elements['tune_transpose'].value = objSong.tune_transpose || 0;
+            form.elements['tipo_acorde'].value = objSong.tipo_acorde || '#';
+            form.elements['tipo_fuente'].value = objSong.tipo_fuente || 'a';
             form.elements['url_youtube'].value = objSong.url_youtube || '';
             form.elements['url_recurso'].value = objSong.url_recurso || '';
-            form.elements['tempo_bpm'].value = objSong.tempo_bpm || '';
+            form.elements['tempo_bpm'].value = objSong.tempo_bpm || 0;
             form.elements['lang'].value = objSong.lang;
             form.elements['song_text'].value = objSong.song_text || '';
             form.elements['notes'].value = objSong.notes || '';
@@ -879,64 +949,129 @@ function buildFormCancion(contenedor, cancion_action = null){
             handleFormTipoAcorde(objSong.tipo_acorde);//para cambiar tipo acorde al cargar el form
             handleFormTipoFuente(objSong.tipo_fuente);//para cambiar tipo fuente al cargar el form
 
-
-            //song ajustes
+            //songs ajustes
             aplicarSongAjustes();
 
+            //ajustes personalizados
+            ajustes_pers = Number(objSong.ajustes_pers);
+            form.elements['tune_transpose_pers'].value = objSong.tune_transpose_pers || 0;
+            form.elements['capo_pers'].value = objSong.capo_pers || 0;
+            form.elements['tipo_acorde_pers'].value = objSong.tipo_acorde_pers || '#';
+            form.elements['tempo_bpm_pers'].value = objSong.tempo_bpm_pers || 0;
+            form.elements['notes_pers'].value = objSong.notes_pers || '';
+
+            aplicarUsersAjustes();
 
             document.querySelector('.vista_fixed .d_contenedor').scrollTop = 0;//voy al inicio del contenedor
             refreshSwipeLayout();
             
-            
-
-            //2. escucho al cambiar el texto...
-            form.elements['song_text'].oninput = (e) => {
-                handleFormInput(e, eid_block_cancion);
-            }
-
-            //3. añado escuchador de change al 'transpose' 
-            form.elements['tune_transpose'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-                const transpose_val = Number(e.currentTarget.value);
-                handleFormTranspose(transpose_val);
-            }
-
-            //4. añado escuchador de change al 'tipo_acorde' 
-            // form.elements['tipo_acorde'].onchange = (e) => {
-            //     console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-            //     const tipo_acorde_val = e.currentTarget.value;
-            //     handleFormTipoAcorde(tipo_acorde_val);
-            // }
-
-            form.querySelector('.wr_di_bem').onclick = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                console.log('e.target.value: ', e.target.value);
-                let tipo_acorde_val;
-
-                if(e.target.dataset.value == '#'){
-                    tipo_acorde_val = '#';
-                }
-                if(e.target.dataset.value == 'b'){
-                    tipo_acorde_val = 'b';
-                }
-                meterTipoAcorde(tipo_acorde_val);
-
-                handleFormTipoAcorde(tipo_acorde_val);
-            }
-
-            //5. añado escuchador de change al 'tipo_fuente' 
-            form.elements['tipo_fuente'].onchange = (e) => {
-                console.log('e.currentTarget.value: ', e.currentTarget.value);
-                
-                const tipo_fuente_val = e.currentTarget.value;
-                handleFormTipoFuente(tipo_fuente_val);
-            }
-            
             buildEsquemaSoloTitulos(form.querySelector('.d_esquema_titulos'), objSong.arr_esquema);             
             break;
     }
+
+
+    //codigo para ambos casos: 'nueva' y  'ver, editar, eliminar'
+    //2. escucho al cambiar el texto...
+    form.elements['song_text'].oninput = (e) => {
+        handleFormInput(e, eid_block_cancion);
+    }
+
+    //3. añado escuchador de change al 'tipo_fuente' // 'Monospace' o 'Arial'
+    form.elements['tipo_fuente'].onchange = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+        
+        const tipo_fuente_val = e.currentTarget.value;
+        handleFormTipoFuente(tipo_fuente_val);
+    }  
+    
+    //antes. tipo_acorde como '<select></select>'
+    //4. añado escuchador de change al 'tipo_acorde' 
+    // form.elements['tipo_acorde'].onchange = (e) => {
+    //     console.log('e.currentTarget.value: ', e.currentTarget.value);
+        
+    //     const tipo_acorde_val = e.currentTarget.value;
+    //     handleFormTipoAcorde(tipo_acorde_val);
+    // }
+    
+    //4. añado escuchador de change al 'tipo_acorde' como '<div></div>' 
+    eid_d_tipo_acorde.onclick = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+        console.log('e.target.value: ', e.target.value);
+        let tipo_acorde_val;
+
+        if(e.target.dataset.value == '#'){
+            tipo_acorde_val = '#';
+        }
+        if(e.target.dataset.value == 'b'){
+            tipo_acorde_val = 'b';
+        }
+        meterTipoAcorde(eid_d_tipo_acorde, tipo_acorde_val);
+
+        handleFormTipoAcorde(tipo_acorde_val);
+    }    
+
+    //5. añado escuchador de change al 'transpose' 
+    form.elements['tune_transpose'].onchange = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+        
+        const transpose_val = Number(e.currentTarget.value);
+        handleFormTranspose(transpose_val);
+    }
+        
+
+
+
+
+    //------------------------------------------------------------------//
+    // start - Ajustes personalizados
+    //------------------------------------------------------------------//
+    //4.pers añado escuchador de change al 'tipo_acorde' como '<div></div>'
+    eid_d_tipo_acorde_pers.onclick = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+        console.log('e.target.value: ', e.target.value);
+        let tipo_acorde_val;
+
+        if(e.target.dataset.value == '#'){
+            tipo_acorde_val = '#';
+        }
+        if(e.target.dataset.value == 'b'){
+            tipo_acorde_val = 'b';
+        }
+        meterTipoAcorde(eid_d_tipo_acorde_pers, tipo_acorde_val);
+
+        handleFormTipoAcorde(tipo_acorde_val);
+    }
+
+    //5.pers añado escuchador de change al 'transpose' 
+    form.elements['tune_transpose_pers'].onchange = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+        
+        const transpose_pers_val = Number(e.currentTarget.value);
+        const capo_pers_val = Number(form.elements['capo_pers'].value);
+
+        const transpose_val_new = getTransposeFromCapo(transpose_pers_val, capo_pers_val);        
+        handleFormTranspose(transpose_val_new);
+    }    
+    
+
+    //6.pers añado escuchador de change al 'transpose' 
+    form.elements['capo_pers'].onchange = (e) => {
+        console.log('e.currentTarget.value: ', e.currentTarget.value);
+
+        const tune_transpose_pers_val = Number(form.elements['tune_transpose_pers'].value);
+        const capo_pers_val = Number(e.currentTarget.value);
+
+        const transpose_val_new = getTransposeFromCapo(tune_transpose_pers_val, capo_pers_val);        
+        handleFormTranspose(transpose_val_new);
+    }    
+
+    
+    //------------------------------------------------------------------//
+    // end - Ajustes personalizados
+    //------------------------------------------------------------------//
+
+
+
 
     if(['ver'].includes(cancion_action)){
         //no apendo nada;
@@ -958,16 +1093,24 @@ function buildFormCancion(contenedor, cancion_action = null){
     // eid_bl_modalFullInner.append(form_cancion);
     contenedor.append(form_cancion);
 
-    meterTipoAcorde(objSong.tipo_acorde);//test
+    meterTipoAcorde(eid_d_tipo_acorde, objSong.tipo_acorde);
+    
+    //si hay ajustes personalizados
+    if(ajustes_pers){
+        meterTipoAcorde(eid_d_tipo_acorde_pers, objSong.tipo_acorde_pers);
+    }
+
+    check_ajustes_pers();
 
     console.log('fin func --- buildFormCancion');
 }
 
-function meterTipoAcorde(valor){
+function meterTipoAcorde(contenedor, valor){
     console.log('=== function meterTipoAcorde() ===');
+    console.log('contenedor: ', contenedor);
     console.log('valor: ', valor);
 
-    const dbtnAll = document.querySelectorAll('.wr_di_bem .dbtn');
+    const dbtnAll = contenedor.querySelectorAll('.dbtn');
     dbtnAll.forEach(dbtn => {
         if(dbtn.dataset.value == valor){
             dbtn.classList.add('active');
@@ -976,11 +1119,21 @@ function meterTipoAcorde(valor){
         }
     });
 
-    const tipo_acorde_input = document.querySelector('#tipo_acorde_hidden');
-    if(tipo_acorde_input){
-        tipo_acorde_input.value = valor;
-        handleFormTipoAcorde(valor);
+    if(contenedor.id === 'd_tipo_acorde'){
+        const tipo_acorde_input = document.querySelector('#tipo_acorde_hidden');
+        if(tipo_acorde_input){
+            tipo_acorde_input.value = valor;
+            handleFormTipoAcorde(valor);
+        }
     }
+
+    if(contenedor.id === 'd_tipo_acorde_pers'){
+        const tipo_acorde_pers_input = document.querySelector('#tipo_acorde_pers_hidden');
+        if(tipo_acorde_pers_input){
+            tipo_acorde_pers_input.value = valor;
+            handleFormTipoAcorde(valor);
+        }
+    }    
 }
 
 
@@ -1334,7 +1487,7 @@ function buildLista(lista_action = null){
 
                 <div class="form_group">
                     <textarea id="notes" name="notes" rows="7" required="" placeholder=" ">${notes_val}</textarea>
-                    <label class="lab_textarea" for="notes">Notas (apuntes personales)</label>
+                    <label class="lab_textarea" for="notes">Notas (apuntes generales a la lista)</label>
                 </div>
 
                 ${ (['nueva','editar'].includes(lista_action)) ? wr_btns_form.outerHTML : '' }
@@ -1471,12 +1624,43 @@ function buildListaSoloSongs(contenedor, arr_lista_bucle){
             const html_title_note = (item.title_note) ? `<span class="cl_title_note">${item.title_note}</span>` : '';
 
             p_lista.dataset.id_song = item.id_song;
+
+            let tune_transpose_val = '';
+            let cl_tune_transpose = '';
+
+            if(Number(item.ajustes_pers)){
+
+                if(item.tune_transpose_pers != 0 || item.capo_pers != 0){
+                    const transpose = getTransposeFromCapo(item.tune_transpose_pers, item.capo_pers);
+                    tune_transpose_val = (transpose > 0)
+                        ? `+${transpose}`
+                        : `${transpose}`;
+                    cl_tune_transpose = 'sp_pers';
+                }else{
+                    tune_transpose_val = '';
+                    cl_tune_transpose = '';
+                }
+
+            }else{
+                
+                cl_tune_transpose = '';
+                
+                if(item.tune_transpose != 0){
+                    tune_transpose_val = item.tune_transpose;
+                }else{
+                    tune_transpose_val = '';
+                }
+            }
+
+
+
+
             p_lista.innerHTML = `
                 <span class="wn_2_flex">
                     
                     <span class="sp_flex_btns">
                         <span class="l_tune">${item.tune || ''}</span>
-                        <span class="l_tune_transpose">${(item.tune_transpose != 0) ? item.tune_transpose : ''}</span>
+                        <span class="l_tune_transpose ${cl_tune_transpose}">${tune_transpose_val}</span>
                         <span class="l_id">${item.id_song}</span>
                         <span class="l_edit"><img src="images/icon_edit_white.svg"></span>
                         <span class="btn_song_x" data-id_song_to_del="${item.id_song}">✕</span>

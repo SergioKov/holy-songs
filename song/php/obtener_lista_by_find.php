@@ -66,6 +66,9 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     }
 }
 
+$id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null ;
+
+
 
 
 include('includes/connect_db.php');
@@ -210,15 +213,24 @@ if($result->num_rows > 0){
             
             //consulta:
             $sql_s = "SELECT
-                    id_song, 
-                    song_number, 
-                    title, 
-                    title2, 
-                    title_note, 
-                    tune,
-                    tune_transpose
-                FROM songs
-                WHERE id_song IN ($string_ids)
+                    s.id_song, 
+                    s.song_number, 
+                    s.title, 
+                    s.title2, 
+                    s.title_note, 
+                    s.tune,
+                    s.tune_transpose,
+
+                    ua.ajustes_pers,
+                    ua.tune_transpose_pers,
+                    ua.capo_pers
+
+                FROM songs s
+                
+                LEFT JOIN users_ajustes ua
+                    ON s.id_song = ua.id_song AND ua.id_user = $id_user
+
+                WHERE s.id_song IN ($string_ids)
 
             ";
             $result_s = $conn->query($sql_s);
@@ -234,7 +246,10 @@ if($result->num_rows > 0){
                         'title2' => $row_s['title2'],
                         'title_note' => $row_s['title_note'],
                         'tune' => $row_s['tune'],
-                        'tune_transpose' => $row_s['tune_transpose']
+                        'tune_transpose' => $row_s['tune_transpose'],
+                        'ajustes_pers' => $row_s['ajustes_pers'],
+                        'tune_transpose_pers' => $row_s['tune_transpose_pers'],
+                        'capo_pers' => $row_s['capo_pers']
                     ];
                     $arr_lista_from_table_songs[] = $data_s;
                 }            

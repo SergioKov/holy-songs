@@ -317,32 +317,43 @@ function pintParrafosAcordes() {
     document.querySelectorAll('fieldset p.c').forEach(p => {
         let textOriginal = p.textContent;
 
-        const regexTexto = /(\([^()]*\))|([|\/\-\(\)])|(\s+)|([^\s|\/\-\(\)]+)/g;//separa símbolos, espacios y texto y todo lo que esté dentro de ( ... ) como una sola pieza
-        //const partes = textOriginal.match(/([|\/])|(\s+)|([^\s|\/]+)/g);
+        const regexTexto = /(\\([^()]*\\))|([|\/\-()])|(\s+)|([^\s|\/\-()]+)/g;//separa símbolos, espacios y texto y todo lo que esté dentro de ( ... ) como una sola pieza
         const partes = textOriginal.match(regexTexto);
 
 
         let resultado = partes.map(parte => {
-            if ( ['|', '/', '-', '(', ')', ':','(1.volta)','(2.volta)','(1. volta)','(2. volta)','(mod)','(mod.)','||:', ':||'].includes(parte) ) {
+            if ( ['|', '/', '-', '(', ')', ':','1.volta','2.volta','1. volta','2. volta','mod','mod.','||:', ':||'].includes(parte) ) {
                 return `<span class="barra">${parte}</span>`;
             } else if (parte.trim() === '') {
-                return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
+                // return `<span class="espacio" data-length="${parte.length}">${parte}</span>`;
+                let parte_new = parte.replace(/ /g, '<span>&nbsp;</span>');
+                console.log('parte_new: ', parte_new);
+
+                return `<span class="espacio" data-length="${parte.length}">${parte_new}</span>`;
             } else {
                 return parte; // acordes u otros caracteres normales
             }
         }).join('');
 
-        //console.log('1. resultado: ',resultado);
+        console.log('1. resultado: ',resultado);
         
         resultado = resultado.replace(regexAcorde, (match) => {
             return `<span class="acorde" data-original="${match}">${match}</span>`;
         });
-        //console.log('2. resultado: ',resultado);
+        console.log('2. resultado: ',resultado);
 
         p.innerHTML = resultado;
     });
+
+    //reemplazarEspaciosAcordes();
+    console.log('=== end - function pintParrafosAcordes() ===');
 }
 
+function reemplazarEspaciosAcordes() {
+    document.querySelectorAll('fieldset p.c .espacio').forEach(espacio => {
+        espacio.innerHTML = espacio.textContent.replace(/ /g, '&nbsp;');
+    });
+}
 
 function pintParrafosLlaves() {
     console.log('=== function pintParrafosLlaves() ===');
@@ -719,14 +730,17 @@ function ajustarEspacios(){
                             new_string = generarEspacios(sig_string_length - 1);
                             console.log('[else] --- new_string.length', new_string.length); 
                         }
-                        arr[i+1].textContent = new_string;
+                        // arr[i+1].textContent = new_string;
+                        arr[i+1].innerHTML = new_string;
                     }
                 }else{//si length de acorde es la de original, pongo los espacios del original
                     //miro si va espacios en el sig elemento
                     if(arr[i+1] && arr[i+1].className == 'espacio'){
                         const length_original = arr[i+1].dataset.length;
+                        const new_string = generarEspacios(length_original);
                         //console.log('recupero la longitud original de los espacios. length_original', length_original); 
-                        arr[i+1].textContent = generarEspacios(length_original);
+                        // arr[i+1].textContent = new_string;
+                        arr[i+1].innerHTML = new_string;
                     }
                 }
 
@@ -739,7 +753,8 @@ function ajustarEspacios(){
 
 function generarEspacios(numero){
     if(numero > 0){
-        return ' '.repeat(numero);
+        // return ' '.repeat(numero);
+        return '<span>&nbsp;</span>'.repeat(numero);//new
     }else{
         return '';
     }
@@ -3141,6 +3156,18 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
         let lang = form.elements["lang"].value.trim();
         let song_text = form.elements["song_text"].value.trim();
         let notes = form.elements["notes"].value.trim();
+        
+        //AJUSTES PERSONALIZADOS
+        let tune_transpose_pers = form.elements["tune_transpose_pers"].value.trim() || 0;
+        let capo_pers = form.elements["capo_pers"].value.trim() || 0;
+        let tempo_bpm_pers = form.elements["tempo_bpm_pers"].value.trim() || 0;
+        let notes_pers = form.elements["notes_pers"].value.trim() || '';
+
+        let tipo_acorde_pers = form.elements["tipo_acorde_pers"].value.trim();
+        if (!tipo_acorde_pers || tipo_acorde_pers === 'undefined') {
+            tipo_acorde_pers = '#';
+        }
+
 
     
         let errors = [];
@@ -3237,7 +3264,7 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
             song_text,
             notes,
 
-            //ajustes
+            //ajustes de resolusión
             device_resolution: deviceResolution,            
             orientation: orientation,            
             font_size: currentFontSize,
@@ -3245,6 +3272,14 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
             acordes_visible: (acordesVisible) ? 1 : 0,
             texto_visible: (textoVisible) ? 1 : 0,
             contenido_width: (contenidoWidth) ? 1: 0,
+
+            //ajustes personalizados
+            ajustes_pers,
+            tune_transpose_pers,
+            capo_pers,
+            tipo_acorde_pers,
+            tempo_bpm_pers,
+            notes_pers,
         }
         console.log('objSongToSend: ',objSongToSend);
     
@@ -3311,6 +3346,9 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
                             title_note: objSong.title_note,
                             tune: objSong.tune,
                             tune_transpose: objSong.tune_transpose,
+                            ajustes_pers: objSong.ajustes_pers,
+                            tune_transpose_pers: objSong.tune_transpose_pers,
+                            capo_pers: objSong.capo_pers,
                         }
                         console.warn('songDataOfLista_new: ', songDataOfLista_new);
 

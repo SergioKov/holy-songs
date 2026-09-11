@@ -734,6 +734,7 @@ let show_en_center = JSON.parse(localStorage.getItem('show_en_center') ?? '0');/
 
 let display_title_detalles = localStorage.getItem('display_title_detalles') || 'none';// def 'none';
 let display_form_detalles = localStorage.getItem('display_form_detalles') || 'none';// def 'none';
+let display_form_detalles_pers = localStorage.getItem('display_form_detalles_pers') || 'none';// def 'none';
 
 //Objeto con datos de la canción actual para pantalla. 
 // SE USA EN 'pantalla_bd.js' 
@@ -924,6 +925,7 @@ let contenidoWidth = false;//a lo ancho. por defecto no ajustado
 
 let permitirShowToast = true;//para evitar mostrar varios toasts seguidos. uso con song_ajustes
 
+let ajustes_pers = 0;//por defecto es false '0'. no mostrar.
 
 const mapasDeLetras = {
 

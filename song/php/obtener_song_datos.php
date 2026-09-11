@@ -158,6 +158,13 @@ $sql = "SELECT
             s.lang,
             s.notes,
             s.count,
+                        
+            ua.ajustes_pers,
+            ua.tune_transpose_pers,
+            ua.capo_pers,
+            ua.tipo_acorde_pers,
+            ua.tempo_bpm_pers,
+            ua.notes_pers,
 
             s.created_at,
             s.updated_at
@@ -170,11 +177,15 @@ $sql = "SELECT
         LEFT JOIN songbooks sb
             ON sb.id_songbook = s.songbook
 
+        LEFT JOIN users_ajustes ua
+            ON s.id_song = ua.id_song AND ua.id_user = ?
+
         WHERE s.id_song = ?
 ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param(
-    "i",
+    "ii",
+    $id_user,
     $id_song
 );
 $stmt->execute();
@@ -186,7 +197,7 @@ $row = $result->fetch_assoc();
 if($row){   
     //echo_json_x($row, 'row']);
 
-    // SQL ajustes
+    // SQL songs_ajustes
     $sql_ajustes = "SELECT
                         device_resolution,
                         orientation,
@@ -209,11 +220,8 @@ if($row){
     if(!$stmt_ajustes){
         die("Error SQL ajustes");
     }
-    
-
 
     $id_song_bd = $row['id_song'];
-
 
     // start --- buscar ajustes
     $stmt_ajustes->bind_param(
@@ -222,7 +230,6 @@ if($row){
         $id_user,
         $device_resolution
     );
-
     $stmt_ajustes->execute();
     $result_ajustes = $stmt_ajustes->get_result();
 
@@ -281,6 +288,14 @@ if($row){
 
         // ajustes por orientación
         'ajustes' => $ajustes,
+        
+        // ajustes personalizados
+        'ajustes_pers' => $row['ajustes_pers'],
+        'tune_transpose_pers' => $row['tune_transpose_pers'],
+        'capo_pers' => $row['capo_pers'],
+        'tipo_acorde_pers' => $row['tipo_acorde_pers'],
+        'tempo_bpm_pers' => $row['tempo_bpm_pers'],
+        'notes_pers' => $row['notes_pers'],
 
         'created_at' => $row['created_at'],
         'updated_at' => $row['updated_at'],

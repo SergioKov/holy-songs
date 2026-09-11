@@ -200,11 +200,23 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $texto_visible  = $datos['texto_visible'] ?? null;
     $contenido_width  = $datos['contenido_width'] ?? null;
 
+    //ajustes personalizados
+    $ajustes_pers  = $datos['ajustes_pers'] ?? null;
+    //$ajustes_pers = $ajustes_pers !== null ? (int)$ajustes_pers : null;
+    //$ajustes_pers = 0;//test
+
+    $tune_transpose_pers  = $datos['tune_transpose_pers'] ?? null;
+    $capo_pers  = $datos['capo_pers'] ?? null;
+    $tipo_acorde_pers  = $datos['tipo_acorde_pers'] ?? null;
+    $tempo_bpm_pers  = $datos['tempo_bpm_pers'] ?? null;
+    $notes_pers  = $datos['notes_pers'] ?? null;
+
     //debug($tabla);
     //debug($campo);
     //debug($arr, 'arr');
     //echo_json_x($arr_esquema, 'arr_esquema');
     //echo_json_x($arr_esquema_array, 'arr_esquema_array');
+    //echo_json_x($ajustes_pers, 'ajustes_pers');
 
     //exit('<br>hasta aki-2');
 
@@ -277,7 +289,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $song_old = $result_old->fetch_assoc();
 
 
-    //PASO 2. Determinar acción
+    //PASO 2. Determinar acción: 
     $action = ($song_old)
         ? 'updated'
         : 'created';
@@ -377,7 +389,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     if($result_aj->num_rows > 0){
         $row_aj = $result_aj->fetch_assoc();
 		//echo_json_x($row,'row');		
-        $stored_id_song_sj = $row_aj["id_song"];//1
+        $stored_id_song_aj = $row_aj["id_song"];//1
         $hay_id_song_en_ajustes = true;
     }else{
         $hay_id_song_en_ajustes = false;
@@ -784,20 +796,24 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
         
         if($hay_id_song_en_tabla){//si es update, id_song ya lo tengo
             $id_song_ajustes = $id_song;
+            $id_song_users_ajustes = $id_song;
             $consulta_info = 'upsert songs_ajustes -> id_song ya existe en tabla songs, por lo tanto se hace update o insert en ajustes con id_song';
         }else{//es insert
             $id_song_ajustes = $conn->insert_id;//es id insertado de la cancion nueva de esta $conn
+            $id_song_users_ajustes = $conn->insert_id;//es id insertado de la cancion nueva de esta $conn
             $consulta_info = 'upsert songs_ajustes -> id_song no existe en tabla songs, por lo tanto se hace insert en ajustes con id_song_ajustes:' . $id_song_ajustes . ' que es id_song_bd de la nueva canción insertada';            
         }
 
         $mensaje_text = '';
         $mas_ajustes_text = '';
+        $mas_users_ajustes_text = '';
         $mas_ajustes_error = '';
+        $mas_users_ajustes_error = '';
 
         //si viene desde js guardarEsquema() => no hago nada
         //si viene desde js guardarSong() => sí hago upsert en ajustes (porque hay device_resolution, etc...)
 
-        if($device_resolution != null){//viene desde js guardarSong() 
+        if($device_resolution !== null){//viene desde js guardarSong() 
             
             //consulta UPSERT
             $sql2_upsert_ajustes = "INSERT INTO songs_ajustes
@@ -860,8 +876,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                     $mensaje_text = 'Error al actualizar datos en ajustes.';
                 }else{
                     $mensaje_text = 'Error al insertar datos en ajustes.';
-                }
-    
+                }    
                 $mas_ajustes_text = ' 1.(Ajustes error)';
                 $mas_ajustes_error = ' 1.(Error en ajustes: ' . $conn->error . ')';
             }
@@ -924,13 +939,88 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
 
 
 
+
+
+        //PASO 6. Guardar ajustes personalizados del usuario (si están habilitados)
+        if($ajustes_pers !== null){//viene desde js guardarSong() 
+            
+            //consulta UPSERT
+            $sql3_upsert_users_ajustes = "INSERT INTO users_ajustes
+                                    (
+                                        id_user,
+                                        id_song,
+
+                                        ajustes_pers,
+                                        tune_transpose_pers,
+                                        capo_pers,
+                                        tipo_acorde_pers,
+                                        tempo_bpm_pers,
+                                        notes_pers,
+    
+                                        created_at,
+                                        updated_at
+                                    )
+                                    VALUES
+                                    (
+                                        '$id_user_logged',
+                                        '$id_song_users_ajustes',
+
+                                        '$ajustes_pers',
+                                        '$tune_transpose_pers',
+                                        '$capo_pers',
+                                        '$tipo_acorde_pers',
+                                        '$tempo_bpm_pers',
+                                        '$notes_pers',
+    
+                                        NOW(),
+                                        NOW()
+                                    )
+                                    ON DUPLICATE KEY UPDATE
+                                        ajustes_pers = VALUES(ajustes_pers),
+                                        tune_transpose_pers = VALUES(tune_transpose_pers),
+                                        capo_pers = VALUES(capo_pers),
+                                        tipo_acorde_pers = VALUES(tipo_acorde_pers),
+                                        tempo_bpm_pers = VALUES(tempo_bpm_pers),
+                                        notes_pers = VALUES(notes_pers),
+                                        updated_at = NOW()
+            ";
+            $result3_users_ajustes = $conn->query($sql3_upsert_users_ajustes);
+    
+    
+    
+            if($result3_users_ajustes){
+                
+                if($hay_id_song_en_tabla){
+                    $mensaje_text = 'Datos actualizados correctamente.';
+                }else{
+                    $mensaje_text = 'Datos insertados correctamente.';
+                }
+                $mas_users_ajustes_text = ' 3.(Ajustes personalizados ok)';
+                $mas_users_ajustes_error = ' 3.(no hay error en ajustes personalizados)';
+    
+            }else{
+    
+                if($hay_id_song_en_tabla){
+                    $mensaje_text = 'Error al actualizar datos en ajustes personalizados.';
+                }else{
+                    $mensaje_text = 'Error al insertar datos en ajustes personalizados.';
+                }    
+                $mas_users_ajustes_text = ' 3.(Ajustes personalizados error)';
+                $mas_users_ajustes_error = ' 3.(Error en ajustes personalizados: ' . $conn->error . ')';
+            }
+        
+        }else{
+            $mas_users_ajustes_text = ' 993.(entra en else - ajustes_pers es [' . $ajustes_pers .  '] - Ajustes personalizados error)';
+        }
+
+
         $respuesta = [
             'success' => true,
             'id_song' => $id_song_ajustes,
             'action' => 'is_upsert',
             'action_tipo' => $action_tipo,
-            'mensaje' => $mensaje_text . $mas_ajustes_text,
-            'conn_error_ajustes' => $mas_ajustes_error,
+            'mensaje' => $mensaje_text . $mas_ajustes_text . $mas_users_ajustes_text,
+            'conn_error_ajustes' => $mas_ajustes_error . $mas_users_ajustes_error,
             'consulta_info' => $consulta_info
         ];
 
