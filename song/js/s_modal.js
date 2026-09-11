@@ -733,7 +733,10 @@ function buildFormCancion(contenedor, cancion_action = null){
                             <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}url_youtube')">
                                 <img src="images/x_white.png">
                             </div>
-                            <input id="${id_vstavka}url_youtube" name="url_youtube" type="text" required="" placeholder=" ">
+                            <div class="d_go_to_link" onclick="goToLinkById('${id_vstavka}url_youtube')">
+                                <img src="images/link_white.png">
+                            </div>
+                            <input id="${id_vstavka}url_youtube" class="pad_2_btms" name="url_youtube" type="text" required="" placeholder=" ">
                             <label for="${id_vstavka}url_youtube">Enlace de vídeo de YouTube</label>
                         </div>
 
@@ -865,8 +868,12 @@ function buildFormCancion(contenedor, cancion_action = null){
                     <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}url_recurso')">
                         <img src="images/x_white.png">
                     </div>
-                    <input id="${id_vstavka}url_recurso" name="url_recurso" type="text" required="" placeholder=" ">
-                    <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/17077)</label>
+                    <div class="d_go_to_link" onclick="goToLinkById('${id_vstavka}url_recurso')">
+                        <img src="images/link_white.png">
+                    </div>
+
+                    <input id="${id_vstavka}url_recurso" class="pad_2_btms" name="url_recurso" type="text" required="" placeholder=" ">
+                    <label for="${id_vstavka}url_recurso">Enlace de recurso (Ej.: https://holychords.pro/1275)</label>
                 </div>
 
                 <div class="form_group">

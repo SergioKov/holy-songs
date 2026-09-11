@@ -1601,6 +1601,9 @@ form textarea {
 form input[type="text"] {
     padding-right: 40px;
 }
+form input.pad_2_btms {
+    padding-right: 80px;
+}
 
 form textarea {
     resize: vertical;
@@ -4534,8 +4537,36 @@ fieldset.kuplet.partial{
 }
 .d_limpiar_input img {
     filter: brightness(0.75);
+    width: 24px;
+    height: 24px;
 }
 
+
+.d_go_to_link {
+    /* background: blue; */
+    position: absolute;
+    right: 45px;
+    top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: grey;
+    opacity: 0.3;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+.d_go_to_link:hover {
+    opacity: 0.6;
+    background: blue;
+}
+.d_go_to_link img {
+    filter: brightness(0.6);
+    width: 24px;
+    height: 24px;
+}
 
 .wr_btns_vertical {
     display: flex;

@@ -6373,5 +6373,17 @@ function makeFldActive(contenedor, fld){
 }
 
 
+function goToLinkById(idElement){
+    console.log('=== function goToLinkById() ===');
 
+    if(!idElement){
+        return;
+    }
+
+    const element = document.getElementById(idElement);
+    const url = element ? element.value.trim() : null;
+    if(element && url){
+        window.open(url, '_blank');
+    }
+}
 
