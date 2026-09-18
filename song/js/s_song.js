@@ -3153,10 +3153,12 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
             const esCoro = regexTituloCoro.test(legend_text);
             const first_p_text = fld.querySelector('.t')?.textContent.trim();//encuentra la primera coincidencia, en lugar de recorrer todo el árbol con fld.querySelectorAll('.t')
 
-            if(first_p_text && !title_def && !title){
+            //si es verso
+            if(!esCoro && first_p_text && !title_def && !title){
                 title_def = first_p_text;
             }
 
+            //si es coro
             if(esCoro && first_p_text && !title2_def && !title2){
                 title2_def = first_p_text;
             }
