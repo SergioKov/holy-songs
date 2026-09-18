@@ -3137,6 +3137,42 @@ async function guardarSong(event, id_contenedor, cancion_action, revisar = false
 
         let title = form.elements["title"].value.trim();
         let title2 = form.elements["title2"].value.trim();
+
+        //si title o title2 o title_note están vacíos, saco textos de los versos o coro introducidos
+        const fieldsetsAll = eid_block_cancion.querySelectorAll('.d_contenedor fieldset');
+        let title_def = '';
+        let title2_def = '';
+
+        const palabrasTitulosCoro = arr_titulos_coro.join('|');//arr_titulos en config
+        const regexTituloCoro = make_regex_titulos(palabrasTitulosCoro);
+
+        for (const [i, fld] of fieldsetsAll.entries()) {           
+            console.log('fld: ', fld);
+            
+            const legend_text = fld.querySelector('legend').textContent.trim();
+            const esCoro = regexTituloCoro.test(legend_text);
+            const first_p_text = fld.querySelector('.t')?.textContent.trim();//encuentra la primera coincidencia, en lugar de recorrer todo el árbol con fld.querySelectorAll('.t')
+
+            if(first_p_text && !title_def && !title){
+                title_def = first_p_text;
+            }
+
+            if(esCoro && first_p_text && !title2_def && !title2){
+                title2_def = first_p_text;
+            }
+            
+            // Aquí SÍ se detiene completamente el bucle
+            if (title_def && title2_def) {
+                break;
+            }            
+        }
+
+        console.log('title_def: ', title_def);
+        console.log('title2_def: ', title2_def);
+
+        title = title || title_def;
+        title2 = title2 || title2_def;
+
         let title_note = form.elements["title_note"].value.trim();
         let category = form.elements["category"].value.trim();
         let songbook = form.elements["songbook"].value.trim();

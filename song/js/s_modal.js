@@ -469,7 +469,7 @@ function buildFormCancion(contenedor, cancion_action = null){
                             <div class="d_limpiar_input" onclick="limpiarInput('#${id_vstavka}title')">
                                 <img src="images/x_white.png">
                             </div>
-                            <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" " value="Nueva canción...">
+                            <input id="${id_vstavka}title" name="title" type="text" required="" placeholder=" " value="">
                             <label for="${id_vstavka}title">Título de la canción (o su primera frase)</label>
                         </div>
 
@@ -907,6 +907,14 @@ function buildFormCancion(contenedor, cancion_action = null){
 
             form.elements["id_song"].disabled = true;//deshabilito input id_song   
             form.querySelector('.wr_id_song').style.display = 'none';//oculto el wr_id_song
+            requestAnimationFrame(() => {
+                hideShowBlock('title_detalles', 'hide');
+                hideShowBlock('form_detalles', 'hide');
+                ajustes_pers = 0;
+                ocultar_ajustes_pers();
+                hideShowBlock('form_detalles_pers', 'hide');
+                form.elements["song_text"].focus();//pongo cursor en textarea 
+            });
             
             pintSongbooksOptions(form.elements['songbook']);           
             break;

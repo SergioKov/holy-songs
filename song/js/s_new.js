@@ -105,11 +105,19 @@ function pintSongActiveSoloDatos(){
         lang_name_text = obj_lang_names[objSong.lang];
     }
 
+    const el_cl_title = p_song.querySelector('.cl_title');
+    const el_cl_title2 = p_song.querySelector('.cl_title2');
+    const el_cl_title_note = p_song.querySelector('.cl_title_note');
 
     //new - actualizo datos de p_song
-    p_song.querySelector('.cl_title').textContent = objSong.title || '';
-    p_song.querySelector('.cl_title2').textContent = objSong.title2 || '';
-    p_song.querySelector('.cl_title_note').textContent = objSong.title_note || '';
+    el_cl_title.textContent = objSong.title || '';//siempre debe estar
+
+    el_cl_title2.textContent = objSong.title2 || '';
+    el_cl_title2.classList.toggle('d-none', !objSong.title2);;//si title2 es true -> quito 'd-none', si es false ->  lo elimino
+    
+    el_cl_title_note.textContent = objSong.title_note || '';
+    el_cl_title_note.classList.toggle('d-none', !objSong.title_note);;//si title_note es true -> quito 'd-none', si es false ->  lo elimino
+
     //p_song.querySelector('.td_idioma').textContent = lang_name_text;
     p_song.querySelector('.l_tune').textContent = objSong.tune || '';
     p_song.querySelector('.l_tune_transpose').textContent = objSong.tune_transpose || '';
@@ -2529,7 +2537,7 @@ function esElementoVisible(elemento) {
 
 
 
-function hideShowBlock(id_div){
+function hideShowBlock(id_div, action = 'toggle'){//action: toggle, show, hide
     console.log('=== function hideShowBlock() ===');
     console.log('id_div: ',id_div);
 
@@ -2551,13 +2559,22 @@ function hideShowBlock(id_div){
     const block_display = block_css.display;
 
     let next_display = '';//para guardar en localStorage
-   
-    if(block_display == 'block'){//si es visible
-        next_display = 'none';//oculto
-    }else{//muestro
-        next_display = 'block';//muestro
-    } 
 
+    if(action == 'toggle'){
+        if(block_display == 'block'){//si es visible
+            next_display = 'none';//oculto
+        }else{//muestro
+            next_display = 'block';//muestro
+        } 
+    }else{
+        if(action == 'show'){
+            next_display = 'block';//muestro
+        }
+        if(action == 'hide'){
+            next_display = 'none';//muestro
+        }
+    }
+ 
     //aplico el cambio
     divElement.style.display = next_display;
 
@@ -2579,7 +2596,6 @@ function hideShowBlock(id_div){
         display_form_detalles_pers = next_display;
         localStorage.setItem('display_form_detalles_pers',display_form_detalles_pers);
     }  
-  
 }
 
 
