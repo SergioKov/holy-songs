@@ -4767,6 +4767,18 @@ async function nueva_song(){
     if(id_song_num){
         id_song_num.textContent = '...'
     }
+
+    const id_lista_icon = document.querySelector('.vista_fixed_head #id_lista_icon');//reset new
+    if(id_lista_icon){
+        if(id_lista){
+            id_lista_icon.innerHTML = `
+                <img src="./images/checklist2_24x24.png"></img>
+            `;
+        }else{
+            id_lista_icon.innerHTML = '';
+        }
+    }
+
     const id_song_pos = document.querySelector('.vista_fixed_head #id_song_pos');//reset new
     if(id_song_pos){
         id_song_pos.textContent = '.. / ..'
@@ -5003,21 +5015,32 @@ function editar_song(){
         currentIndexOfSong = objLista.arr_lista.findIndex(item => item.id_song == id_song);
     }
 
+    const ecl_vp_titulo = document.querySelector('.vista_fixed .vista_fixed_head .vp_titulo');
+
     if(currentIndexOfSong != -1){//si hay cancion en la lista. muestro id_song CON posición
         let song_pos = `${currentIndexOfSong + 1} / ${objLista.arr_lista.length}`; 
-        document.querySelector('.vista_fixed .vista_fixed_head .vp_titulo').innerHTML = `
+        ecl_vp_titulo.innerHTML = `
             <div id="id_song_num">${objSong.id_song}</div>
+            <div id="id_lista_icon">
+                <img src="./images/checklist2_24x24.png">
+            </div>
             <div id="id_song_pos">${song_pos}</div>
         `;
         //muestro botones de sig/prev song ya que hay cancion en la lista
         document.querySelector('.vista_fixed .d_menu_over .wr_btns_next_prev').classList.remove('d-none');
 
     }else{//no hay cancion en la lista. solo muestro id_song sin posición
-        document.querySelector('.vista_fixed .vista_fixed_head .vp_titulo').innerHTML = `
+        ecl_vp_titulo.innerHTML = `
             <div id="id_song_num">${objSong.id_song}</div>
         `;
         //oculto botones de sig/prev song ya que no hay cancion en la lista
         document.querySelector('.vista_fixed .d_menu_over .wr_btns_next_prev').classList.add('d-none');//oculto botones next-prev porque no hay lista o la canción no está en la lista
+    }
+
+    if(id_lista){
+        ecl_vp_titulo.onclick = () => {
+            openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');
+        }
     }
 
 

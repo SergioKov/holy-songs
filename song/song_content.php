@@ -1924,6 +1924,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 
                                                             <div class="vp_titulo">
                                                                 <div id="id_song_num">....</div>
+                                                                <div id="id_lista_icon">
+                                                                    <img src="./images/checklist2_24x24.png">
+                                                                </div>
                                                                 <div id="id_song_pos">.. / ..</div>
                                                             </div>
 

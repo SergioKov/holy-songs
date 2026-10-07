@@ -4189,6 +4189,11 @@ span.sp_number {
     gap: 10px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    transition: 0.3s ease;;
+}
+.vp_titulo:hover {
+    opacity: 1;
 }
 
 .btn_v_lista img {
