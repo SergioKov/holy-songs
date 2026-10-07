@@ -5039,6 +5039,7 @@ function editar_song(){
 
     if(id_lista){
         ecl_vp_titulo.onclick = () => {
+            ocultarVistaFixed();
             openModal('full','Lista actual',null,'buildLista',true, 'ver_sm');
         }
     }
