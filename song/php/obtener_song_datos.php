@@ -206,6 +206,7 @@ if($row){
                         acordes_visible,
                         texto_visible,
                         contenido_width,
+                        song_parts_bg_colored,
                         created_at,
                         updated_at
                     FROM songs_ajustes
@@ -249,7 +250,8 @@ if($row){
             'num_columns'             => $row_ajustes['num_columns'],
             'acordes_visible'         => $row_ajustes['acordes_visible'],
             'texto_visible'           => $row_ajustes['texto_visible'],
-            'contenido_width'         => $row_ajustes['contenido_width']
+            'contenido_width'         => $row_ajustes['contenido_width'],
+            'song_parts_bg_colored'   => $row_ajustes['song_parts_bg_colored']
         ];
     }
     // end --- buscar ajustes

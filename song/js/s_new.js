@@ -3900,6 +3900,21 @@ function quitarContenidoWidth(selectorContenedor){//'#tema_block'
 }
 
 
+function aplicarSongPartsBgColored(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+
+    contenedor.classList.remove('song_parts_bg_off');
+    contenedor.classList.add('song_parts_bg_on');
+}
+
+function quitarSongPartsBgColored(selectorContenedor){//'#tema_block'
+    const contenedor = document.querySelector(selectorContenedor);//'.tema_white', '.tema_black'
+
+    contenedor.classList.remove('song_parts_bg_on');
+    contenedor.classList.add('song_parts_bg_off');
+}
+
+
 
 
 function reemplazarEspacios(texto) {
@@ -4535,6 +4550,12 @@ function aplicarContenidoWidthBd(val){
     toggleContenidoWidth();//hace siguiente accion -> ocultar o mostrar acordes
 }
 
+function aplicarSongPartsBgColoredBd(val){
+    
+    songPartsBgColored = !val;//hago esto para luego aplicar toggleAcordes
+    toggleSongPartsBgColored();//hace siguiente accion -> ocultar o mostrar acordes
+}
+
 
 function changeFontSize(step) {
     step = parseInt(step, 10);
@@ -4732,15 +4753,29 @@ function aplicarSongAjustes(){
         //contenido_width
         if(song_ajustes.contenido_width != null){
             if(Number(song_ajustes.contenido_width)){
-                console.log('hay texto_visible en song_ajustes y es 1, la aplico al cargar el form...');
+                console.log('hay contenido_width en song_ajustes y es 1, la aplico al cargar el form...');
                 aplicarContenidoWidthBd(true);
             }else{
-                console.log('hay texto_visible en song_ajustes y es 0, la aplico al cargar el form...');
+                console.log('hay contenido_width en song_ajustes y es 0, la aplico al cargar el form...');
                 aplicarContenidoWidthBd(false);
             }
         }else{
             console.log('no hay texto_visible en song_ajustes, aplico valor por defecto...');
             aplicarContenidoWidthBd(contenidoWidthDef);//false
+        }
+
+        //song_parts_bg_colored
+        if(song_ajustes.song_parts_bg_colored != null){
+            if(Number(song_ajustes.song_parts_bg_colored)){
+                console.log('hay song_parts_bg_colored en song_ajustes y es 1, lo aplico al cargar el form...');
+                aplicarSongPartsBgColoredBd(true);
+            }else{
+                console.log('hay song_parts_bg_colored en song_ajustes y es 0, lo aplico al cargar el form...');
+                aplicarSongPartsBgColoredBd(false);
+            }
+        }else{
+            console.log('no hay texto_visible en song_ajustes, aplico valor por defecto...');
+            aplicarSongPartsBgColoredBd(songPartsBgColoredDef);//true
         }
 
         setTimeout(()=>{

@@ -1992,6 +1992,9 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                                                         <button id="btn_state_contenido_width" class="btn" onclick="toggleContenidoWidth()">
                                                                             <img src="/song/images/auto_width_off.png">
                                                                         </button>
+                                                                        <button id="btn_state_song_parts_bg" class="btn" onclick="toggleSongPartsBgColored()">
+                                                                            <img src="/song/images/icon_palitra_white_on_32x32.png">
+                                                                        </button>
                                                                     </div>
                                                                 </div>
 

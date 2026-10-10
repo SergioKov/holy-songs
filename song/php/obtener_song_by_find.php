@@ -230,6 +230,7 @@ $sql_init = "SELECT
 // sa.acordes_visible,
 // sa.texto_visible,
 // sa.contenido_width,
+// sa.song_parts_bg_colored,
 //
 //LEFT JOIN songs_ajustes sa 
 //                ON sa.id_song = s.id_song AND sa.device_resolution = '$device_resolution' AND sa.orientation = '$orientation'
@@ -298,6 +299,7 @@ if($result->num_rows > 0){
                         acordes_visible,
                         texto_visible,
                         contenido_width,
+                        song_parts_bg_colored,
                         created_at,
                         updated_at
                     FROM songs_ajustes
@@ -345,7 +347,8 @@ if($result->num_rows > 0){
                 'num_columns'             => $row_ajustes['num_columns'],
                 'acordes_visible'         => $row_ajustes['acordes_visible'],
                 'texto_visible'           => $row_ajustes['texto_visible'],
-                'contenido_width'         => $row_ajustes['contenido_width']
+                'contenido_width'         => $row_ajustes['contenido_width'],
+                'song_parts_bg_colored'   => $row_ajustes['song_parts_bg_colored']
             ];
         }
         // end --- buscar ajustes

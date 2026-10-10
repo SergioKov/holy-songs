@@ -482,6 +482,9 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Structure',
     'Scheme',
     'Tag',
+    'Note',
+    'Remark',
+    'Comment',
 
     'Intro',
     'Verso',
@@ -504,6 +507,9 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Estructura',
     'Esquema',
     'Etiqueta',
+    'Nota',
+    'Observación',
+    'Comentario',
     
     'Інтро',
     'Вступ',
@@ -523,6 +529,10 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Структура',
     'Схема',
     'Тег',
+    'Замітка',
+    'Примітка',
+    'Коментарій',
+    'Коментар',
     
     'Интро',
     'Вступление',
@@ -542,7 +552,42 @@ const arr_titulos = [ //las palabras clave para separar el texto por bloques en 
     'Структура',
     'Схема',
     'Тэг',
+    'Заметка',
+    'Примечание',
+    'Комментарий',
 
+];
+
+const arr_titulos_instrumental = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Intro',
+    'Interlude',
+    'Solo',
+    'Instrumantal',
+
+    'Intro',
+    'Interludio',
+    'Solo',
+    'Instrumental',
+    
+    'Інтро',
+    'Програш',
+    'Інструментал',
+    
+    'Интро',
+    'Проигрыш',
+    'Инструментал',
+
+];
+
+const arr_titulos_verso = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Verse',
+
+    'Verso',
+    'Estrofa',
+    
+    'Куплет',
+    
+    'Куплет',
 ];
 
 const arr_titulos_coro = [ //las palabras clave de Pripev o Coro para separar el texto por bloques en buildSong()
@@ -560,10 +605,30 @@ const arr_titulos_coro = [ //las palabras clave de Pripev o Coro para separar el
     'Перед Приспів',
     'Передприспів',
     'Приспів',
+    'Заспів',
     
     'Пред Припев',
     'Предприпев',
     'Припев',
+    'Запев',
+];
+
+const arr_titulos_puente = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Pre-Bridge',
+    'Pre Bridge',
+    'Bridge',
+
+    'Pre-Puente',
+    'Pre Puente',
+    'Puente',
+    
+    'Перед Брідж',
+    'Брідж',
+    'Міст',
+    
+    'Пред Бридж',
+    'Бридж',
+    'Мост',
 ];
 
 const arr_titulos_coda = [ //las palabras clave para separar el texto por bloques en buildSong()
@@ -584,6 +649,47 @@ const arr_titulos_coda = [ //las palabras clave para separar el texto por bloque
     'Кода',
     'Окончание',
 ];
+
+const arr_titulos_apuntes = [ //las palabras clave para separar el texto por bloques en buildSong()
+    'Structure',
+    'Scheme',
+    'Tag',
+    'Note',
+    'Remark',
+    'Comment',
+
+    'Estructura',
+    'Esquema',
+    'Etiqueta',
+    'Nota',
+    'Observación',
+    'Comentario',
+    
+    'Структура',
+    'Схема',
+    'Тег',
+    'Замітка',
+    'Примітка',
+    'Коментарій',
+    'Коментар',
+    
+    'Структура',
+    'Схема',
+    'Тэг',
+    'Заметка',
+    'Примечание',
+    'Комментарий',
+
+];
+
+const arrSongParts = [
+    ['instrumental', arr_titulos_instrumental],
+    ['verso',        arr_titulos_verso],
+    ['coro',         arr_titulos_coro],
+    ['puente',       arr_titulos_puente],
+    ['apuntes',      arr_titulos_apuntes],
+];
+
 
 const arr_pages = [ //las palabras clave para separar el texto por bloques en buildSong()
     'Page',
@@ -612,6 +718,7 @@ let obj_bloques_maxlineas = {};//elementos html de slides: kuplet, pripev bridge
 let obj_pages = {};//elementos html de slides: kuplet, pripev bridge todo juntos para el texto maximo en una hoja
 
 let MAX_LINEAS_POR_SLIDE = 4;//en esquema select_slide() para mostrar en pantalla.php
+const MAX_REPETICIONES_BLOQUE = 8;//en esquema crear_slide() para añadir cuantas veces se repite una parte de la cancion
 
 let arr_esquema_obj = [];//array de objetos temporal para guardar el esquema creada en crear_esquema()
 let arr_esquema_bucle = [];//array de objetos con los bloques de esquema, sin repetirse
@@ -914,7 +1021,8 @@ let fontSizeDef = 22;//tamaño de fuente por defecto para la canción en pantall
 let numColumnsDef = 1;//numero de columnas en song 
 let acordesVisibleDef = true;// 
 let textoVisibleDef = true;//
-let contenidoWidthDef = false; 
+let contenidoWidthDef = false;
+let songPartsBgColoredDef = true;
 
 let currentFontSize = fontSizeDef;// 
 let currentNumColumns = numColumnsDef;//por defecto siempre 1 columna
@@ -922,6 +1030,7 @@ let currentNumColumns = numColumnsDef;//por defecto siempre 1 columna
 let acordesVisible = true;//se ven acordes por defecto
 let textoVisible = true;//se ve el texto por defecto
 let contenidoWidth = false;//a lo ancho. por defecto no ajustado
+let songPartsBgColored = true;//se ve el fondo coloreado de partes de la canción por defecto
 
 let permitirShowToast = true;//para evitar mostrar varios toasts seguidos. uso con song_ajustes
 

@@ -199,6 +199,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
     $acordes_visible  = $datos['acordes_visible'] ?? null;
     $texto_visible  = $datos['texto_visible'] ?? null;
     $contenido_width  = $datos['contenido_width'] ?? null;
+    $song_parts_bg_colored  = $datos['song_parts_bg_colored'] ?? null;
 
     //ajustes personalizados
     $ajustes_pers  = $datos['ajustes_pers'] ?? null;
@@ -828,6 +829,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                         acordes_visible,
                                         texto_visible,
                                         contenido_width,
+                                        song_parts_bg_colored,
     
                                         created_at,
                                         updated_at
@@ -844,6 +846,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                         '$acordes_visible',
                                         '$texto_visible',
                                         '$contenido_width',
+                                        '$song_parts_bg_colored',
     
                                         NOW(),
                                         NOW()
@@ -854,6 +857,7 @@ if (in_array($_SERVER['REQUEST_METHOD'], $arr_metodos)){
                                         acordes_visible = VALUES(acordes_visible),
                                         texto_visible = VALUES(texto_visible),
                                         contenido_width = VALUES(contenido_width),
+                                        song_parts_bg_colored = VALUES(song_parts_bg_colored),
                                         updated_at = NOW()
             ";
             $result2_ajustes = $conn->query($sql2_upsert_ajustes);

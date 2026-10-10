@@ -995,6 +995,8 @@ function handleFormInput(e, container_block){
 
     //si hay coincidencia con palabras separadores: pripev, kuplet, etc...
     if(matches.length > 0){//hay separador de texto como: pripev, kuplet, etc..
+
+        let arr_titulos_con_contador = [];//para añadir (2), (3), etc. si hay títulos repetidos
         
         //Recorrer las coincidencias...
         matches.forEach((match, i, arr) => {
@@ -1006,8 +1008,22 @@ function handleFormInput(e, container_block){
             // match[1]: si era algo dentro de []
             // match[2]: si era palabra del array sin []
             let titulo = match[1] || match[2];
-            titulo = (titulo) ? titulo.trim() : ''; 
+            titulo = (titulo) ? titulo.trim() : '';
+
+            let cl_song_part = '';
+
+            for (const [clase, titulos] of arrSongParts) {
+                const regexParts = make_regex_titulos(titulos.join('|'));
+                const matchesParts = [...titulo.matchAll(regexParts)];
             
+                console.log(`matchesSongPart${clase}:`, matchesParts);
+            
+                if (matchesParts.length > 0) {
+                    cl_song_part = clase;
+                    break;
+                }
+            }
+
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
 
@@ -1019,6 +1035,29 @@ function handleFormInput(e, container_block){
                 contador++;
             }
 
+            arr_titulos_con_contador.push(titulo);
+            console.log('titulo con contador (si hay): ', titulo);
+
+            //si titulo es vacio '' entonces fue introducido separador de titulos vacio []
+            //por eso debo copiar el titulo anterior y añadirle '(continuación-1)'
+            if (titulo === '') {
+                for (let nivel = 1; nivel <= 10 && i - nivel >= 0; nivel++) {
+                    const tituloAnterior = (arr[i - nivel]?.[1] || arr[i - nivel]?.[2] || '').trim();
+            
+                    if (tituloAnterior) {
+                        //bien. -> añade (continuación-1), (continuación-2), etc. si hay varios titulos vacios seguidos
+                        // titulo = `${tituloAnterior} - (continuación-${nivel})`;
+                        
+                        //mejor. -> añade (2) (continuación-1), (3)(continuación-2), etc. 
+                        //si hay varios titulos vacios seguidos 
+                        //y si se repite el titulo anterio al cual se añade automáticamente (2) etc.
+                        titulo = `${arr_titulos_con_contador[i - nivel]} - (continuación-${nivel})`;
+                        break;
+                    }
+                }
+            }
+
+            
             console.log(' ');
             console.log('=== BLOQUE ===');
             console.log('titulo:', titulo);
@@ -1041,13 +1080,23 @@ function handleFormInput(e, container_block){
             //     `;
             // }
 
+            let div_song_part_veces = '';
+
+            const obj_titulo_bd = objSong.arr_esquema.find(v => v.nombre === titulo);
+            console.log(`i: ${i} --- obj_titulo_bd:`, obj_titulo_bd);
+
+            //si está en la bd veces de repetición -> lo muestro junto a legend
+            if(obj_titulo_bd && obj_titulo_bd.veces > 1){
+                div_song_part_veces = `<div class="song_part_veces">x${obj_titulo_bd.veces}</div>`;
+            }
+
             const slide = document.createElement('div');
             slide.className = 'slide';
             slide.innerHTML = `
                 <div class="slide_inner">
                 ${div_titulo_cancion}
-                    <fieldset class="kuplet">
-                        <legend>${titulo}</legend>
+                    <fieldset class="kuplet ${cl_song_part}">
+                        <legend>${titulo}${div_song_part_veces}</legend>
                         <!-- aki los p -->
                     </fieldset>
                 </div>
@@ -1210,7 +1259,39 @@ function handleFormInput(e, container_block){
     console.log('al final. obj_bloques: ', obj_bloques);
 
     
-    let arr_esquema = Object.keys(obj_bloques);    
+    //let arr_esquema = Object.keys(obj_bloques);//antes    
+    
+    let arr_esquema = [];//new
+    let arr_esquema_segun_song_text = Object.keys(obj_bloques);//new
+
+    const titulosFaltantes = objSong.arr_esquema
+        .filter(el => el.nombre !== '_titulo_cancion_') //no tomo en cuenta esto
+        .filter(el => !arr_esquema_segun_song_text.includes(el.nombre));
+
+    if (titulosFaltantes.length > 0) {
+        const nombres = titulosFaltantes.map(el => el.nombre).join('<br> ');
+        const aviso_text = `
+            <h3>Hay que modificar o crear de nuevo el esquema</h3>
+            <p>Resulta que en la base de datos está guardado el esquema que tiene como títulos los siguientes nombres: </p> 
+            <p><b>${nombres}</b></p> 
+            <p>Pero en el texto de la canción no se encuentran estos títulos.</p>
+            <p>Por lo tanto el esquema guardado en la base de datos no coincide con el texto de la canción y necesita modificación.</p>
+            <p>Corrigelo en el apartado <b>Esquema / Crear</b></p>
+        `;
+        console.warn('aviso_text:',aviso_text);
+
+        showToast('warn', aviso_text, 50, 'center', true, 'Atención');
+    }   
+
+    const arr_esquema_guardado_bd = objSong.arr_esquema
+        .filter(el => el.nombre !== '_titulo_cancion_') //no tomo en cuenta esto
+        .map(el => el.nombre);//creo un array nuevo sin modificar el original
+
+    if(arr_esquema_guardado_bd.length > 0){//si hay esquema guardado en bd
+        arr_esquema = arr_esquema_guardado_bd;//lo uso para mostrar el orden de los bloques segun esquema guardado en bd
+    }else{
+        arr_esquema = arr_esquema_segun_song_text;//por defecto. segun como está escrito el texto de la cancion
+    }
 
     //const vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');//antes
     // const vista_blocks = container_block.querySelector('.wr_vista_blocks');
@@ -1233,12 +1314,16 @@ function handleFormInput(e, container_block){
 
         const slide_original = obj_bloques[titulo]?.slide;
         console.log('slide_original: ', slide_original);
+                
+        if(!slide_original){
+            console.warn('2083. no está slide_original para titulo: ', titulo, 'hago return...');
+            return;
+        }
         
-        const slide_clone = slide_original.cloneNode(true); // true para clonar también hijos 
+        const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
         console.log('slide_clone: ', slide_clone);  
                 
-        vista_blocks.append(slide_clone.querySelector('fieldset'));
-        //vista_blocks.querySelector('.contenedor').append(slide_clone.querySelector('fieldset'));
+        vista_blocks.append(slide_clone?.querySelector('fieldset'));
     });
 
     pintParrafosAcordes();

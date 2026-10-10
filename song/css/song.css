@@ -760,6 +760,7 @@ fieldset{
 
 legend {
     border: 3px solid #909090;
+    position: relative;
 }
 /* mostara x2 para repetir pripev */
 legend span {
@@ -3617,8 +3618,16 @@ span.sp_number {
     white-space: pre-line;
 }
 /* si el bloque no tiene texto, lo oculto */
-.ocultar_acordes fieldset:not(:has(.t)) {
+/* oculto tambien los apuntes y comentarios ya que son para músicos y  cantantes */
+.ocultar_acordes fieldset:not(:has(.t)), 
+.ocultar_acordes fieldset.apuntes 
+{
     display: none;
+}
+
+#block_esquema_body .apuntes {
+    background: #454545;
+    opacity: 0.5;
 }
 
 .mostrar_acordes p.c,
@@ -5289,4 +5298,48 @@ fieldset.kuplet.partial{
     justify-content: center;
     border-radius: 3px;
     padding: 5px 5px 3px;
+}
+
+.song_parts_bg_on {
+/* start estilos */   
+
+    fieldset.instrumental {
+        background: #fff2f2 !important;
+    }
+    fieldset.verso {
+        background: white !important;
+    }
+    fieldset.coro {
+        background: #fffde8 !important;
+    }
+    fieldset.puente {
+        background: #e5fdff !important;
+    }
+    fieldset.apuntes {
+        background: #e0e0e0 !important;
+    }
+
+/* end estilos */   
+}
+
+fieldset.apuntes > :not(legend) {
+    font-style: italic;
+    font-size: 80%;
+    font-weight: normal;
+}
+
+fieldset.apuntes p.t{
+    color: grey;
+}
+
+.song_part_veces {
+    position: absolute;
+    top: -3px;
+    right: -60px;
+    background: #f3fb00;
+    padding: 3px 10px;
+    border-radius: 10px;
+    overflow: overlay;
+    border: 3px solid #ff0000;
+    color: red;
 }
