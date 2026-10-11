@@ -251,12 +251,12 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                                 </div>
                                 <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="esquema" title="Esquema">
                                     <!--Esquema-->
-                                    <img class="btn_img" src="./images/esquema_512x512_white.png">
+                                    <img class="btn_img" src="./images/esquema_white_24x24.png">
                                     <span class="vkl_name">Esquema</span>
                                 </div>
                                 <div class="dbtn dbtn_fx" onclick="showBlockName(this.dataset.block_name)" data-block_name="cancion" title="Canción">
                                     <!--Canción-->
-                                    <img class="btn_img" src="./images/song_512x512_white.png">
+                                    <img class="btn_img" src="./images/song_white_24x24.png">
                                     <span class="vkl_name">Canción</span>
                                 </div>
                                 <div class="dbtn dbtn_fx dbtn_active" onclick="showBlockName(this.dataset.block_name)" data-block_name="lista" title="Lista">

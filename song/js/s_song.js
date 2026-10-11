@@ -1264,6 +1264,7 @@ async function getSongBlocks(){
     if(matches.length > 0){//hay separador de texto como: pripev, kuplet, etc..
 
         let arr_titulos_con_contador = [];//para añadir (2), (3), etc. si hay títulos repetidos
+        let ultima_cl_song_part = '';
         
         //Recorrer las coincidencias...
         matches.forEach((match, i, arr) => {
@@ -1279,17 +1280,42 @@ async function getSongBlocks(){
             
             let cl_song_part = '';
 
+            const tituloParaBuscar = titulo
+                .replace(/\s*-\s*\(continuación-\d+\)\s*$/i, '') //detecta el sufijo final ' - (continuación-N)' y lo elimina.
+                .replace(/\s*\(\d+\)\s*$/, '') //detecta el sufijo final (N) y lo elimina.
+                .trim();
+            console.log(`tituloParaBuscar:`, tituloParaBuscar);
+            
+
             for (const [clase, titulos] of arrSongParts) {
                 const regexParts = make_regex_titulos(titulos.join('|'));
-                const matchesParts = [...titulo.matchAll(regexParts)];
-            
+                const matchesParts = [...tituloParaBuscar.matchAll(regexParts)];
                 console.log(`matchesSongPart${clase}:`, matchesParts);
-            
+
+                console.log({
+                    titulo,
+                    tituloParaBuscar,
+                    clase,
+                    regex: regexParts,
+                    coincide: regexParts.test(tituloParaBuscar),
+                });
+                        
                 if (matchesParts.length > 0) {
+                    console.log('Categoría asignada:', clase, 'Título:', tituloParaBuscar);
                     cl_song_part = clase;
+
+                    if (cl_song_part) {
+                        ultima_cl_song_part = cl_song_part;
+                    }
                     break;
                 }
-            }            
+            }
+
+            console.log({
+                titulo,
+                tituloParaBuscar,
+                cl_song_part
+            });
 
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
@@ -1313,12 +1339,13 @@ async function getSongBlocks(){
             
                     if (tituloAnterior) {
                         //bien. -> añade (continuación-1), (continuación-2), etc. si hay varios titulos vacios seguidos
-                        // titulo = `${tituloAnterior} - (continuación-${nivel})`;
+                        //titulo = `${tituloAnterior} - (continuación-${nivel})`;
                         
                         //mejor. -> añade (2) (continuación-1), (3)(continuación-2), etc. 
                         //si hay varios titulos vacios seguidos 
                         //y si se repite el titulo anterio al cual se añade automáticamente (2) etc.
                         titulo = `${arr_titulos_con_contador[i - nivel]} - (continuación-${nivel})`;
+                        cl_song_part = ultima_cl_song_part;
                         break;
                     }
                 }
@@ -2268,14 +2295,12 @@ async function crear_esquema(){
                     titulo_text = titulo;
                     titulo_count_veces = 1;
                 }
-    
-                let idx_vista_prev = arr_esquema_obj.length;
-    
+        
                 //creo boton del bloque
                 const btn_close = document.createElement('button');
                 btn_close.className = 'btn btn_close';
                 btn_close.dataset.idx = i;
-                btn_close.dataset.idx_esquema = idx_vista_prev;
+                //btn_close.dataset.idx_esquema = idx_vista_prev;
                 btn_close.dataset.titulo = titulo_orig;
                 btn_close.innerHTML = `
                     <span class="sp_titulo">${titulo_text}</span>
@@ -2314,7 +2339,11 @@ async function crear_esquema(){
                         veces: 1
                     }
                     
-                    arr_esquema_obj.push(obj_titulo); 
+                    arr_esquema_obj.push(obj_titulo);
+                    const pos_in_arr = arr_esquema_obj.length - 1;//posicion en array
+
+                    obj_titulo.idx = i;//pos_in_arr;
+                    btn_close.dataset.idx_esquema = pos_in_arr;
                     console.log('(con _titulo_cancion_) --- arr_esquema_obj: ', arr_esquema_obj);
                 }
 
@@ -2324,10 +2353,13 @@ async function crear_esquema(){
                     veces: titulo_count_veces
                 }
                 
-                arr_esquema_obj.push(obj_titulo); 
+                arr_esquema_obj.push(obj_titulo);
+                const pos_in_arr = arr_esquema_obj.length - 1;//posicion en array
+
+                obj_titulo.idx = i;//pos_in_arr;
                 console.log('arr_esquema_obj: ', arr_esquema_obj);
     
-                el_fieldset_cloned.dataset.idx_esquema = idx_vista_prev;
+                el_fieldset_cloned.dataset.idx_esquema = pos_in_arr;
     
                 crear_esquema_wr_vista_blocks.append(el_fieldset_cloned);
                 el_fieldset_cloned.scrollIntoView({behavior: 'smooth'});

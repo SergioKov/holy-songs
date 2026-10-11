@@ -997,6 +997,7 @@ function handleFormInput(e, container_block){
     if(matches.length > 0){//hay separador de texto como: pripev, kuplet, etc..
 
         let arr_titulos_con_contador = [];//para añadir (2), (3), etc. si hay títulos repetidos
+        let ultima_cl_song_part = '';
         
         //Recorrer las coincidencias...
         matches.forEach((match, i, arr) => {
@@ -1012,17 +1013,42 @@ function handleFormInput(e, container_block){
 
             let cl_song_part = '';
 
+            const tituloParaBuscar = titulo
+                .replace(/\s*-\s*\(continuación-\d+\)\s*$/i, '') //detecta el sufijo final ' - (continuación-N)' y lo elimina.
+                .replace(/\s*\(\d+\)\s*$/, '') //detecta el sufijo final (N) y lo elimina.
+                .trim();
+            console.log(`tituloParaBuscar:`, tituloParaBuscar);
+            
+
             for (const [clase, titulos] of arrSongParts) {
                 const regexParts = make_regex_titulos(titulos.join('|'));
-                const matchesParts = [...titulo.matchAll(regexParts)];
-            
+                const matchesParts = [...tituloParaBuscar.matchAll(regexParts)];
                 console.log(`matchesSongPart${clase}:`, matchesParts);
-            
+
+                console.log({
+                    titulo,
+                    tituloParaBuscar,
+                    clase,
+                    regex: regexParts,
+                    coincide: regexParts.test(tituloParaBuscar),
+                });
+                        
                 if (matchesParts.length > 0) {
+                    console.log('Categoría asignada:', clase, 'Título:', tituloParaBuscar);
                     cl_song_part = clase;
+
+                    if (cl_song_part) {
+                        ultima_cl_song_part = cl_song_part;
+                    }
                     break;
                 }
             }
+
+            console.log({
+                titulo,
+                tituloParaBuscar,
+                cl_song_part
+            });
 
             // Contenido: desde el final de la línea de título hasta el siguiente título o final
             const contenido = texto.slice(start + match[0].length, end);//sin '.trim()' ya que con trim() elimina el espacio antes del acorde
@@ -1038,6 +1064,9 @@ function handleFormInput(e, container_block){
             arr_titulos_con_contador.push(titulo);
             console.log('titulo con contador (si hay): ', titulo);
 
+            const arr_cl_song_part = [];
+            arr_cl_song_part[i] = cl_song_part;
+
             //si titulo es vacio '' entonces fue introducido separador de titulos vacio []
             //por eso debo copiar el titulo anterior y añadirle '(continuación-1)'
             if (titulo === '') {
@@ -1046,12 +1075,13 @@ function handleFormInput(e, container_block){
             
                     if (tituloAnterior) {
                         //bien. -> añade (continuación-1), (continuación-2), etc. si hay varios titulos vacios seguidos
-                        // titulo = `${tituloAnterior} - (continuación-${nivel})`;
+                        //titulo = `${tituloAnterior} - (continuación-${nivel})`;
                         
                         //mejor. -> añade (2) (continuación-1), (3)(continuación-2), etc. 
                         //si hay varios titulos vacios seguidos 
                         //y si se repite el titulo anterio al cual se añade automáticamente (2) etc.
                         titulo = `${arr_titulos_con_contador[i - nivel]} - (continuación-${nivel})`;
+                        cl_song_part = ultima_cl_song_part;
                         break;
                     }
                 }
@@ -1072,23 +1102,6 @@ function handleFormInput(e, container_block){
             step.textContent = titulo;
 
             let div_titulo_cancion = '';
-            // if(i == 0){
-            //     div_titulo_cancion = `
-            //         <div class="song_titulo">
-            //             <span>${song_titulo}</span>
-            //         </div>
-            //     `;
-            // }
-
-            let div_song_part_veces = '';
-
-            const obj_titulo_bd = objSong.arr_esquema.find(v => v.nombre === titulo);
-            console.log(`i: ${i} --- obj_titulo_bd:`, obj_titulo_bd);
-
-            //si está en la bd veces de repetición -> lo muestro junto a legend
-            if(obj_titulo_bd && obj_titulo_bd.veces > 1){
-                div_song_part_veces = `<div class="song_part_veces">x${obj_titulo_bd.veces}</div>`;
-            }
 
             const slide = document.createElement('div');
             slide.className = 'slide';
@@ -1096,7 +1109,7 @@ function handleFormInput(e, container_block){
                 <div class="slide_inner">
                 ${div_titulo_cancion}
                     <fieldset class="kuplet ${cl_song_part}">
-                        <legend>${titulo}${div_song_part_veces}</legend>
+                        <legend>${titulo}<div class="song_part_veces d-none"></div></legend>
                         <!-- aki los p -->
                     </fieldset>
                 </div>
@@ -1258,11 +1271,21 @@ function handleFormInput(e, container_block){
 
     console.log('al final. obj_bloques: ', obj_bloques);
 
+    let vista_blocks;
     
-    //let arr_esquema = Object.keys(obj_bloques);//antes    
+    if(container_block == eid_block_cancion){//en cancion hay posibilidad mostrar en varia columnas
+        console.log('es este bloque');
+        vista_blocks = container_block.querySelector('.vista_fixed .d_contenedor .contenedor');
+    }else{//otros
+        vista_blocks = container_block.querySelector('.wr_vista_blocks');
+    }
+
+    vista_blocks.innerHTML = '';//reset
+
     
     let arr_esquema = [];//new
-    let arr_esquema_segun_song_text = Object.keys(obj_bloques);//new
+    let arr_esquema_segun_song_text = Object.keys(obj_bloques)
+        .filter(el => el.nombre !== '_titulo_cancion_'); //no tomo en cuenta esto;//new
 
     const titulosFaltantes = objSong.arr_esquema
         .filter(el => el.nombre !== '_titulo_cancion_') //no tomo en cuenta esto
@@ -1283,48 +1306,83 @@ function handleFormInput(e, container_block){
         showToast('warn', aviso_text, 50, 'center', true, 'Atención');
     }   
 
-    const arr_esquema_guardado_bd = objSong.arr_esquema
-        .filter(el => el.nombre !== '_titulo_cancion_') //no tomo en cuenta esto
-        .map(el => el.nombre);//creo un array nuevo sin modificar el original
+    const arr_esquema_obj_bd = objSong.arr_esquema
+        .filter(el => el.nombre !== '_titulo_cancion_'); //no tomo en cuenta esto
 
-    if(arr_esquema_guardado_bd.length > 0){//si hay esquema guardado en bd
-        arr_esquema = arr_esquema_guardado_bd;//lo uso para mostrar el orden de los bloques segun esquema guardado en bd
-    }else{
-        arr_esquema = arr_esquema_segun_song_text;//por defecto. segun como está escrito el texto de la cancion
-    }
 
-    //const vista_blocks = eid_block_cancion.querySelector('.wr_vista_blocks');//antes
-    // const vista_blocks = container_block.querySelector('.wr_vista_blocks');
-    let vista_blocks;
+
+    if(Object.keys(arr_esquema_obj_bd).length > 0){//si hay esquema guardado en bd
+        
+        //Recorrer el bucle - partes de song_text del input...
+        arr_esquema_obj_bd.forEach( (el, i) => {
+            console.log('el: ', el);
+
+            const titulo = el.nombre;            
+            console.log('titulo: ', titulo);
+
+            const slide_original = obj_bloques[titulo]?.slide;
+            console.log('slide_original: ', slide_original);
+                    
+            if(!slide_original){
+                console.warn('2083. no está slide_original para titulo: ', titulo, 'hago return...');
+                return;
+            }
+            
+            const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
+            console.log('slide_clone: ', slide_clone);
+
+            //si está en la bd veces de repetición -> lo muestro junto a legend
+            if(el.veces > 1){
+                const div_song_part_veces = slide_clone.querySelector('legend .song_part_veces');
+
+                div_song_part_veces.classList.remove('d-none');
+                div_song_part_veces.textContent = `x${el.veces}`;
+            }            
+                    
+            vista_blocks.append(slide_clone?.querySelector('fieldset'));
+        });
     
-    if(container_block == eid_block_cancion){//en cancion hay posibilidad mostrar en varia columnas
-        console.log('es este bloque');
-        //vista_blocks = container_block.querySelector('.wr_vista_blocks .contenedor');
-        vista_blocks = container_block.querySelector('.vista_fixed .d_contenedor .contenedor');
-    }else{//otros
-        vista_blocks = container_block.querySelector('.wr_vista_blocks');
+    }else{
+    
+        //Recorrer el bucle - partes de song_text del input...
+        arr_esquema_segun_song_text.forEach( (titulo, i, arr) => {
+            console.log('titulo: ', titulo);
+
+            const slide_original = obj_bloques[titulo]?.slide;
+            console.log('slide_original: ', slide_original);
+                    
+            if(!slide_original){
+                console.warn('2083. no está slide_original para titulo: ', titulo, 'hago return...');
+                return;
+            }
+            
+            const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
+            console.log('slide_clone: ', slide_clone);  
+                    
+            vista_blocks.append(slide_clone?.querySelector('fieldset'));
+        });
+    
     }
 
-    vista_blocks.innerHTML = '';//reset
     
 
     //Recorrer el bucle - partes de song...
-    arr_esquema.forEach( (titulo, i, arr) => {
-        console.log('titulo: ', titulo);
+    // arr_esquema.forEach( (titulo, i, arr) => {
+    //     console.log('titulo: ', titulo);
 
-        const slide_original = obj_bloques[titulo]?.slide;
-        console.log('slide_original: ', slide_original);
+    //     const slide_original = obj_bloques[titulo]?.slide;
+    //     console.log('slide_original: ', slide_original);
                 
-        if(!slide_original){
-            console.warn('2083. no está slide_original para titulo: ', titulo, 'hago return...');
-            return;
-        }
+    //     if(!slide_original){
+    //         console.warn('2083. no está slide_original para titulo: ', titulo, 'hago return...');
+    //         return;
+    //     }
         
-        const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
-        console.log('slide_clone: ', slide_clone);  
+    //     const slide_clone = slide_original?.cloneNode(true); // true para clonar también hijos 
+    //     console.log('slide_clone: ', slide_clone);  
                 
-        vista_blocks.append(slide_clone?.querySelector('fieldset'));
-    });
+    //     vista_blocks.append(slide_clone?.querySelector('fieldset'));
+    // });
 
     pintParrafosAcordes();
     pintParrafosLlaves();
